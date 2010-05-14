@@ -6,9 +6,21 @@ set number
 set hl
 set incsearch
 
-" set up fonts depending on whether we are on MacOS X or Linux
+" Do things differently for linux and macosx
 if has("unix")
 	set guifont=Monaco\ 8
+	map <C-S-l> :tabn<CR>
+	map <C-S-h> :tabp<CR>
+	set tabpagemax=30
+
+	" Set the gui tabs to a constant width
+	if version >= 700
+	    "set showtabline to show when more than one tab
+	    set showtabline=1
+	    "set tab labels to show at most 12 characters
+	    set guitablabel=%-30.30t%M
+	endif
+
 elseif has("macunix")
 	set guifont=Monaco\:h11.00
 	"set guifont=DejaVu\ Sans\ Mono\:h11.00
