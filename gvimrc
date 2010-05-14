@@ -1,9 +1,7 @@
-"set textwidth=80
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 set autoindent
 set laststatus=2
-set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 set number
-set hl
 set incsearch
 
 " Do things differently for linux and macosx
@@ -27,13 +25,15 @@ elseif has("macunix")
 	"set guifont=Envy\ Code\ R:h11.00
 endif
 
-"colorscheme asmdev
-colorscheme ir_black
-
 set lines=60
 set columns=130
 
+" Turn on search highlighting
 set hlsearch
+
+" colorscheme asmdev
+" colorscheme norwaytoday
+colorscheme ir_black
 
 " 2010-05-12
 " Override the highlight settings for NERD_tree.  This is mainly because
