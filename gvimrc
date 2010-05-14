@@ -11,8 +11,6 @@ if has("macunix")
 	"set guifont=Envy\ Code\ R:h11.00
 elseif has("unix")
 	set guifont=Monaco\ 8
-	map <C-S-l> :tabn<CR>
-	map <C-S-h> :tabp<CR>
 	set tabpagemax=30
 
 	" Set the gui tabs to a constant width
@@ -23,6 +21,11 @@ elseif has("unix")
 	    set guitablabel=%-30.30t%M
 	endif
 endif
+
+" Map Control-Shift-left and Control-Shift-right
+" to moving left and right through the open tabs
+map <C-S-l> :tabn<CR>
+map <C-S-h> :tabp<CR>
 
 set lines=60
 set columns=130
