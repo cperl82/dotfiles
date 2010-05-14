@@ -5,7 +5,11 @@ set number
 set incsearch
 
 " Do things differently for linux and macosx
-if has("unix")
+if has("macunix")
+	set guifont=Monaco\:h11.00
+	"set guifont=DejaVu\ Sans\ Mono\:h11.00
+	"set guifont=Envy\ Code\ R:h11.00
+elseif has("unix")
 	set guifont=Monaco\ 8
 	map <C-S-l> :tabn<CR>
 	map <C-S-h> :tabp<CR>
@@ -18,11 +22,6 @@ if has("unix")
 	    "set tab labels to show at most 12 characters
 	    set guitablabel=%-30.30t%M
 	endif
-
-elseif has("macunix")
-	set guifont=Monaco\:h11.00
-	"set guifont=DejaVu\ Sans\ Mono\:h11.00
-	"set guifont=Envy\ Code\ R:h11.00
 endif
 
 set lines=60
