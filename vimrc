@@ -6,5 +6,3 @@ syntax on
 " to moving left and right through the open tabs
 map <C-S-l> :tabn<CR>
 map <C-S-h> :tabp<CR>
-
-
