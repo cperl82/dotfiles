@@ -30,7 +30,11 @@ hi link treeRO Normal
 function MyTabLabel(n)
 	let buflist = tabpagebuflist(a:n)
 	let winnr = tabpagewinnr(a:n)
-	return bufname(buflist[winnr - 1])
+	let filename = bufname(buflist[winnr - 1])
+	if filename == ""
+		let filename = "[No Name]"
+	endif
+	return filename
 endfunction
 
 function MyTabLine()
@@ -43,12 +47,13 @@ function MyTabLine()
 		endif
 
 		let s .= '%' . (i+1) . 'T'
-		let s .= ' %{MyTabLabel(' . (i+1) . ')} '
+		let s .= ' %{MyTabLabel(' . (i+1) . ')} |'
 	endfor
 
 	if tabpagenr('$') > 1
 		let s .= '%=%#TabLine#%999Xclose'
 	endif
+
 
 	return s
 endfunction
