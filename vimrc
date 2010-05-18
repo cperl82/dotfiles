@@ -77,6 +77,6 @@ function! MoveTabLeft()
 	endif
 	execute "tabmove" (current-2)
 endfunction
-map <C-y> :call MoveTabLeft()<CR>
-map <C-u> :call MoveTabRight()<CR>
+" map <C-h> :call MoveTabLeft()<CR>
+" map <C-l> :call MoveTabRight()<CR>
 
