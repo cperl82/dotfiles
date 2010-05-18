@@ -2,10 +2,6 @@ filetype plugin indent on
 filetype plugin on
 syntax on
 
-" Map Control-Shift-left and Control-Shift-right
-" to moving left and right through the open tabs
-map <C-S-l> :tabn<CR>
-map <C-S-h> :tabp<CR>
 
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 set autoindent
@@ -46,8 +42,8 @@ function! MyTabLine()
 			let s .= '%#TabLine#'
 		endif
 
-		let s .= (i+1) . ' %' . (i+1) . 'T'
-		let s .= ' %{MyTabLabel(' . (i+1) . ')} | '
+		let s .= ' ' . (i+1) . ' %' . (i+1) . 'T'
+		let s .= ' %{MyTabLabel(' . (i+1) . ')} |'
 	endfor
 
 	if tabpagenr('$') > 1
@@ -77,6 +73,11 @@ function! MoveTabLeft()
 	endif
 	execute "tabmove" (current-2)
 endfunction
-" map <C-h> :call MoveTabLeft()<CR>
-" map <C-l> :call MoveTabRight()<CR>
+map <C-[> :call MoveTabLeft()<CR>
+map <C-]> :call MoveTabRight()<CR>
+
+" Map Control-Shift-left and Control-Shift-right
+" to moving left and right through the open tabs
+map <C-h> :tabp<CR>
+map <C-l> :tabn<CR>
 
