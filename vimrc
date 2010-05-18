@@ -27,7 +27,7 @@ hi link treeRO Normal
 
 " 2010-05-17
 " Playing around with trying to implement my own tabline
-function MyTabLabel(n)
+function! MyTabLabel(n)
 	let buflist = tabpagebuflist(a:n)
 	let winnr = tabpagewinnr(a:n)
 	let filename = bufname(buflist[winnr - 1])
@@ -37,7 +37,7 @@ function MyTabLabel(n)
 	return filename
 endfunction
 
-function MyTabLine()
+function! MyTabLine()
 	let s = ''
 	for i in range(tabpagenr('$'))
 		if i+1 == tabpagenr()
@@ -46,8 +46,8 @@ function MyTabLine()
 			let s .= '%#TabLine#'
 		endif
 
-		let s .= '%' . (i+1) . 'T'
-		let s .= ' %{MyTabLabel(' . (i+1) . ')} |'
+		let s .= (i+1) . ' %' . (i+1) . 'T'
+		let s .= ' %{MyTabLabel(' . (i+1) . ')} | '
 	endfor
 
 	if tabpagenr('$') > 1
@@ -57,5 +57,26 @@ function MyTabLine()
 
 	return s
 endfunction
-
 set tabline=%!MyTabLine()
+
+" 2010-05-18
+" Playing around with moving tabs
+" tab numbers run from 1 to n
+function! MoveTabRight()
+	let current = tabpagenr()
+	if current == tabpagenr('$')
+		let current = 0
+	endif
+	execute "tabmove" current
+endfunction
+
+function! MoveTabLeft()
+	let current = tabpagenr()
+	if current == 1
+		let current = tabpagenr('$')
+	endif
+	execute "tabmove" (current-2)
+endfunction
+map <C-j> :call MoveTabRight()<CR>
+map <C-k> :call MoveTabLeft()<CR>
+
