@@ -43,7 +43,8 @@ function! MyTabLine()
 		endif
 
 		let s .= ' ' . (i+1) . ' %' . (i+1) . 'T'
-		let s .= ' %{MyTabLabel(' . (i+1) . ')} |'
+		let s .= ' %{MyTabLabel(' . (i+1) . ')} '
+		let s .= '%#TabLine#|'
 	endfor
 
 	if tabpagenr('$') > 1
@@ -58,6 +59,13 @@ set tabline=%!MyTabLine()
 " 2010-05-18
 " Playing around with moving tabs
 " tab numbers run from 1 to n
+function! MoveTabLeft()
+	let current = tabpagenr()
+	if current == 1
+		let current = tabpagenr('$') + 1
+	endif
+	execute "tabmove" (current-2)
+endfunction
 function! MoveTabRight()
 	let current = tabpagenr()
 	if current == tabpagenr('$')
@@ -65,19 +73,11 @@ function! MoveTabRight()
 	endif
 	execute "tabmove" current
 endfunction
-
-function! MoveTabLeft()
-	let current = tabpagenr()
-	if current == 1
-		let current = tabpagenr('$')
-	endif
-	execute "tabmove" (current-2)
-endfunction
-map <C-Left> :call MoveTabLeft()<CR>
-map <C-Right> :call MoveTabRight()<CR>
+map <silent> <C-Left> :call MoveTabLeft()<CR>
+map <silent> <C-Right> :call MoveTabRight()<CR>
 
 " Map Control-Shift-left and Control-Shift-right
 " to moving left and right through the open tabs
-map <C-h> :tabp<CR>
-map <C-l> :tabn<CR>
+map <silent> <C-h> :tabp<CR>
+map <silent> <C-l> :tabn<CR>
 
