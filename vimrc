@@ -73,8 +73,8 @@ function! MoveTabLeft()
 	endif
 	execute "tabmove" (current-2)
 endfunction
-map <C-[> :call MoveTabLeft()<CR>
-map <C-]> :call MoveTabRight()<CR>
+map <C-Left> :call MoveTabLeft()<CR>
+map <C-Right> :call MoveTabRight()<CR>
 
 " Map Control-Shift-left and Control-Shift-right
 " to moving left and right through the open tabs
