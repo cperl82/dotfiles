@@ -43,7 +43,7 @@ function! MyTabLine()
 		endif
 
 		let s .= ' ' . (i+1) . ' %' . (i+1) . 'T'
-		let s .= ' %{MyTabLabel(' . (i+1) . ')} '
+		let s .= '%{MyTabLabel(' . (i+1) . ')} '
 		let s .= '%#TabLine#|'
 	endfor
 
