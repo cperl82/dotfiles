@@ -29,6 +29,8 @@ function! MyTabLabel(n)
 	let filename = bufname(buflist[winnr - 1])
 	if filename == ""
 		let filename = "[No Name]"
+	else
+		let filename = fnamemodify(filename, ":~")
 	endif
 	return filename
 endfunction
