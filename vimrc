@@ -30,7 +30,7 @@ function! MyTabLabel(n)
 	if filename == ""
 		let filename = "[No Name]"
 	else
-		let filename = fnamemodify(filename, ":~")
+		let filename = fnamemodify(filename, ":.")
 	endif
 	return filename
 endfunction
