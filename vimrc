@@ -38,15 +38,21 @@ endfunction
 function! MyTabLine()
 	let s = ''
 	for i in range(tabpagenr('$'))
+		let s .= '%#TabLine#'
+
+		if i != 0
+			let s .= "|"
+		endif
+
 		if i+1 == tabpagenr()
 			let s .= '%#TabLineSel#'
-		else
-			let s .= '%#TabLine#'
 		endif
 
 		let s .= ' ' . (i+1) . ' %' . (i+1) . 'T'
-		let s .= '%{MyTabLabel(' . (i+1) . ')} '
-		let s .= '%#TabLine#|'
+		let s .= '%{MyTabLabel(' . (i+1) . ')}' . ' '
+		if i+1 == tabpagenr()
+			let s .= '%#TabLine#'
+		endif
 	endfor
 
 	if tabpagenr('$') > 1
