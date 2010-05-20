@@ -83,3 +83,9 @@ map <silent> <C-Right> :call MoveTabRight()<CR>
 map <silent> <C-h> :tabp<CR>
 map <silent> <C-l> :tabn<CR>
 
+" Deal with stupid termina.app weirdness
+if $TERM_PROGRAM == "Apple_Terminal"
+	map [5D <C-Left>
+	map [5C <C-Right>
+endif
+
