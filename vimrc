@@ -1,5 +1,9 @@
+" Enable file type detection, all three modes
+" detection, indent, plugin.  See :help filetype
 filetype plugin indent on
-filetype plugin on
+
+" Turn on syntax highlighting, using defaults
+" See :help syntax
 syntax on
 
 
