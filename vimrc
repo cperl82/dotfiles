@@ -40,31 +40,17 @@ function! MyTabLabel(n)
 endfunction
 
 function! MyTabLine()
-	let s = ''
+	let tabList = []
 	for i in range(1, tabpagenr('$'))
-		let s .= '%#TabLine#'
-
-		if i != 1
-			let s .= "|"
-		endif
-
+		let s = ' ' . i . ' %' . i . 'T' . '%{MyTabLabel(' . i . ')}' . ' '
+		call add(tabList, s)
 		if i == tabpagenr()
-			let s .= '%#TabLineSel#'
-		endif
-
-		let s .= ' ' . i . ' %' . i . 'T'
-		let s .= '%{MyTabLabel(' . i . ')}' . ' '
-		if i == tabpagenr()
-			let s .= '%#TabLine#'
+			let tabList[i-1] = '%#TabLineSel#' . tabList[i-1] . '%#TabLine#'
+		else
+			let tabList[i-1] = '%#TabLine#' . tabList[i-1]
 		endif
 	endfor
-
-	if tabpagenr('$') > 1
-		let s .= '%=%#TabLine#%999Xclose'
-	endif
-
-
-	return s
+	return join(tabList, '|')
 endfunction
 set tabline=%!MyTabLine()
 
