@@ -41,20 +41,20 @@ endfunction
 
 function! MyTabLine()
 	let s = ''
-	for i in range(tabpagenr('$'))
+	for i in range(1, tabpagenr('$'))
 		let s .= '%#TabLine#'
 
-		if i != 0
+		if i != 1
 			let s .= "|"
 		endif
 
-		if i+1 == tabpagenr()
+		if i == tabpagenr()
 			let s .= '%#TabLineSel#'
 		endif
 
-		let s .= ' ' . (i+1) . ' %' . (i+1) . 'T'
-		let s .= '%{MyTabLabel(' . (i+1) . ')}' . ' '
-		if i+1 == tabpagenr()
+		let s .= ' ' . i . ' %' . i . 'T'
+		let s .= '%{MyTabLabel(' . i . ')}' . ' '
+		if i == tabpagenr()
 			let s .= '%#TabLine#'
 		endif
 	endfor
@@ -85,10 +85,12 @@ function! MoveTabRight()
 	endif
 	execute "tabmove" current
 endfunction
+" Map Control-Left and Control-Right
+" to dragging a tab left or right
 map <silent> <C-Left> :call MoveTabLeft()<CR>
 map <silent> <C-Right> :call MoveTabRight()<CR>
 
-" Map Control-Shift-left and Control-Shift-right
+" Map Control-h and Control-l
 " to moving left and right through the open tabs
 map <silent> <C-h> :tabp<CR>
 map <silent> <C-l> :tabn<CR>
