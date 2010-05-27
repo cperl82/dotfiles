@@ -46,11 +46,9 @@ function! MyTabLine()
 		call add(tabList, s)
 		if i == tabpagenr()
 			let tabList[i-1] = '%#TabLineSel#' . tabList[i-1] . '%#TabLine#'
-		else
-			let tabList[i-1] = '%#TabLine#' . tabList[i-1]
 		endif
 	endfor
-	return join(tabList, '|')
+	return '%#TabLine#' . join(tabList, '|')
 endfunction
 set tabline=%!MyTabLine()
 
