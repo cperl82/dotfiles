@@ -79,10 +79,3 @@ map <silent> <C-Right> :call MoveTabRight()<CR>
 " to moving left and right through the open tabs
 map <silent> <C-h> :tabp<CR>
 map <silent> <C-l> :tabn<CR>
-
-" Deal with stupid terminal.app weirdness
-if $TERM_PROGRAM == "Apple_Terminal"
-	map [5D <C-Left>
-	map [5C <C-Right>
-endif
-
