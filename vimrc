@@ -40,18 +40,28 @@ function! MyTabLabel(n)
 	return filename
 endfunction
 
-function! MyTabLine()
-	let tabList = []
-	for i in range(1, tabpagenr('$'))
+function! CreateTabLine()
+	return CreateTabLineRange(1, tabpagenr('$'))
+endfunction
+
+" Function that takes parameters i, j for the start and
+" end tab to display
+function! CreateTabLineRange(j, k)
+	let tabDict = {}
+	for i in range(a:j, a:k)
 		let s = ' ' . i . ' %' . i . 'T' . '%{MyTabLabel(' . i . ')}' . ' '
-		call add(tabList, s)
+		let tabDict[i] = s
 		if i == tabpagenr()
-			let tabList[i-1] = '%#TabLineSel#' . tabList[i-1] . '%#TabLine#'
+			let tabDict[i] = '%#TabLineSel#' . tabDict[i] . '%#TabLine#'
 		endif
+	endfor
+	let tabList = []
+	for key in sort(keys(tabDict))
+		call add(tabList, tabDict[key])
 	endfor
 	return '%#TabLine#' . join(tabList, '|')
 endfunction
-set tabline=%!MyTabLine()
+set tabline=%!CreateTabLine()
 
 " 2010-05-18
 " Playing around with moving tabs
