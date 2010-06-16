@@ -28,7 +28,7 @@ hi link treeRO Normal
 
 " 2010-05-17
 " Playing around with trying to implement my own tabline
-function! MyTabLabel(n)
+function! CreateTabLabel(n)
 	let buflist = tabpagebuflist(a:n)
 	let winnr = tabpagewinnr(a:n)
 	let filename = bufname(buflist[winnr - 1])
@@ -37,7 +37,7 @@ function! MyTabLabel(n)
 	else
 		let filename = fnamemodify(filename, ":.")
 	endif
-	return filename
+	return ' ' . a:n . ' ' . filename . ' '
 endfunction
 
 function! CreateTabLine()
@@ -48,8 +48,14 @@ endfunction
 " end tab to display
 function! CreateTabLineRange(j, k)
 	let tabDict = {}
-	for i in range(a:j, a:k)
-		let s = ' ' . i . ' %' . i . 'T' . '%{MyTabLabel(' . i . ')}' . ' '
+	let start = a:j
+	if a:k > tabpagenr('$')
+		let end = tabpagenr('$')
+	else
+		let end = a:k
+	endif
+	for i in range(start, end)
+		let s = '%{CreateTabLabel(' . i . ')}'
 		let tabDict[i] = s
 		if i == tabpagenr()
 			let tabDict[i] = '%#TabLineSel#' . tabDict[i] . '%#TabLine#'
