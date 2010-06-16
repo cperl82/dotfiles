@@ -41,20 +41,8 @@ function! CreateTabLabel(n)
 endfunction
 
 function! CreateTabLine()
-	return CreateTabLineRange(1, tabpagenr('$'))
-endfunction
-
-" Function that takes parameters i, j for the start and
-" end tab to display
-function! CreateTabLineRange(j, k)
 	let tabDict = {}
-	let start = a:j
-	if a:k > tabpagenr('$')
-		let end = tabpagenr('$')
-	else
-		let end = a:k
-	endif
-	for i in range(start, end)
+	for i in range(1, tabpagenr('$'))
 		let s = '%{CreateTabLabel(' . i . ')}'
 		let tabDict[i] = s
 		if i == tabpagenr()
