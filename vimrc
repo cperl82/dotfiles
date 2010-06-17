@@ -77,11 +77,14 @@ function! CreateTabLine()
 		let tmp = BuildTabList(s:anchor, totTab)
 	endwhile
 
-	" TODO: Add a check to see if there are more tabs than we could
+	" Add a check to see if there are more tabs than we could
 	" display, and if so, put a '>' at the very far right hand side
-	
+	let s:tabline = join(tmp, '|')	
+	if (s:anchor + len(tmp) - 1) < totTab
+		let s:tabline = s:tabline . '%=%999\>'
+	endif
 	" Finally, return the list of tab labels as a string separated by |
-	return join(tmp, "|")
+	return s:tabline
 endfunction
 
 function! BuildTabList(start, end)
