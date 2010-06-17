@@ -76,6 +76,10 @@ function! CreateTabLine()
 		let s:anchor = s:anchor + 1
 		let tmp = BuildTabList(s:anchor, totTab)
 	endwhile
+
+	" TODO: Add a check to see if there are more tabs than we could
+	" display, and if so, put a '>' at the very far right hand side
+	
 	" Finally, return the list of tab labels as a string separated by |
 	return join(tmp, "|")
 endfunction
