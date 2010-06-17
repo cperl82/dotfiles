@@ -76,6 +76,7 @@ function! CreateTabLine()
 		let s:anchor = s:anchor + 1
 		let tmp = BuildTabList(s:anchor, totTab)
 	endwhile
+	" Finally, return the list of tab labels as a string separated by |
 	return join(tmp, "|")
 endfunction
 
