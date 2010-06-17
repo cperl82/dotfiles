@@ -27,8 +27,11 @@ colorscheme ir_black
 hi link treeRO Normal
 
 " 2010-05-17
-" Playing around with trying to implement my own tabline
-function! CreateTabLabel(n)
+" Function returns a dict with 2 keys.
+" label: the actual tab label
+" len: length of the label contained in the key label
+function! CreateTabLabelObj(n)
+	let tmp = {}
 	let buflist = tabpagebuflist(a:n)
 	let winnr = tabpagewinnr(a:n)
 	let filename = bufname(buflist[winnr - 1])
@@ -37,24 +40,61 @@ function! CreateTabLabel(n)
 	else
 		let filename = fnamemodify(filename, ":.")
 	endif
-	return ' ' . a:n . ' ' . filename . ' '
+	let tmp.label = ' ' . a:n . ' ' . filename . ' '
+	let tmp.len = len(tmp.label)
+	if tabpagenr() == a:n
+		let tmp.label = '%#TabLineSel#' . tmp.label . '%#TabLine#'
+	else
+		let tmp.label = '%#TabLine#' . tmp.label
+	endif
+	return tmp
 endfunction
 
 function! CreateTabLine()
-	let tabDict = {}
-	for i in range(1, tabpagenr('$'))
-		let s = '%{CreateTabLabel(' . i . ')}'
-		let tabDict[i] = s
-		if i == tabpagenr()
-			let tabDict[i] = '%#TabLineSel#' . tabDict[i] . '%#TabLine#'
-		endif
-	endfor
-	let tabList = []
-	for key in sort(keys(tabDict))
-		call add(tabList, tabDict[key])
-	endfor
-	return '%#TabLine#' . join(tabList, '|')
+	if ! exists("s:anchor")
+		" If we don't have a tab position to anchor to the left hand
+		" corner, just set it to the first tab
+		let s:anchor = 1
+	endif
+
+	let curTab = tabpagenr()
+	let totTab = tabpagenr('$')
+
+	if curTab < s:anchor
+		" if the current tab is less than the anchor, set the anchor
+		" to the current tab.  This will happen when we move left
+		let s:anchor = curTab
+	endif
+
+	" Build our tabline from anchor to the end, but make sure we dont go
+	" over the width of the screen
+	let tmp = BuildTabList(s:anchor, totTab)
+	
+	" Now check to see if our current tab made it on the list of displayed
+	" tabs, and if not, move the anchor one to the right and try again
+	while curTab > (s:anchor + len(tmp) - 1)
+		let s:anchor = s:anchor + 1
+		let tmp = BuildTabList(s:anchor, totTab)
+	endwhile
+	return join(tmp, "|")
 endfunction
+
+function! BuildTabList(start, end)
+	let tmp = []
+	let width = 0
+	let columns = &columns
+	for i in range(a:start, a:end)
+		let tabObj = CreateTabLabelObj(i)
+		let width = width + tabObj.len
+		if width > columns
+			break
+		endif
+		call add(tmp, tabObj.label)
+	endfor
+	return tmp
+endfunction
+
+" Set the tabline to our custom function
 set tabline=%!CreateTabLine()
 
 " 2010-05-18
