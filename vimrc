@@ -89,6 +89,13 @@ function! BuildTabList(start, end)
 	let width = 0
 	let columns = &columns
 	for i in range(a:start, a:end)
+		" Here we are accounting for the fact that all the tab labels
+		" in the tab list will be joined together with some separator
+		" (we're assuming it will be one character) and therefore that
+		" separator contributes to the total width
+		if (i > a:start) && (i < a:end)
+			let width = width + 1
+		endif
 		let tabObj = CreateTabLabelObj(i)
 		let width = width + tabObj.len
 		if width > columns
