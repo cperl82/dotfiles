@@ -57,30 +57,30 @@ function! CreateTabLine()
 		let s:anchor = 1
 	endif
 
-	let curTab = tabpagenr()
-	let totTab = tabpagenr('$')
+	let s:curTab = tabpagenr()
+	let s:totTab = tabpagenr('$')
 
-	if curTab < s:anchor
+	if s:curTab < s:anchor
 		" if the current tab is less than the anchor, set the anchor
 		" to the current tab.  This will happen when we move left
-		let s:anchor = curTab
+		let s:anchor = s:curTab
 	endif
 
 	" Build our tabline from anchor to the end, but make sure we dont go
 	" over the width of the screen
-	let tmp = BuildTabList(s:anchor, totTab)
+	let s:tmp = BuildTabList(s:anchor, s:totTab)
 	
 	" Now check to see if our current tab made it on the list of displayed
 	" tabs, and if not, move the anchor one to the right and try again
-	while curTab > (s:anchor + len(tmp) - 1)
+	while s:curTab > (s:anchor + len(s:tmp) - 1)
 		let s:anchor = s:anchor + 1
-		let tmp = BuildTabList(s:anchor, totTab)
+		let s:tmp = BuildTabList(s:anchor, s:totTab)
 	endwhile
 
 	" Add a check to see if there are more tabs than we could
 	" display, and if so, put a '>' at the very far right hand side
-	let s:tabline = join(tmp, '|')	
-	if (s:anchor + len(tmp) - 1) < totTab
+	let s:tabline = join(s:tmp, '|')	
+	if (s:anchor + len(s:tmp) - 1) < s:totTab
 		let s:tabline = s:tabline . '%=%999\>'
 	endif
 	" Finally, return the list of tab labels as a string separated by |
@@ -88,25 +88,25 @@ function! CreateTabLine()
 endfunction
 
 function! BuildTabList(start, end)
-	let tmp = []
-	let width = 0
-	let columns = &columns
+	let s:tmp = []
+	let s:width = 0
+	let s:columns = &columns
 	for i in range(a:start, a:end)
 		" Here we are accounting for the fact that all the tab labels
 		" in the tab list will be joined together with some separator
 		" (we're assuming it will be one character) and therefore that
 		" separator contributes to the total width
 		if (i > a:start) && (i < a:end)
-			let width = width + 1
+			let s:width = s:width + 1
 		endif
-		let tabObj = CreateTabLabelObj(i)
-		let width = width + tabObj.len
-		if width > columns
+		let s:tabObj = CreateTabLabelObj(i)
+		let s:width = s:width + s:tabObj.len
+		if s:width > s:columns
 			break
 		endif
-		call add(tmp, tabObj.label)
+		call add(s:tmp, s:tabObj.label)
 	endfor
-	return tmp
+	return s:tmp
 endfunction
 
 " Set the tabline to our custom function
