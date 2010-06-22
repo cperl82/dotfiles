@@ -41,17 +41,18 @@ function! CreateTabObj(n)
 	let s:tabObj.labelLen = len(s:tabObj.label)
 	let s:tabObj.sep = '|'
 	let s:tabObj.sepLen = len(s:tabObj.sep)
+	let s:tabObj.partial = 0
 	" If this is the current tab, set the highlight to make it selected
 	if tabpagenr() == a:n
 		let s:tabObj.labelHighlight = '%#TabLineSel#'
 		let s:tabObj.sepHighlight =   '%#TabLine#'
 		let s:tabObj.resetHighlight = '%#TabLine#'
-		let s:tabObj.selected = 1
+		let s:tabObj.current = 1
 	else
 		let s:tabObj.labelHighlight = '%#TabLine#'
 		let s:tabObj.sepHighlight =   '%#TabLine#'
 		let s:tabObj.resetHighlight = '%#TabLine#'
-		let s:tabObj.selected = 0
+		let s:tabObj.current = 0
 	endif
 	return s:tabObj
 endfunction
@@ -78,10 +79,17 @@ function! CreateTabLine()
 	
 	" Now check to see if our current tab made it on the list of displayed
 	" tabs, and if not, move the anchor one to the right and try again
-	while s:curTab > (s:anchor + len(s:tmp) - 1)
+	while s:curTab > (s:anchor + len(s:tmp) - 1) 
 		let s:anchor = s:anchor + 1
 		let s:tmp = BuildTabList(s:anchor, s:totTab)
 	endwhile
+
+	" Now check that the final tab displayed is not current AND partial,
+	" and if it is, move the window once more
+	if s:tmp[-1].current && s:tmp[-1].partial
+		let s:anchor = s:anchor + 1
+		let s:tmp = BuildTabList(s:anchor, s:totTab)
+	endif
 
 	" Add a check to see if there are more tabs than we could
 	" display, and if so, put a '>' at the very far right hand side
@@ -99,7 +107,10 @@ endfunction
 function! BuildTabList(start, end)
 	let s:tabList = []
 	let s:width = 0
-	let s:columns = &columns
+	" set the number of columns we have to work with to the number of
+	" columns available minus 1, to account for the potential '>' added if
+	" there are more tabs than can fit
+	let s:columns = &columns - 1
 	for i in range(a:start, a:end)
 		let s:tabObj = CreateTabObj(i)
 		" We don't want a separator for the first tab in the tab list
@@ -111,7 +122,8 @@ function! BuildTabList(start, end)
 			let s:overage = s:width - s:columns
 			let s:room = s:tabObj.labelLen - s:overage - 1
 			if s:room > 0
-				let s:tabObj.label = strpart(s:tabObj.label, 0, s:room)
+				let s:tabObj.label = strpart(s:tabObj.label, 0, s:room-3) . '...'
+				let s:tabObj.partial = 1
 				call add(s:tabList, s:tabObj)
 			endif
 			break
