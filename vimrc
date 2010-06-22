@@ -38,23 +38,21 @@ function! CreateTabObj(n)
 		let s:filename = fnamemodify(s:filename, ":.")
 	endif
 	let s:tabObj.label = ' ' . a:n . ' ' . s:filename . ' '
-	let s:tabObj.sep = '|'
 	let s:tabObj.labelLen = len(s:tabObj.label)
+	let s:tabObj.sep = '|'
+	let s:tabObj.sepLen = len(s:tabObj.sep)
 	" If this is the current tab, set the highlight to make it selected
 	if tabpagenr() == a:n
 		let s:tabObj.labelHighlight = '%#TabLineSel#'
 		let s:tabObj.sepHighlight =   '%#TabLine#'
 		let s:tabObj.resetHighlight = '%#TabLine#'
+		let s:tabObj.selected = 1
 	else
 		let s:tabObj.labelHighlight = '%#TabLine#'
 		let s:tabObj.sepHighlight =   '%#TabLine#'
 		let s:tabObj.resetHighlight = '%#TabLine#'
+		let s:tabObj.selected = 0
 	endif
-	" If this is the first tab, make the sep nothing
-	if a:n == 1
-		let s:tabObj.sep = ''
-	endif
-	let s:tabObj.sepLen = len(s:tabObj.sep)
 	return s:tabObj
 endfunction
 
@@ -104,6 +102,10 @@ function! BuildTabList(start, end)
 	let s:columns = &columns
 	for i in range(a:start, a:end)
 		let s:tabObj = CreateTabObj(i)
+		" We don't want a separator for the first tab in the tab list
+		if i == a:start
+			let s:tabObj.sep = ''
+		endif	
 		let s:width = s:width + s:tabObj.sepLen + s:tabObj.labelLen
 		if s:width > s:columns
 			let s:overage = s:width - s:columns
