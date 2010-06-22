@@ -79,17 +79,13 @@ function! CreateTabLine()
 	
 	" Now check to see if our current tab made it on the list of displayed
 	" tabs, and if not, move the anchor one to the right and try again
-	while s:curTab > (s:anchor + len(s:tmp) - 1) 
+	" OR
+	" Check that the final tab displayed is not current AND partial,
+	" and if it is, move the anchor once more
+	while (s:curTab > (s:anchor + len(s:tmp) - 1)) || (s:tmp[-1].current && s:tmp[-1].partial)
 		let s:anchor = s:anchor + 1
 		let s:tmp = BuildTabList(s:anchor, s:totTab)
 	endwhile
-
-	" Now check that the final tab displayed is not current AND partial,
-	" and if it is, move the window once more
-	if s:tmp[-1].current && s:tmp[-1].partial
-		let s:anchor = s:anchor + 1
-		let s:tmp = BuildTabList(s:anchor, s:totTab)
-	endif
 
 	" Add a check to see if there are more tabs than we could
 	" display, and if so, put a '>' at the very far right hand side
