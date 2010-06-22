@@ -26,28 +26,36 @@ colorscheme ir_black
 " ir_black colorscheme looks terrible with treeRO linked to WarningMsg
 hi link treeRO Normal
 
-" 2010-05-17
-" Function returns a dict with 2 keys.
-" label: the actual tab label
-" len: length of the label contained in the key label
-function! CreateTabLabelObj(n)
-	let tmp = {}
-	let buflist = tabpagebuflist(a:n)
-	let winnr = tabpagewinnr(a:n)
-	let filename = bufname(buflist[winnr - 1])
-	if filename == ""
-		let filename = "[No Name]"
+" Function to create a tab object that represents a tagpage
+function! CreateTabObj(n)
+	let s:tabObj = {}
+	let s:buflist = tabpagebuflist(a:n)
+	let s:winnr = tabpagewinnr(a:n)
+	let s:filename = bufname(s:buflist[s:winnr - 1])
+	if s:filename == ""
+		let s:filename = "[No Name]"
 	else
-		let filename = fnamemodify(filename, ":.")
+		let s:filename = fnamemodify(s:filename, ":.")
 	endif
-	let tmp.label = ' ' . a:n . ' ' . filename . ' '
-	let tmp.len = len(tmp.label)
+	let s:tabObj.label = ' ' . a:n . ' ' . s:filename . ' '
+	let s:tabObj.sep = '|'
+	let s:tabObj.labelLen = len(s:tabObj.label)
+	" If this is the current tab, set the highlight to make it selected
 	if tabpagenr() == a:n
-		let tmp.label = '%#TabLineSel#' . tmp.label . '%#TabLine#'
+		let s:tabObj.labelHighlight = '%#TabLineSel#'
+		let s:tabObj.sepHighlight =   '%#TabLine#'
+		let s:tabObj.resetHighlight = '%#TabLine#'
 	else
-		let tmp.label = '%#TabLine#' . tmp.label
+		let s:tabObj.labelHighlight = '%#TabLine#'
+		let s:tabObj.sepHighlight =   '%#TabLine#'
+		let s:tabObj.resetHighlight = '%#TabLine#'
 	endif
-	return tmp
+	" If this is the first tab, make the sep nothing
+	if a:n == 1
+		let s:tabObj.sep = ''
+	endif
+	let s:tabObj.sepLen = len(s:tabObj.sep)
+	return s:tabObj
 endfunction
 
 function! CreateTabLine()
@@ -79,7 +87,10 @@ function! CreateTabLine()
 
 	" Add a check to see if there are more tabs than we could
 	" display, and if so, put a '>' at the very far right hand side
-	let s:tabline = join(s:tmp, '|')	
+	let s:tabline = ''
+	for s:tabObj in s:tmp
+		let s:tabline = s:tabline . s:tabObj.sepHighlight . s:tabObj.sep . s:tabObj.labelHighlight . s:tabObj.label . s:tabObj.resetHighlight
+	endfor
 	if (s:anchor + len(s:tmp) - 1) < s:totTab
 		let s:tabline = s:tabline . '%=%999\>'
 	endif
@@ -88,25 +99,24 @@ function! CreateTabLine()
 endfunction
 
 function! BuildTabList(start, end)
-	let s:tmp = []
+	let s:tabList = []
 	let s:width = 0
 	let s:columns = &columns
 	for i in range(a:start, a:end)
-		" Here we are accounting for the fact that all the tab labels
-		" in the tab list will be joined together with some separator
-		" (we're assuming it will be one character) and therefore that
-		" separator contributes to the total width
-		if (i > a:start) && (i < a:end)
-			let s:width = s:width + 1
-		endif
-		let s:tabObj = CreateTabLabelObj(i)
-		let s:width = s:width + s:tabObj.len
+		let s:tabObj = CreateTabObj(i)
+		let s:width = s:width + s:tabObj.sepLen + s:tabObj.labelLen
 		if s:width > s:columns
+			let s:overage = s:width - s:columns
+			let s:room = s:tabObj.labelLen - s:overage - 1
+			if s:room > 0
+				let s:tabObj.label = strpart(s:tabObj.label, 0, s:room)
+				call add(s:tabList, s:tabObj)
+			endif
 			break
 		endif
-		call add(s:tmp, s:tabObj.label)
+		call add(s:tabList, s:tabObj)
 	endfor
-	return s:tmp
+	return s:tabList
 endfunction
 
 " Set the tabline to our custom function
