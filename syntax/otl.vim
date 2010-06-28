@@ -17,13 +17,13 @@ syn match otlTab1 /^\t\{1}[^\t|].*/       contains=@vikiHyperLinks,otlTodo,otlTa
 syn match otlTab0 /^[^\t|].*/             contains=@vikiHyperLinks,otlTodo,otlTagDef,otlTagRef display nextgroup=otlTab0,otlTab1,otlText
 syn match otlTextLeader /^\t*|/   contained
 
-if exists("g:otl_use_viki") && g:otl_use_viki
-  syn match otlTagRef  /<[Uu][Rr][Ll]:[^>]\+>/     contained
-  syn match otlTagDef  /\<[Ii][Dd]=\w\+>/          contained
-else
-  syn match otlTagRef  /<[Uu][Rr][Ll]:[^>]\+>\|\[[^]]*]/    contained
-  syn match otlTagDef  /\<[Ii][Dd]=\w\+>\|\[\[[^]]*]]/      contained
-end
+" if exists("g:otl_use_viki") && g:otl_use_viki
+"   syn match otlTagRef  /<[Uu][Rr][Ll]:[^>]\+>/     contained
+"   syn match otlTagDef  /\<[Ii][Dd]=\w\+>/          contained
+" else
+"   syn match otlTagRef  /<[Uu][Rr][Ll]:[^>]\+>\|\[[^]]*]/    contained
+"   syn match otlTagDef  /\<[Ii][Dd]=\w\+>\|\[\[[^]]*]]/      contained
+" end
 
 if exists("g:otl_highlight_extensions") && g:otl_highlight_extensions
   syn match otlTodo /\<\(TODO\|XXX\|NOTE\)\>\|\*\*\s*[^*]\+\s*\*\*/    contained
