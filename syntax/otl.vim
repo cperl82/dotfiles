@@ -63,7 +63,7 @@ if g:otl_bold_headers
   hi def otlTab9 ctermfg=3 cterm=bold gui=bold guifg=brown term=reverse
 else
   hi def otlTab0 ctermfg=1 cterm=NONE guifg=red
-  hi def otlTab1 ctermfg=4 cterm=NONE guifg=blue
+  hi def otlTab1 ctermfg=4 cterm=NONE guifg=#6699CC
   hi def otlTab2 ctermfg=2 cterm=NONE guifg=darkgreen
   hi def otlTab3 ctermfg=3 cterm=NONE guifg=brown
   hi def otlTab4 ctermfg=5 cterm=NONE guifg=darkmagenta
