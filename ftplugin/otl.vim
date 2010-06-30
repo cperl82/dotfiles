@@ -32,7 +32,7 @@ endfunction
 " These may be overridden in the user .vimrc file.
 
 " set g:otl_bold_headers to 0 if you don't want bold headers
-call s:OtlDefaultGlobalVar('otl_bold_headers', 1)
+call s:OtlDefaultGlobalVar('otl_bold_headers', 0)
 
 " set g:otl_install_menu to 0 if you don't want an Outliner menu
 call s:OtlDefaultGlobalVar("otl_install_menu", 1)
@@ -193,7 +193,7 @@ if !exists("s:otl_loaded_functions")
   function OtlFoldLevel(n)
     let thisLine = getline(a:n)
     if (thisLine == '')
-      return '='
+      return '-1'
     endif
     " Count tabs. Could be 0.
     let thisLevel = matchend(thisLine, s:tabsAtBeginningOfLine)

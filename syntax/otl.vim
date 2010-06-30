@@ -45,9 +45,9 @@ else
   hi def otlTextLeader guifg=darkgrey ctermfg=7
 endif
 
-" Default is to have bold headers
+" Default is not to have bold headers
 if !exists("g:otl_bold_headers")
-  let g:otl_bold_headers = 1
+  let g:otl_bold_headers = 0
 endif
 
 if g:otl_bold_headers
