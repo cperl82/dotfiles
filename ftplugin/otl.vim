@@ -924,7 +924,8 @@ if !exists("s:otl_loaded_functions")
     "
     setlocal foldtext=OtlFoldText()
     " set to a space, just in case it wasn't a dash.
-    setlocal foldmethod=expr
+    setlocal foldmethod=indent
+    " setlocal foldmethod=expr
     setlocal foldexpr=OtlFoldLevel(v:lnum)
     setlocal formatoptions=crqno
     " for wrapping headers too:
