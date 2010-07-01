@@ -181,7 +181,7 @@ if g:NERDTreeHijackNetrw
     augroup END
 endif
 
-"SECTION: Classes {{{1
+" SECTION: Classes {{{1
 "============================================================
 "CLASS: Bookmark {{{2
 "============================================================
@@ -2653,6 +2653,28 @@ function! s:initNerdTreeInPlace(dir)
     let b:NERDTreeShowBookmarks = g:NERDTreeShowBookmarks
 
     let b:NERDTreeType = "secondary"
+
+    " 2010-07-01 Chris Perl
+    " Trying to understand the whole of the NERDTree code, but not quite
+    " there yet.  For now, adding this as a workaround for the way in which I
+    " work.  I like to invoke vim with a directory as the only command line
+    " argument, like "vim ." or "vim dir1/dir2/dir3" and then use NERDTree to
+    " find the files I want to edit and open them into new tabs.  However,
+    " when you give vim a directory name on the command line, somewhere along
+    " the way (which I don't totally understand yet), lcd seems to get used
+    " (or at least :echo haslocaldir() will return 1, instead of 0).  This
+    " means that when I use NERDTree to change directories, the names of the
+    " various tabs will change as I cycle through my tabs.  Very annoying.  I
+    " dont think is is really the best way to fix this, and to be honest I'm
+    " really not sure where the :lcd is coming from, but for now this allows
+    " me to work the way that I want to.
+    "
+    " Various resources which I've looked at thus far
+    " * NERDTree source (clearly)
+    " * :help cd
+    " * :help haslocaldir
+    " * :help netrw
+    exec "cd " . getcwd()
 
     call s:bindMappings()
     setfiletype nerdtree
