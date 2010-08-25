@@ -7,6 +7,12 @@ if has("macunix")
 	" Turn off the toolbar
 	set guioptions-=T
 
+	" 2010-08-25
+	" Override the highlight settings for FoldColumn with macvim as I can
+	" barely read the default
+	hi clear FoldColumn
+	hi link FoldColumn Folded
+
 elseif has("unix")
 	set guifont=Monaco\ 8
 	set tabpagemax=30
