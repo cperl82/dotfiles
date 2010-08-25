@@ -3,6 +3,10 @@ if has("macunix")
 	set guifont=Monaco\:h11.00
 	"set guifont=DejaVu\ Sans\ Mono\:h11.00
 	"set guifont=Envy\ Code\ R:h11.00
+
+	" Turn off the toolbar
+	set guioptions-=T
+
 elseif has("unix")
 	set guifont=Monaco\ 8
 	set tabpagemax=30
