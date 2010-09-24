@@ -159,10 +159,10 @@ nmap <silent> <C-Right> :call MoveTabRight()<CR>
 nmap <silent> <C-h> :tabp<CR>
 nmap <silent> <C-l> :tabn<CR>
 
-" Map Control-? such that it opens the quick fix window
+" Map Alt-1 (at least on my mac) such that it opens the quick fix window
 " and then prepares a vimgrep for me w/o jumping to the first
 " match it finds
-:nmap <C-?> :copen<CR>:vimgrep ##j **/*<Left><Left><Left><Left><Left><Left><Left>
+:nmap <ESC>1 :copen<CR>:vimgrep ##j **/*<Left><Left><Left><Left><Left><Left><Left>
 
 " 2010-09-24
 " Added newer python syntax highlighting script
