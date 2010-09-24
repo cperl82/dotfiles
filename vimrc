@@ -163,3 +163,8 @@ nmap <silent> <C-l> :tabn<CR>
 " and then prepares a vimgrep for me w/o jumping to the first
 " match it finds
 :nmap <C-?> :copen<CR>:vimgrep ##j **/*<Left><Left><Left><Left><Left><Left><Left>
+
+" 2010-09-24
+" Added newer python syntax highlighting script
+" Enable all the syntax options in it (.vim/syntax/python.vim)
+let g:python_highlight_all = 1
