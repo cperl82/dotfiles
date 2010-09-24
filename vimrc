@@ -151,10 +151,15 @@ function! MoveTabRight()
 endfunction
 " Map Control-Left and Control-Right
 " to dragging a tab left or right
-map <silent> <C-Left> :call MoveTabLeft()<CR>
-map <silent> <C-Right> :call MoveTabRight()<CR>
+nmap <silent> <C-Left> :call MoveTabLeft()<CR>
+nmap <silent> <C-Right> :call MoveTabRight()<CR>
 
 " Map Control-h and Control-l
 " to moving left and right through the open tabs
-map <silent> <C-h> :tabp<CR>
-map <silent> <C-l> :tabn<CR>
+nmap <silent> <C-h> :tabp<CR>
+nmap <silent> <C-l> :tabn<CR>
+
+" Map Control-? such that it opens the quick fix window
+" and then prepares a vimgrep for me w/o jumping to the first
+" match it finds
+:nmap <C-?> :copen<CR>:vimgrep ##j **/*<Left><Left><Left><Left><Left><Left><Left>
