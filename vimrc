@@ -64,18 +64,6 @@ function! s:TabLine.new() dict
 	return obj
 endfunction
 
-function! s:TabLine.display() dict
-	if s:leftAnchorTabNr && s:rightAnchorTabNr
-		throw "Left and Right anchors cannot both be active"
-	elseif s:leftAnchorTabNr
-		let leftidx = s:leftAnchorTabNr - 1
-	elseif s:rightAnchorTabNr
-		" do something here
-	else
-		throw "One of Left or Right anchor should be set"
-	endif
-endfunction
-
 " Class Tab
 let s:Tab = {}
 function! s:Tab.new(number) dict
