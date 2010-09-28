@@ -26,6 +26,102 @@ colorscheme ir_black
 " ir_black colorscheme looks terrible with treeRO linked to WarningMsg
 hi link treeRO Normal
 
+" Messing around with OO for tabline
+" Function TestTabLine
+function! TestTabLine()
+	let tl = s:TabLine.new()
+	return tl
+endfunction
+
+" Class TabLine
+let s:TabLine = {}
+function! s:TabLine.new() dict
+	let obj = copy(self)
+	" Create all of our tabs
+	let obj.tabs = []
+	for i in range(1, tabpagenr('$')) 
+		let tab = s:Tab.new(i)
+		let obj.tabs += [ tab ]
+	endfor
+	" Figure out the width we have to work with
+	let obj.screenwidth = &columns
+	" Set the separator we're using
+	let obj.labelseparator = '|'
+
+	" Identified the selected tab
+	" selectedtab is the current tab page number
+	" selectedtabidx is the index into self.tabs for the selected tab
+	let obj.selectedtab = tabpagenr()
+	let obj.selectedtabidx = obj.selectedtab - 1
+
+	" This is what allows us to save state
+	if ! exists("s:leftAnchorTabNr")
+		let s:leftAnchorTabNr = 1
+	endif
+	if ! exists("s:righAnchorTabNr")
+		let s:rightAnchorTabNr = 0
+	endif
+	return obj
+endfunction
+
+function! s:TabLine.display() dict
+	if s:leftAnchorTabNr && s:rightAnchorTabNr
+		throw "Left and Right anchors cannot both be active"
+	elseif s:leftAnchorTabNr
+		let leftidx = s:leftAnchorTabNr - 1
+	elseif s:rightAnchorTabNr
+		" do something here
+	else
+		throw "One of Left or Right anchor should be set"
+	endif
+endfunction
+
+" Class Tab
+let s:Tab = {}
+function! s:Tab.new(number) dict
+	let obj = copy(self)
+	let obj.number = a:number
+	let buflist    = tabpagebuflist(obj.number)
+	let winnr      = tabpagewinnr(obj.number)
+	let buffer     = buflist[winnr - 1]
+	let name       = bufname(buffer)
+
+	" Set the label
+	if name == ""
+		let obj.name = "[No Name]"
+	else
+		let obj.name = fnamemodify(name, ":.")
+	endif
+
+	" Set the length of the name only.  NOTE that this
+	" is different than the length of the label, since
+	" the label will include the tab number and perhaps
+	" a + if it is modified.
+	let obj.namelen = len(obj.name)
+
+	" Determine if the buffer in the active window of
+	" this tab is modified
+	let obj.modified = getbufvar(buffer, "&modified")
+
+	" Set the label
+	if obj.modified
+		let obj.label = "+" . obj.number . " " . obj.name
+	else
+		let obj.label =       obj.number . " " . obj.name
+	endif
+	" Set the label length
+	let obj.labellen = len(obj.label)
+	" Determine if we are the selected tab or not
+	if obj.number == tabpagenr()
+		let obj.selected = 1
+	else
+		let obj.selected = 0 
+	endif
+endfunction
+
+
+
+
 " Function to create a tab object that represents a tagpage
 function! CreateTabObj(n)
 	let s:tabObj = {}
@@ -168,3 +264,4 @@ nmap <silent> <C-l> :tabn<CR>
 " Added newer python syntax highlighting script
 " Enable all the syntax options in it (.vim/syntax/python.vim)
 let g:python_highlight_all = 1
+let g:python_highlight_ident_errors = 0
