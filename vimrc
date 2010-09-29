@@ -29,39 +29,50 @@ hi link treeRO Normal
 " Messing around with OO for tabline
 " Function TestTabLine
 function! TestTabLine()
-	let tl = s:TabLine.new()
-	return tl
+	let t = s:TabLine.get()
+	t.build()
+	return t
 endfunction
 
 " Class TabLine
 let s:TabLine = {}
-function! s:TabLine.new() dict
-	let obj = copy(self)
-	" Create all of our tabs
-	let obj.tabs = []
+function! s:TabLine.get() dict
+	return self
+endfunction	
+
+function! s:TabLine.build() dict
+	" Do everything to build our current state
+	let self.current_tabs = []
 	for i in range(1, tabpagenr('$')) 
 		let tab = s:Tab.new(i)
-		let obj.tabs += [ tab ]
+		let self.current_tabs += [ tab ]
 	endfor
 	" Figure out the width we have to work with
-	let obj.screenwidth = &columns
+	let self.screenwidth = &columns
 	" Set the separator we're using
-	let obj.labelseparator = '|'
+	let self.labelseparator = '|'
 
 	" Identified the selected tab
 	" selectedtab is the current tab page number
 	" selectedtabidx is the index into self.tabs for the selected tab
-	let obj.selectedtab = tabpagenr()
-	let obj.selectedtabidx = obj.selectedtab - 1
+	let self.selectedtab = tabpagenr()
 
 	" This is what allows us to save state
-	if ! exists("s:leftAnchorTabNr")
-		let s:leftAnchorTabNr = 1
+	if ! exists("self.leftanchortabnr")
+		let self.leftanchortabnr = 1
 	endif
-	if ! exists("s:righAnchorTabNr")
-		let s:rightAnchorTabNr = 0
+	if ! exists("self.rightanchortabnr")
+		let self.rightanchortabnr = 0
 	endif
-	return obj
+	if ! exists("self.previous_tabs")
+		let self.previous_tabs = []
+	endif
+	return self
+endfunction
+
+function! s:TabLine.save_state() dict
+	let self.previous_tabs = self.current_tabs
+	let self.previous_selectedtab = self.selectedtab
 endfunction
 
 " Class Tab
