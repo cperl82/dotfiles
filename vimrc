@@ -6,7 +6,6 @@ filetype plugin indent on
 " See :help syntax
 syntax on
 
-
 set laststatus=2
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 set autoindent
@@ -29,55 +28,37 @@ hi link treeRO Normal
 " Messing around with OO for tabline
 " Function TestTabLine
 function! TestTabLine()
-	let t = s:TabLine.get()
-	t.build()
+	let t = g:TabLine.new()
 	return t
 endfunction
 
 " Class TabLine
-let s:TabLine = {}
-function! s:TabLine.get() dict
-	return self
-endfunction	
-
-function! s:TabLine.build() dict
+let g:TabLine = {}
+function! g:TabLine.new() dict
 	" Do everything to build our current state
-	let self.current_tabs = []
+	let obj = copy(self)
+	" Note that index into self.tabs is tabnr - 1
+	let obj.tabs = []
 	for i in range(1, tabpagenr('$')) 
-		let tab = s:Tab.new(i)
-		let self.current_tabs += [ tab ]
+		let tab = g:Tab.new(i)
+		let obj.tabs += [ tab ]
 	endfor
 	" Figure out the width we have to work with
-	let self.screenwidth = &columns
+	let obj.screenwidth = &columns
 	" Set the separator we're using
-	let self.labelseparator = '|'
+	let obj.labelseparator = '|'
 
 	" Identified the selected tab
 	" selectedtab is the current tab page number
-	" selectedtabidx is the index into self.tabs for the selected tab
-	let self.selectedtab = tabpagenr()
+	" selectedtabidx is the index into obj.tabs for the selected tab
+	let obj.selectedtab = tabpagenr()
 
-	" This is what allows us to save state
-	if ! exists("self.leftanchortabnr")
-		let self.leftanchortabnr = 1
-	endif
-	if ! exists("self.rightanchortabnr")
-		let self.rightanchortabnr = 0
-	endif
-	if ! exists("self.previous_tabs")
-		let self.previous_tabs = []
-	endif
-	return self
-endfunction
-
-function! s:TabLine.save_state() dict
-	let self.previous_tabs = self.current_tabs
-	let self.previous_selectedtab = self.selectedtab
+	return obj
 endfunction
 
 " Class Tab
-let s:Tab = {}
-function! s:Tab.new(number) dict
+let g:Tab = {}
+function! g:Tab.new(number) dict
 	let obj = copy(self)
 	let obj.number = a:number
 	let buflist    = tabpagebuflist(obj.number)
@@ -85,18 +66,12 @@ function! s:Tab.new(number) dict
 	let buffer     = buflist[winnr - 1]
 	let name       = bufname(buffer)
 
-	" Set the label
+	" Set the name
 	if name == ""
 		let obj.name = "[No Name]"
 	else
 		let obj.name = fnamemodify(name, ":.")
 	endif
-
-	" Set the length of the name only.  NOTE that this
-	" is different than the length of the label, since
-	" the label will include the tab number and perhaps
-	" a + if it is modified.
-	let obj.namelen = len(obj.name)
 
 	" Determine if the buffer in the active window of
 	" this tab is modified
@@ -104,18 +79,36 @@ function! s:Tab.new(number) dict
 
 	" Set the label
 	if obj.modified
-		let obj.label = "+" . obj.number . " " . obj.name
+		let obj.label = "+" . obj.number . " " . obj.name . " "
 	else
-		let obj.label =       obj.number . " " . obj.name
+		let obj.label = " " . obj.number . " " . obj.name . " "
 	endif
-	" Set the label length
-	let obj.labellen = len(obj.label)
+
+	" Set the display label, can be modified by client code
+	let obj.displaylabel = obj.label
+
 	" Determine if we are the selected tab or not
 	if obj.number == tabpagenr()
 		let obj.selected = 1
 	else
 		let obj.selected = 0 
 	endif
+	return obj
+endfunction
+
+function! g:Tab.getDisplayLabel() dict
+	if self.selected
+		let pre  = '%#TabLineSel#'
+		let post = '%#TabLine#'
+	else
+		let pre  = ""
+		let post = ""
+	endif
+	return pre . self.displaylabel . post
+endfunction
+
+function! g:Tab.setDisplayLabel(str) dict
+	let self.displaylabel = a:str
 endfunction
 
 
