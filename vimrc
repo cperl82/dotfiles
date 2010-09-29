@@ -116,33 +116,40 @@ endfunction
 
 " Function to create a tab object that represents a tagpage
 function! CreateTabObj(n)
-	let s:tabObj = {}
-	let s:buflist = tabpagebuflist(a:n)
-	let s:winnr = tabpagewinnr(a:n)
-	let s:filename = bufname(s:buflist[s:winnr - 1])
-	if s:filename == ""
-		let s:filename = "[No Name]"
+	let tabObj   = {}
+	let buflist  = tabpagebuflist(a:n)
+	let winnr    = tabpagewinnr(a:n)
+	let buffer   = buflist[winnr - 1]
+	let filename = bufname(buffer)
+	if filename == ""
+		let filename = "[No Name]"
 	else
-		let s:filename = fnamemodify(s:filename, ":.")
+		let filename = fnamemodify(filename, ":.")
 	endif
-	let s:tabObj.label = ' ' . a:n . ' ' . s:filename . ' '
-	let s:tabObj.labelLen = len(s:tabObj.label)
-	let s:tabObj.sep = '|'
-	let s:tabObj.sepLen = len(s:tabObj.sep)
-	let s:tabObj.partial = 0
+	let modified = getbufvar(buffer, "&modified")
+	if modified
+		let pre = " +"
+	else
+		let pre = " "
+	endif
+	let tabObj.label = pre . a:n . ' ' . filename . ' '
+	let tabObj.labelLen = len(tabObj.label)
+	let tabObj.sep = '|'
+	let tabObj.sepLen = len(tabObj.sep)
+	let tabObj.partial = 0
 	" If this is the current tab, set the highlight to make it selected
 	if tabpagenr() == a:n
-		let s:tabObj.labelHighlight = '%#TabLineSel#'
-		let s:tabObj.sepHighlight =   '%#TabLine#'
-		let s:tabObj.resetHighlight = '%#TabLine#'
-		let s:tabObj.current = 1
+		let tabObj.labelHighlight = '%#TabLineSel#'
+		let tabObj.sepHighlight =   '%#TabLine#'
+		let tabObj.resetHighlight = '%#TabLine#'
+		let tabObj.current = 1
 	else
-		let s:tabObj.labelHighlight = '%#TabLine#'
-		let s:tabObj.sepHighlight =   '%#TabLine#'
-		let s:tabObj.resetHighlight = '%#TabLine#'
-		let s:tabObj.current = 0
+		let tabObj.labelHighlight = '%#TabLine#'
+		let tabObj.sepHighlight =   '%#TabLine#'
+		let tabObj.resetHighlight = '%#TabLine#'
+		let tabObj.current = 0
 	endif
-	return s:tabObj
+	return tabObj
 endfunction
 
 function! CreateTabLine()
