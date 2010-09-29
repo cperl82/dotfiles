@@ -44,9 +44,10 @@ function! g:TabLine.new() dict
 		let obj.tabs += [ tab ]
 	endfor
 	" Figure out the width we have to work with
-	let obj.screenwidth = &columns
+	let obj.width = &columns
+
 	" Set the separator we're using
-	let obj.labelseparator = '|'
+	let obj.separator = '|'
 
 	" Identified the selected tab
 	" selectedtab is the current tab page number
@@ -79,9 +80,9 @@ function! g:Tab.new(number) dict
 
 	" Set the label
 	if obj.modified
-		let obj.label = "+" . obj.number . " " . obj.name . " "
+		let obj.label = " +" . obj.number . " " . obj.name . " "
 	else
-		let obj.label = " " . obj.number . " " . obj.name . " "
+		let obj.label =  " " . obj.number . " " . obj.name . " "
 	endif
 
 	" Set the display label, can be modified by client code
