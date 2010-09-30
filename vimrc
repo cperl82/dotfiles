@@ -86,6 +86,9 @@ function! g:TabLine.build(startnr) dict
 				let curridx = startidx
 				continue
 			else
+				if curridx != endix
+					call self.ts.setMoreTabsMarker()
+				endif
 				break
 			endif
 		endif
