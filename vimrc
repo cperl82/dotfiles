@@ -29,7 +29,7 @@ hi link treeRO Normal
 " Function TestTabLine
 function! TestTabLine()
 	let t = g:TabLine.new()
-	return t
+	return t.ts.getString()
 endfunction
 
 " Class TabLine
@@ -43,18 +43,127 @@ function! g:TabLine.new() dict
 		let tab = g:Tab.new(i)
 		let obj.tabs += [ tab ]
 	endfor
-	" Figure out the width we have to work with
-	let obj.width = &columns
-
-	" Set the separator we're using
-	let obj.separator = '|'
-
-	" Identified the selected tab
-	" selectedtab is the current tab page number
-	" selectedtabidx is the index into obj.tabs for the selected tab
+	" Identify the selected tab
 	let obj.selectedtab = tabpagenr()
 
+	" Testing
+	let obj.ts = g:TabString.new()
+	call obj.ts.setAnchor(g:TabString.ANCHORLEFT)
+	let startidx = 0
+	let selected_made_it = 0
+	while ! selected_made_it
+		for tabidx in range(startidx, len(obj.tabs))
+			let tab = obj.tabs[tabidx]
+			let r = obj.ts.appendTab(tab)
+			if r == 0
+				if tabidx != len(obj.tabs)
+					call obj.ts.setMoreTabsMarker()
+				endif
+				break
+			endif
+			if tab.selected
+				let selected_made_it = 1
+			endif
+		endfor
+		if ! selected_made_it
+			call obj.ts.clear()
+			call obj.ts.setAnchor(g:TabString.ANCHORLEFT)
+			let startidx += 1
+		endif
 	return obj
+endfunction
+
+" Class TabString
+let g:TabString = {}
+let g:TabString.ANCHORNONE  = 0
+let g:TabString.ANCHORLEFT  = 1
+let g:TabString.ANCHORRIGHT = 2
+
+function! g:TabString.new() dict
+	let obj = copy(self)
+	" Save space on either side for < or > if neccessary
+	let obj.width = &columns - 1 
+	let obj.remaining = obj.width
+	let obj.separator = '|'
+	let obj.anchor = g:TabString.ANCHORNONE
+	let obj.string = ""
+	return obj
+endfunction
+
+function! g:TabString.setAnchor(x) dict
+	let self.anchor = a:x
+endfunction
+
+function! g:TabString.clear() dict
+	let self.anchor = g:TabString.ANCHORNONE
+	let self.string = ""
+	let self.remaining = self.width
+endfunction
+
+function! g:TabString.appendTab(tab) dict
+	if self.anchor != g:TabString.ANCHORLEFT
+		throw "Can only call appendTab if TabString is ANCHORLEFT"
+	endif
+	let tab = a:tab
+	if self.string == ""
+		let separator = ""
+	else
+		let separator = self.separator
+	endif
+	if self.remaining == 0
+		return 0
+	elseif len(tab.label) >= self.remaining
+		let tmp = strpart(tab.label, 0, self.remaining-1)
+		let tmp = strpart(tmp, 0, len(tmp) - 3) . "..."
+		let self.string .= separator . tab.getHighlightPre() . tmp . tab.getHighlightPost()
+		let self.remaining = 0
+		return 1
+	else
+		let self.string .= separator . tab.getLabel()
+		let self.remaining -= len(tab.label) 
+		let self.remaining -= len(separator)
+		return 2
+	endif
+endfunction
+
+function! g:TabString.prependTab(tab) dict
+	if self.anchor != g:TabString.ANCHORRIGHT
+		throw "Can only call prependTab if TabString is ANCHORRIGHT"
+	endif
+	let tab = a:tab
+	if self.string == ""
+		let separator = ""
+	else
+		let separator = self.separator
+	endif
+	if self.remaining == 0
+		return 0
+	elseif len(tab.label) >= self.remaining
+		let tmp = strpart(tab.label, len(tab.label)-(self.remaining-1), len(tab.label))
+		let tmp = "..." . strpart(tmp, 3, len(tmp))
+		let self.string = tab.getHighlightPre() . tmp . tab.getHighlightPost() . separator . self.string
+		let self.remaining = 0
+		return 1
+	else
+		let self.string = tab.getLabel() . separator . self.string
+		let self.remaining -= len(tab.label)
+		let self.remaining -= len(separator)
+		return 2
+	endif
+endfunction
+
+function! g:TabString.setMoreTabsMarker() dict
+	if self.anchor == g:TabString.ANCHORLEFT
+		let self.string .= '>'
+	elseif self.anchor == g:TabString.ANCHORRIGHT
+		let self.string = '<' . self.string
+	else
+		throw "You cannot call setMoreTabsMarker with having anchored the TabString object"
+	endif
+endfunction
+
+function! g:TabString.getString() dict
+	return '%#Tabline#' . self.string
 endfunction
 
 " Class Tab
@@ -85,34 +194,35 @@ function! g:Tab.new(number) dict
 		let obj.label =  " " . obj.number . " " . obj.name . " "
 	endif
 
-	" Set the display label, can be modified by client code
-	let obj.displaylabel = obj.label
-
 	" Determine if we are the selected tab or not
 	if obj.number == tabpagenr()
 		let obj.selected = 1
 	else
 		let obj.selected = 0 
 	endif
+
+	" Setup the highligh pre and post
+	if obj.selected
+		let obj.highlightPre  = '%#TabLineSel#'
+		let obj.highlightPost = '%#TabLine#'
+	else
+		let obj.highlightPre  = ""
+		let obj.highlightPost = ""
+	endif
 	return obj
 endfunction
 
-function! g:Tab.getDisplayLabel() dict
-	if self.selected
-		let pre  = '%#TabLineSel#'
-		let post = '%#TabLine#'
-	else
-		let pre  = ""
-		let post = ""
-	endif
-	return pre . self.displaylabel . post
+function! g:Tab.getLabel() dict
+	return self.highlightPre . self.label . self.highlightPost
 endfunction
 
-function! g:Tab.setDisplayLabel(str) dict
-	let self.displaylabel = a:str
+function! g:Tab.getHighlightPre() dict
+	return self.highlightPre
 endfunction
 
-
+function! g:Tab.getHighlightPost() dict
+	return self.highlightPost
+endfunction
 
 
 " Function to create a tab object that represents a tagpage
