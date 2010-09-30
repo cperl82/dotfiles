@@ -29,14 +29,19 @@ hi link treeRO Normal
 " Function TestTabLine
 function! TestTabLine()
 	let t = g:TabLine.new()
-	return t.ts.getString()
+	return t.getString()
 endfunction
 
 " Class TabLine
 let g:TabLine = {}
 function! g:TabLine.new() dict
-	" Do everything to build our current state
+	" Initialize the tab number used for anchoring.
+	" NOTE: This is putting the value into self, before the copy below
+	let self.anchor  = 1
+
+	" Create a new object for returning
 	let obj = copy(self)
+
 	" Note that index into self.tabs is tabnr - 1
 	let obj.tabs = []
 	for i in range(1, tabpagenr('$')) 
@@ -45,32 +50,49 @@ function! g:TabLine.new() dict
 	endfor
 	" Identify the selected tab
 	let obj.selectedtab = tabpagenr()
-
+	
 	" Testing
 	let obj.ts = g:TabString.new()
 	call obj.ts.setAnchor(g:TabString.ANCHORLEFT)
-	let startidx = 0
-	let selected_made_it = 0
-	while ! selected_made_it
-		for tabidx in range(startidx, len(obj.tabs))
-			let tab = obj.tabs[tabidx]
-			let r = obj.ts.appendTab(tab)
-			if r == 0
-				if tabidx != len(obj.tabs)
-					call obj.ts.setMoreTabsMarker()
-				endif
+	" Here we need to determine if we moved left or right and other rules
+	" for changing the anchoring.  If we change from left to right, call
+	" setAnchor and reverse self.tabs before calling build.  If we change
+	" from right to left, setAnchor to the left and leave self.tabs alone
+	call obj.build(self.anchor)
+	return obj
+endfunction
+
+function! g:TabLine.getString() dict
+	return self.ts.getString()
+endfunction
+
+function! g:TabLine.build(startnr) dict
+	" Build the tab string from tab number startnr.  Keep going until the
+	" selected tab is fully displayed
+	let startnr  = a:startnr
+	let startidx = startnr - 1
+	let endidx   = len(self.tabs) - 1
+	let curridx  = startidx
+	let stidx    = self.selectedtab - 1
+	call self.ts.clear()
+	while curridx <= endidx
+		let tab = self.tabs[curridx]
+		let return = self.ts.concatTab(tab)
+		if return == 0 || return == 1
+			" TabString is full
+			if stidx >= curridx
+				call self.ts.clear()
+				let startidx += 1
+				let curridx = startidx
+				continue
+			else
 				break
 			endif
-			if tab.selected
-				let selected_made_it = 1
-			endif
-		endfor
-		if ! selected_made_it
-			call obj.ts.clear()
-			call obj.ts.setAnchor(g:TabString.ANCHORLEFT)
-			let startidx += 1
 		endif
-	return obj
+		let curridx += 1
+	endwhile
+	let anchornr = startidx + 1
+	let self.anchor = anchornr
 endfunction
 
 " Class TabString
@@ -95,61 +117,54 @@ function! g:TabString.setAnchor(x) dict
 endfunction
 
 function! g:TabString.clear() dict
-	let self.anchor = g:TabString.ANCHORNONE
 	let self.string = ""
 	let self.remaining = self.width
 endfunction
 
-function! g:TabString.appendTab(tab) dict
-	if self.anchor != g:TabString.ANCHORLEFT
-		throw "Can only call appendTab if TabString is ANCHORLEFT"
-	endif
-	let tab = a:tab
-	if self.string == ""
-		let separator = ""
-	else
-		let separator = self.separator
-	endif
-	if self.remaining == 0
-		return 0
-	elseif len(tab.label) >= self.remaining
-		let tmp = strpart(tab.label, 0, self.remaining-1)
-		let tmp = strpart(tmp, 0, len(tmp) - 3) . "..."
-		let self.string .= separator . tab.getHighlightPre() . tmp . tab.getHighlightPost()
-		let self.remaining = 0
-		return 1
-	else
-		let self.string .= separator . tab.getLabel()
-		let self.remaining -= len(tab.label) 
-		let self.remaining -= len(separator)
-		return 2
-	endif
+function! g:TabString.clearAndAnchor(x) dict
+	call self.clear()
+	call self.setAnchor(a:x)
 endfunction
 
-function! g:TabString.prependTab(tab) dict
-	if self.anchor != g:TabString.ANCHORRIGHT
-		throw "Can only call prependTab if TabString is ANCHORRIGHT"
-	endif
+function! g:TabString.concatTab(tab) dict
 	let tab = a:tab
 	if self.string == ""
 		let separator = ""
 	else
 		let separator = self.separator
 	endif
-	if self.remaining == 0
-		return 0
-	elseif len(tab.label) >= self.remaining
-		let tmp = strpart(tab.label, len(tab.label)-(self.remaining-1), len(tab.label))
-		let tmp = "..." . strpart(tmp, 3, len(tmp))
-		let self.string = tab.getHighlightPre() . tmp . tab.getHighlightPost() . separator . self.string
-		let self.remaining = 0
-		return 1
+	if self.anchor == g:TabString.ANCHORLEFT
+		if self.remaining == 0
+			return 0
+		elseif len(tab.label) >= self.remaining
+			let tmp = strpart(tab.label, 0, self.remaining-1)
+			let tmp = strpart(tmp, 0, len(tmp) - 3) . "..."
+			let self.string .= separator . tab.getHighlightPre() . tmp . tab.getHighlightPost()
+			let self.remaining = 0
+			return 1
+		else
+			let self.string .= separator . tab.getLabel()
+			let self.remaining -= len(tab.label) 
+			let self.remaining -= len(separator)
+			return 2
+		endif
+	elseif self.anchor == g:TabString.ANCHORRIGHT
+		if self.remaining == 0
+			return 0
+		elseif len(tab.label) >= self.remaining
+			let tmp = strpart(tab.label, len(tab.label)-(self.remaining-1), len(tab.label))
+			let tmp = "..." . strpart(tmp, 3, len(tmp))
+			let self.string = tab.getHighlightPre() . tmp . tab.getHighlightPost() . separator . self.string
+			let self.remaining = 0
+			return 1
+		else
+			let self.string = tab.getLabel() . separator . self.string
+			let self.remaining -= len(tab.label)
+			let self.remaining -= len(separator)
+			return 2
+		endif
 	else
-		let self.string = tab.getLabel() . separator . self.string
-		let self.remaining -= len(tab.label)
-		let self.remaining -= len(separator)
-		return 2
-	endif
+		throw "You cannot call concatTab without having anchored the TabString object"
 endfunction
 
 function! g:TabString.setMoreTabsMarker() dict
@@ -158,7 +173,7 @@ function! g:TabString.setMoreTabsMarker() dict
 	elseif self.anchor == g:TabString.ANCHORRIGHT
 		let self.string = '<' . self.string
 	else
-		throw "You cannot call setMoreTabsMarker with having anchored the TabString object"
+		throw "You cannot call setMoreTabsMarker without having anchored the TabString object"
 	endif
 endfunction
 
