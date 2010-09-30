@@ -35,10 +35,7 @@ endfunction
 " Class TabLine
 let g:TabLine = {}
 function! g:TabLine.new() dict
-	" Initialize the tab number used for anchoring.
-	" NOTE: This is putting the value into self, before the copy below
-	let self.anchor  = 1
-
+	
 	" Create a new object for returning
 	let obj = copy(self)
 
@@ -50,6 +47,9 @@ function! g:TabLine.new() dict
 	endfor
 	" Identify the selected tab
 	let obj.selectedtab = tabpagenr()
+
+	" Initialize the tab number used for anchoring.
+	let obj.anchor  = 1
 	
 	" Testing
 	let obj.ts = g:TabString.new()
@@ -58,7 +58,8 @@ function! g:TabLine.new() dict
 	" for changing the anchoring.  If we change from left to right, call
 	" setAnchor and reverse self.tabs before calling build.  If we change
 	" from right to left, setAnchor to the left and leave self.tabs alone
-	call obj.build(self.anchor)
+	call obj.build(obj.anchor)
+	echo "Anchor is " . obj.anchor
 	return obj
 endfunction
 
@@ -86,7 +87,7 @@ function! g:TabLine.build(startnr) dict
 				let curridx = startidx
 				continue
 			else
-				if curridx != endix
+				if curridx != endidx
 					call self.ts.setMoreTabsMarker()
 				endif
 				break
@@ -139,9 +140,10 @@ function! g:TabString.concatTab(tab) dict
 	if self.anchor == g:TabString.ANCHORLEFT
 		if self.remaining == 0
 			return 0
-		elseif len(tab.label) >= self.remaining
-			let tmp = strpart(tab.label, 0, self.remaining-1)
+		elseif len(tab.label) + len(separator) > self.remaining
+			let tmp = strpart(tab.label, 0, self.remaining-len(separator))
 			let tmp = strpart(tmp, 0, len(tmp) - 3) . "..."
+			let tmp = strpart(tmp, 0, self.remaining-len(separator))
 			let self.string .= separator . tab.getHighlightPre() . tmp . tab.getHighlightPost()
 			let self.remaining = 0
 			return 1
@@ -154,9 +156,11 @@ function! g:TabString.concatTab(tab) dict
 	elseif self.anchor == g:TabString.ANCHORRIGHT
 		if self.remaining == 0
 			return 0
-		elseif len(tab.label) >= self.remaining
-			let tmp = strpart(tab.label, len(tab.label)-(self.remaining-1), len(tab.label))
+		elseif len(tab.label) + len(separator) > self.remaining
+			let tmp = strpart(tab.label, len(tab.label)-(self.remaining-len(separator)), len(tab.label))
 			let tmp = "..." . strpart(tmp, 3, len(tmp))
+			" Add fix like you have above for cases were
+			" self.remaining is a very low number like 1, 2 or 3
 			let self.string = tab.getHighlightPre() . tmp . tab.getHighlightPost() . separator . self.string
 			let self.remaining = 0
 			return 1
