@@ -34,9 +34,8 @@ endfunction
 
 " Class TabLine
 let g:TabLine = {}
-let g:TabLine.ANCHOR = 1
-let g:TabLine.ANCHORDIRECTION = 1 " g:TabString.ANCHORLEFT
-let g:TabLine.PREVIOUSTABS = []
+let g:TabLine.BUILDFORWARD = 10
+let g:TabLine.BUILDREVERSE = 11
 function! g:TabLine.new() dict
 	
 	" Create a new object for returning
@@ -52,48 +51,54 @@ function! g:TabLine.new() dict
 	" Identify the selected tab
 	let obj.selectedtab = tabpagenr()
 
-	" Testing
-	let obj.ts = g:TabString.new()
+	" Setup initial state for the first time through
+	if ! exists("obj.marker")
+		let self.marker = 1
+		let obj.marker  = self.marker
+	endif
 
-	" Set our anchor for the TabString to be either the default of
-	" ANCHORLEFT or whatever the previous state was
-	let tabs = obj.tabs
-	let anchorDirection = g:TabLine.ANCHORDIRECTION
-	let anchor = g:TabLine.ANCHOR
+	if ! exists("self.direction")
+		let self.direction = g:TabLine.BUILDFORWARD
+		let obj.direction  = self.direction
+	endif
+
+	if ! exists("self.previousTabs")
+		let self.previousTabs = []
+		let obj.previousTabs  = self.previousTabs
+	endif
+
+	" default to our previous state
+	let marker = self.marker
+	let direction = self.direction
 
 	" Here we need to determine if we moved left or right and other rules
 	" for changing the anchoring.  
 	let movedLeft  = obj.movedLeft()
 	let movedRight = obj.movedRight()
 	if movedLeft
+		echo "Moved Left"
 		let stidx = obj.selectedtab - 1
-		let dt = obj.displayTypeFromTabIdxInTabs(stidx, g:TabLine.PREVIOUSTABS)
+		let dt = obj.displayTypeFromTabIdxInTabs(stidx, self.previousTabs)
 		if (dt == g:Tab.DISPLAYNONE) || (dt == g:Tab.DISPLAYPART)
-			let anchorDirection = g:TabString.ANCHORLEFT
-			let tabs = obj.tabs
-			let anchor = stdix + 1
-		else
-			let tabs = obj.tabs
-			let anchor = g:TabLine.ANCHOR
+			let marker = obj.selectedtab
+			let direction = g:TabLine.BUILDFORWARD
+			echo "Changing build direction: Now LEFT to RIGHT"
 		endif
 	elseif movedRight
+		echo "Moved Right"
 		let stidx = obj.selectedtab - 1
-		let dt = obj.displayTypeFromTabIdxInTabs(stidx, g:TabLine.PREVIOUSTABS)
+		let dt = obj.displayTypeFromTabIdxInTabs(stidx, self.previousTabs)
 		if (dt == g:Tab.DISPLAYNONE) || (dt == g:Tab.DISPLAYPART)
-			let anchorDirection = g:TabString.ANCHORRIGHT
-			let tabs = reverse(obj.tabs)
-			let anchor = stidx + 1
-		else
-			let tabs = obj.tabs
-			let anchor = g:TabLine.ANCHOR
+			let marker = obj.selectedtab
+			let direction = g:TabLine.BUILDREVERSE
+			echo "Changing build direction: Now RIGHT to LEFT"
 		endif
-	else
-		" do nothing
 	endif
-	call obj.ts.setAnchor(anchorDirection)
-	call obj.build(anchor, tabs)
-	call obj.setPreviousTabs(obj.tabs)
-	call obj.setPreviousAnchorDirection(anchorDirection)
+	call obj.build(direction, marker)
+	" Save our state for the next time
+	let self.direction = direction
+	let self.marker = marker
+	let self.previousTabs = obj.tabs
 	return obj
 endfunction
 
@@ -101,16 +106,30 @@ function! g:TabLine.getString() dict
 	return self.ts.getString()
 endfunction
 
-function! g:TabLine.build(startnr, tabs) dict
-	" Build the tab string from tab number startnr.  Keep going until the
-	" selected tab is fully displayed
-	let tabs     = a:tabs
-	let startnr  = a:startnr
-	let startidx = startnr - 1
-	let endidx   = len(tabs) - 1
-	let curridx  = startidx
-	let stidx    = self.selectedtab - 1
+function! g:TabLine.build(direction, startnr) dict
+	" Build the tab string from tab number startnr in direction direction.  
+	" Keep going until the selected tab is fully displayed
+	let direction = a:direction
+	let startnr   = a:startnr
+
+	let  self.ts = g:TabString.new()
 	call self.ts.clear()
+
+	if direction == g:TabLine.BUILDFORWARD
+		call self.ts.setAnchor(g:TabString.ANCHORLEFT)
+		let tabs      = self.tabs
+		let startidx  = startnr - 1
+		let curridx   = startidx
+		let stidx     = self.selectedtab - 1
+	else
+		call self.ts.setAnchor(g:TabString.ANCHORRIGHT)
+		let tabs     = reverse(self.tabs[0:(startnr-1)])
+		let startidx = 0
+		let curridx  = startidx
+		let stidx    = (len(tabs) - 1) - (self.selectedtab - 1)
+	endif
+	let endidx = len(tabs) - 1
+
 	while curridx <= endidx
 		let tab = tabs[curridx]
 		let return = self.ts.concatTab(tab)
@@ -130,8 +149,6 @@ function! g:TabLine.build(startnr, tabs) dict
 		endif
 		let curridx += 1
 	endwhile
-	let anchornr = startidx + 1
-	call self.setAnchor(anchornr)
 endfunction
 
 function! g:TabLine.displayTypeFromTabIdxInTabs(idx, tabs) dict
@@ -157,7 +174,7 @@ endfunction
 
 function! g:TabLine.movedLeft() dict
 	let stidx = self.selectedtab - 1
-	let idx = self.selectedTabIdxFromTabs(g:TabLine.PREVIOUSTABS)
+	let idx = self.selectedTabIdxFromTabs(self.previousTabs)
 	if idx == -1
 		return 0
 	elseif stidx < idx
@@ -169,7 +186,7 @@ endfunction
 
 function! g:TabLine.movedRight() dict
 	let stidx = self.selectedtab - 1
-	let idx = self.selectedTabIdxFromTabs(g:TabLine.PREVIOUSTABS)
+	let idx = self.selectedTabIdxFromTabs(self.previousTabs)
 	if idx == -1
 		return 0
 	elseif stidx > idx
@@ -177,18 +194,6 @@ function! g:TabLine.movedRight() dict
 	else
 		return 0
 	endif
-endfunction
-
-function! g:TabLine.setAnchor(x) dict
-	let g:TabLine.ANCHOR = a:x
-endfunction
-
-function! g:TabLine.setPreviousTabs(x) dict
-	let g:TabLine.PREVIOUSTABS = a:x
-endfunction
-
-function! g:TabLine.setPreviousAnchorDirection(x) dict
-	let g:TabLine.ANCHORDIRECTION = a:x
 endfunction
 
 " Class TabString
@@ -200,7 +205,7 @@ let g:TabString.ANCHORRIGHT = 2
 function! g:TabString.new() dict
 	let obj = copy(self)
 	" Save space on either side for < or > if neccessary
-	let obj.width = &columns - 1 
+	let obj.width = &columns - 2 
 	let obj.remaining = obj.width
 	let obj.separator = '|'
 	let obj.anchor = g:TabString.ANCHORNONE
