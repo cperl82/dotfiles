@@ -35,7 +35,7 @@ endfunction
 " Class TabLine
 let g:TabLine = {}
 let g:TabLine.ANCHOR = 1
-let g:TabLine.ANCHORDIRECTION = g:TabString.ANCHORLEFT
+let g:TabLine.ANCHORDIRECTION = 1 " g:TabString.ANCHORLEFT
 let g:TabLine.PREVIOUSTABS = []
 function! g:TabLine.new() dict
 	
