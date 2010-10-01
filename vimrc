@@ -37,6 +37,22 @@ let g:TabLine = {}
 let g:TabLine.BUILDFORWARD = 10
 let g:TabLine.BUILDREVERSE = 11
 function! g:TabLine.new() dict
+	" Setup initial state for the first time through
+	if ! exists("self.marker")
+		let self.marker = 1
+	endif
+
+	if ! exists("self.direction")
+		let self.direction = g:TabLine.BUILDFORWARD
+	endif
+
+	if ! exists("self.previousTabs")
+		let self.previousTabs = []
+	endif
+
+	" default to our previous state
+	let marker = self.marker
+	let direction = self.direction
 	
 	" Create a new object for returning
 	let obj = copy(self)
@@ -51,25 +67,6 @@ function! g:TabLine.new() dict
 	" Identify the selected tab
 	let obj.selectedtab = tabpagenr()
 
-	" Setup initial state for the first time through
-	if ! exists("obj.marker")
-		let self.marker = 1
-		let obj.marker  = self.marker
-	endif
-
-	if ! exists("self.direction")
-		let self.direction = g:TabLine.BUILDFORWARD
-		let obj.direction  = self.direction
-	endif
-
-	if ! exists("self.previousTabs")
-		let self.previousTabs = []
-		let obj.previousTabs  = self.previousTabs
-	endif
-
-	" default to our previous state
-	let marker = self.marker
-	let direction = self.direction
 
 	" Here we need to determine if we moved left or right and other rules
 	" for changing the anchoring.  
@@ -242,8 +239,8 @@ function! g:TabString.concatTab(tab) dict
 			let tmp = strpart(tmp, 0, len(tmp) - 3) . "..."
 			let tmp = strpart(tmp, 0, self.remaining-len(separator))
 			let self.string .= separator . tab.getHighlightPre() . tmp . tab.getHighlightPost()
-			call tab.setDisplayed(g:Tab.DISPLAYPART)
 			let self.remaining = 0
+			call tab.setDisplayed(g:Tab.DISPLAYPART)
 			return 1
 		else
 			let self.string .= separator . tab.getLabel()
@@ -258,17 +255,18 @@ function! g:TabString.concatTab(tab) dict
 		elseif len(tab.label) + len(separator) > self.remaining
 			let tmp = strpart(tab.label, len(tab.label)-(self.remaining-len(separator)), len(tab.label))
 			let tmp = "..." . strpart(tmp, 3, len(tmp))
+			let tmp = strpart(tmp, len(tmp)-(self.remaining-len(separator)), len(tmp))
 			" Add fix like you have above for cases were
 			" self.remaining is a very low number like 1, 2 or 3
 			let self.string = tab.getHighlightPre() . tmp . tab.getHighlightPost() . separator . self.string
-			call tab.setDisplayed(g:Tab.DISPLAYPART)
 			let self.remaining = 0
+			call tab.setDisplayed(g:Tab.DISPLAYPART)
 			return 1
 		else
 			let self.string = tab.getLabel() . separator . self.string
-			call tab.setDisplayed(g:Tab.DISPLAYFULL)
 			let self.remaining -= len(tab.label)
 			let self.remaining -= len(separator)
+			call tab.setDisplayed(g:Tab.DISPLAYFULL)
 			return 2
 		endif
 	else
