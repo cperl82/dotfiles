@@ -45,22 +45,22 @@ function! g:TabLine.new() dict
 	let movedLeft  = obj.movedLeft()
 	let movedRight = obj.movedRight()
 	if movedLeft
-		echo "Moved Left"
+		" echo "Moved Left"
 		let stidx = obj.selectedtab - 1
 		let dt = obj.displayTypeFromTabIdxInTabs(stidx, self.previousTabs)
 		if (dt == g:Tab.DISPLAYNONE) || (dt == g:Tab.DISPLAYPART)
 			let marker = obj.selectedtab
 			let direction = g:TabLine.BUILDFORWARD
-			echo "Changing build direction: Now LEFT to RIGHT"
+			" echo "Changing build direction: Now LEFT to RIGHT"
 		endif
 	elseif movedRight
-		echo "Moved Right"
+		" echo "Moved Right"
 		let stidx = obj.selectedtab - 1
 		let dt = obj.displayTypeFromTabIdxInTabs(stidx, self.previousTabs)
 		if (dt == g:Tab.DISPLAYNONE) || (dt == g:Tab.DISPLAYPART)
 			let marker = obj.selectedtab
 			let direction = g:TabLine.BUILDREVERSE
-			echo "Changing build direction: Now RIGHT to LEFT"
+			" echo "Changing build direction: Now RIGHT to LEFT"
 		endif
 	endif
 	call obj.build(direction, marker)
