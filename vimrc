@@ -207,6 +207,8 @@ function! g:TabString.new() dict
 	let obj.separator = '|'
 	let obj.anchor = g:TabString.ANCHORNONE
 	let obj.string = ""
+	let obj.pre  = " "
+	let obj.post = " "
 	return obj
 endfunction
 
@@ -275,16 +277,16 @@ endfunction
 
 function! g:TabString.setMoreTabsMarker() dict
 	if self.anchor == g:TabString.ANCHORLEFT
-		let self.string .= '>'
+		let self.post = ">"
 	elseif self.anchor == g:TabString.ANCHORRIGHT
-		let self.string = '<' . self.string
+		let self.pre = "<"
 	else
 		throw "You cannot call setMoreTabsMarker without having anchored the TabString object"
 	endif
 endfunction
 
 function! g:TabString.getString() dict
-	return '%#Tabline#' . self.string
+	return '%#Tabline#' . self.pre . self.string . self.post
 endfunction
 
 " Class Tab
