@@ -173,8 +173,9 @@ nmap <silent> <C-l> :tabn<CR>
 " 2010-09-24
 " Added newer python syntax highlighting script
 " Enable all the syntax options in it (.vim/syntax/python.vim)
-let g:python_highlight_all = 1
-let g:python_highlight_ident_errors = 0
+let python_highlight_all = 1
+let python_highlight_indent_errors = 0
+let python_highlight_space_errors = 0
 
 " 2010-10-01
 " Function to jump to a specific tab
