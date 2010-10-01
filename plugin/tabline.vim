@@ -108,7 +108,7 @@ function! g:TabLine.build(direction, startnr) dict
 	while curridx <= endidx
 		let tab = tabs[curridx]
 		let return = self.ts.concatTab(tab)
-		if return == 0 || return == 1
+		if return == g:TabString.FITNONE || return == g:TabString.FITPART || return == g:TabString.FITFULLOUTOFSPACE
 			" TabString is full
 			if stidx > curridx
 				call self.ts.clear()
@@ -116,9 +116,6 @@ function! g:TabLine.build(direction, startnr) dict
 				let curridx = startidx
 				continue
 			else
-				" FIXME: If the last tab fits exactly, this
-				" check doesn't work, and we never add the >
-				" or < even though there may be more tabs
 				if curridx < endidx
 					if direction == g:TabLine.BUILDFORWARD
 						call self.ts.setMoreTabsMarkerRight()
@@ -183,6 +180,10 @@ let g:TabString = {}
 let g:TabString.ANCHORNONE  = 0
 let g:TabString.ANCHORLEFT  = 1
 let g:TabString.ANCHORRIGHT = 2
+let g:TabString.FITFULL           = 10
+let g:TabString.FITPART           = 11
+let g:TabString.FITNONE           = 12
+let g:TabString.FITFULLOUTOFSPACE = 13
 
 function! g:TabString.new() dict
 	let obj = copy(self)
@@ -220,7 +221,7 @@ function! g:TabString.concatTab(tab) dict
 	endif
 	if self.anchor == g:TabString.ANCHORLEFT
 		if self.remaining == 0
-			return 0
+			return g:TabString.FITNONE
 		elseif len(tab.label) + len(separator) > self.remaining
 			let tmp = strpart(tab.label, 0, self.remaining-len(separator))
 			let tmp = strpart(tmp, 0, len(tmp) - 3) . "..."
@@ -228,33 +229,39 @@ function! g:TabString.concatTab(tab) dict
 			let self.string .= separator . tab.getHighlightPre() . tmp . tab.getHighlightPost()
 			let self.remaining = 0
 			call tab.setDisplayed(g:Tab.DISPLAYPART)
-			return 1
+			return g:TabString.FITPART
 		else
 			let self.string .= separator . tab.getLabel()
-			call tab.setDisplayed(g:Tab.DISPLAYFULL)
 			let self.remaining -= len(tab.label) 
 			let self.remaining -= len(separator)
-			return 2
+			call tab.setDisplayed(g:Tab.DISPLAYFULL)
+			if self.remaining == 0
+				return g:TabString.FITFULLOUTOFSPACE
+			else
+				return g:TabString.FITFULL
+			endif
 		endif
 	elseif self.anchor == g:TabString.ANCHORRIGHT
 		if self.remaining == 0
-			return 0
+			return g:TabString.FITNONE
 		elseif len(tab.label) + len(separator) > self.remaining
 			let tmp = strpart(tab.label, len(tab.label)-(self.remaining-len(separator)), len(tab.label))
 			let tmp = "..." . strpart(tmp, 3, len(tmp))
 			let tmp = strpart(tmp, len(tmp)-(self.remaining-len(separator)), len(tmp))
-			" Add fix like you have above for cases were
-			" self.remaining is a very low number like 1, 2 or 3
 			let self.string = tab.getHighlightPre() . tmp . tab.getHighlightPost() . separator . self.string
 			let self.remaining = 0
 			call tab.setDisplayed(g:Tab.DISPLAYPART)
-			return 1
+			return g:TabString.FITPART
 		else
 			let self.string = tab.getLabel() . separator . self.string
 			let self.remaining -= len(tab.label)
 			let self.remaining -= len(separator)
 			call tab.setDisplayed(g:Tab.DISPLAYFULL)
-			return 2
+			if self.remaining == 0
+				return g:TabString.FITFULLOUTOFSPACE
+			else
+				return g:TabString.FITFULL
+			endif
 		endif
 	else
 		throw "You cannot call concatTab without having anchored the TabString object"
