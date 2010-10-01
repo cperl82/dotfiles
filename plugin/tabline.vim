@@ -40,7 +40,6 @@ function! g:TabLine.new() dict
 	" Identify the selected tab
 	let obj.selectedtab = tabpagenr()
 
-
 	" Here we need to determine if we moved left or right and other rules
 	" for changing the anchoring.  
 	let movedLeft  = obj.movedLeft()
@@ -108,7 +107,6 @@ function! g:TabLine.build(direction, startnr) dict
 
 	while curridx <= endidx
 		let tab = tabs[curridx]
-		echo "Calling concatTab for tab with index " . curridx
 		let return = self.ts.concatTab(tab)
 		if return == 0 || return == 1
 			" TabString is full
@@ -118,6 +116,9 @@ function! g:TabLine.build(direction, startnr) dict
 				let curridx = startidx
 				continue
 			else
+				" FIXME: If the last tab fits exactly, this
+				" check doesn't work, and we never add the >
+				" or < even though there may be more tabs
 				if curridx < endidx
 					if direction == g:TabLine.BUILDFORWARD
 						call self.ts.setMoreTabsMarkerRight()
