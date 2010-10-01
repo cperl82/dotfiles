@@ -45,7 +45,7 @@ function! g:TabLine.new() dict
 	let movedLeft  = obj.movedLeft()
 	let movedRight = obj.movedRight()
 	if movedLeft
-		" echo "Moved Left"
+		 echo "Moved Left"
 		let stidx = obj.selectedtab - 1
 		let dt = obj.displayTypeFromTabIdxInTabs(stidx, self.previousTabs)
 		if (dt == g:Tab.DISPLAYNONE) || (dt == g:Tab.DISPLAYPART)
@@ -54,7 +54,7 @@ function! g:TabLine.new() dict
 			" echo "Changing build direction: Now LEFT to RIGHT"
 		endif
 	elseif movedRight
-		" echo "Moved Right"
+		 echo "Moved Right"
 		let stidx = obj.selectedtab - 1
 		let dt = obj.displayTypeFromTabIdxInTabs(stidx, self.previousTabs)
 		if (dt == g:Tab.DISPLAYNONE) || (dt == g:Tab.DISPLAYPART)
@@ -134,7 +134,7 @@ function! g:TabLine.displayTypeFromTabIdxInTabs(idx, tabs) dict
 	let idx  = a:idx
 	let tabs = a:tabs
 	if idx > len(tabs)-1 || idx < 0
-		return g:Tab.DISPLAYNONE
+		return g:Tab.DISPLAYNOTFOUND
 	else
 		return tabs[idx].displayed
 	endif	
@@ -177,9 +177,9 @@ endfunction
 
 " Class TabString
 let g:TabString = {}
-let g:TabString.ANCHORNONE  = 0
-let g:TabString.ANCHORLEFT  = 1
-let g:TabString.ANCHORRIGHT = 2
+let g:TabString.ANCHORNONE        = 0
+let g:TabString.ANCHORLEFT        = 1
+let g:TabString.ANCHORRIGHT       = 2
 let g:TabString.FITFULL           = 10
 let g:TabString.FITPART           = 11
 let g:TabString.FITNONE           = 12
@@ -281,9 +281,10 @@ endfunction
 
 " Class Tab
 let g:Tab = {}
-let g:Tab.DISPLAYNONE = 0
-let g:Tab.DISPLAYPART = 1
-let g:Tab.DISPLAYFULL = 2
+let g:Tab.DISPLAYNONE     = 0
+let g:Tab.DISPLAYPART     = 1
+let g:Tab.DISPLAYFULL     = 2
+let g:Tab.DISPLAYNOTFOUND = 3
 function! g:Tab.new(number) dict
 	let obj = copy(self)
 	let obj.number = a:number
