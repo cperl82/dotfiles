@@ -118,12 +118,18 @@ function! g:TabLine.build(direction, startnr) dict
 		let startidx  = startnr - 1
 		let curridx   = startidx
 		let stidx     = self.selectedtab - 1
+		if startnr != 1
+			call self.ts.setMoreTabsMarkerLeft()
+		endif
 	else
 		call self.ts.setAnchor(g:TabString.ANCHORRIGHT)
 		let tabs     = reverse(self.tabs[0:(startnr-1)])
 		let startidx = 0
 		let curridx  = startidx
 		let stidx    = (len(tabs) - 1) - (self.selectedtab - 1)
+		if startnr != len(self.tabs) - 1
+			call self.ts.setMoreTabsMarkerRight()
+		endif
 	endif
 	let endidx = len(tabs) - 1
 
@@ -139,7 +145,11 @@ function! g:TabLine.build(direction, startnr) dict
 				continue
 			else
 				if curridx != endidx
-					call self.ts.setMoreTabsMarker()
+					if direction == g:TabLine.BUILDFORWARD
+						call self.ts.setMoreTabsMarkerRight()
+					else
+						call self.ts.setMoreTabsMarkerLeft()
+					endif
 				endif
 				break
 			endif
@@ -275,14 +285,12 @@ function! g:TabString.concatTab(tab) dict
 		throw "You cannot call concatTab without having anchored the TabString object"
 endfunction
 
-function! g:TabString.setMoreTabsMarker() dict
-	if self.anchor == g:TabString.ANCHORLEFT
-		let self.post = ">"
-	elseif self.anchor == g:TabString.ANCHORRIGHT
-		let self.pre = "<"
-	else
-		throw "You cannot call setMoreTabsMarker without having anchored the TabString object"
-	endif
+function! g:TabString.setMoreTabsMarkerLeft() dict
+	let self.pre = "<"
+endfunction
+
+function! g:TabString.setMoreTabsMarkerRight() dict
+	let self.post = ">"
 endfunction
 
 function! g:TabString.getString() dict
