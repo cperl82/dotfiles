@@ -1,22 +1,22 @@
 " Messing around with OO for tabline
 " Function TestTabLine
 function! TestTabLine()
-	let t = g:TabLine.new()
+	let t = s:TabLine.new()
 	return t.getString()
 endfunction
 
 " Class TabLine
-let g:TabLine = {}
-let g:TabLine.BUILDFORWARD = 10
-let g:TabLine.BUILDREVERSE = 11
-function! g:TabLine.new() dict
+let s:TabLine = {}
+let s:TabLine.BUILDFORWARD = 10
+let s:TabLine.BUILDREVERSE = 11
+function! s:TabLine.new() dict
 	" Setup initial state for the first time through
 	if ! exists("self.marker")
 		let self.marker = 1
 	endif
 
 	if ! exists("self.direction")
-		let self.direction = g:TabLine.BUILDFORWARD
+		let self.direction = s:TabLine.BUILDFORWARD
 	endif
 
 	if ! exists("self.previousTabs")
@@ -51,7 +51,7 @@ function! g:TabLine.new() dict
 		let dt = obj.displayTypeFromTabIdxInTabs(stidx, self.previousTabs)
 		if (dt == g:Tab.DISPLAYNONE) || (dt == g:Tab.DISPLAYPART)
 			let marker = obj.selectedtab
-			let direction = g:TabLine.BUILDFORWARD
+			let direction = s:TabLine.BUILDFORWARD
 			echo "Changing build direction: Now LEFT to RIGHT"
 		endif
 	elseif movedRight
@@ -60,7 +60,7 @@ function! g:TabLine.new() dict
 		let dt = obj.displayTypeFromTabIdxInTabs(stidx, self.previousTabs)
 		if (dt == g:Tab.DISPLAYNONE) || (dt == g:Tab.DISPLAYPART)
 			let marker = obj.selectedtab
-			let direction = g:TabLine.BUILDREVERSE
+			let direction = s:TabLine.BUILDREVERSE
 			echo "Changing build direction: Now RIGHT to LEFT"
 		endif
 	endif
@@ -72,11 +72,11 @@ function! g:TabLine.new() dict
 	return obj
 endfunction
 
-function! g:TabLine.getString() dict
+function! s:TabLine.getString() dict
 	return self.ts.getString()
 endfunction
 
-function! g:TabLine.build(direction, startnr) dict
+function! s:TabLine.build(direction, startnr) dict
 	" Build the tab string from tab number startnr in direction direction.  
 	" Keep going until the selected tab is fully displayed
 	let direction = a:direction
@@ -85,7 +85,7 @@ function! g:TabLine.build(direction, startnr) dict
 	let  self.ts = g:TabString.new()
 	call self.ts.clear()
 
-	if direction == g:TabLine.BUILDFORWARD
+	if direction == s:TabLine.BUILDFORWARD
 		call self.ts.setAnchor(g:TabString.ANCHORLEFT)
 		let tabs      = self.tabs
 		let startidx  = startnr - 1
@@ -118,7 +118,7 @@ function! g:TabLine.build(direction, startnr) dict
 				continue
 			else
 				if curridx != endidx
-					if direction == g:TabLine.BUILDFORWARD
+					if direction == s:TabLine.BUILDFORWARD
 						call self.ts.setMoreTabsMarkerRight()
 					else
 						call self.ts.setMoreTabsMarkerLeft()
@@ -131,7 +131,7 @@ function! g:TabLine.build(direction, startnr) dict
 	endwhile
 endfunction
 
-function! g:TabLine.displayTypeFromTabIdxInTabs(idx, tabs) dict
+function! s:TabLine.displayTypeFromTabIdxInTabs(idx, tabs) dict
 	let idx  = a:idx
 	let tabs = a:tabs
 	if idx > len(tabs)-1 || idx < 0
@@ -141,7 +141,7 @@ function! g:TabLine.displayTypeFromTabIdxInTabs(idx, tabs) dict
 	endif	
 endfunction
 
-function! g:TabLine.selectedTabIdxFromTabs(tabs) dict
+function! s:TabLine.selectedTabIdxFromTabs(tabs) dict
 	let tabs = a:tabs
 	for tabidx in range(0, len(tabs)-1)
 		let tab = tabs[tabidx]
@@ -152,7 +152,7 @@ function! g:TabLine.selectedTabIdxFromTabs(tabs) dict
 	return -1
 endfunction
 
-function! g:TabLine.movedLeft() dict
+function! s:TabLine.movedLeft() dict
 	let stidx = self.selectedtab - 1
 	let idx = self.selectedTabIdxFromTabs(self.previousTabs)
 	if idx == -1
@@ -164,7 +164,7 @@ function! g:TabLine.movedLeft() dict
 	endif
 endfunction
 
-function! g:TabLine.movedRight() dict
+function! s:TabLine.movedRight() dict
 	let stidx = self.selectedtab - 1
 	let idx = self.selectedTabIdxFromTabs(self.previousTabs)
 	if idx == -1
