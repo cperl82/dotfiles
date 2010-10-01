@@ -175,3 +175,14 @@ nmap <silent> <C-l> :tabn<CR>
 " Enable all the syntax options in it (.vim/syntax/python.vim)
 let g:python_highlight_all = 1
 let g:python_highlight_ident_errors = 0
+
+" 2010-10-01
+" Function to jump to a specific tab
+function! JumpToTab(n)
+	tabfirst
+	if a:n > 1
+		for i in range(1, a:n-1)
+			tabnext
+		endfor
+	endif
+endfunction
