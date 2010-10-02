@@ -215,6 +215,8 @@ function! g:TabString.clear() dict
 		throw "TabString was never built, cannot be cleared"
 	endif
 	let self.string = ""
+	let self.pre    = ""
+	let self.post   = ""
 	let self.remaining = self.width
 	for tabnr in range(1, len(self.tabs)-1)
 		let tab = self.tabs[tabnr]
