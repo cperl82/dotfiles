@@ -7,8 +7,6 @@ endfunction
 
 " Class TabLine
 let g:TabLine = {}
-let g:TabLine.BUILDFORWARD = 0
-let g:TabLine.BUILDREVERSE = 1
 function! g:TabLine.new() dict
 	" Setup initial state for the first time through
 	if ! exists("self.marker")
@@ -16,7 +14,7 @@ function! g:TabLine.new() dict
 	endif
 
 	if ! exists("self.direction")
-		let self.direction = g:TabLine.BUILDFORWARD
+		let self.direction = g:TabString.ANCHORLEFT
 	endif
 
 	if ! exists("self.previousTabs")
@@ -30,8 +28,10 @@ function! g:TabLine.new() dict
 	" Create a new object for returning
 	let obj = copy(self)
 
-	" Note that index into self.tabs is tabnr - 1
+	" NOTE: The 0 index into self.tabs is invalid.  This way a tab number
+	" and its index into self.tabs is the same
 	let obj.tabs = []
+	let obj.tabs += [ "INVALIDTABINDEX" ]
 	for i in range(1, tabpagenr('$')) 
 		let tab = g:Tab.new(i)
 		let obj.tabs += [ tab ]
@@ -40,39 +40,55 @@ function! g:TabLine.new() dict
 	" Identify the selected tab
 	let obj.selectedtab = tabpagenr()
 
-	if obj.movedLeft()
-		" If we just moved left, we need to check the currently
-		" selected tab as it existed in the previous state
-		let stidx = obj.selectedtab - 1
-		let dt = obj.displayTypeFromTabIdxInTabs(stidx, self.previousTabs)
-		if (dt == g:Tab.DISPLAYNONE) || (dt == g:Tab.DISPLAYPART)
-			" If the tab we just moved to was partially displayed
-			" or not displayed at all then set it to be the marker
-			" and change the direction to BUILDFORWARD
-			let marker = obj.selectedtab
-			let direction = g:TabLine.BUILDFORWARD
-		elseif dt == g:Tab.NOTFOUND
-			" I'm not sure that this piece can happen
-			if self.previousTabs[stidx+1].firsttab && self.direction == g:TabLine.BUILDFORWARD
+	let obj.ts = g:TabString.new()
+	if len(obj.tabs) == len(obj.previousTabs)
+		" No tabs have been added or subtracted
+		if obj.movedLeft()
+			" echo "Moved Left"
+			let prevStateTab = obj.previousTabs[obj.selectedtab]
+			if prevStateTab.isNotDisplayed() || prevStateTab.isPartiallyDisplayed()
 				let marker = obj.selectedtab
-				let direction = g:TabLine.BUILDFORWARD
+				let direction = g:TabString.ANCHORLEFT
 			endif
+			" If the above doesn't apply, we stick with the
+			" previous state
+		elseif obj.movedRight()
+			" echo "Moved Right"
+			let prevStateTab = obj.previousTabs[obj.selectedtab]
+			if prevStateTab.isNotDisplayed() || prevStateTab.isPartiallyDisplayed()
+				let marker = obj.selectedtab
+				let direction = g:TabString.ANCHORRIGHT
+			endif
+			" If the above doesn't apply, we stick with the
+			" previous state
+		else
+			" Just stick with the previous state
 		endif
-	elseif obj.movedRight()
-		let stidx = obj.selectedtab - 1
-		let dt = obj.displayTypeFromTabIdxInTabs(stidx, self.previousTabs)
-		if (dt == g:Tab.DISPLAYNONE) || (dt == g:Tab.DISPLAYPART)
+		call obj.ts.build(obj.tabs, marker, direction)
+	else
+		" The number of tabs has changed.  We either added a tab or
+		" removed a tab.
+		
+		" First, just try to build the tab string with the previous
+		" state
+		call obj.ts.build(obj.tabs, marker, direction)
+		" Now check to see that the selected tab was fully displayed
+		" and if it wasnt, then we need to see what direction we moved
+		" and rebuild the string
+		let tab = obj.tabs[obj.selectedtab]
+		if tab.isNotDisplayed() || tab.isPartiallyDisplayed()
+			call obj.ts.clear()
 			let marker = obj.selectedtab
-			let direction = g:TabLine.BUILDREVERSE
-		elseif dt == g:Tab.NOTFOUND
-			" stidx is outside the range of our previous tabs
-			if self.previousTabs[stidx-1].lasttab && self.direction == g:TabLine.BUILDREVERSE
-				let marker = obj.selectedtab
-				let direction = g:TabLine.BUILDREVERSE
+			if obj.movedLeft()
+				let direction = g:TabString.ANCHORLEFT
+			elseif obj.movedRight()
+				let direction = g:TabString.ANCHORRIGHT
+			else
+				throw "Looks like we created a new tab, but didn't move in any direction"
 			endif
+			call obj.ts.build(obj.tabs, marker, direction)
 		endif
 	endif
-	call obj.build(direction, marker)
 	" Save our state for the next time
 	let self.direction = direction
 	let self.marker = marker
@@ -84,95 +100,22 @@ function! g:TabLine.getString() dict
 	return self.ts.getString()
 endfunction
 
-function! g:TabLine.build(direction, startnr) dict
-	" Build the tab string from tab number startnr in direction direction.  
-	" Keep going until the selected tab is fully displayed
-	let direction = a:direction
-	let startnr   = a:startnr
-
-	let  self.ts = g:TabString.new()
-	call self.ts.clear()
-
-	if direction == g:TabLine.BUILDFORWARD
-		call self.ts.setAnchor(g:TabString.ANCHORLEFT)
-		let tabs      = self.tabs
-		let startidx  = startnr - 1
-		let curridx   = startidx
-		let stidx     = self.selectedtab - 1
-		if startnr > 1
-			call self.ts.setMoreTabsMarkerLeft()
-		endif
-	else
-		call self.ts.setAnchor(g:TabString.ANCHORRIGHT)
-		let tabs     = reverse(self.tabs[0:(startnr-1)])
-		let startidx = 0
-		let curridx  = startidx
-		let stidx    = (len(tabs) - 1) - (self.selectedtab - 1)
-		if startnr < len(self.tabs)
-			call self.ts.setMoreTabsMarkerRight()
-		endif
-	endif
-	let endidx = len(tabs) - 1
-
-	while curridx <= endidx
-		let tab = tabs[curridx]
-		let return = self.ts.concatTab(tab)
-		if return == g:TabString.FITNONE || return == g:TabString.FITPART || return == g:TabString.FITFULLOUTOFSPACE
-			" TabString is full
-			if stidx > curridx
-				call self.ts.clear()
-				let startidx += 1
-				let curridx = startidx
-				continue
-			else
-				if curridx < endidx
-					if direction == g:TabLine.BUILDFORWARD
-						call self.ts.setMoreTabsMarkerRight()
-					else
-						call self.ts.setMoreTabsMarkerLeft()
-					endif
-				endif
-				break
-			endif
-		endif
-		let curridx += 1
-	endwhile
-	if direction == g:TabLine.BUILDFORWARD
-		let self.tabs[startidx].firsttab = 1
-		let self.tabs[curridx].lasttab   = 1
-	else
-		let self.tabs[curridx].firsttab = 1
-		let self.tabs[startidx].lasttab = 1
-	endif
-endfunction
-
-function! g:TabLine.displayTypeFromTabIdxInTabs(idx, tabs) dict
-	let idx  = a:idx
+function! g:TabLine.selectedTabFromTabs(tabs) dict
 	let tabs = a:tabs
-	if idx > len(tabs)-1 || idx < 0
-		return g:Tab.NOTFOUND
-	else
-		return tabs[idx].displayed
-	endif	
-endfunction
-
-function! g:TabLine.selectedTabIdxFromTabs(tabs) dict
-	let tabs = a:tabs
-	for tabidx in range(0, len(tabs)-1)
-		let tab = tabs[tabidx]
+	for tabnr in range(1, len(tabs)-1)
+		let tab = tabs[tabnr]
 		if tab.selected
-			return tabidx
+			return tabnr
 		endif
 	endfor
 	return -1
 endfunction
 
 function! g:TabLine.movedLeft() dict
-	let stidx = self.selectedtab - 1
-	let idx = self.selectedTabIdxFromTabs(self.previousTabs)
-	if idx == -1
+	let previousSelectedTabnr = self.selectedTabFromTabs(self.previousTabs)
+	if previousSelectedTabnr == -1
 		return 0
-	elseif stidx < idx
+	elseif self.selectedtab < previousSelectedTabnr
 		return 1
 	else
 		return 0
@@ -180,11 +123,10 @@ function! g:TabLine.movedLeft() dict
 endfunction
 
 function! g:TabLine.movedRight() dict
-	let stidx = self.selectedtab - 1
-	let idx = self.selectedTabIdxFromTabs(self.previousTabs)
-	if idx == -1
+	let previousSelectedTabnr = self.selectedTabFromTabs(self.previousTabs)
+	if previousSelectedTabnr == -1
 		return 0
-	elseif stidx > idx
+	elseif self.selectedtab > previousSelectedTabnr
 		return 1
 	else
 		return 0
@@ -193,9 +135,8 @@ endfunction
 
 " Class TabString
 let g:TabString = {}
-let g:TabString.ANCHORNONE        = 0
-let g:TabString.ANCHORLEFT        = 1
-let g:TabString.ANCHORRIGHT       = 2
+let g:TabString.ANCHORLEFT        = 0
+let g:TabString.ANCHORRIGHT       = 1
 let g:TabString.FITFULL           = 10
 let g:TabString.FITPART           = 11
 let g:TabString.FITNONE           = 12
@@ -206,25 +147,82 @@ function! g:TabString.new() dict
 	let obj.width = &columns - 2 
 	let obj.remaining = obj.width
 	let obj.separator = '|'
-	let obj.anchor = g:TabString.ANCHORNONE
 	let obj.string = ""
 	let obj.pre  = " "
 	let obj.post = " "
 	return obj
 endfunction
 
-function! g:TabString.setAnchor(x) dict
-	let self.anchor = a:x
+function! g:TabString.build(tabs, startnr, direction) dict
+	" Build a string representation of the tab line from tabs starting at
+	" startnr in direction
+	if exists("self.tabs")
+		throw "Build has already been called on this TabString object, call clear() before calling build again"
+	endif
+
+	let self.tabs      = a:tabs
+	let self.direction = a:direction
+	let self.startnr   = a:startnr
+
+	if self.direction == g:TabString.ANCHORLEFT
+		if self.startnr > 1
+			call self.setMoreTabsMarkerLeft()
+		endif
+		let tabs = self.tabs[1:len(self.tabs)-1]
+		let startidx = self.startnr - 1
+	elseif self.direction == g:TabString.ANCHORRIGHT
+		if self.startnr < len(self.tabs) - 1
+			call self.setMoreTabsMarkerRight()
+		endif
+		let tabs = reverse(self.tabs[1:self.startnr])
+		let startidx = 0
+	else
+		throw "Invalid direction given to TabString.build: " . direction
+	endif
+
+	let lastidx = len(tabs)-1
+	for tabidx in range(startidx, lastidx)
+		let tab = tabs[tabidx]
+		let return = self.concatTab(tab)
+		if return == g:TabString.FITNONE
+			call tab.setNotDisplayed()
+		elseif return == g:TabString.FITPART
+			call tab.setPartiallyDisplayed()	
+			if tabidx < lastidx
+				if self.direction == g:TabString.ANCHORLEFT
+					call self.setMoreTabsMarkerRight()
+				else
+					call self.setMoreTabsMarkerLeft()
+				endif
+			endif
+		elseif return == g:TabString.FITFULLOUTOFSPACE
+			call tab.setFullyDisplayed()
+			if tabidx < lastidx
+				if self.direction == g:TabString.ANCHORLEFT
+					call self.setMoreTabsMarkerRight()
+				else
+					call self.setMoreTabsMarkerLeft()
+				endif
+			endif
+		else
+			call tab.setFullyDisplayed()
+		endif
+	endfor
 endfunction
 
 function! g:TabString.clear() dict
+	if ! exists("self.tabs")
+		throw "TabString was never built, cannot be cleared"
+	endif
 	let self.string = ""
 	let self.remaining = self.width
-endfunction
-
-function! g:TabString.clearAndAnchor(x) dict
-	call self.clear()
-	call self.setAnchor(a:x)
+	for tabnr in range(1, len(self.tabs)-1)
+		let tab = self.tabs[tabnr]
+		call tab.setNotDisplayed()
+	endfor
+	unlet self.tabs
+	unlet self.direction
+	unlet self.startnr
 endfunction
 
 function! g:TabString.concatTab(tab) dict
@@ -234,7 +232,7 @@ function! g:TabString.concatTab(tab) dict
 	else
 		let separator = self.separator
 	endif
-	if self.anchor == g:TabString.ANCHORLEFT
+	if self.direction == g:TabString.ANCHORLEFT
 		if self.remaining == 0
 			return g:TabString.FITNONE
 		elseif len(tab.label) + len(separator) > self.remaining
@@ -243,20 +241,18 @@ function! g:TabString.concatTab(tab) dict
 			let tmp = strpart(tmp, 0, self.remaining-len(separator))
 			let self.string .= separator . tab.getHighlightPre() . tmp . tab.getHighlightPost()
 			let self.remaining = 0
-			call tab.setDisplayed(g:Tab.DISPLAYPART)
 			return g:TabString.FITPART
 		else
 			let self.string .= separator . tab.getLabel()
 			let self.remaining -= len(tab.label) 
 			let self.remaining -= len(separator)
-			call tab.setDisplayed(g:Tab.DISPLAYFULL)
 			if self.remaining == 0
 				return g:TabString.FITFULLOUTOFSPACE
 			else
 				return g:TabString.FITFULL
 			endif
 		endif
-	elseif self.anchor == g:TabString.ANCHORRIGHT
+	elseif self.direction == g:TabString.ANCHORRIGHT
 		if self.remaining == 0
 			return g:TabString.FITNONE
 		elseif len(tab.label) + len(separator) > self.remaining
@@ -265,13 +261,11 @@ function! g:TabString.concatTab(tab) dict
 			let tmp = strpart(tmp, len(tmp)-(self.remaining-len(separator)), len(tmp))
 			let self.string = tab.getHighlightPre() . tmp . tab.getHighlightPost() . separator . self.string
 			let self.remaining = 0
-			call tab.setDisplayed(g:Tab.DISPLAYPART)
 			return g:TabString.FITPART
 		else
 			let self.string = tab.getLabel() . separator . self.string
 			let self.remaining -= len(tab.label)
 			let self.remaining -= len(separator)
-			call tab.setDisplayed(g:Tab.DISPLAYFULL)
 			if self.remaining == 0
 				return g:TabString.FITFULLOUTOFSPACE
 			else
@@ -279,7 +273,8 @@ function! g:TabString.concatTab(tab) dict
 			endif
 		endif
 	else
-		throw "You cannot call concatTab without having anchored the TabString object"
+		throw "self.direction for TabString object does not appear to be properly set"
+	endif
 endfunction
 
 function! g:TabString.setMoreTabsMarkerLeft() dict
@@ -299,7 +294,6 @@ let g:Tab = {}
 let g:Tab.DISPLAYNONE = 0
 let g:Tab.DISPLAYPART = 1
 let g:Tab.DISPLAYFULL = 2
-let g:Tab.NOTFOUND    = 10
 function! g:Tab.new(number) dict
 	let obj = copy(self)
 	let obj.number = a:number
@@ -349,8 +343,40 @@ function! g:Tab.new(number) dict
 	return obj
 endfunction
 
-function! g:Tab.setDisplayed(x) dict
-	let self.displayed = a:x
+function! g:Tab.setNotDisplayed() dict
+	let self.displayed = g:Tab.DISPLAYNONE
+endfunction
+
+function! g:Tab.setPartiallyDisplayed() dict
+	let self.displayed = g:Tab.DISPLAYPART
+endfunction
+
+function! g:Tab.setFullyDisplayed() dict
+	let self.displayed = g:Tab.DISPLAYFULL
+endfunction
+
+function! g:Tab.isNotDisplayed() dict
+	if self.displayed == g:Tab.DISPLAYNONE
+		return 1
+	else
+		return 0
+	endif
+endfunction
+
+function! g:Tab.isPartiallyDisplayed() dict
+	if self.displayed == g:Tab.DISPLAYPART
+		return 1
+	else
+		return 0
+	endif
+endfunction
+
+function! g:Tab.isFullyDisplayed() dict
+	if self.displayed == g:Tab.DISPLAYFULL
+		return 1
+	else
+		return 0
+	endif
 endfunction
 
 function! g:Tab.getLabel() dict
