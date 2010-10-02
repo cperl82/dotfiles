@@ -45,22 +45,38 @@ function! g:TabLine.new() dict
 	let movedLeft  = obj.movedLeft()
 	let movedRight = obj.movedRight()
 	if movedLeft
-		 echo "Moved Left"
+		echo "Moved Left"
 		let stidx = obj.selectedtab - 1
 		let dt = obj.displayTypeFromTabIdxInTabs(stidx, self.previousTabs)
 		if (dt == g:Tab.DISPLAYNONE) || (dt == g:Tab.DISPLAYPART)
 			let marker = obj.selectedtab
 			let direction = g:TabLine.BUILDFORWARD
 			" echo "Changing build direction: Now LEFT to RIGHT"
+		elseif dt == g:Tab.NOTFOUND
+			" stidx is outside the range of our previous tabs
+		" This logic is not correct
+		"	let tab = self.previousTabs[stidx+1]
+		"	if tab.firsttab
+		"		let marker = obj.selectedtab
+		"		let direction = g:TabLine.BUILDFORWARD
+		"	endif
 		endif
 	elseif movedRight
-		 echo "Moved Right"
+		echo "Moved Right"
 		let stidx = obj.selectedtab - 1
 		let dt = obj.displayTypeFromTabIdxInTabs(stidx, self.previousTabs)
 		if (dt == g:Tab.DISPLAYNONE) || (dt == g:Tab.DISPLAYPART)
 			let marker = obj.selectedtab
 			let direction = g:TabLine.BUILDREVERSE
 			" echo "Changing build direction: Now RIGHT to LEFT"
+		elseif dt == g:Tab.NOTFOUND
+			" stidx is outside the range of our previous tabs
+		" This logic is not correct
+		"	let tab = self.previousTabs[stidx-1]
+		"	if tab.lasttab
+		"		let marker = obj.selectedtab
+		"		let direction = g:TabLine.BUILDREVERSE
+		"	endif
 		endif
 	endif
 	call obj.build(direction, marker)
@@ -128,13 +144,20 @@ function! g:TabLine.build(direction, startnr) dict
 		endif
 		let curridx += 1
 	endwhile
+	if direction == g:TabLine.BUILDFORWARD
+		let self.tabs[startidx].firsttab = 1
+		let self.tabs[curridx].lasttab   = 1
+	else
+		let self.tabs[curridx].firsttab = 1
+		let self.tabs[startidx].lasttab = 1
+	endif
 endfunction
 
 function! g:TabLine.displayTypeFromTabIdxInTabs(idx, tabs) dict
 	let idx  = a:idx
 	let tabs = a:tabs
 	if idx > len(tabs)-1 || idx < 0
-		return g:Tab.DISPLAYNOTFOUND
+		return g:Tab.NOTFOUND
 	else
 		return tabs[idx].displayed
 	endif	
@@ -184,7 +207,6 @@ let g:TabString.FITFULL           = 10
 let g:TabString.FITPART           = 11
 let g:TabString.FITNONE           = 12
 let g:TabString.FITFULLOUTOFSPACE = 13
-
 function! g:TabString.new() dict
 	let obj = copy(self)
 	" Save space on either side for < or > if neccessary
@@ -281,10 +303,10 @@ endfunction
 
 " Class Tab
 let g:Tab = {}
-let g:Tab.DISPLAYNONE     = 0
-let g:Tab.DISPLAYPART     = 1
-let g:Tab.DISPLAYFULL     = 2
-let g:Tab.DISPLAYNOTFOUND = 3
+let g:Tab.DISPLAYNONE = 0
+let g:Tab.DISPLAYPART = 1
+let g:Tab.DISPLAYFULL = 2
+let g:Tab.NOTFOUND    = 10
 function! g:Tab.new(number) dict
 	let obj = copy(self)
 	let obj.number = a:number
@@ -326,8 +348,11 @@ function! g:Tab.new(number) dict
 		let obj.highlightPre  = ""
 		let obj.highlightPost = ""
 	endif
-	" Initially, this tab is not displayed
+	" Initially the tab is not displayed
 	let obj.displayed = g:Tab.DISPLAYNONE
+	" Initially we are not marked as either the first or last tab
+	let obj.firsttab  = 0
+	let obj.lasttab   = 0
 	return obj
 endfunction
 
