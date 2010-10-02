@@ -7,8 +7,8 @@ endfunction
 
 " Class TabLine
 let g:TabLine = {}
-let g:TabLine.BUILDFORWARD = 10
-let g:TabLine.BUILDREVERSE = 11
+let g:TabLine.BUILDFORWARD = 0
+let g:TabLine.BUILDREVERSE = 1
 function! g:TabLine.new() dict
 	" Setup initial state for the first time through
 	if ! exists("self.marker")
@@ -40,43 +40,36 @@ function! g:TabLine.new() dict
 	" Identify the selected tab
 	let obj.selectedtab = tabpagenr()
 
-	" Here we need to determine if we moved left or right and other rules
-	" for changing the anchoring.  
-	let movedLeft  = obj.movedLeft()
-	let movedRight = obj.movedRight()
-	if movedLeft
-		echo "Moved Left"
+	if obj.movedLeft()
+		" If we just moved left, we need to check the currently
+		" selected tab as it existed in the previous state
 		let stidx = obj.selectedtab - 1
 		let dt = obj.displayTypeFromTabIdxInTabs(stidx, self.previousTabs)
 		if (dt == g:Tab.DISPLAYNONE) || (dt == g:Tab.DISPLAYPART)
+			" If the tab we just moved to was partially displayed
+			" or not displayed at all then set it to be the marker
+			" and change the direction to BUILDFORWARD
 			let marker = obj.selectedtab
 			let direction = g:TabLine.BUILDFORWARD
-			" echo "Changing build direction: Now LEFT to RIGHT"
 		elseif dt == g:Tab.NOTFOUND
-			" stidx is outside the range of our previous tabs
-		" This logic is not correct
-		"	let tab = self.previousTabs[stidx+1]
-		"	if tab.firsttab
-		"		let marker = obj.selectedtab
-		"		let direction = g:TabLine.BUILDFORWARD
-		"	endif
+			" I'm not sure that this piece can happen
+			if self.previousTabs[stidx+1].firsttab && self.direction == g:TabLine.BUILDFORWARD
+				let marker = obj.selectedtab
+				let direction = g:TabLine.BUILDFORWARD
+			endif
 		endif
-	elseif movedRight
-		echo "Moved Right"
+	elseif obj.movedRight()
 		let stidx = obj.selectedtab - 1
 		let dt = obj.displayTypeFromTabIdxInTabs(stidx, self.previousTabs)
 		if (dt == g:Tab.DISPLAYNONE) || (dt == g:Tab.DISPLAYPART)
 			let marker = obj.selectedtab
 			let direction = g:TabLine.BUILDREVERSE
-			" echo "Changing build direction: Now RIGHT to LEFT"
 		elseif dt == g:Tab.NOTFOUND
 			" stidx is outside the range of our previous tabs
-		" This logic is not correct
-		"	let tab = self.previousTabs[stidx-1]
-		"	if tab.lasttab
-		"		let marker = obj.selectedtab
-		"		let direction = g:TabLine.BUILDREVERSE
-		"	endif
+			if self.previousTabs[stidx-1].lasttab && self.direction == g:TabLine.BUILDREVERSE
+				let marker = obj.selectedtab
+				let direction = g:TabLine.BUILDREVERSE
+			endif
 		endif
 	endif
 	call obj.build(direction, marker)
