@@ -68,14 +68,3 @@ nmap <silent> <C-l> :tabn<CR>
 let python_highlight_all = 1
 let python_highlight_indent_errors = 0
 let python_highlight_space_errors = 0
-
-" 2010-10-01
-" Function to jump to a specific tab
-function! JumpToTab(n)
-	tabfirst
-	if a:n > 1
-		for i in range(1, a:n-1)
-			tabnext
-		endfor
-	endif
-endfunction
