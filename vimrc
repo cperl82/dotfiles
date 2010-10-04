@@ -68,3 +68,11 @@ nmap <silent> <C-l> :tabn<CR>
 let python_highlight_all = 1
 let python_highlight_indent_errors = 0
 let python_highlight_space_errors = 0
+
+" 2010-10-03
+" Make shortcuts for jumping directly to a specific tab
+" We're mapping <Leader> (which defaults to \) followed by {number} (where
+" number is in the range 1-9) to jump to that numbered tab
+for i in range(1,9)
+	execute "nmap <silent> <Leader>" . i . " :" . i . "tabnext<CR>"
+endfor
