@@ -72,7 +72,8 @@ let python_highlight_space_errors = 0
 " 2010-10-03
 " Make shortcuts for jumping directly to a specific tab
 " We're mapping <Leader> (which defaults to \) followed by {number} (where
-" number is in the range 1-9) to jump to that numbered tab
-for i in range(1,9)
+" number is in the range 1-20) to jump to that numbered tab.  I doubt there
+" are many situations where I'll have more than 20 tabs open.
+for i in range(1,20)
 	execute "nmap <silent> <Leader>" . i . " :tabnext " . i . "<CR>"
 endfor
