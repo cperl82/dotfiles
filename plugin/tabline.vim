@@ -291,7 +291,7 @@ function! s:TabString.concatTab(tab) dict
 	endif
 endfunction
 
-" Function: TabString.setMoreTabsMarkerleft {{{2
+" Function: TabString.setMoreTabsMarkerLeft {{{2
 function! s:TabString.setMoreTabsMarkerLeft() dict
 	let self.pre = "<"
 endfunction
