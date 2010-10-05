@@ -1,12 +1,16 @@
-" Messing around with OO for tabline
-" Function CreateTabLine
+" Vim global plugin for generating a different tabline than the default vim
+" tabline when using vim in non gui mode.
+" Maintainer: Chris Perl <chris.perl@gmail.com>
+
+" Function CreateTabLine 
 function! CreateTabLine()
 	let t = s:TabLine.new()
 	return t.getString()
 endfunction
 
-" Class TabLine
+" Class TabLine {{{1
 let s:TabLine = {}
+" Function: TabLine.new {{{2
 function! s:TabLine.new() dict
 	" Setup initial state for the first time through
 	if ! exists("self.marker")
@@ -96,10 +100,12 @@ function! s:TabLine.new() dict
 	return obj
 endfunction
 
+" Function: TabLine.getSTring {{{2
 function! s:TabLine.getString() dict
 	return self.ts.getString()
 endfunction
 
+" Function: TabLine.selectedTabFromTabs {{{2
 function! s:TabLine.selectedTabFromTabs(tabs) dict
 	let tabs = a:tabs
 	for tabnr in range(1, len(tabs)-1)
@@ -111,6 +117,7 @@ function! s:TabLine.selectedTabFromTabs(tabs) dict
 	return -1
 endfunction
 
+" Function: TabLine.movedLeft {{{2
 function! s:TabLine.movedLeft() dict
 	let previousSelectedTabnr = self.selectedTabFromTabs(self.previousTabs)
 	if previousSelectedTabnr == -1
@@ -122,6 +129,7 @@ function! s:TabLine.movedLeft() dict
 	endif
 endfunction
 
+" Function: TabLine.movedRight {{{2
 function! s:TabLine.movedRight() dict
 	let previousSelectedTabnr = self.selectedTabFromTabs(self.previousTabs)
 	if previousSelectedTabnr == -1
@@ -133,7 +141,7 @@ function! s:TabLine.movedRight() dict
 	endif
 endfunction
 
-" Class TabString
+" Class TabString {{{1
 let s:TabString = {}
 let s:TabString.ANCHORLEFT        = 0
 let s:TabString.ANCHORRIGHT       = 1
@@ -141,6 +149,7 @@ let s:TabString.FITFULL           = 10
 let s:TabString.FITPART           = 11
 let s:TabString.FITNONE           = 12
 let s:TabString.FITFULLOUTOFSPACE = 13
+" Function: TabString.new {{{2
 function! s:TabString.new() dict
 	let obj = copy(self)
 	" Save space on either side for < or > if neccessary
@@ -153,6 +162,7 @@ function! s:TabString.new() dict
 	return obj
 endfunction
 
+" Function: TabString.build {{{2
 function! s:TabString.build(tabs, startnr, direction) dict
 	" Build a string representation of the tab line from tabs starting at
 	" startnr in direction
@@ -210,6 +220,7 @@ function! s:TabString.build(tabs, startnr, direction) dict
 	endfor
 endfunction
 
+" Function: TabString.clear {{{2
 function! s:TabString.clear() dict
 	if ! exists("self.tabs")
 		throw "TabString was never built, cannot be cleared"
@@ -227,6 +238,7 @@ function! s:TabString.clear() dict
 	unlet self.startnr
 endfunction
 
+" Function: TabString.concatTab {{{2
 function! s:TabString.concatTab(tab) dict
 	let tab = a:tab
 	if self.string == ""
@@ -279,23 +291,27 @@ function! s:TabString.concatTab(tab) dict
 	endif
 endfunction
 
+" Function: TabString.setMoreTabsMarkerleft {{{2
 function! s:TabString.setMoreTabsMarkerLeft() dict
 	let self.pre = "<"
 endfunction
 
+" Function: TabString.setMoreTabsMarkerRight {{{2
 function! s:TabString.setMoreTabsMarkerRight() dict
 	let self.post = ">"
 endfunction
 
+" Function: TabString.getString {{{2
 function! s:TabString.getString() dict
 	return '%#Tabline#' . self.pre . self.string . self.post
 endfunction
 
-" Class Tab
+" Class Tab {{{1
 let s:Tab = {}
 let s:Tab.DISPLAYNONE = 0
 let s:Tab.DISPLAYPART = 1
 let s:Tab.DISPLAYFULL = 2
+" Function: Tab.new {{{2
 function! s:Tab.new(number) dict
 	let obj = copy(self)
 	let obj.number = a:number
@@ -345,18 +361,22 @@ function! s:Tab.new(number) dict
 	return obj
 endfunction
 
+" Function: Tab.setNotDisplayed {{{2
 function! s:Tab.setNotDisplayed() dict
 	let self.displayed = s:Tab.DISPLAYNONE
 endfunction
 
+" Function: Tab.setPartiallyDisplayed {{{2
 function! s:Tab.setPartiallyDisplayed() dict
 	let self.displayed = s:Tab.DISPLAYPART
 endfunction
 
+" Function: Tab.setFullyDisplayed {{{2
 function! s:Tab.setFullyDisplayed() dict
 	let self.displayed = s:Tab.DISPLAYFULL
 endfunction
 
+" Function: Tab.isNotDisplayed {{{2
 function! s:Tab.isNotDisplayed() dict
 	if self.displayed == s:Tab.DISPLAYNONE
 		return 1
@@ -365,6 +385,7 @@ function! s:Tab.isNotDisplayed() dict
 	endif
 endfunction
 
+" Function: Tab.isPartiallyDisplayed {{{2
 function! s:Tab.isPartiallyDisplayed() dict
 	if self.displayed == s:Tab.DISPLAYPART
 		return 1
@@ -373,6 +394,7 @@ function! s:Tab.isPartiallyDisplayed() dict
 	endif
 endfunction
 
+" Function: Tab.isFullyDisplayed {{{2
 function! s:Tab.isFullyDisplayed() dict
 	if self.displayed == s:Tab.DISPLAYFULL
 		return 1
@@ -381,17 +403,18 @@ function! s:Tab.isFullyDisplayed() dict
 	endif
 endfunction
 
+" Function: Tab.getLabel {{{2
 function! s:Tab.getLabel() dict
 	return self.highlightPre . self.label . self.highlightPost
 endfunction
 
+" Function: Tab.getHighlightPre {{{2
 function! s:Tab.getHighlightPre() dict
 	return self.highlightPre
 endfunction
 
+" Function: Tab.getHighlightPost {{{2
 function! s:Tab.getHighlightPost() dict
 	return self.highlightPost
 endfunction
-
-
 
