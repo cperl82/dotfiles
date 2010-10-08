@@ -73,6 +73,15 @@ function! s:TabLine.new() dict
 		" The number of tabs has changed.  We either added a tab or
 		" removed a tab.
 		
+		" TODO: We need some way to compensate for creation of an
+		" additional tab better.  For example, if you have many tabs
+		" open and are on the far right tab with the TabLine in
+		" ANCHORRIGHT and then do a :#tabnew where # is one less than
+		" the rightmost tab number, the tabline will shift to having
+		" that new tab as the rightmost, when we would like for the
+		" original tab to stay rightmost and things to push to the
+		" left.
+		
 		" First, just try to build the tab string with the previous
 		" state
 		call obj.ts.build(obj.tabs, marker, direction)
