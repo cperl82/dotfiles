@@ -100,7 +100,7 @@ function! s:TabLine.new() dict
 	return obj
 endfunction
 
-" Function: TabLine.getSTring {{{2
+" Function: TabLine.getString {{{2
 function! s:TabLine.getString() dict
 	return self.ts.getString()
 endfunction
