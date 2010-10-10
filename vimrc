@@ -26,7 +26,7 @@ colorscheme ir_black
 hi link treeRO Normal
 
 " Set the tabline to our custom function
-set tabline=%!CreateTabLine()
+set tabline=%!DrawTabLine()
 
 " 2010-05-18
 " Playing around with moving tabs

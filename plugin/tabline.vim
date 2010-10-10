@@ -2,111 +2,167 @@
 " tabline when using vim in non gui mode.
 " Maintainer: Chris Perl <chris.perl@gmail.com>
 
-" Function CreateTabLine 
-function! CreateTabLine()
-	let t = s:TabLine.new()
-	return t.getString()
+" Function: DrawTabLine 
+function! DrawTabLine()
+	if ! exists("s:cperlTabLine")
+		echo "Creating new TabLine"
+		let s:cperlTabLine = s:TabLine.new()
+	endif
+	call s:cperlTabLine.update()
+	return s:cperlTabLine.getString()
 endfunction
 
 " Class TabLine {{{1
 let s:TabLine = {}
 " Function: TabLine.new {{{2
 function! s:TabLine.new() dict
-	" Setup initial state for the first time through
-	if ! exists("self.marker")
-		let self.marker = 1
-	endif
-
-	if ! exists("self.direction")
-		let self.direction = s:TabString.ANCHORLEFT
-	endif
-
-	if ! exists("self.previousTabs")
-		let self.previousTabs = []
-	endif
-
-	" default to our previous state
-	let marker = self.marker
-	let direction = self.direction
-	
 	" Create a new object for returning
 	let obj = copy(self)
 
-	" NOTE: The 0 index into self.tabs is invalid.  This way a tab number
-	" and its index into self.tabs is the same
-	let obj.tabs = []
-	let obj.tabs += [ "INVALIDTABINDEX" ]
-	for i in range(1, tabpagenr('$')) 
-		let tab = s:Tab.new(i)
-		let obj.tabs += [ tab ]
-	endfor
+	" Set the prior state to invalid since we are just being
+	" instantiated and have no prior state
+	let obj.priorState = { "VALID": 0 }
+
+	" Set a marker to indicate that we've just been created
+	let obj.JUSTCREATED = 1
+	
+	" Instantiate a TabString object for creating the actual string that
+	" is the tabline
+	let obj.ts = s:TabString.new()
+	return obj
+endfunction
+
+" Function: TabLine.update {{{2
+function s:TabLine.update() dict
+	if self.JUSTCREATED
+		let self.JUSTCREATED = 0
+		let self.marker = 1
+		let self.direction = s:TabString.ANCHORLEFT
+		call self.initTabs()
+		call self.ts.build(self.tabs, self.marker, self.direction)
+		return
+	endif
+
+	" We're updating, so save our current state
+	call self.saveState()
+
+	" Initialize the current set of tabs
+	call self.initTabs()
+
+	" Celar the TabString object for redrawing
+	call self.ts.clear()
 
 	" Identify the selected tab
-	let obj.selectedtab = tabpagenr()
+	let self.selectedtab = tabpagenr()
 
-	let obj.ts = s:TabString.new()
-	if len(obj.tabs) == len(obj.previousTabs)
+	if len(self.tabs) == len(self.priorState.tabs)
 		" No tabs have been added or subtracted
-		if obj.movedLeft()
-			" echo "Moved Left"
-			let prevStateTab = obj.previousTabs[obj.selectedtab]
-			if prevStateTab.isNotDisplayed() || prevStateTab.isPartiallyDisplayed()
-				let marker = obj.selectedtab
-				let direction = s:TabString.ANCHORLEFT
-			endif
-			" If the above doesn't apply, we stick with the
-			" previous state
-		elseif obj.movedRight()
-			" echo "Moved Right"
-			let prevStateTab = obj.previousTabs[obj.selectedtab]
-			if prevStateTab.isNotDisplayed() || prevStateTab.isPartiallyDisplayed()
-				let marker = obj.selectedtab
-				let direction = s:TabString.ANCHORRIGHT
-			endif
-			" If the above doesn't apply, we stick with the
-			" previous state
-		else
-			" Just stick with the previous state
-		endif
-		call obj.ts.build(obj.tabs, marker, direction)
-	else
-		" The number of tabs has changed.  We either added a tab or
-		" removed a tab.
-		
-		" TODO: We need some way to compensate for creation of an
-		" additional tab better.  For example, if you have many tabs
-		" open and are on the far right tab with the TabLine in
-		" ANCHORRIGHT and then do a :#tabnew where # is one less than
-		" the rightmost tab number, the tabline will shift to having
-		" that new tab as the rightmost, when we would like for the
-		" original tab to stay rightmost and things to push to the
-		" left.
-		
-		" First, just try to build the tab string with the previous
-		" state
-		call obj.ts.build(obj.tabs, marker, direction)
-		" Now check to see that the selected tab was fully displayed
-		" and if it wasnt, then we need to see what direction we moved
-		" and rebuild the string
-		let tab = obj.tabs[obj.selectedtab]
-		if tab.isNotDisplayed() || tab.isPartiallyDisplayed()
-			call obj.ts.clear()
-			let marker = obj.selectedtab
-			if obj.movedLeft()
-				let direction = s:TabString.ANCHORLEFT
-			elseif obj.movedRight()
-				let direction = s:TabString.ANCHORRIGHT
-			else
-				throw "Looks like we created a new tab, but didn't move in any direction"
-			endif
-			call obj.ts.build(obj.tabs, marker, direction)
-		endif
+		call self.updateEqualTabs()
+	elseif len(self.tabs) > len(self.priorState.tabs)
+		" Added a new Tab
+		call self.updateMoreTabs()
+	else 
+		" len(self.tabs) < len(self.priorState.tabs)
+		echo "We removed a Tab, figure that out."
+		"call self.updateLessTabs()
 	endif
-	" Save our state for the next time
-	let self.direction = direction
-	let self.marker = marker
-	let self.previousTabs = obj.tabs
-	return obj
+endfunction
+
+" Function: TabLine.updateEqualTabs() {{{2
+function s:TabLine.updateEqualTabs()
+	if self.movedLeft()
+		let tab = self.priorState.tabs[self.selectedtab]
+		if ! tab.isFullyDisplayed()
+			let self.marker = self.selectedtab
+			let self.direction = s:TabString.ANCHORLEFT
+		endif
+	elseif self.movedRight()
+		let tab = self.priorState.tabs[self.selectedtab]
+		if ! tab.isFullyDisplayed()
+			let self.marker = self.selectedtab
+			let self.direction = s:TabString.ANCHORRIGHT
+		endif
+	else
+		" Just stick with the previous state
+		let self.marker = self.marker
+		let self.direction = self.direction
+	endif
+	call self.ts.build(self.tabs, self.marker, self.direction)
+endfunction
+
+" Function: TabLine.updateMoreTabs() {{{2
+function s:TabLine.updateMoreTabs()
+	let tab = self.tabs[self.selectedtab]
+	if self.direction == s:TabString.ANCHORLEFT
+		" Attempt to build w/ old marker and direction
+		call self.ts.build(self.tabs, self.marker, self.direction)
+		if ! tab.isFullyDisplayed()
+			if self.movedLeft()
+				let self.marker = self.selectedtab
+				call self.ts.clear()
+				call self.ts.build(self.tabs, self.marker, self.direction)
+			elseif self.movedRight()
+				let self.marker = self.selectedtab
+				let self.direction = s:TabString.ANCHORRIGHT
+				call self.ts.clear()
+				call self.ts.build(self.tabs, self.marker, self.direction)
+			else
+				throw "Tab added, but unable to determine if we moved left or right.  Currently ANCHORLEFT"
+			endif
+		endif
+	elseif self.direction == s:TabString.ANCHORRIGHT
+		" If we were anchored right, before building we need to check
+		" the direction since a move left would mean that the new tab
+		" was created before our prior selected tab, and would mean we
+		" have to increment marker by one
+		if self.movedLeft()
+			let self.marker = self.marker + 1
+			call self.ts.build(self.tabs, self.marker, self.direction)
+			if ! tab.isFullyDisplayed()
+				let self.marker = self.selectedtab
+				let self.direction = s:TabString.ANCHORLEFT
+				call self.ts.clear()
+				call self.ts.build(self.tabs, self.marker, self.direction)
+			endif
+		elseif self.movedRight()
+			call self.ts.build(self.tabs, self.marker, self.direction)
+			if ! tab.isFullyDisplayed()
+				let self.marker = self.selectedtab
+				call self.ts.clear()
+				call self.ts.build(self.tabs, self.marker, self.direction)
+			endif
+		else
+			throw "Tab added, but unable to determine if we moved left or right.  Currently ANCHORRIGHT"
+		endif
+	else
+		throw "TabLine does not appear to have a valid direction set: " . direction
+	endif
+endfunction
+
+" Function: TabLine.updateLessTabs() {{{2
+function s:TabLine.updateLessTabs()
+endfunction
+
+" Function: TabLine.saveState() {{{2
+function s:TabLine.saveState()
+	unlet self.priorState
+	let self.priorState = { "VALID": 1 }
+	let self.priorState.tabs = deepcopy(self.tabs)
+	let self.priorState.marker = copy(self.marker)
+	let self.priorState.direction = copy(self.direction)
+	let self.priorState.selectedtab = copy(self.selectedtab)
+endfunction
+
+" Function: TabLine.initTabs() {{{2
+function s:TabLine.initTabs()
+	" NOTE: The 0 index into self.tabs is invalid.  This way a tab number
+	" and its index into self.tabs is the same
+	let self.tabs = []
+	let self.tabs += [ "INVALIDTABINDEX" ]
+	for i in range(1, tabpagenr('$')) 
+		let tab = s:Tab.new(i)
+		let self.tabs += [ tab ]
+	endfor
 endfunction
 
 " Function: TabLine.getString {{{2
@@ -128,10 +184,12 @@ endfunction
 
 " Function: TabLine.movedLeft {{{2
 function! s:TabLine.movedLeft() dict
-	let previousSelectedTabnr = self.selectedTabFromTabs(self.previousTabs)
+	let previousSelectedTabnr = self.selectedTabFromTabs(self.priorState.tabs)
 	if previousSelectedTabnr == -1
 		return 0
-	elseif self.selectedtab < previousSelectedTabnr
+	" Note the less than or equal for cases where a new tab is created
+	" before the current selected tab
+	elseif self.selectedtab <= previousSelectedTabnr
 		return 1
 	else
 		return 0
@@ -140,7 +198,7 @@ endfunction
 
 " Function: TabLine.movedRight {{{2
 function! s:TabLine.movedRight() dict
-	let previousSelectedTabnr = self.selectedTabFromTabs(self.previousTabs)
+	let previousSelectedTabnr = self.selectedTabFromTabs(self.priorState.tabs)
 	if previousSelectedTabnr == -1
 		return 0
 	elseif self.selectedtab > previousSelectedTabnr
@@ -235,8 +293,8 @@ function! s:TabString.clear() dict
 		throw "TabString was never built, cannot be cleared"
 	endif
 	let self.string = ""
-	let self.pre    = ""
-	let self.post   = ""
+	let self.pre    = " "
+	let self.post   = " "
 	let self.remaining = self.width
 	for tabnr in range(1, len(self.tabs)-1)
 		let tab = self.tabs[tabnr]
