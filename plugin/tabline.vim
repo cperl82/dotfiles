@@ -187,7 +187,7 @@ function! s:TabLine.movedLeft() dict
 	" Checking for left movement is a little tricky because the selected
 	" tab number could be the same if we added a tab before the previously
 	" selected tab.
-	if len(self.tabs) == len(self.priorState.tabs)
+	if len(self.tabs) <= len(self.priorState.tabs)
 		return self.selectedtab <  self.priorState.selectedtab ? 1 : 0
 	else
 		return self.selectedtab <= self.priorState.selectedtab ? 1 : 0
