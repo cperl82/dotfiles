@@ -4,12 +4,11 @@
 
 " Function: DrawTabLine 
 function! DrawTabLine()
-	if ! exists("g:cperlTabLine")
-		echo "Creating new TabLine"
-		let g:cperlTabLine = s:TabLine.new()
+	if ! exists("g:cptl")
+		let g:cptl = s:TabLine.new()
 	endif
-	call g:cperlTabLine.update()
-	return g:cperlTabLine.getString()
+	call g:cptl.update()
+	return g:cptl.getString()
 endfunction
 
 " Class TabLine {{{1
@@ -38,6 +37,7 @@ function s:TabLine.update() dict
 		let self.JUSTCREATED = 0
 		let self.marker = 1
 		let self.direction = s:TabString.ANCHORLEFT
+		let self.selectedtab = tabpagenr()
 		call self.initTabs()
 		call self.ts.build(self.tabs, self.marker, self.direction)
 		return
@@ -69,6 +69,10 @@ endfunction
 
 " Function: TabLine.updateEqualTabs {{{2
 function s:TabLine.updateEqualTabs()
+	" TODO: Figure out a good way to deal with window size changes as that
+	" falls under this function.  Currently window size changes can be all
+	" wonky.  Probably just need some login then the else clause below to
+	" build the string and then check it.
 	if self.movedLeft()
 		let tab = self.priorState.tabs[self.selectedtab]
 		if ! tab.isFullyDisplayed()
@@ -83,8 +87,8 @@ function s:TabLine.updateEqualTabs()
 		endif
 	else
 		" Just stick with the previous state
-		let self.marker = self.marker
-		let self.direction = self.direction
+		let self.marker = self.priorState.marker
+		let self.direction = self.priorState.direction
 	endif
 	call self.ts.build(self.tabs, self.marker, self.direction)
 endfunction
@@ -158,6 +162,7 @@ function s:TabLine.saveState()
 	let self.priorState.tabs = deepcopy(self.tabs)
 	let self.priorState.marker = copy(self.marker)
 	let self.priorState.direction = copy(self.direction)
+	let self.priorState.selectedtab = copy(self.selectedtab)
 endfunction
 
 " Function: TabLine.initTabs {{{2
@@ -177,40 +182,21 @@ function! s:TabLine.getString() dict
 	return self.ts.getString()
 endfunction
 
-" Function: TabLine.selectedTabFromTabs {{{2
-function! s:TabLine.selectedTabFromTabs(tabs) dict
-	let tabs = a:tabs
-	for tabnr in range(1, len(tabs)-1)
-		let tab = tabs[tabnr]
-		if tab.selected
-			return tabnr
-		endif
-	endfor
-	return -1
-endfunction
-
 " Function: TabLine.movedLeft {{{2
 function! s:TabLine.movedLeft() dict
-	let previousSelectedTabnr = self.selectedTabFromTabs(self.priorState.tabs)
-	if previousSelectedTabnr == -1
-		return 0
-	elseif self.selectedtab == previousSelectedTabnr
-		return 1
+	" Checking for left movement is a little tricky because the selected
+	" tab number could be the same if we added a tab before the previously
+	" selected tab.
+	if len(self.tabs) == len(self.priorState.tabs)
+		return self.selectedtab <  self.priorState.selectedtab ? 1 : 0
 	else
-		return 0
+		return self.selectedtab <= self.priorState.selectedtab ? 1 : 0
 	endif
 endfunction
 
 " Function: TabLine.movedRight {{{2
 function! s:TabLine.movedRight() dict
-	let previousSelectedTabnr = self.selectedTabFromTabs(self.priorState.tabs)
-	if previousSelectedTabnr == -1
-		return 0
-	elseif self.selectedtab > previousSelectedTabnr
-		return 1
-	else
-		return 0
-	endif
+	 return self.selectedtab > self.priorState.selectedtab ? 1 : 0
 endfunction
 
 " Class TabString {{{1
@@ -300,6 +286,9 @@ function! s:TabString.clear() dict
 	let self.string = ""
 	let self.pre    = " "
 	let self.post   = " "
+	" We need to recalculate the width when we clear in case the window
+	" has changed size
+	let self.width  = &columns - 2
 	let self.remaining = self.width
 	for tabnr in range(1, len(self.tabs)-1)
 		let tab = self.tabs[tabnr]
@@ -380,11 +369,7 @@ endfunction
 
 " Function: TabString.isFull {{{2
 function! s:TabString.isFull() dict
-	if self.remaining == 0
-		return 1
-	else
-		return 0
-	endif
+	return self.remaining == 0 ? 1 : 0
 endfunction
 " Class Tab {{{1
 let s:Tab = {}
