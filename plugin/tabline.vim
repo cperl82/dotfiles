@@ -4,12 +4,12 @@
 
 " Function: DrawTabLine 
 function! DrawTabLine()
-	if ! exists("s:cperlTabLine")
+	if ! exists("g:cperlTabLine")
 		echo "Creating new TabLine"
-		let s:cperlTabLine = s:TabLine.new()
+		let g:cperlTabLine = s:TabLine.new()
 	endif
-	call s:cperlTabLine.update()
-	return s:cperlTabLine.getString()
+	call g:cperlTabLine.update()
+	return g:cperlTabLine.getString()
 endfunction
 
 " Class TabLine {{{1
@@ -63,12 +63,11 @@ function s:TabLine.update() dict
 		call self.updateMoreTabs()
 	else 
 		" len(self.tabs) < len(self.priorState.tabs)
-		echo "We removed a Tab, figure that out."
-		"call self.updateLessTabs()
+		call self.updateLessTabs()
 	endif
 endfunction
 
-" Function: TabLine.updateEqualTabs() {{{2
+" Function: TabLine.updateEqualTabs {{{2
 function s:TabLine.updateEqualTabs()
 	if self.movedLeft()
 		let tab = self.priorState.tabs[self.selectedtab]
@@ -90,7 +89,7 @@ function s:TabLine.updateEqualTabs()
 	call self.ts.build(self.tabs, self.marker, self.direction)
 endfunction
 
-" Function: TabLine.updateMoreTabs() {{{2
+" Function: TabLine.updateMoreTabs {{{2
 function s:TabLine.updateMoreTabs()
 	let tab = self.tabs[self.selectedtab]
 	if self.direction == s:TabString.ANCHORLEFT
@@ -139,21 +138,29 @@ function s:TabLine.updateMoreTabs()
 	endif
 endfunction
 
-" Function: TabLine.updateLessTabs() {{{2
+" Function: TabLine.updateLessTabs {{{2
 function s:TabLine.updateLessTabs()
+	" First attempt to build w/ our prior state
+	let tab = self.tabs[self.selectedtab]
+	call self.ts.build(self.tabs, self.marker, self.direction)
+	if (! self.ts.isFull()) && (self.direction == s:TabString.ANCHORRIGHT)
+		let self.marker = 1
+		let self.direction = s:TabString.ANCHORLEFT
+		call self.ts.clear()
+		call self.ts.build(self.tabs, self.marker, self.direction)
+	endif
 endfunction
 
-" Function: TabLine.saveState() {{{2
+" Function: TabLine.saveState {{{2
 function s:TabLine.saveState()
 	unlet self.priorState
 	let self.priorState = { "VALID": 1 }
 	let self.priorState.tabs = deepcopy(self.tabs)
 	let self.priorState.marker = copy(self.marker)
 	let self.priorState.direction = copy(self.direction)
-	let self.priorState.selectedtab = copy(self.selectedtab)
 endfunction
 
-" Function: TabLine.initTabs() {{{2
+" Function: TabLine.initTabs {{{2
 function s:TabLine.initTabs()
 	" NOTE: The 0 index into self.tabs is invalid.  This way a tab number
 	" and its index into self.tabs is the same
@@ -187,9 +194,7 @@ function! s:TabLine.movedLeft() dict
 	let previousSelectedTabnr = self.selectedTabFromTabs(self.priorState.tabs)
 	if previousSelectedTabnr == -1
 		return 0
-	" Note the less than or equal for cases where a new tab is created
-	" before the current selected tab
-	elseif self.selectedtab <= previousSelectedTabnr
+	elseif self.selectedtab == previousSelectedTabnr
 		return 1
 	else
 		return 0
@@ -373,6 +378,14 @@ function! s:TabString.getString() dict
 	return '%#Tabline#' . self.pre . self.string . self.post
 endfunction
 
+" Function: TabString.isFull {{{2
+function! s:TabString.isFull() dict
+	if self.remaining == 0
+		return 1
+	else
+		return 0
+	endif
+endfunction
 " Class Tab {{{1
 let s:Tab = {}
 let s:Tab.DISPLAYNONE = 0
