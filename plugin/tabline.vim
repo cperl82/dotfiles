@@ -69,28 +69,45 @@ endfunction
 
 " Function: TabLine.updateEqualTabs {{{2
 function s:TabLine.updateEqualTabs()
-	" TODO: Figure out a good way to deal with window size changes as that
-	" falls under this function.  Currently window size changes can be all
-	" wonky.  Probably just need some login then the else clause below to
-	" build the string and then check it.
 	if self.movedLeft()
 		let tab = self.priorState.tabs[self.selectedtab]
 		if ! tab.isFullyDisplayed()
 			let self.marker = self.selectedtab
 			let self.direction = s:TabString.ANCHORLEFT
 		endif
+		call self.ts.build(self.tabs, self.marker, self.direction)
 	elseif self.movedRight()
 		let tab = self.priorState.tabs[self.selectedtab]
 		if ! tab.isFullyDisplayed()
 			let self.marker = self.selectedtab
 			let self.direction = s:TabString.ANCHORRIGHT
 		endif
+		call self.ts.build(self.tabs, self.marker, self.direction)
 	else
+		" TODO: This section needs more work.  The problems are due to
+		" window resizing.  I try to check that things are good after
+		" the first call with the prior state, but it doesn't always
+		" work out perfect.
+		
 		" Just stick with the previous state
 		let self.marker = self.priorState.marker
 		let self.direction = self.priorState.direction
+		" Try to build our tabline
+		call self.ts.build(self.tabs, self.marker, self.direction)
+
+		" Check it.  It could be jacked up due to window resizing
+		let tab = self.tabs[self.selectedtab]
+		if ! tab.isFullyDisplayed()
+			let self.marker = self.selectedtab
+			call self.ts.clear()
+			call self.ts.build(self.tabs, self.marker, self.direction)
+		elseif (! self.ts.isFull()) && (self.direction == s:TabString.ANCHORRIGHT)
+			let self.marker = 1
+			let self.direction = s:TabString.ANCHORLEFT
+			call self.ts.clear()
+			call self.ts.build(self.tabs, self.marker, self.direction)
+		endif
 	endif
-	call self.ts.build(self.tabs, self.marker, self.direction)
 endfunction
 
 " Function: TabLine.updateMoreTabs {{{2
@@ -483,3 +500,4 @@ function! s:Tab.getHighlightPost() dict
 	return self.highlightPost
 endfunction
 
+" vim: fdm=marker
