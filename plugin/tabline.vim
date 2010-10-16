@@ -99,6 +99,7 @@ function s:TabLine.updateEqualTabs()
 		let tab = self.tabs[self.selectedtab]
 		if ! tab.isFullyDisplayed()
 			let self.marker = self.selectedtab
+			call self.switchDirection()
 			call self.ts.clear()
 			call self.ts.build(self.tabs, self.marker, self.direction)
 		elseif (! self.ts.isFull()) && (self.direction == s:TabString.ANCHORRIGHT)
@@ -216,6 +217,14 @@ function! s:TabLine.movedRight() dict
 	 return self.selectedtab > self.priorState.selectedtab ? 1 : 0
 endfunction
 
+" Function: TabLine.switchDirection {{{2
+function! s:TabLine.switchDirection() dict
+	if self.direction == s:TabString.ANCHORLEFT
+		let self.direction = s:TabString.ANCHORRIGHT
+	else
+		let self.direction = s:TabString.ANCHORLEFT
+	endif
+endfunction
 " Class TabString {{{1
 let s:TabString = {}
 let s:TabString.ANCHORLEFT        = 0
