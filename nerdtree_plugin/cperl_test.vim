@@ -5,6 +5,7 @@ let g:loaded_nerdtree_cperl_test = 1
 
 call NERDTreeAddMenuItem({'text': '(s)earch for a node', 'shortcut': 's', 'callback': 'Search'})
 set completefunc=Complete
+autocmd InsertLeave * echo "Left Insert Mode"
 
 function! s:walkTree(dirNode)
     "echo a:dirNode.path.str()
@@ -28,6 +29,9 @@ function! Search()
     " call s:walkTree(b:NERDTreeRoot)
     " call setline(1, saved_line)
     " setlocal nomodifiable
+    " let path = getline(".")
+    " let path = strpart(path, 8)
+    " echo path
     " call NERDTreeRender()
 endfunction
 
