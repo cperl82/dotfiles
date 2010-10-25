@@ -4,8 +4,6 @@ endif
 let g:loaded_nerdtree_cperl_test = 1
 
 call NERDTreeAddMenuItem({'text': '(s)earch for a node', 'shortcut': 's', 'callback': 'Search'})
-set completefunc=Complete
-autocmd InsertLeave * echo "Left Insert Mode"
 
 function! s:walkTree(dirNode)
     "echo a:dirNode.path.str()
@@ -21,6 +19,8 @@ endfunction
 
 function! Search()
     setlocal modifiable
+    setlocal completefunc=Complete
+    autocmd InsertLeave <buffer> echo "Left Insert Mode"
     call setpos(".", [0, 1, 8, 0])
     let saved_line = getline(".")
     call setline(1, "File >> ")
