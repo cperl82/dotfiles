@@ -22,7 +22,6 @@ function! Search()
 	echo "Called Search()"	
 	let s:savedNode = b:NERDTreeRoot.GetSelected()
 	if s:savedNode == {}
-		b:NERDTreeRoot.putCursorHere(0, 0)
 		let s:savedNode = b:NERDTreeRoot
 	endif
 	setlocal modifiable
