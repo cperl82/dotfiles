@@ -18,7 +18,11 @@ set hlsearch
 
 " colorscheme asmdev
 " colorscheme norwaytoday
-colorscheme ir_black
+if $TERM == "xterm-256color" || $TERM == "screen-256color"
+	colorscheme xoria256
+else
+	colorscheme ir_black
+endif
 
 " 2010-05-12
 " Override the highlight settings for NERD_tree.  This is mainly because
