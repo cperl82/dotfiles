@@ -27,8 +27,8 @@ function! s:FuzzyFinder.search() dict
 	setlocal modifiable
 	setlocal completeopt=menuone
 	setlocal completefunc=Complete
-
-	autocmd InsertLeave <buffer> call Finish()
+	autocmd InsertLeave  <buffer> call Finish()
+	autocmd CursorMovedI <buffer> call OnCursorMovedI()
 
 	" TODO: Explain how this works, its kinda f'in confusing
 	inoremap <buffer> <silent> <CR> <C-y><C-r>=FuzzyFinder.saveSelection() ? "" : ""<CR><ESC>
@@ -57,17 +57,18 @@ function! s:FuzzyFinder.complete(findstart, base) dict
 	    return len(self.prompt)
 	else
 		call self.walker.reset()
-		let ret = []
 		if a:base == ""
 			return []
+		else
+			let ret = [ a:base ]
+			while self.walker.hasNext()
+				let node = self.walker.next()
+				let path = node.path.str()
+				if path =~ a:base
+					call add(ret, path)
+				endif
+			endwhile
 		endif
-		while self.walker.hasNext()
-			let node = self.walker.next()
-			let path = node.path.str()
-			if path =~ a:base
-				call add(ret, path)
-			endif
-		endwhile
 		return ret
 	endif
 endfunction
@@ -87,6 +88,12 @@ function! s:FuzzyFinder.finish() dict
 	call NERDTreeRender()
 endfunction
 
+" Function: FuzzyFinder.onCursorMovedI {{{2
+function! s:FuzzyFinder.onCursorMovedI()
+	" TODO: Check for correct positioning of the cursor, like fuf
+	call feedkeys("\<C-x>\<C-u>", 'n')
+endfunction
+
 " Class: NERDTreeWalker {{{1
 let s:NERDTreeWalker = {}
 " Function: NERDTreeWalker.new {{{2
@@ -100,6 +107,7 @@ function! s:NERDTreeWalker.new(root) dict
 	let obj.root = a:root
 
 	" We have to open all the tree nodes as they are lazily populated
+	" TODO: We leave the tree totally expanded, we have to fix that
 	call obj.root.openRecursively()
 
 	let obj.list = obj.walk(obj.root)
@@ -158,4 +166,10 @@ endfunction
 function! Finish()
 	return g:FuzzyFinder.finish()
 endfunction
+
+" Function: OnCursorMovedI {{{2
+function! OnCursorMovedI()
+	return g:FuzzyFinder.onCursorMovedI()
+endfunction
+
 " vim: fdm=marker
