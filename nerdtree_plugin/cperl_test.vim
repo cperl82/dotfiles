@@ -104,7 +104,7 @@ function! s:NERDTreeWalker.new(root) dict
 	" TODO: Add some kind of assertion to make sure a:root is what we
 	" expect it to be
 	let obj = copy(self)
-	let obj.root = a:root
+	let obj.root = deepcopy(a:root)
 
 	" We have to open all the tree nodes as they are lazily populated
 	" TODO: We leave the tree totally expanded, we have to fix that
