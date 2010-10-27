@@ -62,3 +62,44 @@ function! Finish()
 	call s:savedNode.putCursorHere(0, 0)
 	call NERDTreeRender()
 endfunction
+
+" Class: FuzzyFinder {{{1
+let s:FuzzyFinder = {}
+
+" Function: FuzzyFinder.new {{{2
+function! s:FuzzyFinder.new() dict
+endfunction
+
+" Function: FuzzyFinder.search {{{2
+function! s:FuzzyFinder.search() dict
+endfunction
+
+" Function: FuzzyFinder.saveSelection {{{2
+function! s:FuzzyFinder.saveSelection()
+endfunction
+
+" Function: FuzzyFinder.complete {{{2
+function! s:FuzzyFinder.complete(findstart, base) dict
+endfunction
+
+" Function: FuzzyFinder.cleanup {{{2
+function! s:FuzzyFinder.cleanup()
+endfunction
+
+" Class: NERDTreeWalker {{{1
+let s:NERDTreeWalker = {}
+
+" Function: NERDTreeWalker.new {{{2
+function! s:NERDTreeWalker.new() dict
+	" TODO: Implement pre, post, and inorder traversal selection
+endfunction
+
+" Function: NERDTreeWalker.getFirst {{{2
+function! s:NERDTreeWalker.getFirst()
+endfunction
+
+" Function: NERDTreeWalker.getNext {{{2
+function! s:NERDTreeWalker.getNext()
+endfunction
+
+" vim: fdm=marker
