@@ -1,105 +1,161 @@
-if exists("g:loaded_nerdtree_cperl_test")
-	finish
-endif
-let g:loaded_nerdtree_cperl_test = 1
-
-"call NERDTreeAddMenuItem({'text': '(s)earch for a node', 'shortcut': 's', 'callback': 'Search'})
-call NERDTreeAddKeyMap({'key': '<Leader>t', 'quickhelpText': 'Search NERDTree Quickly', 'callback': 'Search'})
-
-function! s:walkTree(dirNode)
-	"echo a:dirNode.path.str()
-	if a:dirNode.path.isDirectory
-	    for i in a:dirNode.children
-	        "echo i.path.str()
-	        if i.path.isDirectory
-	            call s:walkTree(i)
-	        endif
-	    endfor
-	endif
+" Class: FuzzyFinder {{{1
+let s:FuzzyFinder = {}
+" Function: FuzzyFinder.new {{{2
+function! s:FuzzyFinder.new() dict
+	let obj = copy(self)
+	let obj.prompt = "File >>> "
+	let obj.selectedFile = ""
+	let obj.walker = ""
+	return obj
 endfunction
 
-function! Search()
-	" reset where we store the filename
-	unlet g:cperlline
+" Function: FuzzyFinder.search {{{2
+function! s:FuzzyFinder.search() dict
+	" Reset the selected file
+	let self.selectedFile = ""
 
-	let s:savedNode = g:NERDTreeFileNode.GetSelected()
-	if s:savedNode == {}
-		let s:savedNode = b:NERDTreeRoot
+	" Get a new walker
+	let self.walker = s:NERDTreeWalker.new(b:NERDTreeRoot)
+
+	" Initially we set the node to jump to when we are done to the
+	" previously selected node in the tree
+	let self.jumpNode = g:NERDTreeFileNode.GetSelected()
+	if self.jumpNode == {}
+		let self.jumpNode = b:NERDTreeRoot
 	endif
+
 	setlocal modifiable
+	setlocal completeopt=menuone
 	setlocal completefunc=Complete
 
 	autocmd InsertLeave <buffer> call Finish()
 
 	" TODO: Explain how this works, its kinda f'in confusing
-	inoremap <buffer> <silent> <CR> <C-y><C-r>=SaveSelection() ? "" : ""<CR><ESC>
+	inoremap <buffer> <silent> <CR> <C-y><C-r>=FuzzyFinder.saveSelection() ? "" : ""<CR><ESC>
 
-	"call setpos(".", [0, 2, 8, 0])
-	"call setline(2, "File >> ")
-	call setpos(".", [0, line("w0"), 8, 0])
-	call setline(line("w0"), "File >> ")
+	"call setpos(".", [0, 2, len(self.prompt), 0])
+	"call setline(2, self.prompt)
+	call setpos(".", [0, line("w0"), len(self.prompt), 0])
+	call setline(line("w0"), self.prompt)
 	call feedkeys("A", 'n')
 	call feedkeys("\<C-x>\<C-u>", 'n')
 endfunction
 
-function! SaveSelection()
-	let g:cperlline = getline(".")
-endfunction
-
-function! Complete(findstart, base)
-	if a:findstart == 1
-	    return 8
-	else
-	    return [ "foo", "bar", "baz" ]
-	endif
-endfunction
-
-function! Finish()
-	setlocal completefunc&
-	setlocal nomodifiable
-	" Cant figure this out at the moment, keeps raising errors
-	" iunmap <buffer> <CR>
-	call s:savedNode.putCursorHere(0, 0)
-	call NERDTreeRender()
-endfunction
-
-" Class: FuzzyFinder {{{1
-let s:FuzzyFinder = {}
-
-" Function: FuzzyFinder.new {{{2
-function! s:FuzzyFinder.new() dict
-endfunction
-
-" Function: FuzzyFinder.search {{{2
-function! s:FuzzyFinder.search() dict
-endfunction
-
 " Function: FuzzyFinder.saveSelection {{{2
-function! s:FuzzyFinder.saveSelection()
+function! s:FuzzyFinder.saveSelection() dict
+	let self.selectedFile = self.stripPrompt(getline("."))
+endfunction
+
+" Function: FuzzyFinder.stripPrompt {{{2
+function! s:FuzzyFinder.stripPrompt(line) dict
+	return substitute(a:line, self.prompt, "", "")
 endfunction
 
 " Function: FuzzyFinder.complete {{{2
 function! s:FuzzyFinder.complete(findstart, base) dict
+	if a:findstart == 1
+	    return len(self.prompt)
+	else
+		call self.walker.reset()
+		let ret = []
+		if a:base == ""
+			return []
+		endif
+		while self.walker.hasNext()
+			let node = self.walker.next()
+			let path = node.path.str()
+			if path =~ a:base
+				call add(ret, path)
+			endif
+		endwhile
+		return ret
+	endif
 endfunction
 
-" Function: FuzzyFinder.cleanup {{{2
-function! s:FuzzyFinder.cleanup()
+" Function: FuzzyFinder.finish {{{2
+function! s:FuzzyFinder.finish() dict
+	setlocal completefunc&
+	setlocal completeopt&
+	setlocal nomodifiable
+	" Cant figure this out at the moment, keeps raising errors
+	" iunmap <buffer> <CR>
+	if self.selectedFile != ""
+		echo "Handling selected file " . self.selectedFile
+		" call self.handleSelectedFile()
+	endif
+	call self.jumpNode.putCursorHere(0, 0)
+	call NERDTreeRender()
 endfunction
 
 " Class: NERDTreeWalker {{{1
 let s:NERDTreeWalker = {}
-
 " Function: NERDTreeWalker.new {{{2
-function! s:NERDTreeWalker.new() dict
+function! s:NERDTreeWalker.new(root) dict
 	" TODO: Implement pre, post, and inorder traversal selection
+	" Not sure if it matters that its an n-ary tree.
+	
+	" TODO: Add some kind of assertion to make sure a:root is what we
+	" expect it to be
+	let obj = copy(self)
+	let obj.root = a:root
+
+	" We have to open all the tree nodes as they are lazily populated
+	call obj.root.openRecursively()
+
+	let obj.list = obj.walk(obj.root)
+	let obj.idx = 0
+	return obj
 endfunction
 
-" Function: NERDTreeWalker.getFirst {{{2
-function! s:NERDTreeWalker.getFirst()
+" Function: NERDTreeWalker.next {{{2
+function! s:NERDTreeWalker.next() dict
+	if self.idx >= len(self.list)
+		throw "Index too large.  Use .hasNext() to validate this method is safe to call."
+	endif
+	let ret = self.list[self.idx]
+	let self.idx = self.idx + 1
+	return ret
 endfunction
 
-" Function: NERDTreeWalker.getNext {{{2
-function! s:NERDTreeWalker.getNext()
+" Function: NERDTreeWalker.hasNext {{{2
+function! s:NERDTreeWalker.hasNext() dict
+	return self.idx < len(self.list) ? 1 : 0
+endfunction
+" Function: NERDTreeWalker.reset {{{2
+function! s:NERDTreeWalker.reset() dict
+	let self.idx = 0
+endfunction
+" Function: NERDTreeWalker.walk {{{2
+function! s:NERDTreeWalker.walk(node) dict
+	let node = a:node
+	if ! node.path.isDirectory
+		return [ node ]
+	else
+		let ret = []
+		for c in node.children
+			let tmp = self.walk(c)
+			call extend(ret, tmp)
+		endfor
+		return ret
+	endif
 endfunction
 
+" Init stuff {{{1
+if ! exists("FuzzyFinder")
+	let FuzzyFinder = s:FuzzyFinder.new()
+	call NERDTreeAddKeyMap({'key': '<Leader>t', 'quickhelpText': 'Search NERDTree Quickly', 'callback': 'FuzzyFinder.search'})
+else
+	finish
+endif
+
+" Public Interfaces necessary for autocmd and completefunc {{{1
+" Function: Complete {{{2
+function! Complete(findstart, base)
+	return g:FuzzyFinder.complete(a:findstart, a:base)
+endfunction
+
+" Function: Finish {{{2
+function! Finish()
+	return g:FuzzyFinder.finish()
+endfunction
 " vim: fdm=marker
