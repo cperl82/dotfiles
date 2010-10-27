@@ -20,7 +20,7 @@ endfunction
 
 function! Search()
 	echo "Called Search()"	
-	let s:savedNode = b:NERDTreeRoot.GetSelected()
+	let s:savedNode = NERDTreeFileNode.GetSelected()
 	if s:savedNode == {}
 		let s:savedNode = b:NERDTreeRoot
 	endif
