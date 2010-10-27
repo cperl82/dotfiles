@@ -19,25 +19,31 @@ function! s:walkTree(dirNode)
 endfunction
 
 function! Search()
-	echo "Called Search()"	
-	let s:savedNode = NERDTreeFileNode.GetSelected()
+	" reset where we store the filename
+	unlet g:cperlline
+
+	let s:savedNode = g:NERDTreeFileNode.GetSelected()
 	if s:savedNode == {}
 		let s:savedNode = b:NERDTreeRoot
 	endif
 	setlocal modifiable
 	setlocal completefunc=Complete
+
 	autocmd InsertLeave <buffer> call Finish()
-	call setpos(".", [0, 2, 8, 0])
-	call setline(2, "File >> ")
+
+	" TODO: Explain how this works, its kinda f'in confusing
+	inoremap <buffer> <silent> <CR> <C-y><C-r>=SaveSelection() ? "" : ""<CR><ESC>
+
+	"call setpos(".", [0, 2, 8, 0])
+	"call setline(2, "File >> ")
+	call setpos(".", [0, line("w0"), 8, 0])
+	call setline(line("w0"), "File >> ")
 	call feedkeys("A", 'n')
 	call feedkeys("\<C-x>\<C-u>", 'n')
-	" call s:walkTree(b:NERDTreeRoot)
-	" call setline(1, saved_line)
-	" setlocal nomodifiable
-	" let path = getline(".")
-	" let path = strpart(path, 8)
-	" echo path
-	" call NERDTreeRender()
+endfunction
+
+function! SaveSelection()
+	let g:cperlline = getline(".")
 endfunction
 
 function! Complete(findstart, base)
@@ -51,6 +57,8 @@ endfunction
 function! Finish()
 	setlocal completefunc&
 	setlocal nomodifiable
+	" Cant figure this out at the moment, keeps raising errors
+	" iunmap <buffer> <CR>
 	call s:savedNode.putCursorHere(0, 0)
 	call NERDTreeRender()
 endfunction
