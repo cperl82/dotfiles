@@ -62,8 +62,7 @@ function! s:FuzzyFinder.complete(findstart, base) dict
 		else
 			let ret = [ a:base ]
 			while self.walker.hasNext()
-				let node = self.walker.next()
-				let path = node.path.str()
+				let path = self.walker.next()
 				if path =~ a:base
 					call add(ret, path)
 				endif
@@ -108,9 +107,10 @@ function! s:NERDTreeWalker.new(root) dict
 
 	" We have to open all the tree nodes as they are lazily populated
 	" TODO: We leave the tree totally expanded, we have to fix that
-	call obj.root.openRecursively()
+	" call obj.root.openRecursively()
 
-	let obj.list = obj.walk(obj.root)
+	" let obj.list = obj.walk(obj.root)
+	let obj.list = split(glob("`find . -type f -print`"))
 	let obj.idx = 0
 	return obj
 endfunction
