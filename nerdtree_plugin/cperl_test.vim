@@ -1,3 +1,6 @@
+" Intro blurb blah blah
+" Maintainer: chris.perl@gmail.com
+
 " Class: FuzzyFinder {{{1
 let s:FuzzyFinder = {}
 " Function: FuzzyFinder.new {{{2
@@ -60,15 +63,21 @@ function! s:FuzzyFinder.complete(findstart, base) dict
 		if a:base == ""
 			return []
 		else
-			let ret = [ a:base ]
+			let i = 0
+			call complete_add(a:base)
 			while self.walker.hasNext()
-				let path = self.walker.next()
+				let node = self.walker.next()
+				let path = node.path.str()
 				if path =~ a:base
-					call add(ret, path)
+					call complete_add({'word': path, 'abbr': fnamemodify(path, ":.")})
+				endif
+				let i += 1
+				if (i % 20) && complete_check()
+					break
 				endif
 			endwhile
+			return []
 		endif
-		return ret
 	endif
 endfunction
 
@@ -81,10 +90,21 @@ function! s:FuzzyFinder.finish() dict
 	" iunmap <buffer> <CR>
 	if self.selectedFile != ""
 		echo "Handling selected file " . self.selectedFile
+		" This is tricky because the NERDTree isnt necessarily open
 		" call self.handleSelectedFile()
 	endif
 	call self.jumpNode.putCursorHere(0, 0)
 	call NERDTreeRender()
+endfunction
+
+" Function: FuzzyFinder.handleSelectedFile {{{2
+function! s:FuzzyFinder.handleSelectedFile()
+	let path = g:NERDTreePath.New(self.selectedFile)
+	echo path.str()
+	let node = b:NERDTreeRoot.findNode(path)
+	if node != {}
+		let self.jumpNode = node
+	endif
 endfunction
 
 " Function: FuzzyFinder.onCursorMovedI {{{2
@@ -97,48 +117,120 @@ endfunction
 let s:NERDTreeWalker = {}
 " Function: NERDTreeWalker.new {{{2
 function! s:NERDTreeWalker.new(root) dict
-	" TODO: Implement pre, post, and inorder traversal selection
-	" Not sure if it matters that its an n-ary tree.
+	" TODO: Walking the tree has to be smarter.  Instead of opening the
+	" entire tree and flattening it into a list on instantiation, this
+	" object should yield a node when .next() is called, and only if
+	" necessary should the next() method open directories as it walks the
+	" tree.  This should make our use from FuzzyFinder coupled with
+	" FuzzyFinder.complete's use of complete_add and complete_check much
+	" more reasonable for large directories
 	
 	" TODO: Add some kind of assertion to make sure a:root is what we
 	" expect it to be
 	let obj = copy(self)
+	" We have to store a copy of the tree as we manipulate the tree,
+	" opening and closing nodes.  This would destroy the users current
+	" tree view if we did not make a copy.
 	let obj.root = deepcopy(a:root)
-
-	" We have to open all the tree nodes as they are lazily populated
-	" TODO: We leave the tree totally expanded, we have to fix that
-	" call obj.root.openRecursively()
-
-	" let obj.list = obj.walk(obj.root)
-	let obj.list = split(glob("`find . -type f -print`"))
-	let obj.idx = 0
+	let obj.currNode = obj.followLeft(obj.root)
 	return obj
+endfunction
+
+" Function: NERDTreeWalker.followLeft {{{2
+function! s:NERDTreeWalker.followLeft(node) dict
+	" Take a node and follow it as far left down the tree as we can
+	let node = a:node
+	if ! node.path.isDirectory
+		return node
+	else
+		" Must be a directory
+		if ! node.isOpen
+			call node.open()
+		endif
+		if node.getChildCount() > 0
+			let leftmost = self.followLeft(node.getChildByIndex(0, 1))
+			return leftmost
+		else
+			return node
+		endif
 endfunction
 
 " Function: NERDTreeWalker.next {{{2
 function! s:NERDTreeWalker.next() dict
-	if self.idx >= len(self.list)
-		throw "Index too large.  Use .hasNext() to validate this method is safe to call."
+	" Save self.currNode we're going to return this.  Then see if you have
+	" any siblings at this level, if so, follow it left as far as you can.
+	" If not, then walk back up the tree looking for a sibling
+	let save = self.currNode
+	let node = self.currNode
+	let sibling = node.findSibling(1)
+	while ( sibling == {} ) && ( node.parent != {} )
+		let node = node.parent
+		let sibling = node.findSibling(1)
+	endwhile
+	
+	" We either found a sibling, or we are at the root
+	" If we found a sibling, follow it left
+	if sibling != {}
+		let self.currNode = self.followLeft(sibling)	
+	else
+		" We're at the root
+		let self.currNode = {}
 	endif
-	let ret = self.list[self.idx]
-	let self.idx = self.idx + 1
-	return ret
+	return save
+endfunction
+
+" Function: NERDTreeWalker.tmp {{{2
+function! s:NERDTreeWalker.tmp() dict
+	" Find our next sibling.  If we dont have one at this level, walk back
+	" up the tree looking for one.
+	" http://myarch.com/treeiter/traditways
+	let root = self.currNode
+	if root.path.isDirectory && ! root.isOpen
+		call root.open()
+	endif
+	if root.path.isDirectory && root.getChildCount() > 0
+		let node = root.children[0]
+		while node != {}
+			if node.path.isDirectory && ! node.isOpen
+				call node.open()
+			endif
+
+			" echo "Visiting node " . node.path.str()
+			let self.currNode = node
+			if ( node.path.isDirectory ) && ( node.getChildCount() > 0 )
+				" non-leaf node
+				let node = node.children[0] 	
+			else
+				" leaf node (maybe directory, maybe not)
+				while (node.findSibling(1) == {}) && (! node.path.equals(self.root.path))
+					let node = node.parent
+				endwhile
+				let node = node.findSibling(1)
+			endif
+		endwhile
+	endif
 endfunction
 
 " Function: NERDTreeWalker.hasNext {{{2
 function! s:NERDTreeWalker.hasNext() dict
-	return self.idx < len(self.list) ? 1 : 0
+	return self.currNode != {} ? 1 : 0
 endfunction
 " Function: NERDTreeWalker.reset {{{2
 function! s:NERDTreeWalker.reset() dict
-	let self.idx = 0
+	let self.currNode = self.followLeft(self.root)
 endfunction
+
 " Function: NERDTreeWalker.walk {{{2
 function! s:NERDTreeWalker.walk(node) dict
 	let node = a:node
 	if ! node.path.isDirectory
 		return [ node ]
 	else
+		" Make sure the node is opened
+		if ! node.isOpen
+			call node.open()
+		endif
+
 		let ret = []
 		for c in node.children
 			let tmp = self.walk(c)
@@ -171,5 +263,8 @@ endfunction
 function! OnCursorMovedI()
 	return g:FuzzyFinder.onCursorMovedI()
 endfunction
+
+" For debugging {{{1
+let NERDTreeWalker = s:NERDTreeWalker
 
 " vim: fdm=marker
