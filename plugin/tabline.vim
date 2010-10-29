@@ -415,7 +415,7 @@ function! s:Tab.new(number) dict
 	if name == ""
 		let obj.name = "[No Name]"
 	else
-		let obj.name = fnamemodify(name, ":.")
+		let obj.name = fnamemodify(name, ":~:.")
 	endif
 
 	" Determine if the buffer in the active window of
