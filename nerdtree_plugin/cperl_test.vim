@@ -63,7 +63,6 @@ function! s:FuzzyFinder.complete(findstart, base) dict
 		if a:base == ""
 			return []
 		else
-			let i = 0
 			call complete_add(a:base)
 			while self.walker.hasNext()
 				let node = self.walker.next()
@@ -71,8 +70,7 @@ function! s:FuzzyFinder.complete(findstart, base) dict
 				if path =~ a:base
 					call complete_add({'word': path, 'abbr': fnamemodify(path, ":.")})
 				endif
-				let i += 1
-				if (i % 20) && complete_check()
+				if complete_check()
 					break
 				endif
 			endwhile
@@ -148,7 +146,7 @@ function! s:NERDTreeWalker.followLeft(node) dict
 			call node.open()
 		endif
 		if node.getChildCount() > 0
-			let leftmost = self.followLeft(node.getChildByIndex(0, 1))
+			let leftmost = self.followLeft(node.getChildByIndex(0, 0))
 			return leftmost
 		else
 			return node
