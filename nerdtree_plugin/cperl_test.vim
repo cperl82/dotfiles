@@ -8,7 +8,6 @@ function! s:FuzzyFinder.new() dict
 	let obj = copy(self)
 	let obj.prompt = "File >>> "
 	let obj.selectedFile = ""
-	let obj.walker = ""
 	return obj
 endfunction
 
@@ -18,7 +17,9 @@ function! s:FuzzyFinder.search() dict
 	let self.selectedFile = ""
 
 	" Get a new walker
-	let self.walker = s:NERDTreeWalker.new(b:NERDTreeRoot)
+	if ! exists("self.walker")
+		let self.walker = s:NERDTreeWalker.new(b:NERDTreeRoot)
+	endif
 
 	" Initially we set the node to jump to when we are done to the
 	" previously selected node in the tree
