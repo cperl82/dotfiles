@@ -78,12 +78,16 @@ endfunction
 
 " Function: FuzzyFinder.finish {{{2
 function! s:FuzzyFinder.finish() dict
+	" Turn off the autocmd's we defined on our way in so that the call to
+	" setline wont invoke them
+	autocmd! InsertLeave  <buffer>
+	autocmd! CursorMovedI <buffer>
+	iunmap <buffer> <CR>
 	call setline(line("w0"), self.savedLine)
+	call setpos(".", [0, line("w0"), 0, 0])
 	setlocal completefunc&
 	setlocal completeopt&
 	setlocal nomodifiable
-	" Cant figure this out at the moment, keeps raising errors
-	" iunmap <buffer> <CR>
 	if self.selectedFile != ""
 		call self.handleSelectedFile()
 	endif
@@ -91,9 +95,7 @@ endfunction
 
 " Function: FuzzyFinder.handleSelectedFile {{{2
 function! s:FuzzyFinder.handleSelectedFile()
-	let file = self.selectedFile
-	let self.selectedFile = ""
-	execute "tabedit " . file
+	execute "tabedit " . self.selectedFile
 endfunction
 
 " Function: FuzzyFinder.onCursorMovedI {{{2
@@ -118,7 +120,6 @@ function! s:Walker.new(root) dict
 	let obj.files = split(glob(printf("`find %s -type f -print`", obj.dir)))
 	return obj
 endfunction
-
 
 " Function: Walker.next {{{2
 function! s:Walker.next() dict
