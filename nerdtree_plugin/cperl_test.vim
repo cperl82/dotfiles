@@ -1,6 +1,13 @@
 " Intro blurb blah blah
 " Maintainer: chris.perl@gmail.com
 
+" Init stuff {{{1
+if exists("loaded_cperl_fuzzy_finder")
+	finish
+endif
+let loaded_cperl_fuzzy_finder = 1
+call NERDTreeAddKeyMap({'key': '<Leader>t', 'quickhelpText': 'Search NERDTree Quickly', 'callback': 'Search'})
+
 " Class: FuzzyFinder {{{1
 let s:FuzzyFinder = {}
 " Function: FuzzyFinder.new {{{2
@@ -8,6 +15,7 @@ function! s:FuzzyFinder.new() dict
 	let obj = copy(self)
 	let obj.prompt = "File >>> "
 	let obj.selectedFile = ""
+	let obj.walker = s:Walker.new(b:NERDTreeRoot)
 	return obj
 endfunction
 
@@ -16,39 +24,21 @@ function! s:FuzzyFinder.search() dict
 	" Reset the selected file
 	let self.selectedFile = ""
 
-	" Check that we are on a selected node
-	if b:NERDTreeRoot.GetSelected() == {}
-		echo "Please select a node first"
-		return
-	endif
-
-	" Get a new walker
-	if ! exists("self.walker")
-		let self.walker = s:Walker.new(b:NERDTreeRoot)
-	endif
-
-	" Initially we set the node to jump to when we are done to the
-	" previously selected node in the tree
-	let self.jumpNode = g:NERDTreeFileNode.GetSelected()
-	if self.jumpNode == {}
-		let self.jumpNode = b:NERDTreeRoot
-	endif
-
 	setlocal modifiable
 	setlocal completeopt=menuone
-	setlocal completefunc=Complete
-	autocmd InsertLeave  <buffer> call Finish()
-	autocmd CursorMovedI <buffer> call OnCursorMovedI()
+	setlocal completefunc=b:Complete
+	autocmd InsertLeave  <buffer> call b:Finish()
+	autocmd CursorMovedI <buffer> call b:OnCursorMovedI()
 
 	" TODO: Explain how this works, its kinda f'in confusing
-	inoremap <buffer> <silent> <CR> <C-y><C-r>=FuzzyFinder.saveSelection() ? "" : ""<CR><ESC>
+	inoremap <buffer> <silent> <CR> <C-y><C-r>=b:FuzzyFinder.saveSelection() ? "" : ""<CR><ESC>
 
 	"call setpos(".", [0, 2, len(self.prompt), 0])
 	"call setline(2, self.prompt)
 	call setpos(".", [0, line("w0"), len(self.prompt), 0])
+	let self.savedLine = getline(".")
 	call setline(line("w0"), self.prompt)
-	call feedkeys("A", 'n')
-	call feedkeys("\<C-x>\<C-u>", 'n')
+	call feedkeys("A\<C-x>\<C-u>", 'n')
 endfunction
 
 " Function: FuzzyFinder.saveSelection {{{2
@@ -88,13 +78,12 @@ endfunction
 
 " Function: FuzzyFinder.finish {{{2
 function! s:FuzzyFinder.finish() dict
+	call setline(line("w0"), self.savedLine)
 	setlocal completefunc&
 	setlocal completeopt&
 	setlocal nomodifiable
 	" Cant figure this out at the moment, keeps raising errors
 	" iunmap <buffer> <CR>
-	call self.jumpNode.putCursorHere(0, 0)
-	call NERDTreeRender()
 	if self.selectedFile != ""
 		call self.handleSelectedFile()
 	endif
@@ -102,7 +91,9 @@ endfunction
 
 " Function: FuzzyFinder.handleSelectedFile {{{2
 function! s:FuzzyFinder.handleSelectedFile()
-	execute "tabedit " . self.selectedFile
+	let file = self.selectedFile
+	let self.selectedFile = ""
+	execute "tabedit " . file
 endfunction
 
 " Function: FuzzyFinder.onCursorMovedI {{{2
@@ -119,13 +110,12 @@ function! s:Walker.new(root) dict
 	let obj.idx = 0
 	let selected = a:root.GetSelected()
 	if selected == {}
-		let obj.dir = ""
-		let obj.files = []
+		let obj.dir = a:root.path.str()
 	else
 		let obj.dir = selected.path.str()
-		echo "Building file list for dir: " . fnamemodify(obj.dir, ":~:.")
-		let obj.files = split(glob(printf("`find %s -type f -print`", obj.dir)))
 	endif
+	echo "Building file list for dir: " . fnamemodify(obj.dir, ":~:.")
+	let obj.files = split(glob(printf("`find %s -type f -print`", obj.dir)))
 	return obj
 endfunction
 
@@ -147,28 +137,28 @@ function! s:Walker.reset() dict
 	let self.idx = 0
 endfunction
 
-" Init stuff {{{1
-if ! exists("FuzzyFinder")
-	let FuzzyFinder = s:FuzzyFinder.new()
-	call NERDTreeAddKeyMap({'key': '<Leader>t', 'quickhelpText': 'Search NERDTree Quickly', 'callback': 'FuzzyFinder.search'})
-else
-	finish
-endif
-
 " Public Interfaces necessary for autocmd and completefunc {{{1
+" Function: Search {{{2
+function! Search()
+	if ! exists("b:FuzzyFinder")
+		let b:FuzzyFinder = s:FuzzyFinder.new()
+	endif
+	return b:FuzzyFinder.search()
+endfunction
+
 " Function: Complete {{{2
-function! Complete(findstart, base)
-	return g:FuzzyFinder.complete(a:findstart, a:base)
+function! b:Complete(findstart, base)
+	return b:FuzzyFinder.complete(a:findstart, a:base)
 endfunction
 
 " Function: Finish {{{2
-function! Finish()
-	return g:FuzzyFinder.finish()
+function! b:Finish()
+	return b:FuzzyFinder.finish()
 endfunction
 
 " Function: OnCursorMovedI {{{2
-function! OnCursorMovedI()
-	return g:FuzzyFinder.onCursorMovedI()
+function! b:OnCursorMovedI()
+	return b:FuzzyFinder.onCursorMovedI()
 endfunction
 
 " For debugging {{{1
