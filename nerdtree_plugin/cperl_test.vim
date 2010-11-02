@@ -33,8 +33,7 @@ function! s:FuzzyFinder.search() dict
 	" TODO: Explain how this works, its kinda f'in confusing
 	inoremap <buffer> <silent> <CR> <C-y><C-r>=b:FuzzyFinder.saveSelection() ? "" : ""<CR><ESC>
 
-	"call setpos(".", [0, 2, len(self.prompt), 0])
-	"call setline(2, self.prompt)
+	let self.savedPos = getpos(".")
 	call setpos(".", [0, line("w0"), len(self.prompt), 0])
 	let self.savedLine = getline(".")
 	call setline(line("w0"), self.prompt)
@@ -84,7 +83,7 @@ function! s:FuzzyFinder.finish() dict
 	autocmd! CursorMovedI <buffer>
 	iunmap <buffer> <CR>
 	call setline(line("w0"), self.savedLine)
-	call setpos(".", [0, line("w0"), 0, 0])
+	call setpos(".", self.savedPos)
 	setlocal completefunc&
 	setlocal completeopt&
 	setlocal nomodifiable
