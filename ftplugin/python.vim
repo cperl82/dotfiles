@@ -142,8 +142,10 @@ function! GetPythonFold(lnum)
     " if begin of file: take zero
     elseif p==0 | let pind = 0
     endif
+    "echo printf("p: %d, pind: %d, ind: %d", p, pind, ind)
+    if ind>0 && ind==pind && getline(p) =~ '^\s*class\s' | return '>'.(ind/&shiftwidth+1)
     " Case S*=* and C*=*: indent equal
-    if ind>0 && ind==pind | return '='
+    elseif ind>0 && ind==pind | return '='
     " Case S*>* and C*>*: indent increase
     elseif ind>pind | return '='
     " All cases with 0 indent
