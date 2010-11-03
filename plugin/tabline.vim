@@ -11,7 +11,7 @@ function! DrawTabLine()
 	return g:cptl.getString()
 endfunction
 
-" Class TabLine {{{1
+" Class: TabLine {{{1
 let s:TabLine = {}
 " Function: TabLine.new {{{2
 function! s:TabLine.new() dict
@@ -225,7 +225,7 @@ function! s:TabLine.switchDirection() dict
 		let self.direction = s:TabString.ANCHORLEFT
 	endif
 endfunction
-" Class TabString {{{1
+" Class: TabString {{{1
 let s:TabString = {}
 let s:TabString.ANCHORLEFT        = 0
 let s:TabString.ANCHORRIGHT       = 1
@@ -397,7 +397,7 @@ endfunction
 function! s:TabString.isFull() dict
 	return self.remaining == 0 ? 1 : 0
 endfunction
-" Class Tab {{{1
+" Class: Tab {{{1
 let s:Tab = {}
 let s:Tab.DISPLAYNONE = 0
 let s:Tab.DISPLAYPART = 1
@@ -406,6 +406,7 @@ let s:Tab.DISPLAYFULL = 2
 function! s:Tab.new(number) dict
 	let obj = copy(self)
 	let obj.number = a:number
+	let obj.maxLen = 30
 	let buflist    = tabpagebuflist(obj.number)
 	let winnr      = tabpagewinnr(obj.number)
 	let buffer     = buflist[winnr - 1]
@@ -416,6 +417,12 @@ function! s:Tab.new(number) dict
 		let obj.name = "[No Name]"
 	else
 		let obj.name = fnamemodify(name, ":~:.")
+	endif
+
+	" Shorten the name if necessary
+	" This should really be configurable from the outside
+	if len(obj.name) > obj.maxLen 
+		let obj.name = obj.shortenName(obj.name)
 	endif
 
 	" Determine if the buffer in the active window of
@@ -446,9 +453,6 @@ function! s:Tab.new(number) dict
 	endif
 	" Initially the tab is not displayed
 	let obj.displayed = s:Tab.DISPLAYNONE
-	" Initially we are not marked as either the first or last tab
-	let obj.firsttab  = 0
-	let obj.lasttab   = 0
 	return obj
 endfunction
 
@@ -507,6 +511,17 @@ endfunction
 " Function: Tab.getHighlightPost {{{2
 function! s:Tab.getHighlightPost() dict
 	return self.highlightPost
+endfunction
+
+" Function: Tab.shortenName {{{2
+function! s:Tab.shortenName(name) dict
+	let name = a:name
+	" while we are too long strip the leading path component, unless we're
+	" at the last path component, then just return it
+	while len(name) > self.maxLen && name =~ "/" 
+		let name = substitute(name, "^/\\=[^/]*/", "", "")
+	endwhile
+	return name
 endfunction
 
 " vim: fdm=marker
