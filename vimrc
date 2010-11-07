@@ -80,3 +80,40 @@ let python_highlight_space_errors = 0
 for i in range(1,9)
 	execute "nmap <silent> <Leader>" . i . " :tabnext " . i . "<CR>"
 endfor
+
+" 2010-11-07
+" Playing around w/ modified C code folding
+" Copied from http://stackoverflow.com/questions/851916/compact-c-folding-in-vim
+function! CFoldLevel(lnum)
+  let line = getline(a:lnum)
+  if line !~ '^$' && indent(a:lnum) == 0 && line !~ '\({\|}\)'
+    return '>1' " A new fold of level 1 starts here.
+  else
+    return '1' " This line has a foldlevel of 1.
+  endif
+endfunction
+
+function! CFoldText()
+  " Look through all of the folded text for the function signature.
+  let signature = ''
+  let i = v:foldstart
+  while signature == '' && i < v:foldend
+    let line = getline(i)
+    if line =~ '\w\+(.*)$'
+      let signature = line
+    endif 
+    let i = i + 1
+  endwhile
+
+  " Return what the fold should show when folded.
+  return '+-- ' . (v:foldend - v:foldstart) . ' Lines: ' . signature . ' '
+endfunction
+
+function! CFold()               
+  set foldenable
+  set foldlevel=0   
+  set foldmethod=expr
+  set foldexpr=CFoldLevel(v:lnum)
+  set foldtext=CFoldText()
+  set foldnestmax=1
+endfunction
