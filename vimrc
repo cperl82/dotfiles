@@ -110,10 +110,10 @@ function! CFoldText()
 endfunction
 
 function! CFold()               
-  set foldenable
-  set foldlevel=0   
-  set foldmethod=expr
-  set foldexpr=CFoldLevel(v:lnum)
-  set foldtext=CFoldText()
-  set foldnestmax=1
+  setlocal foldenable
+  setlocal foldlevel=0   
+  setlocal foldmethod=expr
+  setlocal foldexpr=CFoldLevel(v:lnum)
+  setlocal foldtext=CFoldText()
+  setlocal foldnestmax=1
 endfunction
