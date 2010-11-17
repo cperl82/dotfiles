@@ -47,6 +47,7 @@ endif
 setlocal foldmethod=expr
 setlocal foldexpr=GetPythonFold(v:lnum)
 setlocal foldtext=PythonFoldText()
+setlocal foldminlines=0
 
 function! PythonFoldText()
   let fs = v:foldstart
