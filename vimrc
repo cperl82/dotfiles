@@ -86,7 +86,7 @@ endfor
 " Copied from http://stackoverflow.com/questions/851916/compact-c-folding-in-vim
 function! CFoldLevel(lnum)
   let line = getline(a:lnum)
-  if line !~ '^$' && indent(a:lnum) == 0 && line !~ '\({\|}\)'
+  if line !~ '^$' && indent(a:lnum) == 0 && line !~ '\({\|}\)' && line !~ '^#'
     return '>1' " A new fold of level 1 starts here.
   else
     return '1' " This line has a foldlevel of 1.
@@ -114,6 +114,7 @@ function! CFold()
   setlocal foldlevel=0   
   setlocal foldmethod=expr
   setlocal foldexpr=CFoldLevel(v:lnum)
-  setlocal foldtext=CFoldText()
+  "setlocal foldtext=CFoldText()
   setlocal foldnestmax=1
+  setlocal foldminlines=1
 endfunction
