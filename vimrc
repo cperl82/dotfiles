@@ -18,7 +18,7 @@ set hlsearch
 
 " colorscheme asmdev
 " colorscheme norwaytoday
-if $TERM == "xterm-256color" || $TERM == "screen-256color"
+if &term =~ ".*256color"
 	colorscheme xoria256
 else
 	colorscheme ir_black
@@ -60,6 +60,15 @@ nmap <silent> <C-Right> :call MoveTabRight()<CR>
 " to moving left and right through the open tabs
 nmap <silent> <C-h> :tabp<CR>
 nmap <silent> <C-l> :tabn<CR>
+
+" 2010-12-30
+" Fix for control left and right moving of tabs within screen.
+" It seems that the keycodes only work for xterm due to vim's
+" builtin_xterm termcap codes.
+if &term =~ 'screen\|screen-256color'
+	set <C-Left>=[1;5D
+	set <C-Right>=[1;5C
+endif
 
 " Map Alt-1 (at least on my mac) such that it opens the quick fix window
 " and then prepares a vimgrep for me w/o jumping to the first
