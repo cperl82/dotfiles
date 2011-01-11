@@ -75,6 +75,10 @@ endif
 " match it finds
 :nmap <ESC>1 :copen<CR>:vimgrep ##j **/*<Left><Left><Left><Left><Left><Left><Left>
 
+" 2011-01-11
+" Map / while in visual mode to search for the highlighted text
+:vmap / y/<C-R>"<CR>
+
 " 2010-09-24
 " Added newer python syntax highlighting script
 " Enable all the syntax options in it (.vim/syntax/python.vim)
