@@ -1,6 +1,10 @@
 " Intro blurb blah blah
 " Maintainer: chris.perl@gmail.com
 
+" 2011-02-07
+" Completely disabling for the time being
+finish
+
 " Init stuff {{{1
 if exists("loaded_cperl_fuzzy_finder")
 	finish
