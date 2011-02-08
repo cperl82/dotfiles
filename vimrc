@@ -29,6 +29,14 @@ endif
 " ir_black colorscheme looks terrible with treeRO linked to WarningMsg
 hi link treeRO Normal
 
+" 2011-02-08
+" Set the NERDTree status line such that it always shows the full path of the
+" currently selected node.  I realize this is a little inefficient at the moment
+" since it calls GetSelected() twice, but I cannot figure out a way to get
+" around that at the moment.  This status line pretty much makes my
+" path_copy.vim NERDTree plugin useless, but whatever.
+let g:NERDTreeStatusline='%{has_key(g:NERDTreeFileNode.GetSelected(), "path") ? g:NERDTreeFileNode.GetSelected().path.str() : b:NERDTreeRoot.path.str()}'
+
 " Set the tabline to our custom function
 set tabline=%!DrawTabLine()
 
