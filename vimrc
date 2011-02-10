@@ -35,7 +35,8 @@ hi link treeRO Normal
 " since it calls GetSelected() twice, but I cannot figure out a way to get
 " around that at the moment.  This status line pretty much makes my
 " path_copy.vim NERDTree plugin useless, but whatever.
-let g:NERDTreeStatusline='%{has_key(g:NERDTreeFileNode.GetSelected(), "path") ? g:NERDTreeFileNode.GetSelected().path.str() : b:NERDTreeRoot.path.str()}'
+" let g:NERDTreeStatusline='%{has_key(g:NERDTreeFileNode.GetSelected(), "path") ? g:NERDTreeFileNode.GetSelected().path.str() : b:NERDTreeRoot.path.str()}'
+let g:NERDTreeStatusline='%{ getcwd() }'
 
 " Set the tabline to our custom function
 set tabline=%!DrawTabLine()
