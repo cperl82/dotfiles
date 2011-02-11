@@ -38,6 +38,24 @@ hi link treeRO Normal
 " let g:NERDTreeStatusline='%{has_key(g:NERDTreeFileNode.GetSelected(), "path") ? g:NERDTreeFileNode.GetSelected().path.str() : b:NERDTreeRoot.path.str()}'
 let g:NERDTreeStatusline='%{ getcwd() }'
 
+" 2011-02-11
+" Emacs style command line editing slightly modified
+" :help emacs-keys
+" start of line
+:cnoremap <C-a>		<Home>
+" delete character under cursor
+:cnoremap <C-d>		<Del>
+" end of line
+:cnoremap <C-e>		<End>
+" back one word
+:cnoremap <Esc>b	<S-Left>
+" forward one word
+:cnoremap <Esc>f	<S-Right>
+" Delete one word to the right
+:cnoremap <Esc>d	<S-Right><C-w>
+" delete one word to the left
+:cnoremap <Esc><C-?>	<C-w>
+
 " Set the tabline to our custom function
 set tabline=%!DrawTabLine()
 
