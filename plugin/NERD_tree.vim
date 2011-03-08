@@ -1228,7 +1228,13 @@ function! s:TreeFileNode.openInNewTab(options)
         call s:closeTreeIfQuitOnOpen()
     endif
 
-    exec "tabedit " . self.path.str({'format': 'Edit'})
+    if has_key(a:options, 'makeLastTab') && a:options['makeLastTab']
+        let l:tabpos = tabpagenr('$')
+    else
+        let l:tabpos = ""
+    endif
+
+    exec l:tabpos . "tabedit " . self.path.str({'format': 'Edit'})
 
     if has_key(a:options, 'stayInCurrentTab') && a:options['stayInCurrentTab']
         exec "tabnext " . currentTab
