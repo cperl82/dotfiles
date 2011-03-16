@@ -69,3 +69,9 @@ function appversion
 	fi
 	curl -s -o /dev/stdout "http://${HOST}/ice/app" | grep '<script src="http://.*/js/_ice-plugins.min.js?v=.*</script>' | sed -e 's/.*?v=\([0-9.][0-9.]*\).*$/\1/'
 }
+
+# Function to reset terminal colors in case something got left in a jacked state
+function cl
+{
+	echo -en '\033[;0m'
+}
