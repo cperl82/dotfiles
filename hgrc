@@ -1,0 +1,11 @@
+[ui]
+username = Chris Perl <chris.perl@gmail.com>
+
+[extensions]
+hgext.graphlog=
+hgext.bookmarks=
+hgext.rebase=
+hgext.transplant=
+hgext.mq=
+hgext.hgsubversion=/Users/cperl/.mercurial/extensions/hgsubversion/hgsubversion
+hgext.hg_histedit=/Users/cperl/.mercurial/extensions/histedit/hg_histedit.py
