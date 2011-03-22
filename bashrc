@@ -27,7 +27,7 @@ function xt
 # Function to set screen window title
 function st
 {
-	printf "\033k${1}\033\"
+	printf "\033k${1}\033\\"
 }
 
 # Function to reset terminal colors in case something got left in a jacked state
