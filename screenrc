@@ -1,7 +1,7 @@
 caption always
 caption string '%{gk}[ %{W}%H %{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{w}%n*%f %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}][%{Y}%l%{g}]%{=b C}[ %m/%d %c ]%{W}'
 defscrollback 2500
-termcapinfo xterm* 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm:smcup=\E[?1049h,:rmcup=\E[?1049l,'
+#termcapinfo xterm* 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm:smcup=\E[?1049h,:rmcup=\E[?1049l,'
 altscreen on
 vbell off
-defbce on
+term screen-256color
