@@ -1,4 +1,5 @@
-syntax: glob
+syntax: re
 
-.netrwhist
-.*.swp
+^\.netrwhist
+^\..*\.swp
+^view\/.*
