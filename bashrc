@@ -19,13 +19,13 @@ function tmpmkcd
 }
 
 # Function to set xterm window title
-function t
+function xt
 {
 	printf '\033]2;${1}\007'
 }
 
 # Function to set screen window title
-function t
+function st
 {
 	printf '\033k${1}\033\'
 }
