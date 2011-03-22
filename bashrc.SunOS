@@ -1,7 +1,19 @@
 export NHL_ROOT=${HOME}/builds
 export PATH=/opt/csw/bin:/var/ant/bin:/var/maven/bin:$PATH:$NHL_ROOT/ITS/EnvironmentManager/common/bin:/usr/sbin:/bin
-
 export TERMINFO=${HOME}/.terminfo
+export JAVA_HOME=/usr/jdk/jdk1.6.0_20
+
+if test "${TERM}" = "xterm" -o \
+	"${TERM}" = "xterm-256color"; then
+	# xt defined in top level bashrc
+	export PROMPT_COMMAND=xt
+fi
+
+if test "${TERM}" = "screen" -o \
+	"${TERM}" = "screen-256color"; then
+	# st defined in top level bashrc
+	export PROMPT_COMMAND=st
+fi
 
 # make a function for ps -ef output but prefixed with full zone name and formatted nicely
 function psz()
@@ -20,6 +32,3 @@ function psz()
 		printf "${FORMAT}" "${zone}" "${uid}" "${user}" "${pid}" "${ppid}" "${c}" "${stime}" "${tty}" "${time}" "${args}"
 	done
 }
-
-# Set JAVA_HOME such that we are picking up java 6
-export JAVA_HOME=/usr/jdk/jdk1.6.0_20
