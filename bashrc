@@ -27,7 +27,7 @@ function xt
 	else
 		NAME=${1}
 	fi
-	printf "\033]2;${NAME}\007"
+	printf "\033]0;${NAME}\007"
 }
 
 # Function to set screen window title
