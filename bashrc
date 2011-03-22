@@ -21,13 +21,25 @@ function tmpmkcd
 # Function to set xterm window title
 function xt
 {
-	printf "\033]2;${1}\007"
+	if [[ -z "${1}" ]]
+	then
+		NAME=${HOSTNAME}
+	else
+		NAME=${1}
+	fi
+	printf "\033]2;${NAME}\007"
 }
 
 # Function to set screen window title
 function st
 {
-	printf "\033k${1}\033\\"
+	if [[ -z "${1}" ]]
+	then
+		NAME=${HOSTNAME}
+	else
+		NAME=${1}
+	fi
+	printf "\033k${NAME}\033\\"
 }
 
 # Function to reset terminal colors in case something got left in a jacked state
