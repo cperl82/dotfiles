@@ -1,8 +1,4 @@
-export PS1="[\u@\h \w] \$ "
-
 # alias's for things that I don't like to type too often
-alias sshr='ssh -l root'
-alias macvim='open -a MacVim'
 alias ls='ls -G'
 
 # Setup our PATH and MANPATH to include the stuff for Darwin Ports (or Mac
@@ -24,18 +20,6 @@ function nhlsoa
 	done
 }
 
-function tmpmkcd
-{
-	today=$(date '+%Y-%m-%d')
-	pathname="${HOME}/tmp/${today}"
-	if [[ ! -d "${pathname}" ]]
-	then
-		mkdir ${pathname} && cd ${pathname}
-	else
-		cd ${pathname}
-	fi
-}
-
 function zl
 {
 	NAME=${1}
@@ -46,12 +30,6 @@ function zl
 function sshzl
 {
 	ssh $(zl ${1})
-}
-
-# A short little function to set my window title manually
-function t
-{
-	printf "\033]2;${1}\007"
 }
 
 # Determine the version of NHL apps currently in qa
@@ -68,10 +46,4 @@ function appversion
 		return 1
 	fi
 	curl -s -o /dev/stdout "http://${HOST}/ice/app" | grep '<script src="http://.*/js/_ice-plugins.min.js?v=.*</script>' | sed -e 's/.*?v=\([0-9.][0-9.]*\).*$/\1/'
-}
-
-# Function to reset terminal colors in case something got left in a jacked state
-function cl
-{
-	echo -en '\033[;0m'
 }

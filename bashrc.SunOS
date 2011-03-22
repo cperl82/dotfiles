@@ -1,6 +1,4 @@
-export PS1='[\u@\h \w]\$ '
 export NHL_ROOT=${HOME}/builds
-export PAGER=less
 export PATH=/opt/csw/bin:/var/ant/bin:/var/maven/bin:$PATH:$NHL_ROOT/ITS/EnvironmentManager/common/bin:/usr/sbin:/bin
 
 export TERMINFO=${HOME}/.terminfo
