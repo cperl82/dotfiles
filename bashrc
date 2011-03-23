@@ -48,15 +48,46 @@ function cl
 	printf '\033[;0m'
 }
 
-## OS Specific
-OSNAME=$(uname -s)
 
+# Bash path canonicalization
+# Copied from comment at
+# http://blog.publicobject.com/2006/06/canonical-path-of-file-in-bash.html
+
+# Resolves symlinks for path components, but will not resolve if the last
+# component, file or directory is a symlink
+function path-canonical-simple() {
+	local dst="${1}"
+	cd -P -- "$(dirname -- "${dst}")" > /dev/null 2>&1 && \
+		echo "$(pwd -P)/$(basename -- "${dst}")"
+}
+
+# Resolves symlinks for all path components, including the final component
+function path-canonical() {
+	local dst="$(path-canonical-simple "${1}")"
+
+	while [[ -h "${dst}" ]]; do
+		local link_dst="$(ls -l "${dst}" | sed -e 's/^.*[ \t]*->[ \t]*\(.*\)[ \t]*$/\1/g')"
+		if [[ "${link_dst}" =~ ^/ ]]; then
+			# absolute symlink
+			dst="${link_dst}"
+		else
+			# relative symlink
+			dst="$(dirname "${dst}")/${link_dst}"
+		fi
+	done
+	dst="$(path-canonical-simple "${dst}")"
+	echo "${dst}"
+}
+
+## OS Specific
+OSFILE="$(dirname "$(path-canonical ${BASH_ARGV[0]})")"
+OSNAME=$(uname -s)
 if   [[ "${OSNAME}" == "Darwin" ]]
 then
-	source ${HOME}/.dotfiles/bashrc.Darwin
+	source "${OSFILE}/bashrc.darwin"
 elif [[ "${OSNAME}" == "SunOS" ]]
 then
-	source ${HOME}/.dotfiles/bashrc.SunOS
+	source "${OSFILE}/bashrc.SunOS"
 else
 	echo "Unknown Operating System"
 fi
