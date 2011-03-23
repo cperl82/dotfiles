@@ -52,6 +52,7 @@ function cl
 # Bash path canonicalization
 # Copied from comment at
 # http://blog.publicobject.com/2006/06/canonical-path-of-file-in-bash.html
+# and adapted to further fit my needs and be more cross platform compatible
 
 # Resolves symlinks for path components, but will not resolve if the last
 # component, file or directory is a symlink
@@ -67,7 +68,13 @@ function path-canonical() {
 
 	while [[ -h "${dst}" ]]; do
 		local link_dst="$(ls -l "${dst}" | sed -e 's/^.*[ \t]*->[ \t]*\(.*\)[ \t]*$/\1/g')"
-		if [[ "${link_dst}" =~ ^/ ]]; then
+		if   [[ "${link_dst}" =~ ^..$ ]]; then
+			# special case
+			dst="$(dirname -- "$(dirname -- "${dst}")")"
+		elif [[ "${link_dst}" =~ ^.$  ]]; then
+			# special case
+			dst="${dst}"
+		elif [[ "${link_dst}" =~ ^/   ]]; then
 			# absolute symlink
 			dst="${link_dst}"
 		else
