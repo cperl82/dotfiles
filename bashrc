@@ -58,7 +58,7 @@ function cl
 function path-canonical-simple() {
 	local dst="${1}"
 	cd -P -- "$(dirname -- "${dst}")" > /dev/null 2>&1 && \
-		echo "$(pwd -P)/$(basename -- "${dst}")"
+		echo "$(pwd -P)/$(basename "${dst}")"
 }
 
 # Resolves symlinks for all path components, including the final component
