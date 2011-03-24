@@ -39,6 +39,12 @@ txtrst='\e[0m'    # Text Reset
 # http://tldp.org/HOWTO/Bash-Prompt-HOWTO/nonprintingchars.html
 export PS1="\[${txtred}\][\[${bldwht}\]\u@\h \[${bldblk}\]\w\[${txtred}\]]\[${txtrst}\]\$ "
 
+# Hack to work around the fact that gnome-terminal always sets TERM=xterm
+if [[ "${TERM}" == "xterm" && "${COLORTERM}" == "gnome-terminal" ]]
+then
+	export TERM=xterm-256color
+fi
+
 # Set directory listing colors to those listed in ~/.dircolors
 if [ -r ~/.dircolors ]
 then
