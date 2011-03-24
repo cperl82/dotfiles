@@ -58,16 +58,20 @@ function cl
 # path-canonical-simple {{{3
 function path-canonical-simple() {
 	local dst="${1}"
-	cd -P -- "$(dirname -- "${dst}")" > /dev/null 2>&1 && \
-		echo "$(pwd -P)/$(basename "${dst}")"
+	if [[ -z "${dst}" ]]; then
+		dst="${PWD}"
+	fi
+
+	cd -- "$(dirname -- "${dst}")" > /dev/null 2>&1 && \
+		echo "$(pwd -P)/$(basename "${dst}")" && \
+		cd -- - >/dev/null 2>&1
 }
 
 # path-canonical {{{3
 # Resolves symlinks for all path components, including the final component
 function path-canonical() {
-	local dst
-
-	if [[ -z "${1}" ]]; then
+	local dst="${1}"
+	if [[ -z "${dst}" ]]; then
 		dst="${PWD}"
 	fi
 
