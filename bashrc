@@ -90,7 +90,7 @@ function path-canonical() {
 	echo "${dst}"
 }
 
-## OS Specific bashrc file inclusion {{{2
+# OS Specific bashrc file inclusion {{{1
 OSFILE="$(dirname "$(path-canonical ${BASH_ARGV[0]})")"
 OSNAME=$(uname -s)
 if   [[ "${OSNAME}" == "Darwin" ]]
@@ -106,4 +106,4 @@ else
 	echo "Unknown Operating System"
 fi
 
-# vim: set fdm=marker
+# vim: fdm=marker
