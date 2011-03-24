@@ -7,5 +7,5 @@ hgext.bookmarks=
 hgext.rebase=
 hgext.transplant=
 hgext.mq=
-hgext.hgsubversion=/Users/cperl/.mercurial/extensions/hgsubversion/hgsubversion
-hgext.hg_histedit=/Users/cperl/.mercurial/extensions/histedit/hg_histedit.py
+hgext.hgsubversion=${HOME}/.mercurial/extensions/hgsubversion/hgsubversion
+hgext.hg_histedit=${HOME}/.mercurial/extensions/histedit/hg_histedit.py
