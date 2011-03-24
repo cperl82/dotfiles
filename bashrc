@@ -65,7 +65,13 @@ function path-canonical-simple() {
 # path-canonical {{{3
 # Resolves symlinks for all path components, including the final component
 function path-canonical() {
-	local dst="$(path-canonical-simple "${1}")"
+	local dst
+
+	if [[ -z "${1}" ]]; then
+		dst="${PWD}"
+	fi
+
+	dst="$(path-canonical-simple "${1}")"
 
 	while [[ -h "${dst}" ]]; do
 		local link_dst="$(ls -l "${dst}" | sed -e 's/^.*[ \t]*->[ \t]*\(.*\)[ \t]*$/\1/g')"
