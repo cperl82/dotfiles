@@ -95,6 +95,9 @@ then
 elif [[ "${OSNAME}" == "SunOS" ]]
 then
 	source "${OSFILE}/bashrc.SunOS"
+elif [[ "${OSNAME}" == "Linux" ]]
+then
+	source "${OSFILE}/bashrc.linux"
 else
 	echo "Unknown Operating System"
 fi
