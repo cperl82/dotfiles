@@ -37,7 +37,8 @@ txtrst='\e[0m'    # Text Reset
 # All non-printing characters are enclosed in \[ and \] to make sure long lines don't
 # wrap all weird and on the same line.  See link immediately below
 # http://tldp.org/HOWTO/Bash-Prompt-HOWTO/nonprintingchars.html
-export PS1="\[${txtred}\][\[${bldwht}\]\u@\h \[${bldblk}\]\w\[${txtred}\]]\[${txtrst}\]\$ "
+#export PS1="\[${txtred}\][\[${bldwht}\]\u@\h \[${bldblk}\]\w\[${txtred}\]]\[${txtrst}\]\$ "
+export PS1='[\u@\h \w]\$ '
 
 # Hack to work around the fact that gnome-terminal always sets TERM=xterm
 if [[ "${TERM}" == "xterm" && "${COLORTERM}" == "gnome-terminal" ]]
