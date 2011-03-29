@@ -16,6 +16,9 @@ set incsearch
 " Turn on search highlighting
 set hlsearch
 
+" Use the man.vim plugin if its available
+runtime! ftplugin/man.vim
+
 " colorscheme asmdev
 " colorscheme norwaytoday
 if &term =~ ".*256color"
