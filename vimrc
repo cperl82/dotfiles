@@ -117,6 +117,11 @@ let python_highlight_all = 1
 let python_highlight_indent_errors = 0
 let python_highlight_space_errors = 0
 
+" 2011-03-30
+" Vim's error highlighting of vimscript isn't always correct, turn it off
+" :help ft-vim-syntax
+let g:vimsyn_noerror = 1
+
 " 2010-10-03
 " Make shortcuts for jumping directly to a specific tab
 " We're mapping <Leader> (which defaults to \) followed by {number} (where
