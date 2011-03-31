@@ -1,31 +1,29 @@
-syn match cptest00 /\".\{-}\"/
-syn match cptest01 /'.\{-}'/
-syn match cptest02 /\d\{4}-\d\{2}-\d\{2}\(\s*\d\{2}:\d\{2}:\d\{2}\)\{0,1}/
-syn match cptest03 /\*.\{-}\*/
-syn match cptest04 /@/ 
-"syn match cptest05 /@[^[:space:]]\+/
-"syn match cptest06 /^.*@done.*$/ contains=concealtest00
-syn match cptest07 /^[^[:blank:]][^{]\+/
-syn match cptest08 "\(http\|ftp\)://[^[:space:]]\+"
-"syn match cptest09 /_[^[:blank:]]\{1,}_/
+syn match Project /^[^[:blank:]][^{]\+:/
+syn match DoubleQuote /\".\{-}\"/
+syn match SingleQuote /'.\{-}'/
+syn match DateTime /\d\{4}-\d\{2}-\d\{2}\(\s*\d\{2}:\d\{2}:\d\{2}\)\{0,1}/
+syn match Starred /\*.\{-}\*/
+syn match AtSymbol /@/ 
+syn match URL "\(http\|ftp\)://[^[:space:]]\+"
 
-syn match ConcealMarker /{{{\d\{}\|}}}\d\{}/ conceal
+syn match Note /^\t\+▸\_.\{-}\(\_^\t\+▸\|\_^\t\+￭\|\%$\)\@=/ fold contains=DoubleQuote,SingleQuote,DateTime,Starred,AtSymbol,URL contained transparent
+syn match NoteDone /^\t\+▸.*@[Dd]one\_.\{-}\(\_^\t\+▸\|\_^\t\+￭\|\%$\)\@=/ fold
+syn match Task /^\t\+￭\_.\{-}\(\_^\t\+￭\|\%$\)\@=/ fold contains=Note,NoteDone
+syn match TaskDone /^\t\+￭.*@[Dd]one\_.\{-}\(\_^\t\+￭\|\%$\)\@=/ fold contains=Note,NoteDone
 
-syn match Subnote /^\(\t\+\)▸\_.\{-}■/ contains=ConcealMarker,DoneSubnote,Subnote,cptest00,cptest01,cptest02,cptest03,cptest04,cptest08 fold
-syn match DoneSubnote /^\(\t\+\)▸.*@done\_.\{-}■/ fold
+"syn match ConcealMarker /{{{\d\{}\|}}}\d\{}/ conceal
 
 syn sync fromstart
 
-hi link cptest00 Constant
-hi link cptest01 PreProc
-hi link cptest02 Comment
-hi link cptest03 Special
-hi link cptest04 Special
-""hi link cptest05 Special
-hi link cptest06 Comment
-hi link cptest07 Type
-hi link cptest08 Statement
-"hi link cptest09 Statement
-hi link ConcealMarker Comment
+hi link Project Type
+hi link DoubleQuote Constant
+hi link SingleQuote PreProc
+hi link DateTime Comment
+hi link Starred Special
+hi link AtSymbol Special
+hi link URL Statement
 
-hi link DoneSubnote Comment
+"hi link ConcealMarker Comment
+
+hi link NoteDone Comment
+hi link TaskDone Comment
