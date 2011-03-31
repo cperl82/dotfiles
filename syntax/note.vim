@@ -11,8 +11,8 @@ syn match cptest08 "\(http\|ftp\)://[^[:space:]]\+"
 
 syn match ConcealMarker /{{{\d\{}\|}}}\d\{}/ conceal
 
-syn match Subnote /▸\_.\{-}--/ contains=ConcealMarker,cptest00,cptest01
-syn match DoneSubnote /▸.*@done\_.\{-}--/ contains=ConcealMarker
+syn match Subnote /^\(\t\+\)▸\_.\{-}\_^\1/ contains=ConcealMarker,DoneSubnote,cptest00,cptest01,cptest02,cptest03,cptest04,cptest08
+syn match DoneSubnote /^\(\t\+\)▸.*@done\_.\{-}\(\_^\1▸\)\@=/
 
 syn sync fromstart
 
