@@ -26,7 +26,5 @@ function! MyFoldText()
 		let dots .= "."
 	endfor
 
-	echo dots
-
 	return spaces . line . dots . size . " lines"
 endfunction
