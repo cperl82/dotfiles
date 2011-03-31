@@ -9,22 +9,20 @@ setlocal foldmethod=marker foldminlines=0 foldcolumn=2
 setlocal foldtext=MyFoldText()
 function! MyFoldText()
 	let line = getline(v:foldstart)
-	let size = (v:foldend - v:foldstart) + 1
 	let line = substitute(line, '{{{\d\+', '', '')
-	let spaces = ""
-
-	" Calculate the appropriate number of leading spaces so the folded
-	" line matches up with the real text underneath it
-	for i in range((len(v:folddashes)-1) * (&ts-1))
-		let spaces .= " "
-	endfor
+	let line = substitute(line, '\t', '    ', 'g')
+	let size = (v:foldend - v:foldstart) + 1
+	
+	" Special calculation of multibyte characters
+	" :help strlen
+	let linelen = strlen(substitute(line, '.', 'x', 'g'))
 
 	" calculate the number of "."'s needed to reach the edge of the window
 	let dots = ""
-	let ndots = winwidth(0) - &foldcolumn - (&number ? &numberwidth : 0) - len(spaces) - len(line) - len(size) - len(" lines") 
+	let ndots = winwidth(0) - &foldcolumn - (&number ? &numberwidth : 0) - linelen - len(size) - len(" lines") - 2
 	for i in range(ndots)
 		let dots .= "."
 	endfor
 
-	return spaces . line . dots . size . " lines"
+	return line . dots . size . " lines"
 endfunction
