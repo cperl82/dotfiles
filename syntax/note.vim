@@ -1,5 +1,5 @@
-syn match DoubleQuote /"\w\+"/
-syn match SingleQuote /'\w\+'/
+syn match DoubleQuote /"[[:print:]]\{-1,}"/
+syn match SingleQuote /'[[:print:]]\{-1,}'/
 syn match DateTime /\d\{4}-\d\{2}-\d\{2}\(\s*\d\{2}:\d\{2}:\d\{2}\)\{0,1}/
 syn match Starred /\*.\{-}\*/
 syn match AtSymbol /@/ 
