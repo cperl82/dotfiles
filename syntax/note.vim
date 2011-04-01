@@ -7,9 +7,9 @@ syn match URL "\(http\|ftp\)://[^[:space:]]\+"
 syn match Context /@\w\+/
 syn match Done /@[Dd]one/
 
-syn match NotePlain /^\t\+▸\_.\{-}\(\_^\t\+▸\|\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold transparent contains=ConcealFoldMarker
-syn match Note /^\t\+▸\_.\{-}\(\_^\t\+▸\|\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,DoubleQuote,SingleQuote,DateTime,Starred,AtSymbol,URL transparent
-syn match NoteDone /^\t\+▸.*@[Dd]one\_.\{-}\(\_^\t\+▸\|\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,Done
+syn match NotePlain /^\t\+▾\_.\{-}\(\_^\t\+▾\|\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold transparent contains=ConcealFoldMarker
+syn match Note /^\t\+▾\_.\{-}\(\_^\t\+▾\|\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,DoubleQuote,SingleQuote,DateTime,Starred,AtSymbol,URL transparent
+syn match NoteDone /^\t\+▾.*@[Dd]one\_.\{-}\(\_^\t\+▾\|\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,Done
 
 syn match Task /^\t\+￭\_.\{-}\(\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,Note,NoteDone,Context
 syn match TaskDone /^\t\+￭.*@[Dd]one\_.\{-}\(\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,NotePlain,NoteDone,Done
