@@ -7,18 +7,16 @@ syn match URL "\(http\|ftp\)://[^[:space:]]\+"
 syn match Context /@\w\+/
 syn match Done /@[Dd]one/
 
-syn match NotePlain /^\t\+▾\_.\{-}\(\_^\t\+▾\|\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold transparent contains=ConcealFoldMarker
-syn match Note /^\t\+▾\_.\{-}\(\_^\t\+▾\|\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,DoubleQuote,SingleQuote,DateTime,Starred,AtSymbol,URL transparent
-syn match NoteDone /^\t\+▾.*@[Dd]one\_.\{-}\(\_^\t\+▾\|\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,Done
+syn match NotePlain /^\s\+▾\_.\{-}\(\_^\s\+▾\|\_^\s\+￭\|^[^\s]\+:\|\%$\)\@=/ transparent contains=ConcealFoldMarker
+syn match Note /^\s\+▾\_.\{-}\(\_^\s\+▾\|\_^\s\+￭\|^[^\s]\+:\|\%$\)\@=/ contains=ConcealFoldMarker,DoubleQuote,SingleQuote,DateTime,Starred,AtSymbol,URL transparent
+syn match NoteDone /^\s\+▾.*@[Dd]one\_.\{-}\(\_^\s\+▾\|\_^\s\+￭\|^[^\s]\+:\|\%$\)\@=/ contains=ConcealFoldMarker,Done
 
-syn match Task /^\t\+￭\_.\{-}\(\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,Note,NoteDone,Context,DoubleQuote,SingleQuote,DateTime,Starred,AtSymbol,URL
-syn match TaskDone /^\t\+￭.*@[Dd]one\_.\{-}\(\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,NotePlain,NoteDone,Done
+syn match Task /^\s\+￭\_.\{-}\(\_^\s\+￭\|^[^\s]\+:\|\%$\)\@=/ contains=ConcealFoldMarker,Note,NoteDone,Context,DoubleQuote,SingleQuote,DateTime,Starred,AtSymbol,URL
+syn match TaskDone /^\s\+￭.*@[Dd]one\_.\{-}\(\_^\s\+￭\|^[^\s]\+:\|\%$\)\@=/ contains=ConcealFoldMarker,NotePlain,NoteDone,Done
 
-syn match Project /^[^\t]\+:\_.\{-}\(\_^[^\t]\|\%$\)\@=/ fold contains=ConcealFoldMarker,Task,TaskDone,Note,NoteDone
+syn match Project /^[^\s]\+:\_.\{-}\(\_^[^\s]\|\%$\)\@=/ contains=ConcealFoldMarker,Task,TaskDone,Note,NoteDone
 
 syn match ConcealFoldMarker /{{{\d\{}\|}}}\d\{}/ conceal
-
-syn sync fromstart
 
 hi link Project Type
 hi link DoubleQuote Constant

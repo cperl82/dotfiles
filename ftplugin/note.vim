@@ -3,7 +3,7 @@ imap <buffer> <Leader>T <C-r>=strftime("%Y-%m-%d %H:%M:%S")<CR>
 imap <buffer> <Leader>v ￭  {{{2<Left><Left><Left><Left><Left>
 imap <buffer> <Leader>b ▾  {{{3<Left><Left><Left><Left><Left>
 
-setlocal tw=90 sw=4 ts=4 softtabstop=4 formatoptions+=t formatoptions-=l
+setlocal et tw=90 sw=4 ts=4 softtabstop=4 formatoptions+=t formatoptions-=l
 setlocal foldmethod=marker foldminlines=0 foldcolumn=2
 
 setlocal foldtext=MyFoldText()
