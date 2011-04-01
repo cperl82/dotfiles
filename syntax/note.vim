@@ -11,7 +11,7 @@ syn match NotePlain /^\t\+▾\_.\{-}\(\_^\t\+▾\|\_^\t\+￭\|^[^\t]\+:\|\%$\)\@
 syn match Note /^\t\+▾\_.\{-}\(\_^\t\+▾\|\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,DoubleQuote,SingleQuote,DateTime,Starred,AtSymbol,URL transparent
 syn match NoteDone /^\t\+▾.*@[Dd]one\_.\{-}\(\_^\t\+▾\|\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,Done
 
-syn match Task /^\t\+￭\_.\{-}\(\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,Note,NoteDone,Context
+syn match Task /^\t\+￭\_.\{-}\(\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,Note,NoteDone,Context,DoubleQuote,SingleQuote,DateTime,Starred,AtSymbol,URL
 syn match TaskDone /^\t\+￭.*@[Dd]one\_.\{-}\(\_^\t\+￭\|^[^\t]\+:\|\%$\)\@=/ fold contains=ConcealFoldMarker,NotePlain,NoteDone,Done
 
 syn match Project /^[^\t]\+:\_.\{-}\(\_^[^\t]\|\%$\)\@=/ fold contains=ConcealFoldMarker,Task,TaskDone,Note,NoteDone
