@@ -12,6 +12,10 @@ export MANPATH=/opt/local/man:${MANPATH}
 export PATH=${PATH}:${HOME}/local/bin
 export PERL5LIB=${PERL5LIB}:${HOME}/local/lib/perl5/site_perl/5.12.3
 
+# 2011-04-05
+# On Mac OS X I like vim to be my man page viewer
+export MANPAGER="col -b | view -c 'set ft=man nomod nolist' -"
+
 function nhlsoa
 {
 	dig @8.20.73.12 ${1} NS +norec +short | sort | while read ns
