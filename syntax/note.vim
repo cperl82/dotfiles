@@ -1,4 +1,4 @@
-syn match DoubleQuote /"[[:print:]]\{-1,}"/ contained
+syn match DoubleQuote /"\_[[:print:]]\{-1,}"/ contained
 syn match SingleQuote /'[^[:space:]]\{-1,}'/ contained
 syn match DateTime /\d\{4}-\d\{2}-\d\{2}\(\s*\d\{2}:\d\{2}:\d\{2}\)\{0,1}/ contained
 syn match Starred /\*.\{-}\*/ contained
