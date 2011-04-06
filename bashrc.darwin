@@ -14,7 +14,7 @@ export PERL5LIB=${PERL5LIB}:${HOME}/local/lib/perl5/site_perl/5.12.3
 
 function vman
 {
-	man $* | col -b | view -c "set ft=man nomod nolist nonumber ic" -
+	vim -c ":Man $*" -c ":only"
 }
 
 function nhlsoa
