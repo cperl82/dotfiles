@@ -102,7 +102,7 @@ function path-canonical() {
 
 # OS Specific bashrc file inclusion {{{1
 DIRPATH="$(dirname "$(path-canonical ${BASH_ARGV[0]})")"
-OSNAME=$(uname -s | awk '{print tolower($0);}')
+OSNAME=$(uname -s)
 OSFILE="${DIRPATH}/bashrc.${OSNAME}"
 if   [[ -f "${OSFILE}" ]]
 then
