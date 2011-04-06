@@ -101,17 +101,12 @@ function path-canonical() {
 }
 
 # OS Specific bashrc file inclusion {{{1
-OSFILE="$(dirname "$(path-canonical ${BASH_ARGV[0]})")"
-OSNAME=$(uname -s)
-if   [[ "${OSNAME}" == "Darwin" ]]
+DIRPATH="$(dirname "$(path-canonical ${BASH_ARGV[0]})")"
+OSNAME=$(uname -s | awk '{print tolower($0);}')
+OSFILE="${DIRPATH}/bashrc.${OSNAME}"
+if   [[ -f "${OSFILE}" ]]
 then
-	source "${OSFILE}/bashrc.darwin"
-elif [[ "${OSNAME}" == "SunOS" ]]
-then
-	source "${OSFILE}/bashrc.SunOS"
-elif [[ "${OSNAME}" == "Linux" ]]
-then
-	source "${OSFILE}/bashrc.linux"
+	source "${OSFILE}"
 else
 	echo "Unknown Operating System"
 fi
