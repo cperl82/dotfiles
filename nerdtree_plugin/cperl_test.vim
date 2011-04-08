@@ -1,12 +1,18 @@
 " Intro blurb blah blah
 " Maintainer: chris.perl@gmail.com
+"
+" Note: This script inspired by
+" http://www.vim.org/scripts/script.php?script_id=1984
+" But I didn't want that much functionality.  So I examined the code and made
+" my own modifcations to just do buffer searching and only operate as a
+" NERDTree plugin.
 
 " Init stuff {{{1
 if exists("loaded_cperl_fuzzy_finder")
 	finish
 endif
 let loaded_cperl_fuzzy_finder = 1
-call NERDTreeAddKeyMap({'key': '<Leader>f', 'quickhelpText': 'Search Open Buffers Quickly', 'callback': 'Search'})
+call NERDTreeAddKeyMap({'key': '<Leader>f', 'quickhelpText': 'Search for a Buffer Quickly', 'callback': 'Search'})
 
 " Class: FuzzyFinder {{{1
 let s:FuzzyFinder = {}
