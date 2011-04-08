@@ -13,7 +13,7 @@ let s:FuzzyFinder = {}
 " Function: FuzzyFinder.new {{{2
 function! s:FuzzyFinder.new() dict
 	let obj = copy(self)
-	let obj.prompt = "Buffer >>> "
+	let obj.prompt = "Buffer Search >>> "
 	let obj.selectedFile = ""
 	let obj.walker = s:Walker.new()
 	return obj
