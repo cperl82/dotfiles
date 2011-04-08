@@ -1,25 +1,21 @@
 " Intro blurb blah blah
 " Maintainer: chris.perl@gmail.com
 
-" 2011-02-07
-" Completely disabling for the time being
-finish
-
 " Init stuff {{{1
 if exists("loaded_cperl_fuzzy_finder")
 	finish
 endif
 let loaded_cperl_fuzzy_finder = 1
-call NERDTreeAddKeyMap({'key': '<Leader>t', 'quickhelpText': 'Search NERDTree Quickly', 'callback': 'Search'})
+call NERDTreeAddKeyMap({'key': '<Leader>f', 'quickhelpText': 'Search Open Buffers Quickly', 'callback': 'Search'})
 
 " Class: FuzzyFinder {{{1
 let s:FuzzyFinder = {}
 " Function: FuzzyFinder.new {{{2
 function! s:FuzzyFinder.new() dict
 	let obj = copy(self)
-	let obj.prompt = "File >>> "
+	let obj.prompt = "Buffer >>> "
 	let obj.selectedFile = ""
-	let obj.walker = s:Walker.new(b:NERDTreeRoot)
+	let obj.walker = s:Walker.new()
 	return obj
 endfunction
 
@@ -35,7 +31,7 @@ function! s:FuzzyFinder.search() dict
 	autocmd CursorMovedI <buffer> call b:OnCursorMovedI()
 
 	" TODO: Explain how this works, its kinda f'in confusing
-	inoremap <buffer> <silent> <CR> <C-y><C-r>=b:FuzzyFinder.saveSelection() ? "" : ""<CR><ESC>
+	inoremap <buffer> <silent> <CR> <C-y><C-r>=b:FuzzyFinder.saveSelection()<CR><ESC>
 
 	let self.savedPos = getpos(".")
 	call setpos(".", [0, line("w0"), len(self.prompt), 0])
@@ -47,6 +43,7 @@ endfunction
 " Function: FuzzyFinder.saveSelection {{{2
 function! s:FuzzyFinder.saveSelection() dict
 	let self.selectedFile = self.stripPrompt(getline("."))
+	return ""
 endfunction
 
 " Function: FuzzyFinder.stripPrompt {{{2
@@ -65,10 +62,9 @@ function! s:FuzzyFinder.complete(findstart, base) dict
 			call self.walker.reset()
 			call complete_add(a:base)
 			while self.walker.hasNext()
-				let path = self.walker.next()
-				let shortpath = fnamemodify(path, ":~:.")
-				if shortpath =~ a:base
-					call complete_add({'word': path, 'abbr': shortpath})
+				let bufname = self.walker.next()
+				if bufname =~ a:base
+					call complete_add({'word': bufname, 'abbr': bufname})
 				endif
 				if complete_check()
 					break
@@ -98,6 +94,14 @@ endfunction
 
 " Function: FuzzyFinder.handleSelectedFile {{{2
 function! s:FuzzyFinder.handleSelectedFile()
+	for i in range(1, tabpagenr('$'))
+		for j in tabpagebuflist(i)
+			if bufname(j) == self.selectedFile
+				execute "tabnext " . i
+				return
+			endif
+		endfor
+	endfor
 	execute "tabedit " . self.selectedFile
 endfunction
 
@@ -110,17 +114,10 @@ endfunction
 " Class: Walker {{{1
 let s:Walker = {}
 " Function: Walker.new {{{2
-function! s:Walker.new(root) dict
+function! s:Walker.new() dict
 	let obj = copy(self)
 	let obj.idx = 0
-	let selected = a:root.GetSelected()
-	if selected == {}
-		let obj.dir = a:root.path.str()
-	else
-		let obj.dir = selected.path.str()
-	endif
-	echo "Building file list for dir: " . fnamemodify(obj.dir, ":~:.")
-	let obj.files = split(glob(printf("`find %s -type f -print`", obj.dir)))
+	let obj.buflist = []
 	return obj
 endfunction
 
@@ -128,17 +125,23 @@ endfunction
 function! s:Walker.next() dict
 	let idx = self.idx
 	let self.idx += 1
-	return self.files[idx]
+	return self.buflist[idx]
 endfunction
 
 " Function: Walker.hasNext {{{2
 function! s:Walker.hasNext() dict
-	return self.idx < len(self.files) ? 1 : 0
+	return self.idx < len(self.buflist) ? 1 : 0
 endfunction
 
 " Function: Walker.reset {{{2
 function! s:Walker.reset() dict
 	let self.idx = 0
+	let self.buflist = []
+	for i in range(1, bufnr('$'))
+		if bufexists(i)
+			call add(self.buflist, bufname(i))
+		endif
+	endfor
 endfunction
 
 " Public Interfaces necessary for autocmd and completefunc {{{1
