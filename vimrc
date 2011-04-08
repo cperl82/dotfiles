@@ -130,44 +130,6 @@ for i in range(1,9)
 	execute "nmap <silent> <Leader>" . i . " :tabnext " . i . "<CR>"
 endfor
 
-" 2010-11-07
-" Playing around w/ modified C code folding
-" Copied from http://stackoverflow.com/questions/851916/compact-c-folding-in-vim
-function! CFoldLevel(lnum)
-  let line = getline(a:lnum)
-  if line !~ '^$' && indent(a:lnum) == 0 && line !~ '\({\|}\)' && line !~ '^#'
-    return '>1' " A new fold of level 1 starts here.
-  else
-    return '1' " This line has a foldlevel of 1.
-  endif
-endfunction
-
-function! CFoldText()
-  " Look through all of the folded text for the function signature.
-  let signature = ''
-  let i = v:foldstart
-  while signature == '' && i < v:foldend
-    let line = getline(i)
-    if line =~ '\w\+(.*)$'
-      let signature = line
-    endif 
-    let i = i + 1
-  endwhile
-
-  " Return what the fold should show when folded.
-  return '+-- ' . (v:foldend - v:foldstart) . ' Lines: ' . signature . ' '
-endfunction
-
-function! CFold()               
-  setlocal foldenable
-  setlocal foldlevel=0   
-  setlocal foldmethod=expr
-  setlocal foldexpr=CFoldLevel(v:lnum)
-  "setlocal foldtext=CFoldText()
-  setlocal foldnestmax=1
-  setlocal foldminlines=1
-endfunction
-
 " 2011-03-15
 " Playing around with better ways to get shell output into vim
 " http://vim.wikia.com/wiki/Display_output_of_shell_commands_in_new_window
