@@ -47,6 +47,23 @@ function cl
 }
 
 
+# vim - function wrapper for use with screen {{{2
+# A conditional function definition to work around the fact that when screen
+# switches to the alternate screen ("\E[?1049h" and "\E[?1049l") and back, it
+# maintains the background color that was set.  This means that after running
+# vim with the xoria256 color scheme, I am left with my prompt having a light
+# greg background color.  This is highly annoying.  I have been manually getting
+# around this by running "cl" after I quit vim from within screen (see function
+# above), but this should do the same thing automatically if I am within screen.
+if test "${TERM}" = "screen" -o \
+	"${TERM}" = "screen-256color"; then
+	function vim
+	{
+		command vim $*
+		tput op
+	}
+fi
+
 # Bash path canonicalization {{{2
 # Copied from comment at
 # http://blog.publicobject.com/2006/06/canonical-path-of-file-in-bash.html
