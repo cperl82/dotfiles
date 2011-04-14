@@ -42,8 +42,10 @@ hi link treeRO Normal
 let g:NERDTreeStatusline = '%{ getcwd() }'
 
 " 2011-04-14
-" Use the fancy arrows for the NERDtree interface
-let g:NERDTreeDirArrows = 1
+" Use the fancy arrows for the NERDtree interface and turn off the AutoCenter
+" feature
+let g:NERDTreeDirArrows  = 1
+let g:NERDTreeAutoCenter = 0
 
 " 2011-02-11
 " Emacs style command line editing slightly modified
