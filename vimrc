@@ -39,7 +39,11 @@ hi link treeRO Normal
 " around that at the moment.  This status line pretty much makes my
 " path_copy.vim NERDTree plugin useless, but whatever.
 " let g:NERDTreeStatusline='%{has_key(g:NERDTreeFileNode.GetSelected(), "path") ? g:NERDTreeFileNode.GetSelected().path.str() : b:NERDTreeRoot.path.str()}'
-let g:NERDTreeStatusline='%{ getcwd() }'
+let g:NERDTreeStatusline = '%{ getcwd() }'
+
+" 2011-04-14
+" Use the fancy arrows for the NERDtree interface
+let g:NERDTreeDirArrows = 1
 
 " 2011-02-11
 " Emacs style command line editing slightly modified
