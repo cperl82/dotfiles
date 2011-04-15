@@ -116,6 +116,11 @@ endif
 :vmap / y/<C-R>=escape('<C-R>"', '/\')<CR><CR>
 :vmap ? y/<C-R>=escape('<C-R>"', '/\')<CR><CR>
 
+" 2011-04-15
+" Map <Leader>n to toggle line numbers on and off.  I find this useful for when
+" I need to copy and paste data out of a vim window
+:nmap <Leader>n :exec &number ? ":set nonu" : ":set nu"<CR>
+
 " 2010-09-24
 " Added newer python syntax highlighting script
 " Enable all the syntax options in it (.vim/syntax/python.vim)
