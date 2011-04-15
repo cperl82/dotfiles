@@ -119,7 +119,7 @@ endif
 " 2011-04-15
 " Map <Leader>n to toggle line numbers on and off.  I find this useful for when
 " I need to copy and paste data out of a vim window
-:nmap <Leader>n :exec &number ? ":set nonu" : ":set nu"<CR>
+:nmap <silent> <Leader>n :exec &number ? ":set nonu" : ":set nu"<CR>
 
 " 2010-09-24
 " Added newer python syntax highlighting script
