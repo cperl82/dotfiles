@@ -114,7 +114,7 @@ if test "${TERM}" = "screen" -o \
 	"${TERM}" = "screen-256color"; then
 	function vim
 	{
-		command vim $*
+		command vim "$@"
 		tput op
 	}
 fi
