@@ -141,6 +141,31 @@ for i in range(1,9)
 	execute "nmap <silent> <Leader>" . i . " :tabnext " . i . "<CR>"
 endfor
 
+" 2011-05-04
+" Playing around with making it easier to deal with sessions with vim
+function! s:SaveOrCreateSession()
+	let session_dir = '~/.vim/sessions'
+
+	if v:this_session != ""
+		" Session already exists just resave it
+		let cmd = printf("mksession! %s", v:this_session)
+		execute cmd
+	else
+		" Prompt for a new session name and store it in
+		" ~/.vim/sessions
+		if glob(session_dir) == ""
+			call mkdir(fnamemodify(session_dir, ":p"), "")
+		endif
+		let name = input("Enter a name for this session: ")	
+		if name != ""
+			let cmd = printf("mksession! %s", session_dir . '/' . name . '.vim')
+			execute cmd
+		endif
+	endif
+endfunction
+command! -nargs=0 SaveOrCreateSession call s:SaveOrCreateSession()
+nmap <Leader>s :SaveOrCreateSession<CR>
+
 " 2011-03-15
 " Playing around with better ways to get shell output into vim
 " http://vim.wikia.com/wiki/Display_output_of_shell_commands_in_new_window

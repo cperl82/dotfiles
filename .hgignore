@@ -3,3 +3,4 @@ syntax: re
 ^\.netrwhist
 ^\..*\.swp
 ^view\/.*
+^sessions\/.*
