@@ -3,7 +3,7 @@ syn match SingleQuote /'[^[:space:]]\{-}'/ contained
 syn match DateTime /\d\{4}-\d\{2}-\d\{2}\(\s*\d\{2}:\d\{2}:\d\{2}\)\{0,1}/ contained
 syn match Starred /\*.\{-}\*/ contained
 syn match AtSymbol /@\s/ contained
-syn match URL "\(http\|ftp\)://[^[:space:]]\+" contained
+syn match URL "\(http\|https\|ftp\)://[^[:space:]]\+" contained
 syn match Context /\s\+@[[:alnum:]-]\+/ contained
 
 syn region Note start=/^\s\+▾/ end=/^\s\{-}\(\_^\s\+▾\|\_^\s\+￭\|\_^[^[:space:]].\+:\|\%$\)\@=/ contains=Context,DoubleQuote,SingleQuote,DateTime,Starred,AtSymbol,URL contained
