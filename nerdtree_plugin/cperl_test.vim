@@ -7,10 +7,6 @@
 " my own modifcations to just do buffer searching and only operate as a
 " NERDTree plugin.
 "
-" 2011-04-08
-" Still leaving disabled for now
-finish
-
 
 " Init stuff {{{1
 if exists("loaded_cperl_fuzzy_finder")
