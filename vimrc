@@ -162,7 +162,9 @@ function! s:SaveOrCreateSession()
 			execute cmd
 		endif
 	endif
-	echo "Session saved as: " . v:this_session
+	if v:this_session != ""
+		echo "Session saved as: " . v:this_session
+	endif
 endfunction
 command! -nargs=0 SaveOrCreateSession call s:SaveOrCreateSession()
 nmap <Leader>s :SaveOrCreateSession<CR>
