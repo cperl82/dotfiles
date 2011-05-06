@@ -65,9 +65,6 @@ let g:NERDTreeAutoCenter = 0
 " delete one word to the left
 :cnoremap <Esc><C-?>	<C-w>
 
-" Set the tabline to our custom function
-set tabline=%!DrawTabLine()
-
 " 2010-05-18
 " Playing around with moving tabs
 " tab numbers run from 1 to n

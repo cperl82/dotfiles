@@ -11,6 +11,9 @@ function! DrawTabLine()
 	return g:cptl.getString()
 endfunction
 
+" Set the tabline to our custom function
+set tabline=%!DrawTabLine()
+
 " Class: TabLine {{{1
 let s:TabLine = {}
 " Function: TabLine.new {{{2
