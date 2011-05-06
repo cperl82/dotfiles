@@ -118,6 +118,12 @@ endif
 " I need to copy and paste data out of a vim window
 :nmap <silent> <Leader>n :exec &number ? ":set nonu" : ":set nu"<CR>
 
+" 2011-05-06
+" Some ideas taken from
+" http://stevelosh.com/blog/2010/09/coming-home-to-vim/
+:nnoremap ,<Space> :nohl<CR>
+:nnoremap <Tab> %
+
 " 2010-09-24
 " Added newer python syntax highlighting script
 " Enable all the syntax options in it (.vim/syntax/python.vim)
