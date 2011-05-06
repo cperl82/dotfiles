@@ -1,5 +1,6 @@
-syn keyword Todo TODO FIXME XXX contained containedin=ALL
+syn keyword Todo TODO FIXME XXX contained
 
+syn match LineContinuation /\\$/ contained
 syn match DoubleQuote /"\_[[:print:]]\{-}"/ contained
 syn match SingleQuote /'[^[:space:]]\{-}'/ contained
 syn match DateTime /\d\{4}-\d\{2}-\d\{2}\(\s*\d\{2}:\d\{2}:\d\{2}\)\{0,1}/ contained
@@ -8,14 +9,15 @@ syn match AtSymbol /@\s/ contained
 syn match URL "\(http\|https\|ftp\)://[^[:space:]]\+" contained
 syn match Context /\s\+@[[:alnum:]-]\+/ contained
 
-syn region Note start=/^\s\+▾/ end=/^\s\{-}\(\_^\s\+▾\|\_^\s\+￭\|\_^[^[:space:]].\+:\|\%$\)\@=/ contains=Context,DoubleQuote,SingleQuote,DateTime,Starred,AtSymbol,URL contained
-syn region Task start=/^\s\+￭/ end=/^\s\{-}\(\_^\s\+￭\|\_^[^[:space:]].\+:\|\%$\)\@=/ contains=Note,NoteDone,Context,DoubleQuote,SingleQuote,DateTime,Starred,AtSymbol,URL contained
-syn region Proj start=/^[^[:space:]].\+:/ end=/^\s\{-}\(\_^[^[:space:]].\+:\|\%$\)\@=/ contains=Task,Note,TaskDone,NoteDone
+syn region Note start=/^\s\+▾/ end=/^\s\{-}\(\_^\s\+▾\|\_^\s\+￭\|\_^[^[:space:]].\+:\|\%$\)\@=/ contains=Context,DoubleQuote,SingleQuote,DateTime,Starred,AtSymbol,URL,Todo,LineContinuation contained
+syn region Task start=/^\s\+￭/ end=/^\s\{-}\(\_^\s\+￭\|\_^[^[:space:]].\+:\|\%$\)\@=/ contains=Note,NoteDone,Context,DoubleQuote,SingleQuote,DateTime,Starred,AtSymbol,URL,Todo,LineContinuation  contained
+syn region Proj start=/^[^[:space:]].\+:/ end=/^\s\{-}\(\_^[^[:space:]].\+:\|\%$\)\@=/ contains=Task,Note,TaskDone,NoteDone,Todo,LineContinuation
 syn region TaskDone start=/^\s\+￭.*@[Dd]one/ end=/^\s\{-}\(\_^\s\+￭\|\_^[^[:space:]].\+:\|\%$\)\@=/ contained
 syn region NoteDone start=/^\s\+▾.*@[Dd]one/ end=/^\s\{-}\(\_^\s\+▾\|\_^\s\+￭\|\_^[^[:space:]].\+:\|\%$\)\@=/ contained
 
 syn sync fromstart
 
+hi link LineContinuation Todo
 hi link DoubleQuote PreProc
 hi link SingleQuote Constant
 hi link DateTime Comment
