@@ -9,7 +9,7 @@
 "
 " 2011-04-08
 " Still leaving disabled for now
-"finish
+finish
 
 
 " Init stuff {{{1
