@@ -29,7 +29,9 @@ endif
 
 " 2011-05-07
 " Override some highlight settings for NERD_tree.
+hi link NERDTreeUp  Label
 hi link NERDTreeDir Label
+hi link NERDTreeCWD Macro
 
 " 2011-02-08
 " Set the NERDTree status line such that it always shows the full path of the
