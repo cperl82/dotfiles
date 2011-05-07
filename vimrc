@@ -27,10 +27,9 @@ else
 	colorscheme ir_black
 endif
 
-" 2010-05-12
-" Override the highlight settings for NERD_tree.  This is mainly because
-" ir_black colorscheme looks terrible with treeRO linked to WarningMsg
-hi link treeRO Normal
+" 2011-05-07
+" Override some highlight settings for NERD_tree.
+hi link NERDTreeDir Label
 
 " 2011-02-08
 " Set the NERDTree status line such that it always shows the full path of the
