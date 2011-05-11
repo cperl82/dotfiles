@@ -4,7 +4,7 @@ imap <buffer> <Leader>v ￭  {{{2<Left><Left><Left><Left><Left>
 imap <buffer> <Leader>b ▾  {{{3<Left><Left><Left><Left><Left>
 
 setlocal et tw=90 sw=4 ts=4 softtabstop=4 formatoptions+=t formatoptions-=l
-setlocal foldmethod=marker foldminlines=0 foldcolumn=2
+setlocal foldmethod=marker foldminlines=0 foldcolumn=0
 
 setlocal foldtext=MyFoldText()
 function! MyFoldText()
