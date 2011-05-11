@@ -1,3 +1,11 @@
+# First thing we do is check if bash is version 3 and, since Mac is my main
+# platform and I use macports, check if the macports bash is available (its
+# version 4), and if it is, execute that.
+if [[ ${BASH_VERSINFO[0]} -eq 3 && -f "/opt/local/bin/bash" ]]
+then
+	exec /opt/local/bin/bash
+fi
+
 # Variables {{{1
 export PS1='[\u@\h \w]\$ '
 export PAGER=less
