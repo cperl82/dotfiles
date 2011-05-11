@@ -22,6 +22,7 @@ SYMLINKS=(
 	"screenrc"
 	"vimrc"
 	"gvimrc"
+	"ackrc"
 )
 
 for symlink in ${SYMLINKS[@]}
