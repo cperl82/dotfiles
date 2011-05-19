@@ -123,7 +123,7 @@ endif
 " 2011-05-06
 " Some ideas taken from
 " http://stevelosh.com/blog/2010/09/coming-home-to-vim/
-:nnoremap ,<Space> :nohl<CR>
+:nnoremap <Space><Space> :nohl<CR>
 :nnoremap <Tab> %
 
 " 2010-09-24
