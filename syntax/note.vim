@@ -12,7 +12,7 @@ syn match ProjHeader /^[^[:space:]].\+:/
 
 syn region TaskDone start=/^\s\+￭.*@[Dd]one/ end=/^\s\{-}\(\_^\s\+￭\|\_^[^[:space:]].\+:\|\%$\)\@=/
 syn region NoteDone start=/^\s\+▾.*@[Dd]one/ end=/^\s\{-}\(\_^\s\+▾\|\_^\s\+￭\|\_^[^[:space:]].\+:\|\%$\)\@=/
-syn region ListEntryDone start=/^\s\+-\s\+.*@[Dd]one/ end=/^\s\{-}\(\_^\s\+-\)\@=/
+syn region ListEntryDone start=/^\s\+-\s\+.*@[Dd]one/ end=/^\s\{-}\(\_^\s\+-\|\_^\s\+▾\|\_^\s\+￭\|\_^[^[:space:]].\+:\|\%$\)\@=/
 
 syn sync fromstart
 
