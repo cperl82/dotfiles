@@ -13,6 +13,15 @@ if has("macunix")
 	hi clear FoldColumn
 	hi link FoldColumn Folded
 
+	" 2011-05-24
+	" Override the defaults for NERDTree Openable and ExecFile in the gui
+	hi link NERDTreeOpenable Identifier
+	hi link NERDTreeExecFile Identifier
+
+	" 2011-05-24
+	" Set the gui colorscheme
+	colorscheme xoria256
+
 elseif has("unix")
 	set guifont=Monaco\ 8
 	set tabpagemax=30
