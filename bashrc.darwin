@@ -12,12 +12,6 @@ export MANPATH=/opt/local/man:${MANPATH}
 export PATH=${PATH}:${HOME}/local/bin
 export PERL5LIB=${PERL5LIB}:${HOME}/local/lib/perl5/site_perl/5.12.3
 
-if test "${TERM}" = "xterm" -o \
-	"${TERM}" = "xterm-256color"; then
-	# xt defined in top level bashrc
-	export PROMPT_COMMAND=xt
-fi
-
 function vman
 {
 	vim -c ":Man $*" -c ":only"
