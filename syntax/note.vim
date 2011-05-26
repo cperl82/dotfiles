@@ -1,4 +1,4 @@
-syn keyword Todo TODO FIXME XXX
+syn keyword Todo TODO FIXME XXX NOTE
 
 syn match LineContinuation /\\$/
 syn match DoubleQuote /"\_[[:print:]]\{-}"/
