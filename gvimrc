@@ -20,7 +20,8 @@ if has("macunix")
 
 	" 2011-05-24
 	" Set the gui colorscheme
-	colorscheme xoria256
+	set bg=light
+	colorscheme solarized
 
 elseif has("unix")
 	set guifont=Monaco\ 8
