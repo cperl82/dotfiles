@@ -1,5 +1,5 @@
 export NHL_ROOT=${HOME}/builds
-export PATH=/opt/csw/bin:/var/ant/bin:/var/maven/bin:$PATH:$NHL_ROOT/ITS/EnvironmentManager/common/bin:/usr/sbin:/bin
+export PATH=/opt/csw/bin:/var/ant/bin:/var/maven/bin:$PATH:$NHL_ROOT/ITS/EnvironmentManager/common/bin:/usr/sbin:/bin:/usr/ccs/bin
 export TERMINFO=${HOME}/.terminfo
 export JAVA_HOME=/usr/jdk/jdk1.6.0_20
 
