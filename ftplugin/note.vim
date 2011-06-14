@@ -9,7 +9,7 @@ setlocal foldmethod=marker foldminlines=0 foldcolumn=0
 setlocal foldtext=MyFoldText()
 function! MyFoldText()
 	let line = getline(v:foldstart)
-	let line = substitute(line, '{{{\d\+', '', '')
+	let line = substitute(line, '{{{\d\+\s\{,1}', '', '')
 	let line = substitute(line, '\t', '    ', 'g')
 	let line = substitute(line, '▾', '▸', '')
 	let size = (v:foldend - v:foldstart) + 1
