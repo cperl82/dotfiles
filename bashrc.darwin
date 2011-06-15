@@ -68,6 +68,7 @@ aes-encrypt() {
 			;;
 		*)
 			echo "aes-encrypt --file {filename} | --string {string}"
+			return
 		esac
 	done
 	if [[ -n "${filename}" ]]; then
