@@ -1,3 +1,6 @@
+" Pathogen testing
+call pathogen#runtime_append_all_bundles() 
+
 " Enable file type detection, all three modes
 " detection, indent, plugin.  See :help filetype
 filetype plugin indent on
