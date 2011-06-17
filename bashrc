@@ -100,6 +100,48 @@ function path-canonical() {
 	echo "${dst}"
 }
 
+# AES Encryption via command line {{{2
+# This is meant to be simplified interface to the aes-256-cbc encryption
+# available in openssl.  Note that output is always "ascii armored" as that just
+# makes life easier.
+aes-256-cbc() { 
+	verb="${1}"
+	shift
+	case "${verb}" in
+	e|enc|encrypt)
+		encrypt_decrypt=""
+		;;
+	d|dec|decrypt)
+		encrypt_decrypt="-d"
+		;;
+	*)
+		echo "${FUNCNAME} encrypt|decrypt string|file str|filename"
+		return
+		;;
+	esac	
+
+	noun="${1}"
+	shift
+	case "${noun}" in 
+	s|str|string)
+		data="${1}"
+		openssl_cmd="openssl aes-256-cbc \${encrypt_decrypt} -a -in /dev/stdin -out /dev/stdout <<< '${data}'"
+		;;
+	f|fil|file)
+		file="${1}"
+		openssl_cmd="openssl aes-256-cbc \${encrypt_decrypt} -a -in ${file} -out ${file}.aes256"
+		;;
+	*)
+		echo "${FUNCNAME} encrypt|decrypt string|file str|filename"
+		return
+		;;
+	esac
+
+	echo ${openssl_cmd}
+	eval ${openssl_cmd}
+
+}
+
 # Misc Stuff {{{1
 
 # vim - function wrapper for use with screen {{{2
@@ -138,4 +180,4 @@ else
 	echo "Unknown Operating System"
 fi
 
-# vim: fdm=marker
+# vim: tw=80 fdm=marker

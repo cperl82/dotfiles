@@ -53,27 +53,3 @@ function appversion
 	curl -s -o /dev/stdout "http://${HOST}/ice/app" | grep '<script src="http://.*/js/_ice-plugins.min.js?v=.*</script>' | sed -e 's/.*?v=\([0-9.][0-9.]*\).*$/\1/'
 }
 
-aes-encrypt() {
-	while true; do
-		case "${1}" in
-		-f | --file)
-			filename="${2}"
-			shift
-			break
-			;;
-		-s | --string)
-			string="${2}"
-			shift
-			break
-			;;
-		*)
-			echo "aes-encrypt --file {filename} | --string {string}"
-			return
-		esac
-	done
-	if [[ -n "${filename}" ]]; then
-		openssl aes-256-cbc -a -in "${filename}" -out "${filename}.enc"
-	else
-		echo "${1}" | openssl aes-256-cbc -a -in /dev/stdin -out /dev/stdout
-	fi
-}
