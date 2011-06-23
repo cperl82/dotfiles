@@ -129,7 +129,16 @@ aes-256-cbc() {
 		;;
 	f|fil|file)
 		file="${1}"
-		openssl_cmd="openssl aes-256-cbc \${encrypt_decrypt} -a -in ${file} -out ${file}.aes256"
+		if [[ -z "${encrypt_decrypt}" ]]; then
+			# encryption
+			infile="${file}"
+			outfile="${file}.aes"
+		else
+			# decryption
+			infile="${file}"
+			outfile="${file}.aes-decrypted"
+		fi
+		openssl_cmd="openssl aes-256-cbc ${encrypt_decrypt} -a -in ${infile} -out ${outfile}"
 		;;
 	*)
 		echo "${FUNCNAME} encrypt|decrypt string|file str|filename"
