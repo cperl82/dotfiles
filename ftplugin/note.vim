@@ -1,5 +1,5 @@
 imap <buffer> <Leader>t <C-r>=strftime("%Y-%m-%d")<CR>
-imap <buffer> <Leader>T <C-r>=strftime("%Y-%m-%d|%H:%M:%S")<CR>
+imap <buffer> <Leader>T <C-r>=strftime("%Y-%m-%d\|%H:%M:%S")<CR>
 imap <buffer> <Leader>v ￭  {{{2<Left><Left><Left><Left><Left>
 imap <buffer> <Leader>b ▾  {{{3<Left><Left><Left><Left><Left>
 
