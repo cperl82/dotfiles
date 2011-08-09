@@ -7,5 +7,5 @@ hgext.bookmarks=
 hgext.rebase=
 hgext.transplant=
 hgext.mq=
-hgext.hgsubversion=${HOME}/.mercurial/extensions/hgsubversion/hgsubversion
-hgext.hg_histedit=${HOME}/.mercurial/extensions/histedit/hg_histedit.py
+hgext.hgsubversion=${HOME}/.dotfiles/hg-ext/hgsubversion/hgsubversion
+hgext.hg_histedit=${HOME}/.dotfiles/hg-ext/histedit/hg_histedit.py
