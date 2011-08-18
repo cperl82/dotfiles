@@ -40,7 +40,7 @@ function sshzl
 # Determine the version of NHL apps currently in qa
 function appversion
 {
-	if [[ "${1}" == "production" ]]
+	if [[ "${1}" == "production" || "${1}" == "prod" ]]
 	then
 		HOST="www.nhl.com"
 	elif [[ "${1}" == "qa" ]]
@@ -50,6 +50,6 @@ function appversion
 		echo "Unknown environment"
 		return 1
 	fi
-	curl -s -o /dev/stdout "http://${HOST}/ice/app" | grep '<script src="http://.*/js/_ice-plugins.min.js?v=.*</script>' | sed -e 's/.*?v=\([0-9.][0-9.]*\).*$/\1/'
+	curl -s -o /dev/stdout "http://${HOST}/ice/index.htm" | grep '<link href="http://.*/nhl/images/favicon.ico?v=.*</script>' | sed -e 's/.*?v=\([0-9.][0-9.]*\).*$/\1/'
 }
 
