@@ -12,11 +12,6 @@ export MANPATH=/opt/local/man:${MANPATH}
 export PATH=${PATH}:${HOME}/local/bin
 export PERL5LIB=${PERL5LIB}:${HOME}/local/lib/perl5/site_perl/5.12.3
 
-function vman
-{
-	vim -c ":Man $*" -c ":only"
-}
-
 function nhlsoa
 {
 	dig @8.20.73.12 ${1} NS +norec +short | sort | while read ns

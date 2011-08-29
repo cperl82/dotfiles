@@ -183,6 +183,11 @@ then
 	export PYTHONSTARTUP="${HOME}/.python_startup.py"
 fi
 
+function vman
+{
+	vim -c ":Man $*" -c ":only"
+}
+
 # OS Specific bashrc file inclusion {{{1
 DIRPATH="$(dirname "$(path-canonical ${BASH_ARGV[0]})")"
 OSNAME=$(uname -s)
