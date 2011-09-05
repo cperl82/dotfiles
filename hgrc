@@ -1,8 +1,7 @@
 [ui]
 username = Chris Perl <chris.perl@gmail.com>
 
-[web]
-cacerts = /etc/ssl/certs/ca-certificates.crt
+[hostfingerprints]
 
 [extensions]
 hgext.graphlog=
