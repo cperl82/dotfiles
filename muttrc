@@ -20,7 +20,7 @@ unignore x-mailer:
 set markers=no # don't put '+' at the beginning of wrapped lines
 # set pager_index_lines= 5 # how large is the index window?
 set sort = 'threads'
-set sort_aux = 'last-date-sent'
+set sort_aux = 'last-date-received'
 
 set folder = "imaps://imap.gmail.com:993"
 set spoolfile = "+INBOX"
