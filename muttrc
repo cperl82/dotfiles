@@ -26,6 +26,7 @@ set folder = "imaps://imap.gmail.com:993"
 set spoolfile = "+INBOX"
 set postponed ="+[Gmail]/Drafts"
 #set trash = "imaps://imap.gmail.com/[Gmail]/Trash"
+mailboxes +INBOX +linux-btrfs +linux-kernel +macports-dev +vbox-dev
 
 set header_cache =~/.mutt/cache/headers
 set message_cachedir =~/.mutt/cache/bodies
