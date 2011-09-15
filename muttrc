@@ -40,6 +40,10 @@ bind pager j next-line
 bind pager k previous-line
 bind pager J next-entry
 bind pager K previous-entry
+bind pager \Cd next-page
+bind pager \Cu previous-page
+bind pager gg top
+bind pager G bottom
 macro index zc "<collapse-thread>" "Macro to emulate VIM folding commands"
 macro index zo "<collapse-thread>" "Macro to emulate VIM folding commands"
 # set index_format="%4C %Z %[%b %d %H:%M:%S] %-15.15L (%?l?%4l&%4c?) %s"
