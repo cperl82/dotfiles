@@ -47,6 +47,7 @@ macro index zo "<collapse-thread>" "Macro to emulate VIM folding commands"
 # set index_format="%4C %Z %[%b %d %H:%M:%S] %-15.15L %s %?M?(%03M)?"
 set index_format="%4C %Z %(%b %d %H:%M:%S) %-15.15L %s %?M?(%03M)?"
 set mark_old = no
+set folder_format="%2C %t %6N %F %2l %-8.8u %-8.8g %8s %d %f"
 
 
 
