@@ -50,8 +50,8 @@ localfolders = ~/Mail/Gmail
 type = Gmail
 
 # Specify the Gmail user name. This is the only mandatory parameter.
-remoteuser = chris.perl@gmail.com
-remotepass = {insert-password-here}
+remoteuser     = chris.perl@gmail.com
+remotepassfile = ~/.offlineimap.passwd
 
 # Deleting a message from a Gmail folder via the IMAP interface will
 # just remove that folder's label from the message: the message will

@@ -1,9 +1,10 @@
 # Trying to get started from:
 # http://crunchbanglinux.org/wiki/howto/howto_setup_mutt_with_gmail_imap
+# Now doing a bunch of reconfiguration from 
+# http://pbrisbin.com/posts/mutt_gmail_offlineimap
 # Personal settings
 set from = "chris.perl@gmail.com"
 set realname = "Chris Perl"
-set imap_user = "chris.perl@gmail.com"
 
 # Header stuff
 ignore "Authentication-Results:"
@@ -21,21 +22,24 @@ set markers=no # don't put '+' at the beginning of wrapped lines
 # set pager_index_lines= 5 # how large is the index window?
 set sort = 'threads'
 set sort_aux = 'last-date-received'
-
-set folder = "imaps://imap.gmail.com:993"
+set mbox_type = Maildir
+set folder    = ~/Mail/Gmail
 set spoolfile = "+INBOX"
-set postponed ="+[Gmail]/Drafts"
-#set trash = "imaps://imap.gmail.com/[Gmail]/Trash"
-mailboxes +INBOX +linux-btrfs +linux-kernel +macports-dev +vbox-dev
-
-set header_cache =~/.mutt/cache/headers
-set message_cachedir =~/.mutt/cache/bodies
-set certificate_file =~/.mutt/certificates
+set mbox      = "+[Gmail]/All Mail"
+set postponed = "+[Gmail]/Drafts"
 set move = no
+set mark_old = no
+set index_format="%4C %Z %(%b %d %H:%M:%S) %-15.15L %s %?M?(%03M)?"
+set folder_format="%2C %t %6N %F %2l %-8.8u %-8.8g %8s %d %f"
+
+mailboxes +INBOX +linux-btrfs +linux-kernel +macports-dev +vbox-dev
 
 set smtp_url = "smtp://chris.perl@gmail.com@smtp.gmail.com:587/"
 
-# Personal of my own
+macro index D "<save-message>+[Gmail].Trash<enter>"   "move message to the trash"
+macro index S "<save-message>+[Gmail].Spam<enter>"    "mark message as spam"
+
+# Make mutt more vim like
 bind pager j next-line
 bind pager k previous-line
 bind pager J next-entry
@@ -46,12 +50,6 @@ bind pager gg top
 bind pager G bottom
 macro index zc "<collapse-thread>" "Macro to emulate VIM folding commands"
 macro index zo "<collapse-thread>" "Macro to emulate VIM folding commands"
-# set index_format="%4C %Z %[%b %d %H:%M:%S] %-15.15L (%?l?%4l&%4c?) %s"
-# set index_format="%4C %Z %[%b %d %H:%M:%S] %-15.15L (%?l?%4l&%4c?) %s %?M?(%03M)?"
-# set index_format="%4C %Z %[%b %d %H:%M:%S] %-15.15L %s %?M?(%03M)?"
-set index_format="%4C %Z %(%b %d %H:%M:%S) %-15.15L %s %?M?(%03M)?"
-set mark_old = no
-set folder_format="%2C %t %6N %F %2l %-8.8u %-8.8g %8s %d %f"
 
 # For marking messages in LKML read (as I can't possibly keep up with them all)
 #  T: Tag messages matching pattern
@@ -61,7 +59,6 @@ set folder_format="%2C %t %6N %F %2l %-8.8u %-8.8g %8s %d %f"
 #  ;: Apply the following command to all tagged messages
 #  t: Toggle the 'tagged' flag
 macro index lkc "T~N\n;WN;t"
-
 
 # Screenshot http://trovao.droplinegnome.org/stuff/mutt-zenburnt.png
 #
