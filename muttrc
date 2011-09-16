@@ -53,6 +53,14 @@ set index_format="%4C %Z %(%b %d %H:%M:%S) %-15.15L %s %?M?(%03M)?"
 set mark_old = no
 set folder_format="%2C %t %6N %F %2l %-8.8u %-8.8g %8s %d %f"
 
+# For marking messages in LKML read (as I can't possibly keep up with them all)
+#  T: Tag messages matching pattern
+# ~N: Pattern for previous 'T' command, all 'New' messages
+#  ;: Apply the following command to all tagged messages
+# WN: Clear the new flag
+#  ;: Apply the following command to all tagged messages
+#  t: Toggle the 'tagged' flag
+macro index lkc "T~N\n;WN;t"
 
 
 # Screenshot http://trovao.droplinegnome.org/stuff/mutt-zenburnt.png
