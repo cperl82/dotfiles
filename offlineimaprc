@@ -9,6 +9,24 @@ metadata = ~/.offlineimap
 ui = ttyui
 accounts = Gmail
 
+[mbnames]
+
+# offlineimap can record your mailbox names in a format you specify.
+# You can define the header, each mailbox item, the separator,
+# and the footer.  Here is an example for Mutt.
+# If enabled is yes, all six setting must be specified, even if they
+# are just the empty string "".
+#
+# The header, peritem, sep, and footer are all Python expressions passed
+# through eval, so you can (and must) use Python quoting.
+
+enabled = yes
+filename = ~/.muttrc.mailboxes
+header = "mailboxes "
+peritem = "+%(accountname)s/%(foldername)s"
+sep = " "
+footer = "\n"
+
 [Account Gmail]
 ########## Basic settings
 
