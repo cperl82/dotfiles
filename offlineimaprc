@@ -1,0 +1,65 @@
+[general]
+
+# This specifies where offlineimap is to store its metadata.
+# This directory will be created if it does not already exist.
+
+metadata = ~/.offlineimap
+
+# Note launchd invocation will explicitly invoke with  -u quiet
+ui = ttyui
+accounts = Gmail
+
+[Account Gmail]
+########## Basic settings
+
+# These settings specify the two folders that you will be syncing.
+# You'll need to have a "Repository ..." section for each one.
+
+localrepository = Gmail-Local
+remoterepository = Gmail-Remote
+
+[Repository Gmail-Local]
+
+# This is one of the two repositories that you'll work with given the
+# above example.  Each repository requires a "type" declaration.
+#
+# The types supported are Maildir and IMAP.
+#
+
+type = Maildir
+
+# Specify local repository.  Your IMAP folders will be synchronized
+# to maildirs created under this path.  OfflineIMAP will create the
+# maildirs for you as needed.
+
+localfolders = ~/Mail/Gmail
+
+[Repository Gmail-Remote]
+# A repository using Gmail's IMAP interface.  Any configuration
+# parameter of `IMAP` type repositories can be used here.  Only
+# `remoteuser` (or `remoteusereval` ) is mandatory.  Default values
+# for other parameters are OK, and you should not need fiddle with
+# those.
+#
+# The Gmail repository will use hard-coded values for `remotehost`,
+# `remoteport`, `tunnel` and `ssl`.  (See
+# http://mail.google.com/support/bin/answer.py?answer=78799&topic=12814)
+# Any attempt to set those parameters will be silently ignored.
+#
+
+type = Gmail
+
+# Specify the Gmail user name. This is the only mandatory parameter.
+remoteuser = chris.perl@gmail.com
+remotepass = {insert-password-here}
+
+# Deleting a message from a Gmail folder via the IMAP interface will
+# just remove that folder's label from the message: the message will
+# continue to exist in the '[Gmail]/All Mail' folder.  If `realdelete`
+# is set to `True`, then deleted messages will really be deleted
+# during `offlineimap` sync, by moving them to the '[Gmail]/Trash'
+# folder.  BEWARE: this will delete a messages from *all folders* it
+# belongs to!
+#
+# See http://mail.google.com/support/bin/answer.py?answer=77657&topic=12815
+realdelete = no
