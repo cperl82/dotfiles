@@ -3,7 +3,7 @@
 <plist version="1.0">
     <dict>
         <key>Label</key>
-        <string>org.fppe.offlineimap.plist</string>
+        <string>org.fppe.offlineimap</string>
         <key>ProgramArguments</key>
         <array>
             <string>/opt/local/bin/offlineimap</string>
