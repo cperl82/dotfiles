@@ -84,7 +84,7 @@ type = Gmail
 # Example 1: synchronizing only INBOX and Sent.
 #
 # folderfilter = lambda foldername: foldername in ['INBOX', 'Sent']
-folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail', '[Gmail]/Important']
+folderfilter = lambda foldername: foldername not in ['[Gmail]/Important',]
 
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser     = chris.perl@gmail.com
