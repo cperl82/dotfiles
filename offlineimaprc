@@ -76,6 +76,15 @@ localfolders = ~/Mail/Gmail
 #
 
 type = Gmail
+# You can specify which folders to sync.  You can do it several ways.
+# I'll provide some examples.  The folderfilter operates on the
+# *UNTRANSLATED* name, if you specify nametrans.  It should return
+# true if the folder is to be included; false otherwise.
+#
+# Example 1: synchronizing only INBOX and Sent.
+#
+# folderfilter = lambda foldername: foldername in ['INBOX', 'Sent']
+folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail',]
 
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser     = chris.perl@gmail.com
