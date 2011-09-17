@@ -33,7 +33,7 @@ maxconnections = 1
 enabled = yes
 filename = ~/.muttrc.mailboxes
 header = "mailboxes "
-peritem = "+%(accountname)s/%(foldername)s"
+peritem = "+%(foldername)s"
 sep = " "
 footer = "\n"
 
