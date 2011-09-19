@@ -37,8 +37,8 @@ set index_format="%4C %Z %(%b %d %Y %H:%M:%S)  %-15.15L  %s  %?M?(%03M)?"
 set folder_format="%2C %t %6N %F %2l %-8.8u %-8.8g %8s %d %f"
 
 ## Hooks
-#  Start with all threads collapsed
-folder-hook . "exec collapse-all" 
+#  Start with all threads collapsed for LKML
+folder-hook linux-kernel "exec collapse-all" 
 
 # Source the mailbox list as provided by offlineimap.
 # See the example in /opt/local/etc/offlineimap.conf.sample.
