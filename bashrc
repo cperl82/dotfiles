@@ -156,6 +156,8 @@ aes-256-cbc() {
 
 }
 
+# NHL Schedule scraping function {{{2
+# argument is a regex that is matched against the est node from the xml
 nhl-schedule () {
 	TMPFILE="/tmp/nhl-sched-by-date.$$"
 	SOURCE="http://www.nhl.com/feeds/public/SeasonSchedule.xml"
