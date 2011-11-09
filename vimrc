@@ -108,9 +108,9 @@ endif
 
 " 2011-01-11
 " Map / and ? while in visual mode to search for the highlighted text
-:vmap / y/<C-R>=escape('<C-R>"', '/\')<CR><CR>
+:vmap / y/<C-R>=escape('<C-R>"', '/\[]')<CR><CR>
 " Escaping `?' is necessary with backward searching
-:vmap ? y?<C-R>=escape('<C-R>"', '?/\')<CR><CR>
+:vmap ? y?<C-R>=escape('<C-R>"', '?/\[]')<CR><CR>
 
 " 2011-04-15
 " Map <Leader>n to toggle line numbers on and off.  I find this useful for when
