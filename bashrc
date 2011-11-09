@@ -156,6 +156,25 @@ aes-256-cbc() {
 
 }
 
+nhl-schedule () {
+	TMPFILE="/tmp/nhl-sched-by-date.$$"
+	SOURCE="http://www.nhl.com/feeds/public/SeasonSchedule.xml"
+
+	what="${1}"
+	curl -qs -o "${TMPFILE}" "${SOURCE}"
+	local i=0
+	while read gameId est awayTeam homeTeam
+	do
+		if [[ "${est}" =~ ${what} ]];
+		then
+			echo "${est}" "${gameId}" "${awayTeam}" "${homeTeam}"
+			i=$((i+1))
+		fi
+	done < <(xmlstarlet sel -t -m "schedule/game" -v "concat(gameId,' ',est,' ',awayTeam,' ',homeTeam)" -n "${TMPFILE}")
+	echo ${i}
+	rm -f "${TMPFILE}"
+}
+
 # Misc Stuff {{{1
 
 # vim - function wrapper for use with screen {{{2
