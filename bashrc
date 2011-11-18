@@ -167,9 +167,11 @@ nhl-schedule () {
 	local i=0
 	while read gameId est awayTeam homeTeam
 	do
-		if [[ "${est}" =~ ${what} ]];
+		est=${est/T/ }
+		line="${est}  ${gameId}  ${awayTeam} ${homeTeam}"
+		if [[ "${line}" =~ ${what} ]];
 		then
-			echo "${est}" "${gameId}" "${awayTeam}" "${homeTeam}"
+			echo "${line}"
 			i=$((i+1))
 		fi
 	done < <(xmlstarlet sel -t -m "schedule/game" -v "concat(gameId,' ',est,' ',awayTeam,' ',homeTeam)" -n "${TMPFILE}")
