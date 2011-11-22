@@ -168,7 +168,7 @@ nhl-schedule () {
 	while read gameId est awayTeam homeTeam
 	do
 		est=${est/T/ }
-		line="${est}  ${gameId}  ${awayTeam} ${homeTeam}"
+		line="${est}  ${gameId}  ${awayTeam} @ ${homeTeam}"
 		if [[ "${line}" =~ ${what} ]];
 		then
 			echo "${line}"
