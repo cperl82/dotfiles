@@ -56,6 +56,10 @@ macro index S "<save-message>+[Gmail].Spam<enter>"    "mark message as spam"
 # index
 bind index \Cd next-page
 bind index \Cu previous-page
+bind index gg first-entry
+bind index G last-entry
+bind index ? search-reverse
+bind index N search-opposite
 
 # pager
 bind pager j next-line
@@ -66,6 +70,8 @@ bind pager \Cd next-page
 bind pager \Cu previous-page
 bind pager gg top
 bind pager G bottom
+bind pager ? search-reverse
+bind pager N search-opposite
 macro index zc "<collapse-thread>" "Macro to emulate VIM folding commands"
 macro index zo "<collapse-thread>" "Macro to emulate VIM folding commands"
 
