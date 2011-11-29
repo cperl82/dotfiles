@@ -124,13 +124,20 @@ aes-256-cbc() {
 	shift
 	case "${noun}" in 
 	s|str|string)
-		data="${1}"
-		openssl_cmd="openssl aes-256-cbc \${encrypt_decrypt} -a -in /dev/stdin -out /dev/stdout <<< '${data}'"
+		if [[ -z "${1}" ]]
+		then
+			pre_cmd="read -e -p 'input string: ' data"
+		else
+			pre_cmd="data=${1}"
+		fi
+		openssl_cmd="openssl aes-256-cbc \${encrypt_decrypt} -a -in /dev/stdin -out /dev/stdout <<< \${data}"
+		post_cmd=""
 		;;
 	f|fil|file)
 		file="${1}"
 		infile="${file}"
 		outfile="${file}.aes.$$"
+		pre_cmd=""
 		openssl_cmd="openssl aes-256-cbc ${encrypt_decrypt} -a -in ${infile} -out ${outfile}"
 		post_cmd="mv \${outfile} \${file}"
 		;;
@@ -141,7 +148,7 @@ aes-256-cbc() {
 	esac
 
 	#echo ${openssl_cmd}
-	eval ${openssl_cmd} && eval ${post_cmd}
+	eval ${pre_cmd} && eval ${openssl_cmd} && eval ${post_cmd}
 
 }
 
