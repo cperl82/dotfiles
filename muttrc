@@ -7,15 +7,11 @@ set from = "chris.perl@gmail.com"
 set realname = "Chris Perl"
 
 # Header stuff
-ignore "Authentication-Results:"
-ignore "DomainKey-Signature:"
-ignore "DKIM-Signature:"
-hdr_order Date From To Cc
-
 ignore *
-unignore from: date subject to cc
-unignore x-mailing-list: posted-to:
-unignore x-mailer:
+unignore from date subject to cc
+unignore x-mailing-list posted-to
+unignore x-mailer
+hdr_order From: To: Cc: Date: Subject:
 
 # For better looks
 set markers          = no # don't put '+' at the beginning of wrapped lines
@@ -33,6 +29,7 @@ set move             = no
 set mark_old         = no
 set copy             = no
 set menu_scroll
+set record           = ""
 #set index_format="%4C %Z %(%b %d %Y %H:%M:%S)  %-15.15L  %s  %?M?(%03M)?"
 set index_format="%4C %Z %(%b %d %Y %H:%M:%S)  %-20.20L %?M?%3M+&    ? %s"
 set folder_format="%2C %t %6N %F %2l %-8.8u %-8.8g %8s %d %f"
