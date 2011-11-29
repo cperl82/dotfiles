@@ -57,6 +57,8 @@ bind index gg first-entry
 bind index G last-entry
 bind index ? search-reverse
 bind index N search-opposite
+bind index H top-page
+bind index L bottom-page
 
 # pager
 bind pager j next-line
