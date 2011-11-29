@@ -126,8 +126,10 @@ aes-256-cbc() {
 	s|str|string)
 		if [[ -z "${1}" ]]
 		then
+			# No data on command line, prompt for it
 			pre_cmd="read -e -p 'input string: ' data"
 		else
+			# Just use the data from the command line
 			pre_cmd="data=${1}"
 		fi
 		openssl_cmd="openssl aes-256-cbc \${encrypt_decrypt} -a -in /dev/stdin -out /dev/stdout <<< \${data}"
