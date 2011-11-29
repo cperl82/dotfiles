@@ -9,9 +9,7 @@ set realname = "Chris Perl"
 # Header stuff
 ignore *
 unignore from date subject to cc
-unignore x-mailing-list posted-to
-unignore x-mailer
-hdr_order From: To: Cc: Date: Subject:
+hdr_order from to cc date subject
 
 # For better looks
 set markers          = no # don't put '+' at the beginning of wrapped lines
