@@ -52,7 +52,12 @@ set smtp_url = "smtp://chris.perl@gmail.com@smtp.gmail.com:587/"
 macro index D "<save-message>+[Gmail].Trash<enter>"   "move message to the trash"
 macro index S "<save-message>+[Gmail].Spam<enter>"    "mark message as spam"
 
-# Make mutt more vim like
+## Make mutt more vim like
+# index
+bind index \Cd next-page
+bind index \Cu previous-page
+
+# pager
 bind pager j next-line
 bind pager k previous-line
 bind pager J next-entry
