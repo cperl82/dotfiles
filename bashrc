@@ -129,21 +129,10 @@ aes-256-cbc() {
 		;;
 	f|fil|file)
 		file="${1}"
-		if [[ -z "${encrypt_decrypt}" ]]; then
-			# encryption
-			infile="${file}"
-			outfile="${file}.aes"
-		else
-			# decryption
-			# Check to make sure input file ends with .aes
-			if [[ ! ("${file}" =~ \.aes$) ]]; then
-				echo "File specified for decryption must have an 'aes' extension"
-				return
-			fi
-			infile="${file}"
-			outfile="${file%.aes}"
-		fi
+		infile="${file}"
+		outfile="${file}.aes.$$"
 		openssl_cmd="openssl aes-256-cbc ${encrypt_decrypt} -a -in ${infile} -out ${outfile}"
+		post_cmd="mv \${outfile} \${file}"
 		;;
 	*)
 		echo "${FUNCNAME} encrypt|decrypt string|file str|filename"
@@ -152,7 +141,7 @@ aes-256-cbc() {
 	esac
 
 	#echo ${openssl_cmd}
-	eval ${openssl_cmd}
+	eval ${openssl_cmd} && eval ${post_cmd}
 
 }
 
