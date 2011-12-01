@@ -3,6 +3,9 @@ username = Chris Perl <chris.perl@gmail.com>
 
 [hostfingerprints]
 
+[alias]
+svnlog = log --style ${HOME}/.dotfiles/hg.style.log.hgsubversion
+
 [extensions]
 hgext.graphlog=
 hgext.bookmarks=
