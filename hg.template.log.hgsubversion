@@ -4,5 +4,5 @@ tag:         {tags}
 parent:      {parents}
 user:        {author|user}
 date:        {date|isodate} ({date|rfc822date})
-summary:     {desc|strip|fill76}
+summary:     {desc|strip|firstline|fill76}
 
