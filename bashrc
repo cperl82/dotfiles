@@ -161,6 +161,10 @@ nhl-schedule () {
 	SOURCE="http://www.nhl.com/feeds/public/SeasonSchedule.xml"
 
 	what="${1}"
+	if [[ -z "${what}" ]]
+	then
+		what=$(date '+%Y-%m-%d')
+	fi
 	curl -qs -o "${TMPFILE}" "${SOURCE}"
 	local i=0
 	while read gameId est awayTeam homeTeam
