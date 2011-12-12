@@ -4,8 +4,8 @@ username = Chris Perl <chris.perl@gmail.com>
 [hostfingerprints]
 
 [alias]
-svnlog  = log --style ${HOME}/.dotfiles/hg.style.log.hgsubversion
-gsvnlog = glog --style ${HOME}/.dotfiles/hg.style.log.hgsubversion
+svnlog  = log --style ${DOTFILES_ROOT}/hg.style.log.hgsubversion
+gsvnlog = glog --style ${DOTFILES_ROOT}/hg.style.log.hgsubversion
 
 [extensions]
 hgext.graphlog=
@@ -14,5 +14,5 @@ hgext.rebase=
 hgext.transplant=
 hgext.mq=
 hgext.purge=
-#hgext.hgsubversion=${HOME}/.dotfiles/hg-ext/hgsubversion/hgsubversion
-#hgext.hg_histedit=${HOME}/.dotfiles/hg-ext/histedit/hg_histedit.py
+hgext.hgsubversion=${HG_EXT_ROOT}/hgsubversion/hgsubversion
+hgext.hg_histedit=${HG_EXT_ROOT}/histedit/hg_histedit.py

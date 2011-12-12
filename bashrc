@@ -213,10 +213,17 @@ function vman
 	vim -c ":Man $*" -c ":only"
 }
 
+# Important variable setting {{{1
+# mercurial extensions live in the directory "hg_ext" in the repo that pulls in
+# this dotfiles repo as a subrepo (i.e. the "environment" repo)
+DOTFILES_ROOT="$(dirname "$(path-canonical ${BASH_ARGV[0]})")"
+HG_EXT_ROOT="$(dirname "$(dirname "$(path-canonical ${BASH_ARGV[0]})")")/hg_ext"
+
+export HG_EXT_ROOT DOTFILES_ROOT
+
 # OS Specific bashrc file inclusion {{{1
-DIRPATH="$(dirname "$(path-canonical ${BASH_ARGV[0]})")"
 OSNAME=$(uname -s)
-OSFILE="${DIRPATH}/bashrc.${OSNAME}"
+OSFILE="${DOTFILES_ROOT}/bashrc.${OSNAME}"
 if   [[ -f "${OSFILE}" ]]
 then
 	source "${OSFILE}"
