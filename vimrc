@@ -1,5 +1,5 @@
 " Pathogen testing using our special area for vim bundles
-call pathogen#runtime_append_all_bundles($VIM_BUNDLE_ROOT) 
+call pathogen#infect($VIM_BUNDLE_ROOT) 
 
 " Enable file type detection, all three modes
 " detection, indent, plugin.  See :help filetype
