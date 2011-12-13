@@ -135,6 +135,12 @@ let python_highlight_space_errors = 0
 " :help ft-vim-syntax
 let g:vimsyn_noerror = 1
 
+" 2011-12-13
+" Control where ".netrwhist" gets written.  If this variable is not set then
+" netrw tries to figure it out itself.
+" See /opt/local/share/vim/vim73/autoload/netrw.vim
+let g:netrw_home = $HOME . "/.netrwhist"
+
 " 2010-10-03
 " Make shortcuts for jumping directly to a specific tab
 " We're mapping <Leader> (which defaults to \) followed by {number} (where
