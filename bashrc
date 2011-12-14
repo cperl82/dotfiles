@@ -219,9 +219,8 @@ function vman
 ENV_ROOT="$(dirname "$(dirname "$(path-canonical ${BASH_ARGV[0]})")")"
 DOTFILES_ROOT="${ENV_ROOT}/dotfiles"
 HG_EXT_ROOT="${ENV_ROOT}/hg_ext"
-VIM_BUNDLE_ROOT="${ENV_ROOT}/vim_bundles"
 
-export ENV_ROOT DOTFILES_ROOT HG_EXT_ROOT VIM_BUNDLE_ROOT
+export ENV_ROOT DOTFILES_ROOT HG_EXT_ROOT
 
 # OS Specific bashrc file inclusion {{{1
 OSNAME=$(uname -s)
