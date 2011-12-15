@@ -58,6 +58,9 @@ let g:vimwiki_list = [ wiki_0 ]
 " Fixup some vimwiki colors
 hi link VimwikiNoExistsLink Comment
 
+" Fixup conflicts with Quicksilver (<C-Space> already used)
+:map <leader>tt <Plug>VimwikiToggleListItem
+
 " 2011-02-11
 " Emacs style command line editing slightly modified
 " :help emacs-keys
