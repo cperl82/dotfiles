@@ -55,6 +55,9 @@ let wiki_0.auto_export = 0
 
 let g:vimwiki_list = [ wiki_0 ]
 
+" Fixup some vimwiki colors
+hi link VimwikiNoExistsLink Comment
+
 " 2011-02-11
 " Emacs style command line editing slightly modified
 " :help emacs-keys
