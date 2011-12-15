@@ -45,6 +45,16 @@ let g:NERDTreeStatusline = '%{ getcwd() }'
 let g:NERDTreeDirArrows  = 1
 let g:NERDTreeAutoCenter = 0
 
+" 2011-12-15
+" Vimwiki Configuration
+let wiki_0 = {}
+let wiki_0.path = '~/Dropbox/vimwiki/markup'
+let wiki_0.path_html = '~/Dropbox/vimwiki/html'
+let wiki_0.nested_syntaxes = { 'python': 'python', 'c': 'c', 'perl': 'perl' }
+let wiki_0.auto_export = 1
+
+let g:vimwiki_list = [ wiki_0 ]
+
 " 2011-02-11
 " Emacs style command line editing slightly modified
 " :help emacs-keys
