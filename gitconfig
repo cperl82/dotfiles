@@ -4,3 +4,5 @@
 
 [core]
 	excludesfile = "/Users/cperl/.env/dotfiles/gitignore.global"
+[color]
+	ui = auto
