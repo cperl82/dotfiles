@@ -50,7 +50,7 @@ let g:NERDTreeAutoCenter = 0
 let wiki_0 = {}
 let wiki_0.path = '~/Dropbox/vimwiki/markup'
 let wiki_0.path_html = '~/Dropbox/vimwiki/html'
-let wiki_0.nested_syntaxes = { 'python': 'python', 'c': 'c', 'perl': 'perl', 'sh': 'sh' }
+let wiki_0.nested_syntaxes = { 'python': 'python', 'ansi-c': 'c', 'perl': 'perl', 'sh': 'sh' }
 let wiki_0.auto_export = 0
 
 let g:vimwiki_list = [ wiki_0 ]
