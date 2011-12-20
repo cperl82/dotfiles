@@ -36,6 +36,7 @@ header = "mailboxes "
 peritem = "+%(foldername)s"
 sep = " "
 footer = "\n"
+folderfilter = lambda accountname, foldername: foldername not in ['[Gmail].All Mail',]
 
 [Account Gmail]
 ########## Basic settings
