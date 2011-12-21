@@ -1,5 +1,5 @@
 " Pathogen testing
-call pathogen#infect() 
+call pathogen#infect($BUNDLE_ROOT) 
 
 " Enable file type detection, all three modes
 " detection, indent, plugin.  See :help filetype
