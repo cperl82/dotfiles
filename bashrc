@@ -219,7 +219,7 @@ function vman
 ENV_ROOT="$(dirname "$(dirname "$(path-canonical ${BASH_ARGV[0]})")")"
 DOTFILES_ROOT="${ENV_ROOT}/dotfiles"
 HG_EXT_ROOT="${ENV_ROOT}/hg_ext"
-BUNDLE_ROOT="${ENV_ROOT}/bundle"
+BUNDLE_ROOT="${ENV_ROOT}/bundles"
 
 export ENV_ROOT DOTFILES_ROOT HG_EXT_ROOT BUNDLE_ROOT
 
