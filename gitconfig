@@ -6,3 +6,8 @@
 	excludesfile = "/Users/cperl/.env/dotfiles/gitignore.global"
 [color]
 	ui = auto
+
+[remote "nerdtree-upstream"]
+	url = git@github.com:scrooloose/nerdtree.git
+	fetch = +refs/heads/*:refs/remotes/nerdtree-upstream/*
+
