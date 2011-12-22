@@ -14,4 +14,4 @@
 	co = checkout
 	df = diff
 	lg = log -p
-	glog = log --pretty=oneline --graph
+	glog = log --pretty=oneline --all --graph
