@@ -7,7 +7,11 @@
 [color]
 	ui = auto
 
-[remote "nerdtree-upstream"]
-	url = git@github.com:scrooloose/nerdtree.git
-	fetch = +refs/heads/*:refs/remotes/nerdtree-upstream/*
-
+[alias]
+	st = status
+	ci = commit
+	br = branch
+	co = checkout
+	df = diff
+	lg = log -p
+	glog = log --pretty=oneline --graph
