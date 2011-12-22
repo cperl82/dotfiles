@@ -214,11 +214,9 @@ function vman
 }
 
 # Important variable setting {{{1
-# mercurial extensions live in the directory "hg_ext" in the repo that pulls in
-# this dotfiles repo as a subrepo (i.e. the "environment" repo)
 ENV_ROOT="$(dirname "$(dirname "$(path-canonical ${BASH_ARGV[0]})")")"
 DOTFILES_ROOT="${ENV_ROOT}/dotfiles"
-HG_EXT_ROOT="${ENV_ROOT}/hg_ext"
+HG_EXT_ROOT="${ENV_ROOT}/hgext"
 BUNDLE_ROOT="${ENV_ROOT}/bundles"
 
 export ENV_ROOT DOTFILES_ROOT HG_EXT_ROOT BUNDLE_ROOT
