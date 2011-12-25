@@ -45,6 +45,10 @@ let g:NERDTreeStatusline = '%{ getcwd() }'
 let g:NERDTreeDirArrows  = 1
 let g:NERDTreeAutoCenter = 0
 
+" 2011-12-25
+" Trying to use buffers and minibufexplorer instead of tab pages
+set hidden
+
 " 2011-12-15
 " Vimwiki Configuration
 let wiki_0 = {}

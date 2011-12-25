@@ -7,6 +7,9 @@ if has("macunix")
 	" Turn off the toolbar
 	set guioptions-=T
 
+	" Turn off the left scrollbar
+	set guioptions-=L
+
 	" 2010-08-25
 	" Override the highlight settings for FoldColumn with macvim as I can
 	" barely read the default
