@@ -54,6 +54,7 @@ set hidden
 let g:miniBufExplModSelTarget = 1
 " Always display the MBE window, even with 1 buffer
 let g:miniBufExplorerMoreThanOne = 1
+let g:miniBufExplMapWindowNavVim = 1
 
 " 2011-12-15
 " Vimwiki Configuration
