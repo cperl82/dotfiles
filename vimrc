@@ -48,6 +48,9 @@ let g:NERDTreeAutoCenter = 0
 " 2011-12-25
 " Trying to use buffers and minibufexplorer instead of tab pages
 set hidden
+" Make sure that minibufexpl does not try to open a buffer in a window
+" occupied by a buffer where &modifiable is not set
+let g:miniBufExplModSelTarget = 1
 
 " 2011-12-15
 " Vimwiki Configuration
