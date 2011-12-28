@@ -44,6 +44,9 @@ let g:NERDTreeStatusline = '%{ getcwd() }'
 " feature
 let g:NERDTreeDirArrows  = 1
 let g:NERDTreeAutoCenter = 0
+" 2011-12-28
+" Change the default NERDTree quick help key so I can still reverse search
+let g:NERDTreeMapHelp = 'H'
 
 " 2011-12-25
 " Trying to use buffers and minibufexplorer instead of tab pages
