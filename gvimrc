@@ -41,3 +41,9 @@ endif
 
 set lines=60
 set columns=130
+
+" 2011-12-27 
+" Make the beeping stop!
+" http://vim.wikia.com/wiki/Disable_beeping
+" under the section "Disable beep and flash with gvimrc"
+set noerrorbells visualbell t_vb=
