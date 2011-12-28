@@ -3,7 +3,7 @@
 	email = chris.perl@gmail.com
 
 [core]
-	excludesfile = "/Users/cperl/.gitignore"
+	excludesfile = "~/.gitignore"
 
 [color]
 	ui = auto
