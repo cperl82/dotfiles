@@ -52,8 +52,7 @@ set hidden
 " Make sure that minibufexpl does not try to open a buffer in a window
 " occupied by a buffer where &modifiable is not set
 let g:miniBufExplModSelTarget = 1
-" Always display the MBE window, even with 1 buffer
-let g:miniBufExplorerMoreThanOne = 1
+let g:miniBufExplorerMoreThanOne = 2
 let g:miniBufExplMapWindowNavVim = 1
 
 " 2011-12-15
