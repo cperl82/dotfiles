@@ -231,4 +231,13 @@ else
 	echo "Unknown Operating System"
 fi
 
+# Local bashrc file inclustion {{{1
+# Allows inclusion of initialization stuff that I don't want to keep in my
+# dotfiles repo
+LOCALRC="${HOME}/.bashrc.local"
+if [[ -f "${LOCALRC}" ]]
+then
+	source "${LOCALRC}"
+fi
+
 # vim: tw=80 fdm=marker
