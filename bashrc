@@ -224,7 +224,7 @@ export ENV_ROOT DOTFILES_ROOT HG_EXT_ROOT BUNDLE_ROOT
 # OS Specific bashrc file inclusion {{{1
 OSNAME=$(uname -s | tr '[A-Z]' '[a-z]')
 OSFILE="${DOTFILES_ROOT}/bashrc.${OSNAME}"
-if   [[ -f "${OSFILE}" ]]
+if [[ -f "${OSFILE}" ]]
 then
 	source "${OSFILE}"
 else
