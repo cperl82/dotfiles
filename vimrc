@@ -123,8 +123,8 @@ nmap <silent> <C-Right> :call MoveTabRight()<CR>
 
 " Map Control-h and Control-l
 " to moving left and right through the open tabs
-nmap <silent> <C-h> :tabp<CR>
-nmap <silent> <C-l> :tabn<CR>
+"nmap <silent> <C-h> :tabp<CR>
+"nmap <silent> <C-l> :tabn<CR>
 
 " 2010-12-30
 " Fix for control left and right moving of tabs within screen.
@@ -134,11 +134,6 @@ if &term =~ 'screen\|screen-256color'
 	set <C-Left>=[1;5D
 	set <C-Right>=[1;5C
 endif
-
-" Map Alt-1 (at least on my mac) such that it opens the quick fix window
-" and then prepares a vimgrep for me w/o jumping to the first
-" match it finds
-:nmap <ESC>1 :copen<CR>:vimgrep ##j **/*<Left><Left><Left><Left><Left><Left><Left>
 
 " 2011-01-11
 " Map / and ? while in visual mode to search for the highlighted text
