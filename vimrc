@@ -58,6 +58,10 @@ let g:miniBufExplModSelTarget = 1
 let g:miniBufExplorerMoreThanOne = 2
 let g:miniBufExplMapWindowNavVim = 1
 
+" 2011-12-30
+" Easier access to :Kwbd command from plugin/kwbd.vim
+nnoremap <silent> <Leader>bd :Kwbd<CR>
+
 " 2011-12-15
 " Vimwiki Configuration
 let wiki_0 = {}
