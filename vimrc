@@ -48,9 +48,7 @@ let g:NERDTreeAutoCenter = 0
 " Change the default NERDTree quick help key so I can still reverse search
 let g:NERDTreeMapHelp = 'H'
 " 2011-12-31
-" Disable Hijacking of netrw (I turn it off below) and make the default window
-" a little wider
-let g:NERDTreeHijackNetrw = 0
+" Set the default size of the NERDTree window
 let g:NERDTreeWinSize = 36
 
 " 2011-12-31
