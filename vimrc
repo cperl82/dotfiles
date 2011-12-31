@@ -47,6 +47,32 @@ let g:NERDTreeAutoCenter = 0
 " 2011-12-28
 " Change the default NERDTree quick help key so I can still reverse search
 let g:NERDTreeMapHelp = 'H'
+" 2011-12-31
+" Disable Hijacking of netrw (I turn it off below) and make the default window
+" a little wider
+let g:NERDTreeHijackNetrw = 0
+let g:NERDTreeWinSize = 36
+
+" 2011-12-31
+" Disable netrw
+" :help netrw-noload
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
+
+" Automatically open NERDTree if its a directory
+"augroup CPTest
+"autocmd CPTest VimEnter * call s:OpenNERDTreeIfDirectory(expand("<amatch>"))
+"augroup NONE
+
+function! s:OpenNERDTreeIfDirectory(arg)
+	echo "s:OpenNERDTreeIfDirectory called with arg " . a:arg
+	let l:dir = fnameescape(a:arg)
+	if isdirectory(l:dir)
+		let l:bufnum = bufnr(a:arg)
+		exec ":bwipe " . l:bufnum
+		exec ":NERDTree " . a:arg
+	endif
+endfunction
 
 " 2011-12-25
 " Trying to use buffers and minibufexplorer instead of tab pages
