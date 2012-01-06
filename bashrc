@@ -1,6 +1,7 @@
 # Variables {{{1
 export PS1='[\u@\h \w]\$ '
 export PAGER=less
+export MYSQL_PS1="\u@\h [\d]> "
 
 # Functions {{{1
 # tmpmkcd {{{2
