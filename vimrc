@@ -113,11 +113,13 @@ let wiki_0.nested_syntaxes = {
 			\ 'perl': 'perl',
 			\ 'shell': 'sh',
 			\ 'config': 'config',
-			\ 'vimscript': 'vim' }
+			\ 'vimscript': 'vim',
+			\ 'java': 'java' }
 let wiki_0.auto_export = 0
 
 let g:vimwiki_list = [ wiki_0 ]
 let g:vimwiki_camel_case = 0
+let g:vimwiki_folding = 1
 
 " Fixup some vimwiki colors
 hi link VimwikiNoExistsLink Comment
