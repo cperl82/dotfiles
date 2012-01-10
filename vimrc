@@ -85,6 +85,19 @@ let g:miniBufExplModSelTarget = 1
 let g:miniBufExplorerMoreThanOne = 2
 let g:miniBufExplMapWindowNavVim = 1
 
+" 2012-01-09
+" Bufexplorer settings
+let g:bufExplorerDetailedHelp = 1
+let g:bufExplorerSortBy = 'fullpath'
+let g:bufExplorerShowTabBuffer = 1
+
+" 2012-01-09
+" Window movement commands
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
+nnoremap <C-h> <C-W>h
+nnoremap <C-l> <C-W>l
+
 " 2011-12-30
 " Easier access to :Kwbd command from plugin/kwbd.vim
 nnoremap <silent> <Leader>bd :Kwbd<CR>
