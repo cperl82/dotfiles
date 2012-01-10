@@ -73,11 +73,14 @@ function! s:OpenNERDTreeIfDirectory(arg)
 endfunction
 
 " 2011-12-25
-" Trying to use buffers and minibufexplorer instead of tab pages
+" Trying to use buffers instead of tab pages
 set hidden
 
 " Make sure that minibufexpl does not try to open a buffer in a window
 " occupied by a buffer where &modifiable is not set
+" 2012-01-09
+" Disabling MiniBufExplorer and trying plain old Bufexplorer
+let loaded_minibufexplorer = 1
 let g:miniBufExplModSelTarget = 1
 let g:miniBufExplorerMoreThanOne = 2
 let g:miniBufExplMapWindowNavVim = 1
