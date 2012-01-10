@@ -9,5 +9,6 @@ if !has("gui")
 	hi link bufExplorerMapping Normal
 	hi link bufExplorerSplit Normal
 	hi link bufExplorerTitle Normal
+	hi link bufExplorerHidBuf Normal
 endif
 
