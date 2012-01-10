@@ -143,44 +143,6 @@ hi link VimwikiNoExistsLink Comment
 " delete one word to the left
 :cnoremap <Esc><C-?>	<C-w>
 
-" 2010-05-18
-" Playing around with moving tabs
-" tab numbers run from 1 to n
-function! MoveTabLeft()
-	let current = tabpagenr()
-	if current == 1
-		let current = tabpagenr('$') + 1
-	endif
-	execute "tabmove" (current-2)
-endfunction
-
-function! MoveTabRight()
-	let current = tabpagenr()
-	if current == tabpagenr('$')
-		let current = 0
-	endif
-	execute "tabmove" current
-endfunction
-
-" Map Control-Left and Control-Right
-" to dragging a tab left or right
-nmap <silent> <C-Left> :call MoveTabLeft()<CR>
-nmap <silent> <C-Right> :call MoveTabRight()<CR>
-
-" Map Control-h and Control-l
-" to moving left and right through the open tabs
-"nmap <silent> <C-h> :tabp<CR>
-"nmap <silent> <C-l> :tabn<CR>
-
-" 2010-12-30
-" Fix for control left and right moving of tabs within screen.
-" It seems that the keycodes only work for xterm due to vim's
-" builtin_xterm termcap codes.
-if &term =~ 'screen\|screen-256color'
-	set <C-Left>=[1;5D
-	set <C-Right>=[1;5C
-endif
-
 " 2011-01-11
 " Map / and ? while in visual mode to search for the highlighted text
 :vmap / y/<C-R>=escape('<C-R>"', '/\[]')<CR><CR>
@@ -215,14 +177,6 @@ let g:vimsyn_noerror = 1
 " netrw tries to figure it out itself.
 " See /opt/local/share/vim/vim73/autoload/netrw.vim
 let g:netrw_home = $HOME . "/.netrwhist"
-
-" 2010-10-03
-" Make shortcuts for jumping directly to a specific tab
-" We're mapping <Leader> (which defaults to \) followed by {number} (where
-" number is in the range 1-9) to jump to that numbered tab
-for i in range(1,9)
-	execute "nmap <silent> <Leader>" . i . " :tabnext " . i . "<CR>"
-endfor
 
 " 2011-05-04
 " Playing around with making it easier to deal with sessions with vim
