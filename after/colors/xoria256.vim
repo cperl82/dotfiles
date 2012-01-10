@@ -1,6 +1,13 @@
 " 2011-05-07
-" Override some highlight settings for NERD_tree.
-hi link NERDTreeUp  Label
-hi link NERDTreeDir Label
-hi link NERDTreeCWD Macro
+if !has("gui")
+	" Override some highlight settings for NERD_tree.
+	hi link NERDTreeUp  Label
+	hi link NERDTreeDir Label
+	hi link NERDTreeCWD Macro
+
+	" Override some highlight settings for bufexplorer
+	hi link bufExplorerMapping Normal
+	hi link bufExplorerSplit Normal
+	hi link bufExplorerTitle Normal
+endif
 
