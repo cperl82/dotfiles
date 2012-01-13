@@ -201,6 +201,14 @@ if test "${TERM}" = "screen" -o \
 	}
 fi
 
+# ackl - function wrapper for use with ack (http://www.betterthangrep.com/)
+# to output to less -R.  I don't always want this, but want it easily available
+# when I do.
+function ackl
+{
+	ack --pager='less -R' "$@"
+}
+
 # PYTHONSTARTUP Environment variable {{{2
 # if the ${HOME}/.python_startup.py file exists, set PYTHONSTARTUP to point to
 # it such that its contents are executed for interactive python sessions
