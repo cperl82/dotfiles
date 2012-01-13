@@ -69,3 +69,17 @@ function! NERDTreeCopyPathToClipboardRelative(node)
 		exec printf("silent !echo -n %s | pbcopy", fnamemodify(a:node.path.str(), ':.'))
 	endif
 endfunction
+
+
+
+function! NERDTreeRevealPath(filepath)
+	let results = []
+	windo if bufname("%") =~# '^NERD_tree_' | call add(results, bufwinnr("%")) | endif
+	"TODO: Better way to do this?  Right now must be a single NERDTree
+	"window
+	if len(results) ==# 1
+		exec printf("%dwincmd w", results[0])
+		silent call b:NERDTreeRoot.reveal(g:NERDTreePath.New(a:filepath))
+	endif
+endfunction
+nnoremap <silent> ,r :call NERDTreeRevealPath(expand("%:p"))<CR>
