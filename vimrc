@@ -134,42 +134,42 @@ let g:vimwiki_folding = 1
 hi link VimwikiNoExistsLink Comment
 
 " Fixup conflicts with Quicksilver (<C-Space> already used)
-:map <leader>tt <Plug>VimwikiToggleListItem
+map <leader>tt <Plug>VimwikiToggleListItem
 
 " 2011-02-11
 " Emacs style command line editing slightly modified
 " :help emacs-keys
 " start of line
-:cnoremap <C-a>		<Home>
+cnoremap <C-a>		<Home>
 " delete character under cursor
-:cnoremap <C-d>		<Del>
+cnoremap <C-d>		<Del>
 " end of line
-:cnoremap <C-e>		<End>
+cnoremap <C-e>		<End>
 " back one word
-:cnoremap <Esc>b	<S-Left>
+cnoremap <Esc>b	<S-Left>
 " forward one word
-:cnoremap <Esc>f	<S-Right>
+cnoremap <Esc>f	<S-Right>
 " Delete one word to the right
-:cnoremap <Esc>d	<S-Right><C-w>
+cnoremap <Esc>d	<S-Right><C-w>
 " delete one word to the left
-:cnoremap <Esc><C-?>	<C-w>
+cnoremap <Esc><C-?>	<C-w>
 
 " 2011-01-11
 " Map / and ? while in visual mode to search for the highlighted text
-:vmap / y/<C-R>=escape('<C-R>"', '/\[]')<CR><CR>
+vmap / y/<C-R>=escape('<C-R>"', '/\[]')<CR><CR>
 " Escaping `?' is necessary with backward searching
-:vmap ? y?<C-R>=escape('<C-R>"', '?/\[]')<CR><CR>
+vmap ? y?<C-R>=escape('<C-R>"', '?/\[]')<CR><CR>
 
 " 2011-04-15
 " Map <Leader>n to toggle line numbers on and off.  I find this useful for when
 " I need to copy and paste data out of a vim window
-:nmap <silent> <Leader>n :exec &number ? ":set nonu" : ":set nu"<CR>
+nmap <silent> <Leader>n :exec &number ? ":set nonu" : ":set nu"<CR>
 
 " 2011-05-06
 " Some ideas taken from
 " http://stevelosh.com/blog/2010/09/coming-home-to-vim/
-:nnoremap ,<Space> :nohl<CR>
-:nnoremap <Tab> %
+nnoremap ,<Space> :nohl<CR>
+nnoremap <Tab> %
 
 " 2010-09-24
 " Added newer python syntax highlighting script
