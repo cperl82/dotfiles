@@ -44,12 +44,18 @@ let g:NERDTreeStatusline = '%{ getcwd() }'
 " feature
 let g:NERDTreeDirArrows  = 1
 let g:NERDTreeAutoCenter = 0
+
 " 2011-12-28
 " Change the default NERDTree quick help key so I can still reverse search
 let g:NERDTreeMapHelp = 'H'
+
 " 2011-12-31
 " Set the default size of the NERDTree window
 let g:NERDTreeWinSize = 36
+
+" 2012-01-14
+" Map :NERDTreeFind to an easily accessible key sequence
+nnoremap <silent> ,r :NERDTreeFind<CR>
 
 " 2011-12-31
 " Disable netrw
