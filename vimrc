@@ -1,6 +1,9 @@
 " Pathogen testing
 call pathogen#infect($BUNDLE_ROOT) 
 
+" Change the default leader key
+let mapleader = ","
+
 " Enable file type detection, all three modes
 " detection, indent, plugin.  See :help filetype
 filetype plugin indent on
