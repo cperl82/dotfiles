@@ -99,6 +99,8 @@ let g:miniBufExplMapWindowNavVim = 1
 let g:bufExplorerDetailedHelp = 1
 let g:bufExplorerSortBy = 'fullpath'
 let g:bufExplorerShowTabBuffer = 1
+let g:bufExplorerShowRelativePath = 1
+let g:bufExplorerJumpToCurBufLine = 1
 
 " 2012-01-09
 " Window movement commands
