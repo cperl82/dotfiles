@@ -142,20 +142,27 @@ map <leader>tt <Plug>VimwikiToggleListItem
 " 2011-02-11
 " Emacs style command line editing slightly modified
 " :help emacs-keys
-" start of line
-cnoremap <C-a>		<Home>
-" delete character under cursor
-cnoremap <C-d>		<Del>
-" end of line
-cnoremap <C-e>		<End>
-" back one word
-cnoremap <Esc>b	<S-Left>
-" forward one word
-cnoremap <Esc>f	<S-Right>
-" Delete one word to the right
-cnoremap <Esc>d	<S-Right><C-w>
-" delete one word to the left
-cnoremap <Esc><C-?>	<C-w>
+" 2012-01-26
+" Trying to figure the cmd line mappings for macvim
+" Mappings for the gui are in gvimrc
+" :he macmeta
+" :he gui-extras
+if not has(gui_running)
+	" start of line
+	cnoremap <C-a> <Home>
+	" delete character under cursor
+	cnoremap <C-d> <Del>
+	" end of line
+	cnoremap <C-e> <End>
+	" back one word
+	cnoremap <Esc>b	<S-Left>
+	" forward one word
+	cnoremap <Esc>f	<S-Right>
+	" Delete one word to the right
+	cnoremap <Esc>d	<S-Right><C-w>
+	" delete one word to the left
+	cnoremap <Esc><C-?> <C-w>
+endif
 
 " 2011-01-11
 " Map / and ? while in visual mode to search for the highlighted text

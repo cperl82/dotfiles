@@ -9,6 +9,26 @@ if has("macunix")
 	set bg=light
 	colorscheme solarized
 
+	" 2012-01-26
+	" Fixing cmd line editing stuff in macvim
+	" :he macmeta
+	" :he gui-extras
+	set macmeta
+	" start of line
+	cnoremap <C-a> <Home>
+	" delete character under cursor
+	cnoremap <C-d> <Del>
+	" end of line
+	cnoremap <C-e> <End>
+	" back one word
+	cnoremap <M-b> <S-Left>
+	" forward one word
+	cnoremap <M-f> <S-Right>
+	" Delete one word to the right
+	cnoremap <M-d> <S-Right><C-w>
+	" delete one word to the left
+	cnoremap <M-BS> <C-w>
+
 elseif has("unix")
 	set guifont=Monaco\ 7
 
