@@ -147,7 +147,7 @@ map <leader>tt <Plug>VimwikiToggleListItem
 " Mappings for the gui are in gvimrc
 " :he macmeta
 " :he gui-extras
-if not has(gui_running)
+if !has("gui_running")
 	" start of line
 	cnoremap <C-a> <Home>
 	" delete character under cursor
