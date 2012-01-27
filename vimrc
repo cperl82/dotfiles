@@ -170,6 +170,12 @@ vmap / y/<C-R>=escape('<C-R>"', '/\[]')<CR><CR>
 " Escaping `?' is necessary with backward searching
 vmap ? y?<C-R>=escape('<C-R>"', '?/\[]')<CR><CR>
 
+" 2012-01-27
+" Make copying to the clipboard easier
+if has("clipboard")
+	vmap <Leader>c "*y<CR>
+endif
+
 " 2011-04-15
 " Map <Leader>n to toggle line numbers on and off.  I find this useful for when
 " I need to copy and paste data out of a vim window
