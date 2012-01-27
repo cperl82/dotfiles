@@ -7,37 +7,37 @@ endif
 let g:loaded_nerdtree_path_utils = 1
 
 call NERDTreeAddKeyMap({
-		\ 'key': ',y',
+		\ 'key': '<Leader>y',
 		\ 'scope': 'Node',
 		\ 'quickhelpText': 'Copy relative path of current node into the unamed register',
 		\ 'callback': 'NERDTreeCopyPathToURegRelative', })
 
 call NERDTreeAddKeyMap({
-		\ 'key': ',Y',
+		\ 'key': '<Leader>Y',
 		\ 'scope': 'Node',
 		\ 'quickhelpText': 'Copy absolute path of current node into the unamed register',
 		\ 'callback': 'NERDTreeCopyPathToURegAbsolute', })
 
 call NERDTreeAddKeyMap({
-		\ 'key': ',e',
+		\ 'key': '<Leader>e',
 		\ 'scope': 'Node',
 		\ 'quickhelpText': 'Echo the relative path of the selected node',
 		\ 'callback': 'NERDTreeEchoPathRelative', })
 
 call NERDTreeAddKeyMap({
-		\ 'key': ',E',
+		\ 'key': '<Leader>E',
 		\ 'scope': 'Node',
 		\ 'quickhelpText': 'Echo the absolute path of the selected node',
 		\ 'callback': 'NERDTreeEchoPathAbsolute', })
 
 call NERDTreeAddKeyMap({
-		\ 'key': ',c',
+		\ 'key': '<Leader>c',
 		\ 'scope': 'Node',
 		\ 'quickhelpText': 'Copy the relative path of the selected node to the clipboard',
 		\ 'callback': 'NERDTreeCopyPathToClipboardRelative', })
 
 call NERDTreeAddKeyMap({
-		\ 'key': ',C',
+		\ 'key': '<Leader>C',
 		\ 'scope': 'Node',
 		\ 'quickhelpText': 'Copy the relative path of the selected node to the clipboard',
 		\ 'callback': 'NERDTreeCopyPathToClipboardAbsolute', })
