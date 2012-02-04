@@ -4,12 +4,6 @@ if has("macunix")
 	"set guifont=DejaVu\ Sans\ Mono\:h11.00
 	"set guifont=Envy\ Code\ R:h11.00
 
-	" Turn off the toolbar
-	set guioptions-=T
-
-	" Turn off the left scrollbar
-	set guioptions-=L
-
 	" 2011-05-24
 	" Set the gui colorscheme
 	set bg=light
@@ -18,6 +12,9 @@ if has("macunix")
 elseif has("unix")
 	set guifont=Monaco\ 8
 	set tabpagemax=30
+
+	" Turn off the menu bar
+	set guioptions-=m
 
 	" Set the gui tabs to a constant width
 	if version >= 700
@@ -30,6 +27,13 @@ endif
 
 set lines=60
 set columns=130
+
+" Turn off the toolbar
+set guioptions-=T
+
+" Turn off the left scrollbar
+set guioptions-=L
+
 
 " 2011-12-27 
 " Make the beeping stop!
