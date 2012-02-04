@@ -10,19 +10,14 @@ if has("macunix")
 	colorscheme solarized
 
 elseif has("unix")
-	set guifont=Monaco\ 8
-	set tabpagemax=30
+	set guifont=Monaco\ 7
 
 	" Turn off the menu bar
 	set guioptions-=m
 
-	" Set the gui tabs to a constant width
-	if version >= 700
-	    "set showtabline to show when more than one tab
-	    set showtabline=1
-	    "set tab labels to show at most 12 characters
-	    set guitablabel=%-30.30t%M
-	endif
+	set bg=light
+	colorscheme solarized
+
 endif
 
 set lines=60
