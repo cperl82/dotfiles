@@ -98,7 +98,7 @@ let g:miniBufExplMapWindowNavVim = 1
 " Bufexplorer settings
 let g:bufExplorerDetailedHelp = 1
 let g:bufExplorerSortBy = 'fullpath'
-let g:bufExplorerShowTabBuffer = 1
+let g:bufExplorerShowTabBuffer = 0
 let g:bufExplorerShowRelativePath = 1
 let g:bufExplorerJumpToCurBufLine = 1
 
