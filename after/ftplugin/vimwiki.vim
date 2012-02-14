@@ -7,4 +7,4 @@ setlocal et tw=79 sw=4 ts=4 softtabstop=4 formatoptions+=t formatoptions-=l conc
 " Make it so that writing a bulleted list like:
 " - some text that is long enough to wrap
 "   actually wrap to the proper indent
-setlocal comments+=fb:- formatoptions+=c
+setlocal comments+=fb:- formatoptions+=cq
