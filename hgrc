@@ -7,6 +7,9 @@ username = Chris Perl <chris.perl@gmail.com>
 svnlog  = log --style ${DOTFILES_ROOT}/hg.style.log.hgsubversion
 gsvnlog = glog --style ${DOTFILES_ROOT}/hg.style.log.hgsubversion
 
+[git]
+intree = 1
+
 [extensions]
 hgext.graphlog=
 hgext.bookmarks=
