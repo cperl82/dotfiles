@@ -5,7 +5,7 @@ syn match CPHashMark /\s\+#.*$/
 syn match CPContext /\(^\|\s\+\)@[^[:space:]]\+/
 
 hi link CPTripleQuote PreProc
-hi link CPDoubleQuote PreProc
+hi link CPDoubleQuote Type
 hi link CPSingleQuote Constant
 hi link CPHashMark Comment
 hi link CPContext Comment
