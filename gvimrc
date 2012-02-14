@@ -30,7 +30,7 @@ if has("macunix")
 	cnoremap <M-BS> <C-w>
 
 elseif has("unix")
-	set guifont=Monaco\ 7
+	set guifont=Bitstream\ Vera\ Sans\ Mono\ 8
 
 	" Turn off the menu bar
 	set guioptions-=m
