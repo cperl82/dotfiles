@@ -127,6 +127,7 @@ let wiki_0.nested_syntaxes = {
 			\ 'vimscript': 'vim',
 			\ 'java': 'java' }
 let wiki_0.auto_export = 0
+let wiki_0.syntax = 'markdown'
 
 let g:vimwiki_list = [ wiki_0 ]
 let g:vimwiki_camel_case = 0
