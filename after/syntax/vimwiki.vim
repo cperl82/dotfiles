@@ -1,7 +1,7 @@
 syn match CPDoubleQuote /"\_[[:print:]]\{-}"/
 syn match CPTripleQuote /"""\_.\{-}"""/
 syn match CPSingleQuote /'[^[:space:]]\{-}'/
-syn match CPHashMark /#.*$/
+syn match CPHashMark /\s\+#.*$/
 syn match CPContext /\(^\|\s\+\)@[^[:space:]]\+/
 
 hi link CPTripleQuote PreProc
