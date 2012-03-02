@@ -230,6 +230,9 @@ BUNDLE_ROOT="${ENV_ROOT}/bundles"
 
 export ENV_ROOT DOTFILES_ROOT HG_EXT_ROOT BUNDLE_ROOT
 
+PATH=${PATH}:${ENV_ROOT}/bin
+export PATH
+
 # OS Specific bashrc file inclusion {{{1
 OSNAME=$(uname -s | tr '[A-Z]' '[a-z]')
 OSFILE="${DOTFILES_ROOT}/bashrc.${OSNAME}"
