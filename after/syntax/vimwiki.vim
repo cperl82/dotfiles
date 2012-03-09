@@ -9,7 +9,7 @@ hi link CPTripleQuote PreProc
 hi link CPDoubleQuote Type
 hi link CPSingleQuote Constant
 hi link CPHashMark Comment
-hi link CPContext Comment
+hi link CPContext Directory
 hi link CPBlockQuote NonText
 
 " 2012-02-14
