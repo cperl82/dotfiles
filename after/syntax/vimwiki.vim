@@ -12,7 +12,6 @@ hi link CPHashMark Comment
 hi link CPContext Comment
 hi link CPBlockQuote NonText
 
-
 " 2012-02-14
 " Direct override of what is defined in bundles/vimwiki/syntax/vimwiki.vim.  I
 " use the markdown syntax.  That means headings are represented with '#'.
