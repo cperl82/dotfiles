@@ -174,7 +174,7 @@ vmap ? y?<C-R>=escape('<C-R>"', '?/\[]')<CR><CR>
 " 2012-01-27
 " Make copying to the clipboard easier
 if has("clipboard")
-	vmap <Leader>c "*y<CR>
+	vmap <Leader>c "*y
 endif
 
 " 2011-04-15
