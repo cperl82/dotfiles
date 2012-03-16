@@ -8,3 +8,4 @@ setlocal et tw=79 sw=2 ts=2 softtabstop=2 formatoptions+=t formatoptions-=l conc
 " - some text that is long enough to wrap
 "   actually wrap to the proper indent
 setlocal comments+=fb:- formatoptions+=cq
+setlocal fdm=marker
