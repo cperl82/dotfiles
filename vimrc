@@ -131,7 +131,7 @@ let wiki_0.syntax = 'markdown'
 
 let g:vimwiki_list = [ wiki_0 ]
 let g:vimwiki_camel_case = 0
-let g:vimwiki_folding = 1
+let g:vimwiki_folding = 0
 let g:vimwiki_fold_lists = 0
 
 " Fixup some vimwiki colors
