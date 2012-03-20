@@ -171,6 +171,12 @@ vnoremap / y/<C-R>=escape('<C-R>"', '/\[]')<CR><CR>
 " Escaping `?' is necessary with backward searching
 vnoremap ? y?<C-R>=escape('<C-R>"', '?/\[]')<CR><CR>
 
+" 2012-03-19
+" Make * in visual mode just highlight all occurances instead of jumping to
+" the next match.  Similar to the suggestions here:
+" http://vim.wikia.com/wiki/Highlight_all_search_pattern_matches
+vnoremap <silent> * y:let @/='<C-R>=escape('<C-R>"', '?/\[]')<CR>'<CR>:set hlsearch<CR>
+
 " 2012-01-27
 " Make copying to the clipboard easier
 if has("clipboard")
