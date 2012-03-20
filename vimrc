@@ -167,9 +167,9 @@ endif
 
 " 2011-01-11
 " Map / and ? while in visual mode to search for the highlighted text
-vmap / y/<C-R>=escape('<C-R>"', '/\[]')<CR><CR>
+vnoremap / y/<C-R>=escape('<C-R>"', '/\[]')<CR><CR>
 " Escaping `?' is necessary with backward searching
-vmap ? y?<C-R>=escape('<C-R>"', '?/\[]')<CR><CR>
+vnoremap ? y?<C-R>=escape('<C-R>"', '?/\[]')<CR><CR>
 
 " 2012-01-27
 " Make copying to the clipboard easier
