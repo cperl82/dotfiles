@@ -40,3 +40,13 @@ else
   let g:vimwiki_rxH6 = '^'.g:vimwiki_rxH.'\{6}[^'.g:vimwiki_rxH.']\+.*'
   let g:vimwiki_rxHeader = '^\('.g:vimwiki_rxH.'\{1,6}\)\zs[^'.g:vimwiki_rxH.']\+.*\ze'
 endif
+
+" 2012-03-27
+" Another override from bundles/vimwiki/syntax/vimwiki.vim, I want the header
+" to be able to contain my @context lables but highlight them correctly
+execute 'syntax match VimwikiHeader1 /'.g:vimwiki_rxH1.'/ contains=CPContext,VimwikiTodo,VimwikiHeaderChar,VimwikiNoExistsLink,VimwikiLink,@Spell'
+execute 'syntax match VimwikiHeader2 /'.g:vimwiki_rxH2.'/ contains=CPContext,VimwikiTodo,VimwikiHeaderChar,VimwikiNoExistsLink,VimwikiLink,@Spell'
+execute 'syntax match VimwikiHeader3 /'.g:vimwiki_rxH3.'/ contains=CPContext,VimwikiTodo,VimwikiHeaderChar,VimwikiNoExistsLink,VimwikiLink,@Spell'
+execute 'syntax match VimwikiHeader4 /'.g:vimwiki_rxH4.'/ contains=CPContext,VimwikiTodo,VimwikiHeaderChar,VimwikiNoExistsLink,VimwikiLink,@Spell'
+execute 'syntax match VimwikiHeader5 /'.g:vimwiki_rxH5.'/ contains=CPContext,VimwikiTodo,VimwikiHeaderChar,VimwikiNoExistsLink,VimwikiLink,@Spell'
+execute 'syntax match VimwikiHeader6 /'.g:vimwiki_rxH6.'/ contains=CPContext,VimwikiTodo,VimwikiHeaderChar,VimwikiNoExistsLink,VimwikiLink,@Spell'
