@@ -58,7 +58,11 @@ let g:NERDTreeWinSize = 36
 
 " 2012-01-14
 " Map :NERDTreeFind to an easily accessible key sequence
-nnoremap <silent> ,r :NERDTreeFind<CR>
+nnoremap <silent> <Leader>r :NERDTreeFind<CR>
+
+" 2012-04-26
+" Map :NERDTree to something easier to type
+nnoremap <silent> <Leader>nt :NERDTree<CR>
 
 " 2011-12-31
 " Disable netrw
