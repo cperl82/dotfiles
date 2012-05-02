@@ -54,6 +54,11 @@ function my-slow-log-since
 	# $1 is the host
 	# $2 is the date in YYYY-mm-dd
 
+	if [[ -z "${1}" || -z "${2}" ]]
+	then
+		echo "${FUNCNAME} HOST YYYY-mm-dd"
+		return
+	fi
 	HOST="${1}"
 	# Turn YYYY-mm-dd into YYmmdd like MySQL uses
 	DATE=$(echo "${2}" | tr -d '-' | sed -e 's/^..//')
