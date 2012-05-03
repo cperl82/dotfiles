@@ -116,6 +116,7 @@ nnoremap <C-l> <C-W>l
 " 2011-12-30
 " Easier access to :Kwbd command from plugin/kwbd.vim
 nnoremap <silent> <Leader>bd :Kwbd<CR>
+nnoremap <silent> <Leader>bw :Kwbw<CR>
 
 " 2011-12-15
 " Vimwiki Configuration

@@ -1,17 +1,18 @@
 " 2011-12-27
-" Ripped directly from: http://vim.wikia.com/wiki/Deleting_a_buffer_without_closing_the_window
+" Ripped from:
+" http://vim.wikia.com/wiki/Deleting_a_buffer_without_closing_the_window, but
+" modified to suit my needs
 
 "here is a more exotic version of my original Kwbd script
 "delete the buffer; keep windows; create a scratch buffer if no buffers left
-function s:Kwbd(kwbdStage)
-  if(a:kwbdStage == 1)
+function s:DeleteBuffer(cmd)
     if(!buflisted(winbufnr(0)))
       bd!
       return
     endif
     let s:kwbdBufNum = bufnr("%")
     let s:kwbdWinNum = winnr()
-    windo call s:Kwbd(2)
+    windo call s:ChangeOtherWindows()
     execute s:kwbdWinNum . 'wincmd w'
     let s:buflistedLeft = 0
     let s:bufFinalJump = 0
@@ -20,11 +21,11 @@ function s:Kwbd(kwbdStage)
     while(l:i <= l:nBufs)
       if(l:i != s:kwbdBufNum)
         if(buflisted(l:i))
-          let s:buflistedLeft = s:buflistedLeft + 1
+	let s:buflistedLeft = s:buflistedLeft + 1
         else
-          if(bufexists(l:i) && !strlen(bufname(l:i)) && !s:bufFinalJump)
-            let s:bufFinalJump = l:i
-          endif
+	if(bufexists(l:i) && !strlen(bufname(l:i)) && !s:bufFinalJump)
+	    let s:bufFinalJump = l:i
+	endif
         endif
       endif
       let l:i = l:i + 1
@@ -40,7 +41,7 @@ function s:Kwbd(kwbdStage)
       execute s:kwbdWinNum . 'wincmd w'
     endif
     if(buflisted(s:kwbdBufNum) || s:kwbdBufNum == bufnr("%"))
-      execute "bd! " . s:kwbdBufNum
+      execute printf("%s! %d", a:cmd, s:kwbdBufNum)
     endif
     if(!s:buflistedLeft)
       set buflisted
@@ -48,19 +49,21 @@ function s:Kwbd(kwbdStage)
       set buftype=
       setlocal noswapfile
     endif
-  else
-    if(bufnr("%") == s:kwbdBufNum)
-      let prevbufvar = bufnr("#")
-      if(prevbufvar > 0 && buflisted(prevbufvar) && prevbufvar != s:kwbdBufNum)
-        b #
-      else
-        bn
-      endif
-    endif
-  endif
 endfunction
 
-command! Kwbd call <SID>Kwbd(1)
+function s:ChangeOtherWindows()
+    if(bufnr("%") == s:kwbdBufNum)
+        let prevbufvar = bufnr("#")
+        if(prevbufvar > 0 && buflisted(prevbufvar) && prevbufvar != s:kwbdBufNum)
+            b #
+        else
+            bn
+        endif
+    endif
+endfunction
+
+command! Kwbd call <SID>DeleteBuffer('bd')
+command! Kwbw call <SID>DeleteBuffer('bw')
 "nnoremap <silent> <Plug>Kwbd :<C-u>Kwbd<CR>
 
 " Create a mapping (e.g. in your .vimrc) like this:
