@@ -15,6 +15,9 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
 import XMonad.Layout.NoBorders
+import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.DynamicLog
+import XMonad.Layout.MultiToggle.Instances
 
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
@@ -34,7 +37,7 @@ myBorderWidth   = 1
 -- ("right alt"), which does not conflict with emacs keybindings. The
 -- "windows key" is usually mod4Mask.
 --
-myModMask       = mod1Mask
+myModMask       = mod4Mask
 
 -- The default number of workspaces (virtual screens) and their names.
 -- By default we use numeric strings, but any string may be used as a
@@ -176,7 +179,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = smartBorders tiled ||| Mirror tiled ||| noBorders Full
+myLayout = avoidStruts (smartBorders tiled) ||| avoidStruts (Mirror tiled) ||| noBorders Full
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
@@ -245,7 +248,13 @@ myStartupHook = return ()
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
-main = xmonad defaults
+main = xmonad =<< statusBar myBar myPP toggleStrutsKey defaults
+
+myBar = "xmobar"
+
+myPP = xmobarPP { ppCurrent = xmobarColor "#429942" "" . wrap "<" ">" }
+
+toggleStrutsKey XConfig { XMonad.modMask = modMask } = (modMask, xK_b)
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
