@@ -18,6 +18,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
 import XMonad.Layout.MultiToggle.Instances
+import XMonad.Actions.CycleWS
 
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
@@ -122,6 +123,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- See also the statusBar function from Hooks.DynamicLog.
     --
     -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
+
+    -- Toggle the previous workspace
+    , ((modm, xK_z), toggleWS)
 
     -- Quit xmonad
     , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
