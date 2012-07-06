@@ -101,3 +101,7 @@ remotepassfile = ~/.offlineimap.passwd
 #
 # See http://mail.google.com/support/bin/answer.py?answer=77657&topic=12815
 realdelete = no
+
+# 2012-07-06
+# Adding cert_fingerprint for imap.gmail.com
+cert_fingerprint = f3043dd689a2e7dddfbef82703a6c65ea9b634c1
