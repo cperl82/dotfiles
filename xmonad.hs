@@ -124,8 +124,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     --
     -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
 
-    -- Toggle the previous workspace
+    -- Workspace bindings
     , ((modm, xK_z), toggleWS)
+    , ((modm, xK_Right), nextWS)
+    , ((modm, xK_Left), prevWS)
 
     -- Quit xmonad
     , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
