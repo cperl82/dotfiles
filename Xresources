@@ -1,4 +1,4 @@
-#include ".Xresources.solarized_dark"
-
-URxvt.font: xft:monaco:pixelsize=12
+URxvt.font: xft:monaco:pixelsize=13, \
+            xft:bitstream vera sans mono:pixelsize=13:antialias=true
 URxvt.scrollBar: false
+URxvt.skipBuiltinGlyphs: true
