@@ -52,3 +52,11 @@ then
 	alias ls='ls --color=auto'
 	eval "$(dircolors ~/.dircolors)"
 fi
+
+# URxvt specific setting of font size.  See urxvt(1)
+if [[ "${TERM}" =~ rxvt-unicode.* ]]
+then
+	function fnsz {
+		printf '\e]710;xft:Monaco:pixelsize=%s\007' ${1}
+	}
+fi
