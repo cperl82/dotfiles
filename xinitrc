@@ -1,7 +1,6 @@
 xset +fp /usr/share/fonts/local
 xset fp rehash
 xrdb -merge ~/.Xresources
-xrdb -merge ~/.Xresources.solarized_dark
 xsetroot -solid darkslategrey
 xsetroot -cursor_name left_ptr
 #exec ck-launch-session fvwm
