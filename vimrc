@@ -27,7 +27,9 @@ runtime! ftplugin/man.vim
 
 " colorscheme asmdev
 " colorscheme norwaytoday
-if &term == "rxvt-unicode"
+if (&term == "rxvt-unicode") || ($COLORTERM =~ 'rxvt.*')
+	" the first check catches normal urxvt, the second catches screen
+	" inside urxvt
 	set bg=dark
 	colorscheme solarized
 elseif	&term =~ ".*256color"
