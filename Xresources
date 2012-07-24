@@ -2,6 +2,7 @@ URxvt.font: xft:monaco:pixelsize=10, \
             xft:bitstream vera sans mono:pixelsize=10:antialias=true
 URxvt.scrollBar: false
 URxvt.skipBuiltinGlyphs: true
+URxvt.cursorUnderline: true
 
 
 !! drop in Solarized colorscheme for Xresources/Xdefaults
