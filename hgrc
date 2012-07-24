@@ -17,7 +17,7 @@ hgext.rebase=
 hgext.transplant=
 hgext.mq=
 hgext.purge=
-hgext.hg-git=${HG_EXT_ROOT}/hg-git/hggit
+#hgext.hg-git=${HG_EXT_ROOT}/hg-git/hggit
 #hgext.hgsubversion=${HG_EXT_ROOT}/hgsubversion/hgsubversion
 #hgext.hg_histedit=${HG_EXT_ROOT}/histedit/hg_histedit.py
 
