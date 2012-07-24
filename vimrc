@@ -267,3 +267,10 @@ function! s:ExecuteInShell(command)
 	echo 'Shell command ' . command . ' executed.'
 endfunction
 command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
+
+" 2012-07-24
+" Source a local vimrc to allow environment specific overrides
+let g:local_rc_file = $HOME . "/.vimrc.local"
+if filereadable(g:local_rc_file)
+	exec printf("source %s", g:local_rc_file)
+endif
