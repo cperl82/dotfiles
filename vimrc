@@ -27,7 +27,10 @@ runtime! ftplugin/man.vim
 
 " colorscheme asmdev
 " colorscheme norwaytoday
-if &term =~ ".*256color"
+if &term == "rxvt-unicode"
+	set bg=dark
+	colorscheme solarized
+elseif	&term =~ ".*256color"
 	colorscheme xoria256
 else
 	colorscheme ir_black
