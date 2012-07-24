@@ -70,6 +70,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch gmrun
     , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
 
+    -- activate xscreensaver
+    , ((modm,               xK_x     ), spawn "xscreensaver-command -a")
+
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
 
