@@ -217,6 +217,8 @@ myLayout = avoidStruts (smartBorders tiled) ||| avoidStruts (Mirror tiled) ||| n
 myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
     , className =? "Gimp"           --> doFloat
+    , className =? "Pidgin"         --> doFloat
+    , className =? "Vlc"            --> doFloat
     , resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore ]
 
