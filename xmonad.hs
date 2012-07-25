@@ -18,6 +18,8 @@ import XMonad.Layout.NoBorders
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
 import XMonad.Layout.MultiToggle.Instances
+import XMonad.Layout.PerWorkspace
+import XMonad.Layout.Reflect
 import XMonad.Actions.CycleWS
 
 -- The preferred terminal program, which is used in a binding below and by
@@ -121,6 +123,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Deincrement the number of windows in the master area
     , ((modm              , xK_period), sendMessage (IncMasterN (-1)))
 
+    -- From XMonad.Layout.Reflect, ability to swap master window left/right up/down
+    -- , ((modm .|. controlMask, xK_x), sendMessage $ Toggle REFLECTX)
+    -- , ((modm .|. controlMask, xK_y), sendMessage $ Toggle REFLECTY)
+
     -- Toggle the status bar gap
     -- Use this binding with avoidStruts from Hooks.ManageDocks.
     -- See also the statusBar function from Hooks.DynamicLog.
@@ -188,7 +194,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = avoidStruts (smartBorders tiled) ||| avoidStruts (Mirror tiled) ||| noBorders Full
+myLayout = modWorkspace "1" reflectHoriz (avoidStruts (smartBorders tiled) ||| avoidStruts (Mirror tiled) ||| noBorders Full)
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
