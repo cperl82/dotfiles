@@ -1,5 +1,6 @@
 xset +fp /usr/share/fonts/local
 xset fp rehash
+xset -b
 xrdb -merge ~/.Xresources
 xsetroot -solid darkslategrey
 xsetroot -cursor_name left_ptr
