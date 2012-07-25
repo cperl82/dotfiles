@@ -59,21 +59,13 @@ function! NERDTreeEchoPathAbsolute(node)
 endfunction
 
 function! NERDTreeCopyPathToClipboardAbsolute(node)
-	if has("macunix")
-		if v:version >= 703
-			call setreg('*', a:node.path.str())
-		else
-			exec printf("silent !echo -n %s | pbcopy", a:node.path.str())
-		endif
+	if has("clipboard")
+		call setreg('*', a:node.path.str())
 	endif
 endfunction
 
 function! NERDTreeCopyPathToClipboardRelative(node)
-	if has("macunix")
-		if v:version >= 703
-			call setreg('*', fnamemodify(a:node.path.str(), ':.'))
-		else
-			exec printf("silent !echo -n %s | pbcopy", fnamemodify(a:node.path.str(), ':.'))
-		endif
+	if has("clipboard")
+		call setreg('*', fnamemodify(a:node.path.str(), ':.'))
 	endif
 endfunction
