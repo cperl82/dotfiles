@@ -1,0 +1,4 @@
+#include ".Xresources.solarized_dark"
+
+URxvt.font: xft:monaco:pixelsize=12
+URxvt.scrollBar: false
