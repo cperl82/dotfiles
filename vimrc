@@ -76,33 +76,9 @@ nnoremap <silent> <Leader>nt :NERDTree<CR>
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
 
-" Automatically open NERDTree if its a directory
-"augroup CPTest
-"autocmd CPTest VimEnter * call s:OpenNERDTreeIfDirectory(expand("<amatch>"))
-"augroup NONE
-
-function! s:OpenNERDTreeIfDirectory(arg)
-	echo "s:OpenNERDTreeIfDirectory called with arg " . a:arg
-	let l:dir = fnameescape(a:arg)
-	if isdirectory(l:dir)
-		let l:bufnum = bufnr(a:arg)
-		exec ":bwipe " . l:bufnum
-		exec ":NERDTree " . a:arg
-	endif
-endfunction
-
 " 2011-12-25
 " Trying to use buffers instead of tab pages
 set hidden
-
-" Make sure that minibufexpl does not try to open a buffer in a window
-" occupied by a buffer where &modifiable is not set
-" 2012-01-09
-" Disabling MiniBufExplorer and trying plain old Bufexplorer
-let loaded_minibufexplorer = 1
-let g:miniBufExplModSelTarget = 1
-let g:miniBufExplorerMoreThanOne = 2
-let g:miniBufExplMapWindowNavVim = 1
 
 " 2012-01-09
 " Bufexplorer settings
@@ -147,9 +123,6 @@ let g:vimwiki_fold_lists = 0
 
 " Fixup some vimwiki colors
 hi link VimwikiNoExistsLink Comment
-
-" Fixup conflicts with Quicksilver (<C-Space> already used)
-map <leader>tt <Plug>VimwikiToggleListItem
 
 " 2011-02-11
 " Emacs style command line editing slightly modified
@@ -222,52 +195,6 @@ let g:vimsyn_noerror = 1
 " netrw tries to figure it out itself.
 " See /opt/local/share/vim/vim73/autoload/netrw.vim
 let g:netrw_home = $HOME . "/.netrwhist"
-
-" 2011-05-04
-" Playing around with making it easier to deal with sessions with vim
-function! s:SaveOrCreateSession()
-	let session_dir = '~/.vim/sessions'
-
-	if v:this_session != ""
-		" Session already exists just resave it
-		let cmd = printf("mksession! %s", v:this_session)
-		execute cmd
-	else
-		" Prompt for a new session name and store it in
-		" ~/.vim/sessions
-		if glob(session_dir) == ""
-			call mkdir(fnamemodify(session_dir, ":p"), "")
-		endif
-		let name = input("Enter a name for this session: ")	
-		if name != ""
-			let cmd = printf("mksession! %s", session_dir . '/' . name . '.vim')
-			execute cmd
-		endif
-	endif
-	if v:this_session != ""
-		echo "Session saved as: " . v:this_session
-	endif
-endfunction
-command! -nargs=0 SaveOrCreateSession call s:SaveOrCreateSession()
-nmap <Leader>s :SaveOrCreateSession<CR>
-
-" 2011-03-15
-" Playing around with better ways to get shell output into vim
-" http://vim.wikia.com/wiki/Display_output_of_shell_commands_in_new_window
-function! s:ExecuteInShell(command)
-	let command = join(map(split(a:command), 'expand(v:val)'))
-	let winnr = bufwinnr('^' . command . '$')
-	silent! execute  winnr < 0 ? 'botright new ' . fnameescape(command) : winnr . 'wincmd w'
-	setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap number
-	echo 'Execute ' . command . '...'
-	silent! execute 'silent %!'. command
-	silent! execute 'resize ' . line('$')
-	silent! redraw
-	silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
-	silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>'
-	echo 'Shell command ' . command . ' executed.'
-endfunction
-command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
 
 " 2012-07-24
 " http://stackoverflow.com/questions/2586984/how-can-i-swap-positions-of-two-open-files-in-splits-in-vim
