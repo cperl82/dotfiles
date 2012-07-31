@@ -3,6 +3,7 @@ call pathogen#infect($BUNDLE_ROOT)
 
 " Change the default leader key
 let mapleader = ","
+let maplocalleader = ","
 
 " Enable file type detection, all three modes
 " detection, indent, plugin.  See :help filetype
