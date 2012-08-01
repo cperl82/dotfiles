@@ -225,3 +225,14 @@ let g:local_rc_file = $HOME . "/.vimrc.local"
 if filereadable(g:local_rc_file)
 	exec printf("source %s", g:local_rc_file)
 endif
+
+" 2012-08-01
+" Just noticed this "recentering" while using the ocaml plugin to view types,
+" but its really annoying.
+" http://vim.wikia.com/wiki/Avoid_scrolling_when_switch_buffers
+" When switching buffers, preserve window view.
+if v:version >= 700
+    au BufLeave * let b:winview = winsaveview()
+    au BufEnter * if exists('b:winview') | call winrestview(b:winview) | endif
+    endif
+2012-08-01
