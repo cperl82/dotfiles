@@ -232,6 +232,6 @@ endif
 " http://vim.wikia.com/wiki/Avoid_scrolling_when_switch_buffers
 " When switching buffers, preserve window view.
 if v:version >= 700
-    au BufLeave * let b:winview = winsaveview()
-    au BufEnter * if exists('b:winview') | call winrestview(b:winview) | endif
+    au BufLeave *.ml,*.mli let b:winview = winsaveview()
+    au BufEnter *.ml,*.mli if exists('b:winview') | call winrestview(b:winview) | endif
 endif
