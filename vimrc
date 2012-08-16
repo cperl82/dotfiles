@@ -235,3 +235,12 @@ if v:version >= 700
     au BufLeave *.ml,*.mli let b:winview = winsaveview()
     au BufEnter *.ml,*.mli if exists('b:winview') | call winrestview(b:winview) | endif
 endif
+
+" 2012-08-16
+" Keep find myself wanting a shortcut to echo the path of the current file
+" while not in NERDTree.  Note that this conflicts with mappings I have setup
+" for NERDTree buffers that basically do the same thing (except they are
+" operating on a NERDTree node, not a buffer).  But thats fine because
+" NERDTree will override this global mapping and it "just works".
+nnoremap <silent> <leader>e :echo expand("%")<CR>
+nnoremap <silent> <leader>E :echo expand("%:p")<CR>
