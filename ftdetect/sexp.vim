@@ -1,1 +1,1 @@
-au BufNewFile,BufRead *.sexp set filetype=lisp
+au BufNewFile,BufRead *.sexp set filetype=scheme
