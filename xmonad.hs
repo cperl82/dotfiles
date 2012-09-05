@@ -17,6 +17,7 @@ import qualified Data.Map        as M
 import XMonad.Layout.NoBorders
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.MultiToggle.Instances
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.Reflect
@@ -270,7 +271,8 @@ main = xmonad =<< statusBar myBar myPP toggleStrutsKey defaults
 
 myBar = "xmobar"
 
-myPP = xmobarPP { ppCurrent = xmobarColor "#429942" "" . wrap "<" ">" }
+myPP = xmobarPP { ppCurrent = xmobarColor "#429942" "" . wrap "<" ">",
+                  ppUrgent  = xmobarColor "red" "" }
 
 toggleStrutsKey XConfig { XMonad.modMask = modMask } = (modMask, xK_b)
 
@@ -280,7 +282,7 @@ toggleStrutsKey XConfig { XMonad.modMask = modMask } = (modMask, xK_b)
 --
 -- No need to modify this.
 --
-defaults = defaultConfig {
+defaults = withUrgencyHook NoUrgencyHook defaultConfig {
       -- simple stuff
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
