@@ -15,6 +15,7 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
 import XMonad.Layout.NoBorders
+import XMonad.Layout.Minimize
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.UrgencyHook
@@ -134,6 +135,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     --
     -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
 
+    -- Minimize
+    , ((modm,               xK_m     ), withFocused minimizeWindow)
+    , ((modm .|. shiftMask, xK_m     ), sendMessage RestoreNextMinimizedWin)
+
     -- Workspace bindings
     , ((modm, xK_z), toggleWS)
     , ((modm, xK_Right), nextWS)
@@ -195,7 +200,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = modWorkspace "1" reflectHoriz (avoidStruts (smartBorders tiled) ||| avoidStruts (Mirror tiled) ||| noBorders Full)
+myLayout = minimize (modWorkspace "1" reflectHoriz (avoidStruts (smartBorders tiled) ||| avoidStruts (Mirror tiled) ||| noBorders Full))
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
