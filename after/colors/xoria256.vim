@@ -10,5 +10,7 @@ if !has("gui")
 	hi link bufExplorerSplit Normal
 	hi link bufExplorerTitle Normal
 	hi link bufExplorerHidBuf Normal
+else
+	hi link NERDTReeDir Statement
 endif
 
