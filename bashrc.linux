@@ -60,3 +60,6 @@ then
 		printf '\e]710;xft:Monaco:pixelsize=%s\007' ${1}
 	}
 fi
+
+# 2012-10-24: convient alias for other ps invocations
+alias pse='ps -eo pid,tid,class,rtprio,ni,pri,psr,pcpu,stat,wchan:14,args'
