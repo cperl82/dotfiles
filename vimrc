@@ -19,6 +19,7 @@ set autoindent
 set number
 set numberwidth=4
 set incsearch
+set showcmd
 
 " Turn on search highlighting
 set hlsearch
