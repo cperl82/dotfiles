@@ -74,6 +74,7 @@ bind pager ? search-reverse
 bind pager N search-opposite
 macro index zc "<collapse-thread>" "Macro to emulate VIM folding commands"
 macro index zo "<collapse-thread>" "Macro to emulate VIM folding commands"
+macro index <space> "<collapse-thread>" "Macro to expand/collapse a thread"
 
 # For marking messages in LKML read (as I can't possibly keep up with them all)
 #  T: Tag messages matching pattern
