@@ -201,10 +201,10 @@ if test "${TERM}" = "screen" -o \
 	}
 fi
 
-# ackl - function wrapper for use with ack (http://www.betterthangrep.com/)
+# lack - function wrapper for use with ack (http://www.betterthangrep.com/)
 # to output to less -R.  I don't always want this, but want it easily available
 # when I do.
-function ackl
+function lack
 {
 	ack --pager='less -R' "$@"
 }
