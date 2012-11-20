@@ -101,6 +101,12 @@ nnoremap <C-l> <C-W>l
 nnoremap <silent> <Leader>bd :Kwbd<CR>
 nnoremap <silent> <Leader>bw :Kwbw<CR>
 
+" 2012-11-20
+" Easier tab jumping
+for i in range(1,12)
+	exec printf("nnoremap <silent> <F%d> :%dtabn<CR>", i, i)
+endfor
+
 " 2011-12-15
 " Vimwiki Configuration
 let wiki_0 = {}
