@@ -79,6 +79,9 @@ function path-canonical() {
 
 	dst="$(path-canonical-simple "${1}")"
 
+	# Strip an potential trailing slash
+	dst="${dst%/}"
+
 	while [[ -h "${dst}" ]]; do
 		local link_dst="$(ls -l "${dst}" | sed -e 's/^.*[ \t]*->[ \t]*\(.*\)[ \t]*$/\1/g')"
 		if   [[ "${link_dst}" =~ ^..$ ]]; then
@@ -94,6 +97,10 @@ function path-canonical() {
 			# relative symlink
 			dst="$(dirname "${dst}")/${link_dst}"
 		fi
+
+		# Strip an potential trailing slash as it can cause `test -h' to
+		# fail
+		dst="${dst%/}"
 	done
 	# This call IS necessary as the traversal of symlinks above in the while
 	# loop may have introduced additional symlinks into the path where the
