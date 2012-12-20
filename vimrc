@@ -131,6 +131,13 @@ let g:vimwiki_fold_lists = 0
 " Fixup some vimwiki colors
 hi link VimwikiNoExistsLink Comment
 
+" 2012-12-20 Embedded syntax highlighting for markdown filetype via tpope's
+" vim-markdown: https://github.com/tpope/vim-markdown
+let g:markdown_fenced_languages = [ "python", "ruby", "sh", "ocaml", "java" ]
+
+" 2012-12-20 I almost always am looking at bash code
+let g:is_bash = 1
+
 " 2011-02-11
 " Emacs style command line editing slightly modified
 " :help emacs-keys
