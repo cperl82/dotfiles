@@ -95,8 +95,6 @@ function path-canonical() {
 			# relative symlink
 			dst="$(dirname "${dst}")/${link_dst}"
 		fi
-
-		dst="${dst%/}"
 	done
 	# This call IS necessary as the traversal of symlinks above in the while
 	# loop may have introduced additional symlinks into the path where the
