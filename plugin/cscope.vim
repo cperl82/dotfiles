@@ -30,6 +30,11 @@ if has("cscope")
 
     """"""""""""" Standard cscope/vim boilerplate
 
+    " 2012-12-19: Work around for the fact that fedora includes similar bits
+    " in their /etc/vimrc, which causes this plugin to attempt to add a
+    " `duplicate' database.  Annoying.
+    set nocscopeverbose
+
     " use both cscope and ctag for 'ctrl-]', ':ta', and 'vim -t'
     set cscopetag
 
