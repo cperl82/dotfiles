@@ -34,8 +34,14 @@ if (&term == "rxvt-unicode") || ($COLORTERM =~ 'rxvt.*')
 	" inside urxvt
 	set bg=dark
 	colorscheme solarized
-elseif	&term =~ ".*256color"
+elseif	&term =~ "xterm-256color"
 	colorscheme xoria256
+elseif  &term =~ "screen-256color"
+	colorscheme xoria256
+	set <xUp>=[1;*A
+	set <xDown>=[1;*B
+	set <xLeft>=[1;*D
+	set <xRight>=[1;*C
 else
 	colorscheme ir_black
 endif
