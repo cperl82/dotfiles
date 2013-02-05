@@ -113,6 +113,11 @@ for i in range(1,12)
 	exec printf("nnoremap <silent> <F%d> :%dtabn<CR>", i, i)
 endfor
 
+" 2013-02-05
+" Easier tab moving
+nnoremap <silent> <C-Left>  :tabp<CR>
+nnoremap <silent> <C-Right> :tabn<CR>
+
 " 2011-12-15
 " Vimwiki Configuration
 let wiki_0 = {}
