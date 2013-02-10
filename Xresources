@@ -4,6 +4,10 @@ URxvt.font: -xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*, \
 URxvt.scrollBar: false
 URxvt.skipBuiltinGlyphs: true
 URxvt.cursorUnderline: false
+URxvt.keysym.C-Up:  \033[1;5A
+URxvt.keysym.C-Down:  \033[1;5B
+URxvt.keysym.C-Left:  \033[1;5D
+URxvt.keysym.C-Right: \033[1;5C
 
 
 !! drop in Solarized colorscheme for Xresources/Xdefaults
