@@ -61,5 +61,33 @@ then
 	}
 fi
 
+if [[ "${TERM}" =~ xterm.* ]]
+then
+	function xterm-colorscheme {
+		local filename="${1}"
+		awk '
+		$1 ~ /^#define/ { defines[$2] = $3 }
+		$1 ~ /^(XTerm|\*).*foreground:$/ {
+			if ($2 in defines) {
+				what=defines[$2]
+			}
+			else {
+				what=$2
+			}
+			printf("\033]10;%s\007", what);
+		}
+		$1 ~ /^(XTerm|\*).*background:$/ {
+			if ($2 in defines) {
+				what=defines[$2]
+			}
+			else {
+				what=$2
+			}
+			printf("\033]11;%s\007", what);
+		}
+		' ${filename}
+	}
+fi
+
 # 2012-10-24: convient alias for other ps invocations
 alias pse='ps -eo pid,ppid,tid,class,rtprio,ni,pri,vsz,rss,psr,pcpu,stat,wchan:25,args'
