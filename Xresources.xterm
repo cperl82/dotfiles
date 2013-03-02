@@ -3,6 +3,7 @@ XTerm.termName: xterm-256color
 XTerm.vt100.scrollBar: false
 XTerm*on2Clicks: regex [-_.[:alpha:][:digit:]]+
 XTerm*on3Clicks: regex [^ 	\n]+
+XTerm*on4Clicks: line
 
 
 !! drop in Solarized colorscheme for Xresources/Xdefaults
