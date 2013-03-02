@@ -1,5 +1,6 @@
 xset -b
-xrdb -merge ~/.Xresources
+xrdb -merge ~/.dotfiles/Xresources.urxvt
+xrdb -merge ~/.dotfiles/Xresources.xterm
 xsetroot -solid darkslategrey
 xsetroot -cursor_name left_ptr
 #exec ck-launch-session fvwm
