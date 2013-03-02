@@ -1,6 +1,7 @@
 XTerm*font: -xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*
 XTerm.termName: xterm-256color
 XTerm.vt100.scrollBar: false
+XTerm*on3Clicks: regex [^ 	\n]+
 
 
 !! drop in Solarized colorscheme for Xresources/Xdefaults
