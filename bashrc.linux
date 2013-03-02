@@ -65,27 +65,44 @@ if [[ "${TERM}" =~ xterm.* ]]
 then
 	function xterm-colorscheme {
 		local filename="${1}"
-		awk '
-		$1 ~ /^#define/ { defines[$2] = $3 }
-		$1 ~ /^(XTerm|\*).*foreground:$/ {
-			if ($2 in defines) {
-				what=defines[$2]
-			}
-			else {
-				what=$2
-			}
-			printf("\033]10;%s\007", what);
-		}
-		$1 ~ /^(XTerm|\*).*background:$/ {
-			if ($2 in defines) {
-				what=defines[$2]
-			}
-			else {
-				what=$2
-			}
-			printf("\033]11;%s\007", what);
-		}
-		' ${filename}
+		declare -A defines
+
+		cat "${filename}" | while read line
+		do
+			if [[ "${line}" =~ ^#define ]]
+			then
+				read _ key value <<< "${line}"
+				defines[${key}]=${value}
+				continue
+			elif [[ "${line}" =~ ^(XTerm|\*) ]]
+			then
+				read key value <<< "${line}"
+				if [[ "${key}" =~ foreground:$ ]]
+				then
+					op="10"
+				elif [[ "${key}" =~ background:$ ]]
+				then
+					op="11"
+				elif [[ "${key}" =~ color[0-9]+:$ ]]
+				then
+					color=$(echo "${key}" | sed -e 's/^.*color\([0-9][0-9]*\).*$/\1/')
+					op="4;${color}"
+				else
+					continue
+				fi
+
+				if [[ -n "${defines[${value}]}" ]]
+				then
+					what="${defines[$value]}"
+				else
+					what="${value}"
+				fi
+				printf "\033]%s;%s\007" "${op}" "${what}"
+
+			else
+				true
+			fi
+		done
 	}
 fi
 
