@@ -64,9 +64,18 @@ fi
 if [[ "${TERM}" =~ xterm.* ]]
 then
 	function xterm-colorscheme {
+		# The idea of this function is to take a .Xresouces or .Xdefaults file as input and
+		# look through it for resources that would affect the way XTerm looks.  Then, when
+		# we find them, emit the XTerm escape sequences to set those things dynamically.
+		#
+		# I'm sure I'm missing some things, but this seems to work relatively well in giving
+		# me a way to dynamically change the XTerm colorscheme.
 		local filename="${1}"
 		declare -A defines
 
+		# Escape sequences are documented in xterm source in `ctlseqs.ms' (or after
+		# processing with nroff in `ctlseqs.txt').
+		# Also available here: http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
 		cat "${filename}" | while read line
 		do
 			if [[ "${line}" =~ ^#define ]]
@@ -76,13 +85,20 @@ then
 				continue
 			elif [[ "${line}" =~ ^(XTerm|\*) ]]
 			then
+				additional=""
 				read key value <<< "${line}"
-				if [[ "${key}" =~ foreground:$ ]]
+				if   [[ "${key}" =~ foreground:$ ]]
 				then
 					op="10"
+					# Additional is to set the highlight background color to the
+					# current foreground color (i.e. reverse video)
+					additional="printf \"\033]17;%s\007\" \"\${what}\""
 				elif [[ "${key}" =~ background:$ ]]
 				then
 					op="11"
+					# Additional is to set the highlight foreground color to the
+					# current background color (i.e. reverse video)
+					additional="printf \"\033]19;%s\007\" \"\${what}\""
 				elif [[ "${key}" =~ color[0-9]+:$ ]]
 				then
 					color=$(echo "${key}" | sed -e 's/^.*color\([0-9][0-9]*\).*$/\1/')
@@ -97,10 +113,12 @@ then
 				else
 					what="${value}"
 				fi
+
 				printf "\033]%s;%s\007" "${op}" "${what}"
+				[[ -n "${additional}" ]] && eval ${additional}
 
 			else
-				true
+				continue
 			fi
 		done
 	}
