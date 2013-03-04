@@ -205,8 +205,8 @@ nfs3-capture-filter-for-host () {
 				for (n in a)
 					printf("%d\n", n)
 			}
-		' | \
-		sed -e 's/^/port /')
+		  ' | \
+		  sed -e 's/^/port /')
 	)
 	IFS="|"
 	printf "host %s and (%s)\n" "${host}" "${ports[*]}" | sed -e 's/|/ or /g'
