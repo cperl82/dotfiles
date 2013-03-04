@@ -184,6 +184,35 @@ nhl-schedule () {
 	rm -f "${TMPFILE}"
 }
 
+# NFSv3 Capture Filter {{{2
+# Generate tcpdump capture filter for host running nfsv3
+nfs3-capture-filter-for-host () {
+	local host="${1}"
+	if [[ -z "${host}" ]]
+	then
+		echo "nfs3-capture-filter-for-host hostname"
+		return
+	fi
+	OFS="${IFS}"
+	IFS=$'\n'
+	ports=(
+		$(rpcinfo -p "${host}" | \
+		  awk '
+			$4 ~ /[0-9]+/ {
+				a[$4] = 1;
+			}
+			END {
+				for (n in a)
+					printf("%d\n", n)
+			}
+		' | \
+		sed -e 's/^/port /')
+	)
+	IFS="|"
+	printf "host %s and (%s)\n" "${host}" "${ports[*]}" | sed -e 's/|/ or /g'
+	IFS="${OFS}"
+}
+
 # Misc Stuff {{{1
 
 # vim - function wrapper for use with screen {{{2
