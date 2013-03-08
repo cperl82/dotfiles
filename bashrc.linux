@@ -125,4 +125,4 @@ then
 fi
 
 # 2012-10-24: convient alias for other ps invocations
-alias pse='ps -eo pid,ppid,tid,class,rtprio,ni,pri,vsz,rss,psr,pcpu,stat,wchan:25,args'
+alias pse='ps -eo pid,ppid,tid,class,rtprio,ni,pri,etime,vsz,rss,psr,pcpu,stat,wchan:25,args'
