@@ -124,5 +124,21 @@ then
 	}
 fi
 
-# 2012-10-24: convient alias for other ps invocations
-alias pse='ps -eo pid,ppid,tid,class,rtprio,ni,pri,etime,vsz,rss,psr,pcpu,stat,wchan:25,args'
+# 2013-03-08: convert pse alias to function
+function pse () {
+	local args=("${@}")
+	local selector=0
+
+	for i in "${args[@]}"
+	do
+		if [[ "${i}" == "-t" || "${i}" == "-u" ]]
+		then
+			selector=1
+			break
+		fi
+	done
+
+	[[ "${selector}" -eq 0 ]] && args=("${args[@]}" "-e")
+	cmd=$(printf "ps -o user,pid,ppid,tid,class,rtprio,ni,pri,bsdstart,vsz,rss,psr,pcpu,stat,wchan:25,args %s" "${args[*]}")
+	eval "${cmd}"
+}
