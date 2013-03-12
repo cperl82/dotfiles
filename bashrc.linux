@@ -139,6 +139,6 @@ function pse () {
 	done
 
 	[[ "${selector}" -eq 0 ]] && args=("${args[@]}" "-e")
-	cmd=$(printf "ps -o user,pid,ppid,tid,class,rtprio,ni,pri,bsdstart,vsz,rss,psr,pcpu,stat,wchan:25,args %s" "${args[*]}")
+	cmd=$(printf "ps -o user,pid,ppid,tid,class,rtprio,ni,pri,bsdstart,vsz,rss,psr,pcpu,stat,wchan:25,tty,args %s" "${args[*]}")
 	eval "${cmd}"
 }
