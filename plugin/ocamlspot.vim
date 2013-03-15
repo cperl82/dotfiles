@@ -1,4 +1,15 @@
-let s:ocamlspot = "/janelibs/ocaml-4.00.1+jane3/bin/ocamlspot.opt"
+" Find ocamlspot.opt
+let s:buildinfo = printf("%s/.omake-ocaml-bin", system("hg root | tr -d '\n'"))
+if exists("g:ocamlspot")
+	" User override
+	let s:ocamlspot = g:ocamlspot
+elseif filereadable(s:buildinfo)
+	" Get it from the build environment (Jane Street Specific)
+	let s:ocamlspot = printf("%s/ocamlspot.opt", system(printf("cat %s | tr -d '\n'", s:buildinfo)))
+else
+	" Assume its somewhere in our path
+	let s:ocamlspot = "ocamlspot.opt"
+endif
 
 function! s:OcamlSpotCommand()
 	let buf    = bufname("%")
