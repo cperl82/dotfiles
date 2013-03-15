@@ -1,6 +1,6 @@
 let s:ocamlspot = "/janelibs/ocaml-4.00.1+jane3/bin/ocamlspot.opt"
 
-function! s:SpotCommand()
+function! s:OcamlSpotCommand()
 	let buf    = bufname("%")
 	let path   = fnamemodify(buf, ":p")
 	let pos    = getpos(".")
@@ -14,7 +14,7 @@ function! s:SpotCommand()
 endfunction
 
 function! s:Spot()
-	let cmd = s:SpotCommand()
+	let cmd = s:OcamlSpotCommand()
 	let out = system(cmd)
 	echo out
 
@@ -33,7 +33,7 @@ function! s:Spot()
 endfunction
 
 function! s:Type()
-	let cmd = s:SpotCommand()
+	let cmd = s:OcamlSpotCommand()
 	let out = system(cmd)
 	echo out
 
