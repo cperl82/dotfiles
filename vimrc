@@ -93,7 +93,7 @@ let g:bufExplorerDetailedHelp = 1
 let g:bufExplorerSortBy = 'fullpath'
 let g:bufExplorerShowTabBuffer = 0
 let g:bufExplorerShowRelativePath = 1
-let g:bufExplorerJumpToCurBufLine = 1
+let g:bufExplorerShowNoName = 1
 
 " 2012-01-09
 " Window movement commands
