@@ -24,6 +24,15 @@ set showcmd
 " Turn on search highlighting
 set hlsearch
 
+" 2011-12-25
+" Trying to use buffers instead of tab pages
+set hidden
+
+" 2013-04-10
+" I seem to always want these, so I'm trying them out
+set splitbelow
+set splitright
+
 " Use the man.vim plugin if its available
 runtime! ftplugin/man.vim
 
@@ -82,10 +91,6 @@ nnoremap <silent> <Leader>nt :NERDTree<CR>
 " :help netrw-noload
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
-
-" 2011-12-25
-" Trying to use buffers instead of tab pages
-set hidden
 
 " 2012-01-09
 " Bufexplorer settings
