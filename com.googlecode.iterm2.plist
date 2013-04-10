@@ -4,7 +4,11 @@
 <dict>
 	<key>AFRStrokeThickness</key>
 	<real>-0.10000000149011612</real>
+	<key>AdjustWindowForFontSizeChange</key>
+	<true/>
 	<key>AdvancedFontRendering</key>
+	<false/>
+	<key>AllowClipboardAccess</key>
 	<false/>
 	<key>AnimateDimming</key>
 	<false/>
@@ -14,6 +18,8 @@
 	<integer>0</integer>
 	<key>AppleSmoothFixedFontsSizeThreshold</key>
 	<integer>1</integer>
+	<key>AutoHideTmuxClientSession</key>
+	<false/>
 	<key>CheckTestRelease</key>
 	<true/>
 	<key>ClosingHotkeySwitchesSpaces</key>
@@ -511,18 +517,33 @@
 	<false/>
 	<key>MinimumContrast</key>
 	<real>0.0</real>
+	<key>NSFontPanelAttributes</key>
+	<string>1, 0</string>
 	<key>NSNavBrowserPreferedColumnContentWidth</key>
 	<real>186</real>
-	<key>NSNavLastCurrentDirectory</key>
-	<string>~/Downloads/solarized/iterm2-colors-solarized</string>
 	<key>NSNavLastRootDirectory</key>
-	<string>~</string>
+	<string>~/Desktop</string>
 	<key>NSNavPanelExpandedSizeForOpenMode</key>
 	<string>{743, 450}</string>
 	<key>NSQuotedKeystrokeBinding</key>
 	<string></string>
 	<key>NSRepeatCountBinding</key>
 	<string></string>
+	<key>NSScrollAnimationEnabled</key>
+	<false/>
+	<key>NSTableView Columns KeyBingingTable</key>
+	<array>
+		<data>
+		BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU1N0cmluZwGEhAhOU09iamVjdACF
+		hAErATCG
+		</data>
+		<string>198</string>
+		<data>
+		BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU1N0cmluZwGEhAhOU09iamVjdACF
+		hAErATGG
+		</data>
+		<string>319</string>
+	</array>
 	<key>NSTableView Columns NSNavOutlineColumnSearchSettings</key>
 	<array>
 		<data>
@@ -609,6 +630,8 @@
 		</data>
 		<string>60</string>
 	</array>
+	<key>NSTableView Hidden Columns KeyBingingTable</key>
+	<array/>
 	<key>NSTableView Hidden Columns NSNavOutlineColumnSearchSettings</key>
 	<array>
 		<data>
@@ -663,6 +686,8 @@
 		hAErDHBoeXNpY2FsU2l6ZYY=
 		</data>
 	</array>
+	<key>NSTableView Sort Ordering KeyBingingTable</key>
+	<array/>
 	<key>NSTableView Sort Ordering NSNavOutlineColumnSearchSettings</key>
 	<array>
 		<data>
@@ -680,19 +705,19 @@
 		<true/>
 	</array>
 	<key>NSWindow Frame Preferences</key>
-	<string>930 231 605 485 0 0 2560 1418 </string>
+	<string>930 231 924 485 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>1539 247 991 1098 0 0 2560 1418 </string>
+	<string>586 224 1214 933 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>173 90 1768 1113 0 0 2560 1418 </string>
+	<string>14 958 570 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>216 167 1019 1023 0 0 2560 1418 </string>
+	<string>204 300 570 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
-	<string>493 238 1019 963 0 0 2560 1418 </string>
+	<string>1875 753 570 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
-	<string>311 71 1089 768 0 0 2560 1418 </string>
+	<string>536 721 585 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 5</key>
-	<string>314 149 2104 1233 0 0 2560 1418 </string>
+	<string>314 284 857 1098 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 6</key>
 	<string>593 53 585 423 0 0 2560 1418 </string>
 	<key>New Bookmarks</key>
@@ -2571,12 +2596,47 @@
 	<false/>
 	<key>OpenBookmark</key>
 	<false/>
+	<key>OpenTmuxWindowsIn</key>
+	<integer>0</integer>
 	<key>PMPrintingExpandedStateForPrint</key>
 	<false/>
 	<key>PassOnControlClick</key>
 	<false/>
 	<key>PasteFromClipboard</key>
 	<true/>
+	<key>PointerActions</key>
+	<dict>
+		<key>Button,1,1,,</key>
+		<dict>
+			<key>Action</key>
+			<string>kContextMenuPointerAction</string>
+		</dict>
+		<key>Button,2,1,,</key>
+		<dict>
+			<key>Action</key>
+			<string>kPasteFromClipboardPointerAction</string>
+		</dict>
+		<key>Gesture,ThreeFingerSwipeDown,,</key>
+		<dict>
+			<key>Action</key>
+			<string>kPrevWindowPointerAction</string>
+		</dict>
+		<key>Gesture,ThreeFingerSwipeLeft,,</key>
+		<dict>
+			<key>Action</key>
+			<string>kPrevTabPointerAction</string>
+		</dict>
+		<key>Gesture,ThreeFingerSwipeRight,,</key>
+		<dict>
+			<key>Action</key>
+			<string>kNextTabPointerAction</string>
+		</dict>
+		<key>Gesture,ThreeFingerSwipeUp,,</key>
+		<dict>
+			<key>Action</key>
+			<string>kNextWindowPointerAction</string>
+		</dict>
+	</dict>
 	<key>PrefsCustomFolder</key>
 	<string>/Users/chris/.env/dotfiles</string>
 	<key>PromptOnClose</key>
@@ -2596,11 +2656,13 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2012-01-06T09:04:36Z</date>
+	<date>2013-03-23T23:31:40Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
 	<false/>
+	<key>ShowPaneTitles</key>
+	<true/>
 	<key>SmartPlacement</key>
 	<false/>
 	<key>SplitPaneDimmingAmount</key>
@@ -2612,6 +2674,10 @@
 	<key>TabViewType</key>
 	<integer>0</integer>
 	<key>ThreeFingerEmulates</key>
+	<false/>
+	<key>TmuxDashboardLimit</key>
+	<integer>10</integer>
+	<key>TripleClickSelectsFullWrappedLines</key>
 	<false/>
 	<key>URLHandlersByGuid</key>
 	<dict/>
@@ -2636,6 +2702,6 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>1.0.0.20111020</string>
+	<string>1.0.0.20130302</string>
 </dict>
 </plist>
