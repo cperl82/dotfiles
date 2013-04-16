@@ -148,41 +148,61 @@ function pse () {
 function nfsiostat-formatted () {
 	nfsiostat "$@" | awk '
 	BEGIN {
-		w_mnt=0;
+		w_mnt    = 0;
+		w_rdblks = 0;
+		w_wrblks = 0;
+		w_rddir  = 0;
+		w_wrdir  = 0;
+		w_rdsrv  = 0;
+		w_wrsrv  = 0;
+		w_ops    = 0;
+		w_rops   = 0;
+		w_wops   = 0;
 		getline;
 		getline;
 	}
 
-	$1 ~ /^Filesystem:$/ {
-		rdblks=$2;
-		wrblks=$3;
-		rddir=$4;
-		wrdir=$5;
-		rdsrv=$6;
-		wrsrv=$7;
-		ops=$8;
-		rops=$9;
-		wops=$10;
+	$1 ~ /[-_A-Za-z0-9]+:/ {
+		mnt    = $1;
+		rdblks = $2;
+		wrblks = $3;
+		rddir  = $4;
+		wrdir  = $5;
+		rdsrv  = $6;
+		wrsrv  = $7;
+		ops    = $8;
+		rops   = $9;
+		wops   = $10;
 
-		w_rdblks=length(rdblks);
-		w_wrblks=length(wrblks);
-		w_rddir=length(rddir);
-		w_wrdir=length(wrdir);
-		w_rdsrv=length(rdsrv);
-		w_wrsrv=length(wrsrv);
-		w_ops=length(ops);
-		w_rops=length(rops);
-		w_wops=length(wops);
-
-		lines[i++] = $0;
-	}
-
-	$1 ~ /[-A-Z][a-z][0-9]+:/ {
-		mnt=$1
 		new_w_mnt = length(mnt);
-		if (new_w_mnt > w_mnt) {
-			w_mnt = new_w_mnt;
-		}
+		w_mnt = new_w_mnt > w_mnt ? new_w_mnt : w_mnt
+
+		new_w_rdblks=length(rdblks);
+		w_rdblks = new_w_rdblks > w_rdblks ? new_w_rdblks : w_rdblks
+
+		new_w_wrblks=length(wrblks);
+		w_wrblks = new_w_wrblks > w_wrblks ? new_w_wrblks : w_wrblks
+
+		new_w_rddir=length(rddir);
+		w_rddir = new_w_rddir > w_rddir ? new_w_rddir : w_rddir
+
+		new_w_wrdir=length(wrdir);
+		w_wrdir = new_w_wrdir > w_wrdir ? new_w_wrdir : w_wrdir
+
+		new_w_rdsrv=length(rdsrv);
+		w_rdsrv = new_w_rdsrv > w_rdsrv ? new_w_rdsrv : w_rdsrv
+
+		new_w_wrsrv=length(wrsrv);
+		w_wrsrv = new_w_wrsrv > w_wrsrv ? new_w_wrsrv : w_wrsrv
+
+		new_w_ops=length(ops);
+		w_ops = new_w_ops > w_ops ? new_w_ops : w_ops
+
+		new_w_rops=length(rops);
+		w_rops = new_w_rops > w_rops ? new_w_rops : w_rops
+
+		new_w_wops=length(wops);
+		w_wops = new_w_wops > w_wops ? new_w_wops : w_wops
 
 		lines[i++] = $0;
 	}
