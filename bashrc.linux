@@ -142,3 +142,68 @@ function pse () {
 	cmd=$(printf "ps -o user:12,pid,ppid,tid,class,rtprio,ni,pri,bsdstart,vsz:9,rss:9,psr,pcpu,stat,wchan:25,tty,args %s" "${args[*]}")
 	eval "${cmd}"
 }
+
+# 2013-04-16: wrapper for nfsiostat to make it easier to read
+# TODO: Remove the ability to pass flags that break parsing, i.e. `-h'.
+function nfsiostat-formatted () {
+	nfsiostat "$@" | awk '
+	BEGIN {
+		w_mnt=0;
+		getline;
+		getline;
+	}
+
+	$1 ~ /^Filesystem:$/ {
+		rdblks=$2;
+		wrblks=$3;
+		rddir=$4;
+		wrdir=$5;
+		rdsrv=$6;
+		wrsrv=$7;
+		ops=$8;
+		rops=$9;
+		wops=$10;
+
+		w_rdblks=length(rdblks);
+		w_wrblks=length(wrblks);
+		w_rddir=length(rddir);
+		w_wrdir=length(wrdir);
+		w_rdsrv=length(rdsrv);
+		w_wrsrv=length(wrsrv);
+		w_ops=length(ops);
+		w_rops=length(rops);
+		w_wops=length(wops);
+
+		lines[i++] = $0;
+	}
+
+	$1 ~ /[-A-Z][a-z][0-9]+:/ {
+		mnt=$1
+		new_w_mnt = length(mnt);
+		if (new_w_mnt > w_mnt) {
+			w_mnt = new_w_mnt;
+		}
+
+		lines[i++] = $0;
+	}
+
+	$0 ~ /^$/ {
+		for (j=0; j<i; j++) {
+			split(lines[j], items, " ");
+			printf("%-*s %*s %*s %*s %*s %*s %*s %*s %*s %*s\n",
+				w_mnt,    items[1],
+				w_rdblks, items[2],
+				w_wrblks, items[3],
+				w_rddir,  items[4],
+				w_wrdir,  items[5],
+				w_rdsrv,  items[6],
+				w_wrsrv,  items[7],
+				w_ops,    items[8],
+				w_rops,   items[9],
+				w_wops,   items[10]);
+		}
+		print;
+		delete lines;
+		i = 0;
+	}'
+}
