@@ -227,28 +227,34 @@ let g:vimsyn_noerror = 1
 " See /opt/local/share/vim/vim73/autoload/netrw.vim
 let g:netrw_home = $HOME . "/.netrwhist"
 
-" 2012-07-24
+" 2013-05-31
 " http://stackoverflow.com/questions/2586984/how-can-i-swap-positions-of-two-open-files-in-splits-in-vim
 function! MarkWindowSwap()
+    " marked window number
     let g:markedWinNum = winnr()
+    let g:markedBufNum = bufnr("%")
 endfunction
 
 function! DoWindowSwap()
-    "Mark destination
-    let curNum = winnr()
-    let curBuf = bufnr( "%" )
+    let curWinNum = winnr()
+    let curBufNum = bufnr("%")
+    " Switch focus to marked window
     exe g:markedWinNum . "wincmd w"
-    "Switch to source and shuffle dest->source
-    let markedBuf = bufnr( "%" )
-    "Hide and open so that we aren't prompted and keep history
-    exe 'hide buf' curBuf
-    "Switch to dest and shuffle source->dest
-    exe curNum . "wincmd w"
-    "Hide and open so that we aren't prompted and keep history
-    exe 'hide buf' markedBuf
+
+    " Load current buffer on marked window
+    exe 'hide buf' curBufNum
+
+    " Switch focus to current window
+    exe curWinNum . "wincmd w"
+
+    " Load marked buffer on current window
+    exe 'hide buf' g:markedBufNum
 endfunction
-nnoremap <silent> <leader>mw :call MarkWindowSwap()<CR>
-nnoremap <silent> <leader>pw :call DoWindowSwap()<CR>
+
+nnoremap H :call MarkWindowSwap()<CR><Bar><C-w>h<Bar>:call DoWindowSwap()<CR>
+nnoremap J :call MarkWindowSwap()<CR><Bar><C-w>j<Bar>:call DoWindowSwap()<CR>
+nnoremap K :call MarkWindowSwap()<CR><Bar><C-w>k<Bar>:call DoWindowSwap()<CR>
+nnoremap L :call MarkWindowSwap()<CR><Bar><C-w>l<Bar>:call DoWindowSwap()<CR>
 
 " 2012-07-24
 " Source a local vimrc to allow environment specific overrides
