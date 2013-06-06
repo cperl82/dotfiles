@@ -251,10 +251,10 @@ function! DoWindowSwap()
     exe 'hide buf' g:markedBufNum
 endfunction
 
-nnoremap H :call MarkWindowSwap()<CR><Bar><C-w>h<Bar>:call DoWindowSwap()<CR>
-nnoremap J :call MarkWindowSwap()<CR><Bar><C-w>j<Bar>:call DoWindowSwap()<CR>
-nnoremap K :call MarkWindowSwap()<CR><Bar><C-w>k<Bar>:call DoWindowSwap()<CR>
-nnoremap L :call MarkWindowSwap()<CR><Bar><C-w>l<Bar>:call DoWindowSwap()<CR>
+nnoremap <Leader>h :call MarkWindowSwap()<CR><Bar><C-w>h<Bar>:call DoWindowSwap()<CR>
+nnoremap <Leader>j :call MarkWindowSwap()<CR><Bar><C-w>j<Bar>:call DoWindowSwap()<CR>
+nnoremap <Leader>k :call MarkWindowSwap()<CR><Bar><C-w>k<Bar>:call DoWindowSwap()<CR>
+nnoremap <Leader>l :call MarkWindowSwap()<CR><Bar><C-w>l<Bar>:call DoWindowSwap()<CR>
 
 " 2012-07-24
 " Source a local vimrc to allow environment specific overrides
