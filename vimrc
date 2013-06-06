@@ -207,7 +207,6 @@ nmap <silent> <Leader>n :exec &number ? ":set nonu" : ":set nu"<CR>
 " Some ideas taken from
 " http://stevelosh.com/blog/2010/09/coming-home-to-vim/
 nnoremap ,<Space> :nohl<CR>
-nnoremap <Tab> %
 
 " 2010-09-24
 " Added newer python syntax highlighting script
