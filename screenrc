@@ -5,3 +5,9 @@ defscrollback 2500
 altscreen on
 vbell off
 term screen-256color
+
+# Bindings for dealing with multiple regions
+bind j focus down
+bind k focus up
+bind t focus top
+bind b focus bottom
