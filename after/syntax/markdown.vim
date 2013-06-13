@@ -18,3 +18,5 @@ hi link CPNumberBox   Directory
 
 " 2013-06-13: Override the folded look
 hi! link Folded Ignore
+
+hi link markdownItalic Constant
