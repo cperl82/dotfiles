@@ -139,10 +139,11 @@ function pse () {
 	done
 
 	[[ "${selector}" -eq 0 ]] && args=("${args[@]}" "-e")
-	cmd=$(printf "ps -o user:12,pid,ppid,tid,class,rtprio,ni,pri,bsdstart,vsz:9,rss:9,psr,pcpu,stat,wchan:25,tty,args %s" "${args[*]}")
+	cmd=$(printf "ps -o user:12,pid,ppid,tid,nlwp,class,rtprio:3=RTP,ni,pri,bsdstart,vsz:9,rss:9,psr,pcpu,stat,wchan:25,tty,args %s" "${args[*]}")
 	eval "${cmd}"
 }
 alias psef='pse --forest'
+alias psel='pse -L --sort pid'
 
 # 2013-04-16: wrapper for nfsiostat to make it easier to read
 # TODO: Remove the ability to pass flags that break parsing, i.e. `-h'.
