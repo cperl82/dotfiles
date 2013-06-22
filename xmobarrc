@@ -3,7 +3,7 @@ Config { font = "-xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*"
        , position = Top
        , commands = [ Run StdinReader
                     , Run MultiCpu ["-t", "<autototal>"] 30
-                    , Run BatteryP ["BAT0"] ["-L","50","-H","75","--high","green","--normal","yellow", "--low", "red"] 30
+                    , Run BatteryP ["BAT0"] ["-L","50","-H","75","--high","green","--normal","yellow", "--low", "red"] 300
                     , Run Date "%a %b %_d %H:%M" "date" 360
                     ]
        , sepChar = "%"
