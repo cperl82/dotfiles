@@ -143,7 +143,7 @@ function pse () {
 	eval "${cmd}"
 }
 alias psef='pse --forest'
-alias psel='pse -L --sort pid'
+alias psel='pse -L'
 
 # 2013-04-16: wrapper for nfsiostat to make it easier to read
 # TODO: Remove the ability to pass flags that break parsing, i.e. `-h'.
