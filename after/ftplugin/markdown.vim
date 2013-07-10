@@ -1,4 +1,5 @@
-set et ts=2 sts=2 sw=2 tw=79
+setlocal et ts=2 sts=2 sw=2 tw=79
+setlocal clipboard=unnamed
 inoremap <buffer> <Leader>T <C-r>=strftime("%Y-%m-%d")<CR>
 inoremap <buffer> <Leader>t <C-r>=strftime("%Y-%m-%dT%H:%M:%S")<CR>
 nnoremap <Space> za
@@ -21,3 +22,8 @@ function! MarkdownText()
 	return line . spaces . size . " lines"
 endfunction
 setlocal foldtext=MarkdownText()
+
+function! GmailLinkToClipboard(hash)
+	let @+ = printf("https://mail.google.com/mail/u/0/#all/%s", a:hash)
+endfunction
+nnoremap <silent> <LocalLeader>cg :call GmailLinkToClipboard("<C-R>=expand("<cword>")<CR>")<CR>
