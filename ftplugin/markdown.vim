@@ -1,6 +1,6 @@
 set et ts=2 sts=2 sw=2 tw=79
-imap <buffer> <Leader>T <C-r>=strftime("%Y-%m-%d")<CR>
-imap <buffer> <Leader>t <C-r>=strftime("%Y-%m-%dT%H:%M:%S")<CR>
+inoremap <buffer> <Leader>T <C-r>=strftime("%Y-%m-%d")<CR>
+inoremap <buffer> <Leader>t <C-r>=strftime("%Y-%m-%dT%H:%M:%S")<CR>
 nnoremap <Space> za
 
 function! MarkdownText()
@@ -20,5 +20,4 @@ function! MarkdownText()
 	endfor
 	return line . spaces . size . " lines"
 endfunction
-
 setlocal foldtext=MarkdownText()
