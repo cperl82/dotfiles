@@ -33,6 +33,10 @@ set hidden
 set splitbelow
 set splitright
 
+" 2013-07-31
+" I don't want tab completion of file/dir names to work on these
+set wildignore=*.cmi,*.cmx,*.cmt,*.o,*.ml.d,*.objdeps
+
 " Use the man.vim plugin if its available
 runtime! ftplugin/man.vim
 
