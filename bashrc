@@ -253,6 +253,31 @@ function vman
 	vim -c ":Man $*" -c ":only"
 }
 
+# add-path {{{2
+# function to add something to PATH, skipping duplicates
+function add-path
+{
+	d="${1}"
+	if [[ -d "${d}" ]]
+	then
+		components=( $(echo ${PATH} | /bin/tr ':' ' ') )
+		found=0
+		for p in "${components[@]}"
+		do
+			if [[ "${p}" == "${d}" ]]
+			then
+				found=1
+				break
+			fi
+		done
+
+		if [[ ${found} -eq 0 ]]
+		then
+			export PATH=${PATH}:${d}
+		fi
+	fi
+}
+
 # Important variable setting {{{1
 ENV_ROOT="$(dirname "$(dirname "$(path-canonical ${BASH_ARGV[0]})")")"
 DOTFILES_ROOT="${ENV_ROOT}/dotfiles"
@@ -261,8 +286,8 @@ BUNDLE_ROOT="${ENV_ROOT}/bundles"
 
 export ENV_ROOT DOTFILES_ROOT HG_EXT_ROOT BUNDLE_ROOT
 
-PATH=${PATH}:${ENV_ROOT}/bin
-export PATH
+add-path ${ENV_ROOT}/bin
+add-path ${HOME}/bin
 
 # OS Specific bashrc file inclusion {{{1
 OSNAME=$(uname -s | tr '[A-Z]' '[a-z]')
