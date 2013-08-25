@@ -8,6 +8,10 @@ URxvt.keysym.C-Up:  \033[1;5A
 URxvt.keysym.C-Down:  \033[1;5B
 URxvt.keysym.C-Left:  \033[1;5D
 URxvt.keysym.C-Right: \033[1;5C
+URxvt.perl-ext-common: default,selection
+URxvt.selection.pattern-0: ([-_.[:alpha:][:digit:]]+)
+URxvt.selection.pattern-1: ([^ 	\n]+)
+URxvt.selection.pattern-2: (^.*$)
 
 
 !! drop in Solarized colorscheme for Xresources/Xdefaults
