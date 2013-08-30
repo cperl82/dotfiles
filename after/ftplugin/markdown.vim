@@ -1,3 +1,31 @@
+if has("folding") && exists("g:markdown_folding")
+  setlocal foldexpr=MarkdownFold()
+  setlocal foldmethod=expr
+  let b:undo_ftplugin .= " foldexpr< foldmethod<"
+
+  function! MarkdownFold()
+    let line = getline(v:lnum)
+
+    " Regular headers
+    let depth = match(line, '\(^#\+\)\@<=\( .*$\)\@=')
+    if depth > 0
+      return ">" . depth
+    endif
+
+    " Setext style headings
+    let nextline = getline(v:lnum + 1)
+    if (line =~ '^.\+$') && (nextline =~ '^=\+$')
+      return ">1"
+    endif
+
+    if (line =~ '^.\+$') && (nextline =~ '^-\+$')
+      return ">2"
+    endif
+
+    return "="
+  endfunction
+endif
+
 setlocal et ts=2 sts=2 sw=2 tw=79
 setlocal clipboard=unnamed
 inoremap <buffer> <Leader>T <C-r>=strftime("%Y-%m-%d")<CR>
