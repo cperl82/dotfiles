@@ -260,7 +260,7 @@ function add-path
 	d="${1}"
 	if [[ -d "${d}" ]]
 	then
-		components=( $(echo ${PATH} | /bin/tr ':' ' ') )
+		components=( $(echo ${PATH} | tr ':' ' ') )
 		found=0
 		for p in "${components[@]}"
 		do
