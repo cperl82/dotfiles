@@ -52,6 +52,8 @@ endfunction
 setlocal foldtext=MarkdownText()
 
 function! GmailLinkToClipboard(hash)
-	let @+ = printf("https://mail.google.com/mail/u/0/#all/%s", a:hash)
+	" Strip any trailing "," or "." characters
+	let hash = substitute(a:hash, '\(,\|\.\)$', '', '')
+	let @+ = printf("https://mail.google.com/mail/u/0/#all/%s", hash)
 endfunction
 nnoremap <silent> <LocalLeader>cg :call GmailLinkToClipboard("<C-R>=expand("<cword>")<CR>")<CR>
