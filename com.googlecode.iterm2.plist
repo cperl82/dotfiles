@@ -707,15 +707,15 @@
 	<key>NSWindow Frame Preferences</key>
 	<string>930 231 924 485 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>586 224 1214 933 0 0 2560 1418 </string>
+	<string>1453 412 927 888 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>14 958 570 423 0 0 2560 1418 </string>
+	<string>89 976 570 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>204 300 570 423 0 0 2560 1418 </string>
+	<string>1053 988 570 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
 	<string>1875 753 570 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
-	<string>536 721 585 423 0 0 2560 1418 </string>
+	<string>536 721 570 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 5</key>
 	<string>314 284 857 1098 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 6</key>
@@ -2656,7 +2656,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2013-03-23T23:31:40Z</date>
+	<date>2013-06-30T15:35:33Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
@@ -2702,6 +2702,6 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>1.0.0.20130302</string>
+	<string>1.0.0.20130319</string>
 </dict>
 </plist>
