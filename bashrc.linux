@@ -131,7 +131,7 @@ function pse () {
 
 	for i in "${args[@]}"
 	do
-		if [[ "${i}" == "-t" || "${i}" == "-u" ]]
+		if [[ "${i}" == "-t" || "${i}" == "-u" || "${i}" == "-p" ]]
 		then
 			selector=1
 			break
