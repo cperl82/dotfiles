@@ -128,6 +128,10 @@ endfor
 nnoremap <silent> <C-Left>  :tabp<CR>
 nnoremap <silent> <C-Right> :tabn<CR>
 
+" 2013-10-02
+" I have come to expect that space with expand and collapse folds
+nnoremap <Space> za
+
 " 2011-12-15
 " Vimwiki Configuration
 let wiki_0 = {}
