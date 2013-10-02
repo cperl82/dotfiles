@@ -18,7 +18,4 @@ hi link CPDateTime    PreProc
 hi link CPNumberBox   Directory
 hi link CPGmailHash   Underlined
 
-" 2013-06-13: Override the folded look
-hi! link Folded Ignore
-
 hi link markdownItalic Constant

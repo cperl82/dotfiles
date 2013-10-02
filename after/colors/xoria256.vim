@@ -10,7 +10,10 @@ if !has("gui")
 	hi link bufExplorerSplit Normal
 	hi link bufExplorerTitle Normal
 	hi link bufExplorerHidBuf Normal
+
 else
+	hi clear Folded
+	hi link Folded Ignore
 	hi link NERDTReeDir Statement
 endif
 
