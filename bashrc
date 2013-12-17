@@ -81,7 +81,7 @@ function path-canonical() {
 
 	# Strip an potential trailing slash as it can cause `test -h' to fail
 	while [[ -h "${dst%/}" ]]; do
-		local link_dst="$(ls -l "${dst}" | sed -e 's/^.*[ \t]*->[ \t]*\(.*\)[ \t]*$/\1/g')"
+		local link_dst="$(command ls -l "${dst}" | sed -e 's/^.*[ \t]*->[ \t]*\(.*\)[ \t]*$/\1/g')"
 		if   [[ "${link_dst}" =~ ^..$ ]]; then
 			# special case
 			dst="$(dirname -- "$(dirname -- "${dst}")")"
