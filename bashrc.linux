@@ -274,3 +274,46 @@ function rpmenv () {
 		;;
 	esac
 }
+
+# 2014-03-21 formatted printing of /proc/mounts
+function proc-mounts {
+	fstype="${1}"
+
+	if [[ -z ${fstype} ]]
+	then
+		fstype=".*"
+	fi
+
+	awk '
+	{
+		if ($3 ~ /'"${fstype}"'/) {
+			field1_len = length($1);
+			field2_len = length($2);
+			field3_len = length($3);
+			field4_len = length($4);
+			field5_len = length($5);
+			field6_len = length($6);
+
+			field1_max = field1_len > field1_max ? field1_len : field1_max;
+			field2_max = field2_len > field2_max ? field2_len : field2_max;
+			field3_max = field3_len > field3_max ? field3_len : field3_max;
+			field4_max = field4_len > field4_max ? field4_len : field4_max;
+			field5_max = field5_len > field5_max ? field5_len : field5_max;
+			field6_max = field6_len > field6_max ? field6_len : field6_max;
+			lines[NR] = $0;
+		}
+	}
+
+	END {
+		for (i in lines) {
+			split(lines[i], a);
+			printf("%-*s  %-*s  %-*s  %*s  %*s  %*s\n",
+				field1_max, a[1],
+				field2_max, a[2],
+				field3_max, a[3],
+				field4_max, a[4],
+				field5_max, a[5],
+				field6_max, a[6]);
+		}
+	}' /proc/mounts | sort -k 3,2
+}
