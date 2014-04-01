@@ -7,11 +7,23 @@
 (setq el-get-verbose t)
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user-receipes")
 
-(setq my-packages '(ack-and-a-half chumpy-windows color-theme
-	color-theme-almost-monokai color-theme-ir-black
-	color-theme-mac-classic color-theme-solarized
-	color-theme-tomorrow color-theme-zenburn escreen evil
-	evil-leader tuareg-mode undo-tree xoria256-emacs org-mode))
+(setq my-packages
+      '(ack-and-a-half
+        chumpy-windows
+        color-theme
+        color-theme-almost-monokai
+        color-theme-ir-black
+        color-theme-mac-classic
+        color-theme-solarized
+        color-theme-tomorrow
+        color-theme-zenburn
+        xoria256-emacs
+        escreen
+        evil
+        undo-tree
+        evil-leader
+        tuareg-mode
+        org-mode))
 
 (el-get 'sync my-packages)
 
