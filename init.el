@@ -22,12 +22,6 @@
 (setq show-paren-delay 0)
 (show-paren-mode)
 
-; 2014-03-27: Quick window changing
-(global-set-key "\M-h" 'windmove-left)
-(global-set-key "\M-j" 'windmove-down)
-(global-set-key "\M-k" 'windmove-up)
-(global-set-key "\M-l" 'windmove-right)
-
 ; 2014-03-27: Do not want backup files
 (setq make-backup-files nil)
 
