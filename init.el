@@ -1,16 +1,17 @@
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(require 'el-get)
-(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user-receipes")
-(setq el-get-verbose t)
+(unless (require 'el-get nil 'noerror) (with-current-buffer
+    (url-retrieve-synchronously
+    "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max)) (eval-print-last-sexp)))
 
-(setq my-packages
-      '(ack-and-a-half chumpy-windows color-theme
-      color-theme-almost-monokai color-theme-black-purple
-      color-theme-chocolate-rain color-theme-emacs-revert-theme
-      color-them e-inkpot color-theme-ir-black
-      color-theme-mac-classic color-theme-solarized
-      color-theme-tomorrow color-theme-zenburn el-get escreen evil
-      evil-leader tuareg-mode undo-tree xoria256-emacs))
+(setq el-get-verbose t)
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user-receipes")
+
+(setq my-packages '(ack-and-a-half chumpy-windows color-theme
+	color-theme-almost-monokai color-theme-ir-black
+	color-theme-mac-classic color-theme-solarized
+	color-theme-tomorrow color-theme-zenburn escreen evil
+	evil-leader tuareg-mode undo-tree xoria256-emacs))
 
 (el-get 'sync my-packages)
 
