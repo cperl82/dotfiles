@@ -11,7 +11,7 @@
 	color-theme-almost-monokai color-theme-ir-black
 	color-theme-mac-classic color-theme-solarized
 	color-theme-tomorrow color-theme-zenburn escreen evil
-	evil-leader tuareg-mode undo-tree xoria256-emacs))
+	evil-leader tuareg-mode undo-tree org xoria256-emacs))
 
 (el-get 'sync my-packages)
 
