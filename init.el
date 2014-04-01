@@ -27,6 +27,9 @@
 
 (el-get 'sync my-packages)
 
+; 2014-04-01: Load theme
+(load-theme 'zenburn)
+
 ; 2014-03-27: Turn off the menu bar
 (menu-bar-mode -1)
 
