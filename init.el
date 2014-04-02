@@ -24,8 +24,7 @@
         evil-leader
         tuareg-mode
         org-mode
-        project-explorer
-        dired-x))
+        project-explorer))
 
 (el-get 'sync my-packages)
 
