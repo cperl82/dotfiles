@@ -23,7 +23,9 @@
         undo-tree
         evil-leader
         tuareg-mode
-        org-mode))
+        org-mode
+        project-explorer
+        dired-x))
 
 (el-get 'sync my-packages)
 
