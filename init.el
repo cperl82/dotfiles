@@ -24,7 +24,9 @@
         evil-leader
         tuareg-mode
         org-mode
-        project-explorer))
+        project-explorer
+        xcscope
+        xcscope+))
 
 (el-get 'sync my-packages)
 
