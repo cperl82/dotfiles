@@ -167,3 +167,18 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+; 2014-04-03: Define keys for org mode
+(evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
+(evil-define-key 'normal org-mode-map (kbd "SPC") 'org-cycle)
+(evil-define-key 'normal org-mode-map (kbd "M-h") 'org-metaleft)
+(evil-define-key 'normal org-mode-map (kbd "M-l") 'org-metaright)
+(evil-define-key 'normal org-mode-map (kbd "M-k") 'org-metaup)
+(evil-define-key 'normal org-mode-map (kbd "M-j") 'org-metadown)
+(evil-define-key 'normal org-mode-map (kbd "M-H") 'org-shiftmetaleft)
+(evil-define-key 'normal org-mode-map (kbd "M-L") 'org-shiftmetaright)
+(evil-define-key 'normal org-mode-map (kbd "M-K") 'org-shiftmetaup)
+(evil-define-key 'normal org-mode-map (kbd "M-J") 'org-shiftmetadown)
+
+(evil-define-key 'insert org-mode-map (kbd "C-c .")
+  '(lambda () (interactive) (org-time-stamp-inactive t)))
