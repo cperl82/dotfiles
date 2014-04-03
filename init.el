@@ -24,6 +24,7 @@
         evil-leader
         tuareg-mode
         org-mode
+        buffer-move
         project-explorer
         xcscope
         xcscope+))
@@ -184,3 +185,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (evil-define-key 'insert org-mode-map (kbd "C-c .")
   '(lambda () (interactive) (org-time-stamp-inactive t)))
+
+; 2014-04-03: buffer-move
+(require 'buffer-move)
+(global-set-key (kbd "<C-S-up>")    'buf-move-up)
+(global-set-key (kbd "<C-S-down>")  'buf-move-down)
+(global-set-key (kbd "<C-S-left>")  'buf-move-left)
+(global-set-key (kbd "<C-S-right>") 'buf-move-right)
