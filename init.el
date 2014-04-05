@@ -31,9 +31,6 @@
 
 (el-get 'sync my-packages)
 
-; 2014-04-01: Load theme
-(load-theme 'zenburn)
-
 ; 2014-03-27: Turn off the menu bar
 (menu-bar-mode -1)
 
@@ -49,6 +46,7 @@
 (require 'evil)
 (evil-mode 1)
 (evil-set-initial-state 'ibuffer-mode 'normal)
+(evil-set-initial-state 'help-mode    'normal)
 
 ; 2014-03-27: Evil Leader
 (require 'evil-leader)
@@ -173,12 +171,25 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (evil-define-key 'insert org-mode-map (kbd "C-c .")
   '(lambda () (interactive) (org-time-stamp-inactive t)))
 
-; 2014-04-03: buffer-move
+(require 'windmove)
+(define-key evil-normal-state-map "\C-j" 'windmove-down)
+(define-key evil-normal-state-map "\C-k" 'windmove-up)
+(define-key evil-normal-state-map "\C-h" 'windmove-left)
+(define-key evil-normal-state-map "\C-l" 'windmove-right)
+(define-key evil-motion-state-map "\C-j" 'windmove-down)
+(define-key evil-motion-state-map "\C-k" 'windmove-up)
+(define-key evil-motion-state-map "\C-h" 'windmove-left)
+(define-key evil-motion-state-map "\C-l" 'windmove-right)
+
 (require 'buffer-move)
-(global-set-key (kbd "C-c C-b k") 'buf-move-up)
-(global-set-key (kbd "C-c C-b j") 'buf-move-down)
-(global-set-key (kbd "C-c C-b h") 'buf-move-left)
-(global-set-key (kbd "C-c C-b l") 'buf-move-right)
+(define-key evil-normal-state-map (kbd "C-M-j") 'buf-move-down)
+(define-key evil-normal-state-map (kbd "C-M-k") 'buf-move-up)
+(define-key evil-normal-state-map (kbd "C-M-h") 'buf-move-left)
+(define-key evil-normal-state-map (kbd "C-M-l") 'buf-move-right)
+(define-key evil-motion-state-map (kbd "C-M-j") 'buf-move-down)
+(define-key evil-motion-state-map (kbd "C-M-k") 'buf-move-up)
+(define-key evil-motion-state-map (kbd "C-M-h") 'buf-move-left)
+(define-key evil-motion-state-map (kbd "C-M-l") 'buf-move-right)
 
 ; 2014-04-04: Holy moly its effort to get line numbers like vim!
 ; TODO: Maybe you should just use defadvise around linum's own
