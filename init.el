@@ -187,8 +187,28 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   '(lambda () (interactive) (org-time-stamp-inactive t)))
 
 ; 2014-04-03: buffer-move
-(require 'buffer-move)
-(global-set-key (kbd "<C-S-up>")    'buf-move-up)
-(global-set-key (kbd "<C-S-down>")  'buf-move-down)
-(global-set-key (kbd "<C-S-left>")  'buf-move-left)
-(global-set-key (kbd "<C-S-right>") 'buf-move-right)
+;(require 'buffer-move)
+;(global-set-key (kbd "<C-S-up>")    'buf-move-up)
+;(global-set-key (kbd "<C-S-down>")  'buf-move-down)
+;(global-set-key (kbd "<C-S-left>")  'buf-move-left)
+;(global-set-key (kbd "<C-S-right>") 'buf-move-right)
+
+; 2014-04-04: Holy moly its effort to get line numbers like vim!
+; TODO: Maybe you should just use defadvise around linum's own
+; function that implements 'dynamic and add a trailing space
+(defun linum-format-fun (line-number)
+    (let* ((lines (count-lines (point-min) (point-max)))
+	   (width (length (number-to-string lines)))
+	   (min-width 2))
+      (propertize
+	(format
+	 (concat "%"
+	  (if (> width min-width)
+	      (number-to-string width)
+	    (number-to-string min-width))
+	  "d ")
+	 line-number)
+	'face 'linum)))
+
+(global-linum-mode 1)
+(setq linum-format 'linum-format-fun)
