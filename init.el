@@ -156,19 +156,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (global-set-key (kbd "M-[") 'dim:escreen-goto-prev-screen)
 (global-set-key (kbd "M-]") 'dim:escreen-goto-next-screen)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("4031c1ea0bb235b75a048bd92f3bf3aa984c9f7cc5b408f00f62ed99a6eecc09" "8b30636c9a903a9fa38c7dcf779da0724a37959967b6e4c714fdc3b3fe0b8653" default))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
 ; 2014-04-03: Org mode customizations
 (add-hook 'org-mode-hook 'auto-fill-mode)
 (setq org-log-done 'time)
@@ -187,11 +174,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   '(lambda () (interactive) (org-time-stamp-inactive t)))
 
 ; 2014-04-03: buffer-move
-;(require 'buffer-move)
-;(global-set-key (kbd "<C-S-up>")    'buf-move-up)
-;(global-set-key (kbd "<C-S-down>")  'buf-move-down)
-;(global-set-key (kbd "<C-S-left>")  'buf-move-left)
-;(global-set-key (kbd "<C-S-right>") 'buf-move-right)
+(require 'buffer-move)
+(global-set-key (kbd "C-c C-b k") 'buf-move-up)
+(global-set-key (kbd "C-c C-b j") 'buf-move-down)
+(global-set-key (kbd "C-c C-b h") 'buf-move-left)
+(global-set-key (kbd "C-c C-b l") 'buf-move-right)
 
 ; 2014-04-04: Holy moly its effort to get line numbers like vim!
 ; TODO: Maybe you should just use defadvise around linum's own
@@ -212,3 +199,17 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (global-linum-mode 1)
 (setq linum-format 'linum-format-fun)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (zenburn)))
+ '(custom-safe-themes (quote ("4031c1ea0bb235b75a048bd92f3bf3aa984c9f7cc5b408f00f62ed99a6eecc09" "8b30636c9a903a9fa38c7dcf779da0724a37959967b6e4c714fdc3b3fe0b8653" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
