@@ -192,24 +192,22 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-motion-state-map (kbd "C-M-l") 'buf-move-right)
 
 ; 2014-04-04: Holy moly its effort to get line numbers like vim!
-; TODO: Maybe you should just use defadvise around linum's own
-; function that implements 'dynamic and add a trailing space
-(defun linum-format-fun (line-number)
-    (let* ((lines (count-lines (point-min) (point-max)))
-	   (width (length (number-to-string lines)))
-	   (min-width 2))
-      (propertize
-	(format
-	 (concat "%"
-	  (if (> width min-width)
-	      (number-to-string width)
-	    (number-to-string min-width))
-	  "d ")
-	 line-number)
-	'face 'linum)))
+; http://www.emacswiki.org/emacs/LineNumbers#toc6
+(unless window-system
+  (add-hook 'linum-before-numbering-hook
+	    (lambda ()
+	      (setq-local linum-format-fmt
+			  (let ((w (length (number-to-string
+					    (count-lines (point-min) (point-max))))))
+			    (concat "%" (number-to-string w) "d"))))))
 
-(global-linum-mode 1)
-(setq linum-format 'linum-format-fun)
+(defun linum-format-func (line)
+  (concat
+   (propertize (format linum-format-fmt line) 'face 'linum)
+   (propertize " " 'face 'linum)))
+
+(unless window-system
+  (setq linum-format 'linum-format-func))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
