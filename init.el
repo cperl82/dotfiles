@@ -173,6 +173,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (global-unset-key (kdb "C-h"))
 (global-set-key (kbd "C-c C-h") 'help)
+(global-set-key (kbd "C-c h")   'help)
 
 (require 'windmove)
 (define-key evil-normal-state-map "\C-j" 'windmove-down)
