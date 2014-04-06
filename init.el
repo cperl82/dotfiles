@@ -197,6 +197,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-motion-state-map (kbd "C-M-h") 'buf-move-left)
 (define-key evil-motion-state-map (kbd "C-M-l") 'buf-move-right)
 
+; 2014-04-06: cscope related
+; (evil-define-key 'normal cscope-minor-mode-keymap (kbd "<S-return>") 'cscope-select-entry-inplace)
+
 ; 2014-04-04: Holy moly its effort to get line numbers like vim!
 ; http://www.emacswiki.org/emacs/LineNumbers#toc6
 (unless window-system
