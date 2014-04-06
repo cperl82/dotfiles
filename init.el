@@ -168,8 +168,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (evil-define-key 'normal org-mode-map (kbd "M-K") 'org-shiftmetaup)
 (evil-define-key 'normal org-mode-map (kbd "M-J") 'org-shiftmetadown)
 
-(evil-define-key 'insert org-mode-map (kbd "C-c .")
+(evil-define-key 'insert org-mode-map (kbd "C-c ,")
   '(lambda () (interactive) (org-time-stamp-inactive t)))
+
+(evil-define-key 'insert org-mode-map (kbd "C-c .")
+  '(lambda () (interactive) (org-time-stamp-inactive)))
 
 (global-unset-key (kbd "C-h"))
 (global-set-key (kbd "C-c C-h") 'help)
