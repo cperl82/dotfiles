@@ -171,6 +171,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (evil-define-key 'insert org-mode-map (kbd "C-c .")
   '(lambda () (interactive) (org-time-stamp-inactive t)))
 
+(global-unset-key (kdb "C-h"))
+(global-set-key (kbd "C-c C-h") 'help)
+
 (require 'windmove)
 (define-key evil-normal-state-map "\C-j" 'windmove-down)
 (define-key evil-normal-state-map "\C-k" 'windmove-up)
