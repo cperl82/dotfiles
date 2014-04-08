@@ -60,7 +60,8 @@
   "k" 'kill-buffer
   "o" 'delete-other-windows
   "x" 'delete-window
-  "e" 'escreen-get-active-screen-numbers-with-emphasis)
+  "e" '(lambda () (interactive) (message (file-relative-name (buffer-file-name))))
+  "E" '(lambda () (interactive) (message (buffer-file-name))))
 
 ; 2014-04-01: http://stackoverflow.com/questions/8483182/emacs-evil-mode-best-practice
 (defun minibuffer-keyboard-quit ()
