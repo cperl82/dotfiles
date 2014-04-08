@@ -233,3 +233,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  )
 
 (setq c-default-style "linux")
+
+; 2014-04-08: local emacs overrides
+(let ((local "~/.emacs.local"))
+  (when (file-exists-p local) (load-file local)))
