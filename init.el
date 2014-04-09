@@ -233,6 +233,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  ;; If there is more than one, they won't work right.
  )
 
+; 2014-04-08 project-explorer mappings
+(evil-define-key 'normal project-explorer-mode-map (kbd "TAB") 'pe/tab)
+(evil-define-key 'normal project-explorer-mode-map "o" 'pe/return)
+
 (setq c-default-style "linux")
 
 ; 2014-04-08: local emacs overrides
