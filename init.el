@@ -155,6 +155,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (global-set-key (kbd "M-[") 'dim:escreen-goto-prev-screen)
 (global-set-key (kbd "M-]") 'dim:escreen-goto-next-screen)
 
+; 2014-04-13: Custom keys for dired
+(evil-define-key 'normal dired-mode-map (kbd "TAB") 'dired-hide-subdir)
+
 ; 2014-04-03: Org mode customizations
 (add-hook 'org-mode-hook 'auto-fill-mode)
 (setq org-log-done 'time)
