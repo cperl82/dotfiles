@@ -60,6 +60,7 @@
   "k" 'kill-buffer
   "o" 'delete-other-windows
   "x" 'delete-window
+  "l" 'escreen-get-active-screen-numbers-with-emphasis
   "e" '(lambda () (interactive) (message (file-relative-name (buffer-file-name))))
   "E" '(lambda () (interactive) (message (buffer-file-name))))
 
