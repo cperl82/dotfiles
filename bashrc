@@ -157,6 +157,27 @@ aes-256-cbc() {
 
 }
 
+# Emacs convience functions {{{2
+emd () {
+	name="${1}"
+	if [[ -z "${name}" ]]
+	then
+		echo "emd [name-of-daemon-socket]"
+		return
+	fi
+	emacs --daemon="${name}"
+}
+
+emc () {
+	name="${1}"
+	if [[ -z "${name}" ]]
+	then
+		echo "emc [name-of-daemon-socket]"
+		return
+	fi
+	emacsclient -nw --socket-name="${name}"
+}
+
 # NHL Schedule scraping function {{{2
 # argument is a regex that is matched against the est node from the xml
 nhl-schedule () {
