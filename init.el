@@ -60,6 +60,7 @@
   "k" 'kill-buffer
   "o" 'delete-other-windows
   "x" 'delete-window
+  "l" 'escreen-get-active-screen-numbers-with-emphasis
   "e" '(lambda () (interactive) (message (file-relative-name (buffer-file-name))))
   "E" '(lambda () (interactive) (message (buffer-file-name))))
 
@@ -157,6 +158,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ; 2014-04-13: Custom keys for dired
 (evil-define-key 'normal dired-mode-map (kbd "TAB") 'dired-hide-subdir)
+(evil-define-key 'normal hs-minor-mode-map (kbd "TAB") 'hs-toggle-hiding)
+
 
 ; 2014-04-03: Org mode customizations
 (add-hook 'org-mode-hook 'auto-fill-mode)
@@ -202,7 +205,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-motion-state-map (kbd "C-M-l") 'buf-move-right)
 
 ; 2014-04-06: cscope related
-; (evil-define-key 'normal cscope-minor-mode-keymap (kbd "<S-return>") 'cscope-select-entry-inplace)
+(add-hook 'cscope-list-entry-hook
+	  (lambda ()
+	    (define-key evil-normal-state-local-map (kbd "RET") 'cscope-select-entry-current-window)
+	    (define-key evil-normal-state-local-map (kbd "SPC") 'cscope-show-entry-other-window)
+	    (define-key evil-normal-state-local-map (kbd   "o") 'cscope-select-entry-other-window)
+	    (define-key evil-normal-state-local-map (kbd   "n") 'cscope-next-file-without-jump)
+	    (define-key evil-normal-state-local-map (kbd   "p") 'cscope-prev-file-without-jump)))
 
 ; 2014-04-04: Holy moly its effort to get line numbers like vim!
 ; http://www.emacswiki.org/emacs/LineNumbers#toc6
@@ -257,9 +266,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (defun toggle-hiding (column)
       (interactive "P")
-      (if hs-minor-mode
-          (if (condition-case nil
-                  (hs-toggle-hiding)
-                (error t))
-              (hs-show-all))
-        (toggle-selective-display column)))
+      (if (boundp 'hs-minor-mode)
+	    (if (condition-case nil
+		    (hs-toggle-hiding)
+		  (error t))
+		(hs-show-all))
+	(toggle-selective-display column)))
