@@ -85,7 +85,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ; 2014-03-28: Functions to support selecting something in Visual mode
 ; and then automatically start searching for it by pressing "/" or "?"
 (evil-define-operator cp-evil-search (beg end forward)
-  (let* ((search-string (buffer-substring beg end))
+  (let* ((search-string (buffer-substring-no-properties beg end))
 	 (quoted-string (regexp-quote search-string)))
     (setq isearch-forward forward)
     (evil-search quoted-string forward t)))
