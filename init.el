@@ -31,6 +31,26 @@
 
 (el-get 'sync my-packages)
 
+; 2014-04-22 mode-line-format
+(setq-default mode-line-format
+    `("%e"
+     mode-line-front-space
+     mode-line-mule-info
+     mode-line-client
+     mode-line-modified
+     mode-line-remote
+     mode-line-frame-identification
+     mode-line-buffer-identification
+     "   "
+     ,(if (string-match (format "^%s" (getenv "HOME")) default-directory)
+          (replace-match "~" t t default-directory)
+        default-directory)
+     "   "
+     mode-line-position
+     evil-mode-line-tag
+     (vc-mode vc-mode)
+     "  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
+
 ; 2014-03-27: Turn off the menu bar
 (menu-bar-mode -1)
 
