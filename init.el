@@ -159,7 +159,17 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ; 2014-04-13: Custom keys for dired
 (evil-define-key 'normal dired-mode-map (kbd "TAB") 'dired-hide-subdir)
 (evil-define-key 'normal hs-minor-mode-map (kbd "TAB") 'hs-toggle-hiding)
+(add-hook 'dired-load-hook
+	  (lambda ()
+	    (load "dired-x")
+	    ;; Set dired-x global variables here.  For example:
+	    ;; (setq dired-guess-shell-gnutar "gtar")
+	    ))
 
+(add-hook 'dired-mode-hook
+	  (lambda ()
+	    ;; Set dired-x buffer-local variables here.  For example:
+	    (dired-omit-mode 1)))
 
 ; 2014-04-03: Org mode customizations
 (add-hook 'org-mode-hook 'auto-fill-mode)
