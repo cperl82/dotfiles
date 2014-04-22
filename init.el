@@ -33,7 +33,7 @@
 
 ; 2014-04-22 mode-line-format
 (setq-default mode-line-format
-    `("%e"
+    '("%e"
      mode-line-front-space
      mode-line-mule-info
      mode-line-client
@@ -42,9 +42,9 @@
      mode-line-frame-identification
      mode-line-buffer-identification
      "   "
-     ,(if (string-match (format "^%s" (getenv "HOME")) default-directory)
+     (:eval (if (string-match (format "^%s" (getenv "HOME")) default-directory)
           (replace-match "~" t t default-directory)
-        default-directory)
+        default-directory))
      "   "
      mode-line-position
      evil-mode-line-tag
