@@ -80,8 +80,9 @@
   "k" 'kill-buffer
   "o" 'delete-other-windows
   "x" 'delete-window
-  "l" 'escreen-get-active-screen-numbers-with-emphasis
-  "e" '(lambda () (interactive) (message (file-relative-name (buffer-file-name))))
+  "e" 'escreen-get-active-screen-names-with-emphasis
+  "l" 'escreen-move-screen-right
+  "h" 'escreen-move-screen-left
   "E" '(lambda () (interactive) (message (buffer-file-name))))
 
 ; 2014-04-01: http://stackoverflow.com/questions/8483182/emacs-evil-mode-best-practice
@@ -136,45 +137,75 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (require 'escreen)
 (escreen-install)
 
-;; add C-\ l to list screens with emphase for current one
-(defun escreen-get-active-screen-numbers-with-emphasis ()
-  "what the name says"
+(defun escreen-swap-screen (other-screen-number)
+  (if (and
+       (numberp other-screen-number)
+       (not (eq other-screen-number escreen-current-screen-number)))
+      (let ((screen-data-current (escreen-configuration-escreen escreen-current-screen-number))
+	    (screen-data-other   (escreen-configuration-escreen other-screen-number)))
+	(setcar screen-data-current other-screen-number)
+	(setcar screen-data-other   escreen-current-screen-number)
+	(setq escreen-current-screen-number other-screen-number))))
+
+(defun escreen-move-screen (direction)
+  (let ((other-screen-number
+	 (cond ((eq direction 'left)  (1- escreen-current-screen-number))
+	       ((eq direction 'right) (1+ escreen-current-screen-number)))))
+    (cond ((and
+	    (>= other-screen-number 0)
+	    (<= other-screen-number escreen-highest-screen-number-used))
+	   (escreen-swap-screen other-screen-number)))))
+
+(defun escreen-move-screen-left ()
   (interactive)
-  (let ((escreens (escreen-get-active-screen-numbers))
-	(emphased ""))
+  (escreen-move-screen 'left)
+  (escreen-get-active-screen-names-with-emphasis))
 
-    (dolist (s escreens)
-      (setq emphased
-	    (concat emphased (if (= escreen-current-screen-number s)
-				 (concat "(*" (number-to-string s) ")")
-			       (number-to-string s))
-		    " ")))
-    (message "escreen: active screens: %s" emphased)))
+(defun escreen-move-screen-right ()
+  (interactive)
+  (escreen-move-screen 'right)
+  (escreen-get-active-screen-names-with-emphasis))
 
-(global-set-key (kbd "C-\\ l") 'escreen-get-active-screen-numbers-with-emphasis)
+(defun escreen-rename-screen (name)
+  (interactive "sNew screen name: ")
+  (if (stringp name)
+      (let ((screen-data (escreen-configuration-escreen escreen-current-screen-number))
+	     (new-name (if (equal name "") nil name)))
+	(setcar (cdr screen-data) new-name)
+	(escreen-get-active-screen-names-with-emphasis))))
 
-(defun dim:escreen-goto-last-screen ()
+(defun escreen-get-active-screen-names-with-emphasis()
+  (interactive)
+  (let ((output ""))
+    (dolist (n (escreen-get-active-screen-numbers))
+      (let* ((data (escreen-configuration-escreen n))
+	     (name (nth 1 data))
+	     (number-string (or name (number-to-string n))))
+	(setq output
+	    (format "%s %s" output
+		 (if (eq escreen-current-screen-number n)
+		     (format "(*%s)" number-string)
+		   number-string)))))
+    (message "escreen: active screens: %s" output)))
+
+(defun cp/escreen-goto-last-screen ()
   (interactive)
   (escreen-goto-last-screen)
-  (escreen-get-active-screen-numbers-with-emphasis))
+  (escreen-get-active-screen-names-with-emphasis))
 
-(defun dim:escreen-goto-prev-screen (&optional n)
+(defun cp/escreen-goto-prev-screen (&optional n)
   (interactive "p")
   (escreen-goto-prev-screen n)
-  (escreen-get-active-screen-numbers-with-emphasis))
+  (escreen-get-active-screen-names-with-emphasis))
 
-(defun dim:escreen-goto-next-screen (&optional n)
+(defun cp/escreen-goto-next-screen (&optional n)
   (interactive "p")
   (escreen-goto-next-screen n)
-  (escreen-get-active-screen-numbers-with-emphasis))
+  (escreen-get-active-screen-names-with-emphasis))
 
-(define-key escreen-map escreen-prefix-char 'dim:escreen-goto-last-screen)
-
-(global-set-key '[M-S-right] (quote dim:escreen-goto-next-screen))
-(global-set-key '[M-S-left] (quote dim:escreen-goto-prev-screen))
-
-(global-set-key (kbd "M-[") 'dim:escreen-goto-prev-screen)
-(global-set-key (kbd "M-]") 'dim:escreen-goto-next-screen)
+(global-set-key (kbd "C-\\") 'escreen-prefix)
+(global-set-key (kbd "M-[")  'cp/escreen-goto-prev-screen)
+(global-set-key (kbd "M-]")  'cp/escreen-goto-next-screen)
 
 ; 2014-04-13: Custom keys for dired
 (evil-define-key 'normal dired-mode-map (kbd "TAB") 'dired-hide-subdir)
