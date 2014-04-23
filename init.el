@@ -117,8 +117,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (evil-define-operator cp-evil-search-backward (beg end type)
   (cp-evil-search beg end nil))
 
-(define-key evil-visual-state-map "/" `cp-evil-search-forward)
-(define-key evil-visual-state-map "?" `cp-evil-search-backward)
+(define-key evil-visual-state-map "/" 'cp-evil-search-forward)
+(define-key evil-visual-state-map "?" 'cp-evil-search-backward)
 
 ; 2014-03-27: ack-and-a-half: https://github.com/jhelwig/ack-and-a-half
 (require 'ack-and-a-half)
