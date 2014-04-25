@@ -31,24 +31,26 @@
 (el-get 'sync my-packages)
 
 (defun format-default-dir-for-mode-line (d max-length)
-  (let ((reduced
-	 (if (string-match (format "^%s" (getenv "HOME")) d)
-	     (replace-match "~" t t d) d)))
-    (replace-regexp-in-string
-     "/$"
-     "" 
-     (if (> (length reduced) max-length)
-	 (let* ((n 0)
-		(further-reduced "")
-		(pieces
-		 (reverse (remove-if (lambda (s) (equal "" s)) (split-string d "/"))))
-		(max (length pieces)))
-	   (catch 'done
-	     (while (< n max)
-	       (setq further-reduced (format "%s/%s" (nth n pieces) further-reduced))
-	       (when (> (length further-reduced) max-length) (throw 'done further-reduced))
-	       (setq n (1+ n)))))
-       reduced))))
+  (let* ((reduced
+	  (if (string-match (format "^%s" (getenv "HOME")) d)
+	      (replace-match "~" t t d)
+	    d))
+	 (reduced (replace-regexp-in-string "/$" "" reduced)))
+    (if (> (length reduced) max-length)
+	(let* ((n 0)
+	       (further-reduced nil)
+	       (pieces
+		(reverse (remove-if (lambda (s) (equal "" s)) (split-string reduced "/"))))
+	       (len (length pieces)))
+	  (catch 'done
+	    (while (< n len)
+	      (setq further-reduced
+		    (if further-reduced
+			(format "%s/%s" (nth n pieces) further-reduced)
+		      (nth n pieces)))
+	      (when (> (length further-reduced) max-length) (throw 'done further-reduced))
+	      (setq n (1+ n)))))
+      reduced)))
 
 ; 2014-04-22 mode-line-format
 (setq-default mode-line-format
@@ -61,7 +63,7 @@
      mode-line-frame-identification
      mode-line-buffer-identification
      "   "
-     (:eval (format-default-dir-for-mode-line default-directory 30))
+     (:eval (format-default-dir-for-mode-line default-directory 50))
      "   "
      mode-line-position
      evil-mode-line-tag
@@ -75,7 +77,7 @@
 (menu-bar-mode -1)
 
 ; 2014-03-27: Always show matching parents
-(setq show-paren-delay 0)
+(setq-default show-paren-delay 0)
 (show-paren-mode)
 
 ; 2014-03-27: Do not want backup files
@@ -139,6 +141,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ; 2014-03-27: ack-and-a-half: https://github.com/jhelwig/ack-and-a-half
 (require 'ack-and-a-half)
+(setq-default ack-and-a-half-prompt-for-directory t)
+(setq-default ack-and-a-half-use-ido t)
+(add-to-list 'ack-and-a-half-mode-type-default-alist '(tuareg-mode "ocaml" "cc"))
 
 ; 2014-03-29: org-mode
 (require 'org)
@@ -196,28 +201,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (let ((output ""))
     (dolist (n (escreen-get-active-screen-numbers))
       (let* ((data (escreen-configuration-escreen n))
-	     (name (nth 1 data))
-	     (number-string (or name (number-to-string n))))
+	     (screen-name (nth 1 data)))
 	(setq output
-	    (format "%s %s" output
-		 (if (eq escreen-current-screen-number n)
-		     (format "(*%s)" number-string)
-		   number-string)))))
-    (message "escreen: active screens: %s" output)))
+	    (format "%s  %s" output
+		 (cond ((and (eq escreen-current-screen-number n) screen-name) (format "%d* %s" n screen-name))
+		       ((eq escreen-current-screen-number n) (format "%d*" n))
+		       (screen-name (format "%d- %s" n screen-name))
+		       (t (format "%d-" n))))))
+    (message "escreen: active screens: %s" output))))
 
-(defun cp/escreen-goto-last-screen ()
-  (interactive)
-  (escreen-goto-last-screen)
-  (escreen-get-active-screen-names-with-emphasis))
-
-(defun cp/escreen-goto-prev-screen (&optional n)
-  (interactive "p")
-  (escreen-goto-prev-screen n)
-  (escreen-get-active-screen-names-with-emphasis))
-
-(defun cp/escreen-goto-next-screen (&optional n)
-  (interactive "p")
-  (escreen-goto-next-screen n)
+(defadvice escreen-goto-screen (after cp/escreen-goto-screen first (n &optional dont-update-current) activate)
   (escreen-get-active-screen-names-with-emphasis))
 
 (defadvice escreen-create-screen (after cp/escreen-create-screen first (&optional n) activate)
@@ -228,23 +221,19 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (define-key escreen-map "r"       'escreen-rename-screen)
 (global-set-key (kbd "C-\\")      'escreen-prefix)
-(global-set-key (kbd "C-\\ C-\\") 'cp/escreen-goto-last-screen)
-(global-set-key (kbd "M-[")       'cp/escreen-goto-prev-screen)
-(global-set-key (kbd "M-]")       'cp/escreen-goto-next-screen)
+(global-set-key (kbd "C-\\ C-\\") 'escreen-goto-last-screen)
+(global-set-key (kbd "M-[")       'escreen-goto-prev-screen)
+(global-set-key (kbd "M-]")       'escreen-goto-next-screen)
+
+;2014-04-24: hide show related
+(evil-define-key 'normal hs-minor-mode-map (kbd "TAB") 'hs-toggle-hiding)
 
 ; 2014-04-13: Custom keys for dired
 (evil-define-key 'normal dired-mode-map (kbd "TAB") 'dired-hide-subdir)
-(evil-define-key 'normal hs-minor-mode-map (kbd "TAB") 'hs-toggle-hiding)
-(add-hook 'dired-load-hook
-	  (lambda ()
-	    (load "dired-x")
-	    ;; Set dired-x global variables here.  For example:
-	    ;; (setq dired-guess-shell-gnutar "gtar")
-	    ))
-
 (add-hook 'dired-mode-hook
 	  (lambda ()
 	    ;; Set dired-x buffer-local variables here.  For example:
+	    (require 'dired-x)
 	    (dired-omit-mode 1)))
 
 ; 2014-04-03: Org mode customizations
@@ -289,6 +278,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-motion-state-map (kbd "C-M-k") 'buf-move-up)
 (define-key evil-motion-state-map (kbd "C-M-h") 'buf-move-left)
 (define-key evil-motion-state-map (kbd "C-M-l") 'buf-move-right)
+
+(define-key evil-normal-state-map (kbd "SPC") 'next-error)
 
 ; 2014-04-06: cscope related
 (add-hook 'cscope-list-entry-hook
