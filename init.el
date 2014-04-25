@@ -25,7 +25,6 @@
         tuareg-mode
         org-mode
         buffer-move
-        project-explorer
         xcscope
         xcscope+))
 
@@ -66,7 +65,6 @@
 (require 'evil)
 (evil-mode 1)
 (evil-set-initial-state 'ibuffer-mode 'normal)
-(evil-set-initial-state 'help-mode    'normal)
 
 ; 2014-03-27: Evil Leader
 (require 'evil-leader)
@@ -81,8 +79,6 @@
   "o" 'delete-other-windows
   "x" 'delete-window
   "e" 'escreen-get-active-screen-names-with-emphasis
-  "l" 'escreen-move-screen-right
-  "h" 'escreen-move-screen-left
   "E" '(lambda () (interactive) (message (buffer-file-name))))
 
 ; 2014-04-01: http://stackoverflow.com/questions/8483182/emacs-evil-mode-best-practice
@@ -203,9 +199,17 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (escreen-goto-next-screen n)
   (escreen-get-active-screen-names-with-emphasis))
 
-(global-set-key (kbd "C-\\") 'escreen-prefix)
-(global-set-key (kbd "M-[")  'cp/escreen-goto-prev-screen)
-(global-set-key (kbd "M-]")  'cp/escreen-goto-next-screen)
+(defadvice escreen-create-screen (after cp/escreen-create-screen first (&optional n) activate)
+  (escreen-get-active-screen-names-with-emphasis))
+
+(defadvice escreen-kill-screen (after cp/escreen-kill-screen first (&optional n) activate)
+  (escreen-get-active-screen-names-with-emphasis))
+
+(define-key escreen-map "r"       'escreen-rename-screen)
+(global-set-key (kbd "C-\\")      'escreen-prefix)
+(global-set-key (kbd "C-\\ C-\\") 'cp/escreen-goto-last-screen)
+(global-set-key (kbd "M-[")       'cp/escreen-goto-prev-screen)
+(global-set-key (kbd "M-]")       'cp/escreen-goto-next-screen)
 
 ; 2014-04-13: Custom keys for dired
 (evil-define-key 'normal dired-mode-map (kbd "TAB") 'dired-hide-subdir)
@@ -305,10 +309,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-; 2014-04-08 project-explorer mappings
-(evil-define-key 'normal project-explorer-mode-map (kbd "TAB") 'pe/tab)
-(evil-define-key 'normal project-explorer-mode-map "o" 'pe/return)
 
 (setq c-default-style "linux")
 
