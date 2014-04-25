@@ -30,6 +30,26 @@
 
 (el-get 'sync my-packages)
 
+(defun format-default-dir-for-mode-line (d max-length)
+  (let ((reduced
+	 (if (string-match (format "^%s" (getenv "HOME")) d)
+	     (replace-match "~" t t d) d)))
+    (replace-regexp-in-string
+     "/$"
+     "" 
+     (if (> (length reduced) max-length)
+	 (let* ((n 0)
+		(further-reduced "")
+		(pieces
+		 (reverse (remove-if (lambda (s) (equal "" s)) (split-string d "/"))))
+		(max (length pieces)))
+	   (catch 'done
+	     (while (< n max)
+	       (setq further-reduced (format "%s/%s" (nth n pieces) further-reduced))
+	       (when (> (length further-reduced) max-length) (throw 'done further-reduced))
+	       (setq n (1+ n)))))
+       reduced))))
+
 ; 2014-04-22 mode-line-format
 (setq-default mode-line-format
     '("%e"
@@ -41,14 +61,15 @@
      mode-line-frame-identification
      mode-line-buffer-identification
      "   "
-     (:eval (if (string-match (format "^%s" (getenv "HOME")) default-directory)
-          (replace-match "~" t t default-directory)
-        default-directory))
+     (:eval (format-default-dir-for-mode-line default-directory 30))
      "   "
      mode-line-position
      evil-mode-line-tag
      (vc-mode vc-mode)
      "  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
+
+; 2014-04-24: Duplicate buffer names
+(require 'uniquify)
 
 ; 2014-03-27: Turn off the menu bar
 (menu-bar-mode -1)
