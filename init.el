@@ -61,7 +61,7 @@
      mode-line-frame-identification
      mode-line-buffer-identification
      "   "
-     (:eval (format-default-dir-for-mode-line default-directory 30))
+     (:eval (format-default-dir-for-mode-line default-directory 50))
      "   "
      mode-line-position
      evil-mode-line-tag
