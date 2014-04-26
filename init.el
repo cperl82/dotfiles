@@ -282,13 +282,17 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-normal-state-map (kbd "SPC") 'next-error)
 
 ; 2014-04-06: cscope related
+(setq-default cscope-option-use-inverted-index t)
+(setq-default cscope-close-window-after-select t) 
 (add-hook 'cscope-list-entry-hook
 	  (lambda ()
 	    (define-key evil-normal-state-local-map (kbd "RET") 'cscope-select-entry-current-window)
 	    (define-key evil-normal-state-local-map (kbd "SPC") 'cscope-show-entry-other-window)
 	    (define-key evil-normal-state-local-map (kbd   "o") 'cscope-select-entry-other-window)
 	    (define-key evil-normal-state-local-map (kbd   "n") 'cscope-next-file-without-jump)
-	    (define-key evil-normal-state-local-map (kbd   "p") 'cscope-prev-file-without-jump)))
+	    (define-key evil-normal-state-local-map (kbd   "p") 'cscope-prev-file-without-jump)
+	    (define-key evil-normla-state-local-map (kbd "M-K") 'cscope-history-kill-result)
+	    (define-key evil-normal-state-local-map (kbd   "q") 'cscope-bury-buffer)))
 
 ; 2014-04-04: Holy moly its effort to get line numbers like vim!
 ; http://www.emacswiki.org/emacs/LineNumbers#toc6
