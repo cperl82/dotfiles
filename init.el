@@ -218,6 +218,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	(escreen-get-active-screen-names-with-emphasis))))
 
 (defun escreen-get-active-screen-names-with-emphasis()
+  ; TODO: Perhaps you want to propertize the name or the number with
+  ; some sort of highlighting
   (interactive)
   (let ((output ""))
     (dolist (n (escreen-get-active-screen-numbers))
