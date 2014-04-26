@@ -184,7 +184,21 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (cond ((and
 	    (>= other-screen-number 0)
 	    (<= other-screen-number escreen-highest-screen-number-used))
-	   (escreen-swap-screen other-screen-number)))))
+	   (escreen-swap-screen other-screen-number))
+	  ; These are the cases where we're moving right off the right
+	  ; end or left off the left end
+	  ; TODO: some of the below can probably be factored out
+	  ((< other-screen-number 0)
+	   (let ((n 1)
+		 (end escreen-highest-screen-number-used))
+	    (while (<= n end)
+	      (escreen-swap-screen n)
+	      (setq n (1+ n)))))
+	  ((> other-screen-number escreen-highest-screen-number-used)
+	   (let ((n (1- escreen-highest-screen-number-used)))
+	     (while (>= n 0)
+	       (escreen-swap-screen n)
+	       (setq n (1- n))))))))
 
 (defun escreen-move-screen-left ()
   (interactive)
