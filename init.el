@@ -212,7 +212,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (defun escreen-rename-screen (&optional name &optional number)
   (interactive "sNew screen name: ")
   (let ((screen-data (escreen-configuration-escreen (or number escreen-current-screen-number)))
-	(new-name (or (if (equal name "") nil name) "default")))
+	(new-name (cond ((equal name "") nil)
+			((stringp name) name)
+			(t "default"))))
     (setcar (cdr screen-data) new-name)
     (escreen-get-active-screen-names-with-emphasis)))
 
