@@ -209,13 +209,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (escreen-move-screen 'right)
   (escreen-get-active-screen-names-with-emphasis))
 
-(defun escreen-rename-screen (name)
+(defun escreen-rename-screen (&optional name &optional number)
   (interactive "sNew screen name: ")
-  (if (stringp name)
-      (let ((screen-data (escreen-configuration-escreen escreen-current-screen-number))
-	     (new-name (if (equal name "") nil name)))
-	(setcar (cdr screen-data) new-name)
-	(escreen-get-active-screen-names-with-emphasis))))
+  (let ((screen-data (escreen-configuration-escreen (or number escreen-current-screen-number)))
+	(new-name (or (if (equal name "") nil name) "default")))
+    (setcar (cdr screen-data) new-name)
+    (escreen-get-active-screen-names-with-emphasis)))
 
 (defun escreen-get-active-screen-names-with-emphasis()
   ; TODO: Perhaps you want to propertize the name or the number with
@@ -233,11 +232,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 		       (t (format "%d-" n))))))
     (message "escreen: active screens: %s" output))))
 
-(defun escreen-set-screen-name-default (&optional screen-number)
-  (let* ((screen-number (or screen-number escreen-current-screen-number))
-	 (screen-data (escreen-configuration-escreen screen-number)))
-	(setcar (cdr screen-data) "default")))
-
 (defadvice escreen-goto-screen (after cp/escreen-goto-screen first (n &optional dont-update-current) activate)
   (escreen-get-active-screen-names-with-emphasis))
 
@@ -245,11 +239,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (escreen-get-active-screen-names-with-emphasis))
 
 (defadvice escreen-create-screen (after cp/escreen-create-screen first (&optional n) activate)
-  (escreen-set-screen-name-default)
+  (escreen-rename-screen)
   (escreen-get-active-screen-names-with-emphasis))
 
 (defadvice escreen-install (after cp/escreen-install activate)
-  (escreen-set-screen-name-default))
+  (escreen-rename-screen))
 
 (escreen-install)
 
