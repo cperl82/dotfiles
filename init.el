@@ -165,9 +165,17 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        (not (eq other-screen-number escreen-current-screen-number)))
       (let ((screen-data-current (escreen-configuration-escreen escreen-current-screen-number))
 	    (screen-data-other   (escreen-configuration-escreen other-screen-number)))
-	(setcar screen-data-current other-screen-number)
-	(setcar screen-data-other   escreen-current-screen-number)
-	(setq escreen-current-screen-number other-screen-number))))
+	(cond ((and screen-data-current screen-data-other)
+	       ; The other screen does exist
+	       (progn
+		 (setcar screen-data-current other-screen-number)
+		 (setcar screen-data-other   escreen-current-screen-number)
+		 (setq escreen-current-screen-number other-screen-number)))
+	      ((and screen-data-current (not screen-data-other))
+	       ; The other screen doesn't exist
+	       (progn
+		 (setcar screen-data-current other-screen-number)
+		 (setq escreen-current-screen-number other-screen-number)))))))
 
 (defun escreen-move-screen (direction)
   (let ((other-screen-number
@@ -214,6 +222,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (escreen-get-active-screen-names-with-emphasis))
 
 (defadvice escreen-create-screen (after cp/escreen-create-screen first (&optional n) activate)
+  (let ((screen-data (escreen-configuration-escreen escreen-current-screen-number)))
+	(setcar (cdr screen-data) "default"))
   (escreen-get-active-screen-names-with-emphasis))
 
 (defadvice escreen-kill-screen (after cp/escreen-kill-screen first (&optional n) activate)
