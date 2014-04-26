@@ -9,26 +9,23 @@
 
 (setq my-packages
       '(ack-and-a-half
-        chumpy-windows
         color-theme
-        color-theme-almost-monokai
         color-theme-ir-black
-        color-theme-mac-classic
-        color-theme-solarized
         color-theme-tomorrow
         color-theme-zenburn
         xoria256-emacs
-        escreen
         evil
         undo-tree
         evil-leader
         tuareg-mode
         org-mode
         buffer-move
-        xcscope
-        xcscope+))
+        xcscope))
 
 (el-get 'sync my-packages)
+
+; 2014-04-26: Loading other stuff
+(add-to-list 'load-path "~/.emacs.d")
 
 (defun format-default-dir-for-mode-line (d max-length)
   (let* ((reduced
