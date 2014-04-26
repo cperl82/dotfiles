@@ -157,7 +157,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ;;; escreen
 (require 'escreen)
-(escreen-install)
 
 (defun escreen-swap-screen (other-screen-number)
   (if (and
@@ -232,16 +231,25 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 		       (t (format "%d-" n))))))
     (message "escreen: active screens: %s" output))))
 
-(defadvice escreen-goto-screen (after cp/escreen-goto-screen first (n &optional dont-update-current) activate)
-  (escreen-get-active-screen-names-with-emphasis))
+(defun escreen-set-screen-name-default (&optional screen-number)
+  (let* ((screen-number (or screen-number escreen-current-screen-number))
+	 (screen-data (escreen-configuration-escreen screen-number)))
+	(setcar (cdr screen-data) "default")))
 
-(defadvice escreen-create-screen (after cp/escreen-create-screen first (&optional n) activate)
-  (let ((screen-data (escreen-configuration-escreen escreen-current-screen-number)))
-	(setcar (cdr screen-data) "default"))
+(defadvice escreen-goto-screen (after cp/escreen-goto-screen first (n &optional dont-update-current) activate)
   (escreen-get-active-screen-names-with-emphasis))
 
 (defadvice escreen-kill-screen (after cp/escreen-kill-screen first (&optional n) activate)
   (escreen-get-active-screen-names-with-emphasis))
+
+(defadvice escreen-create-screen (after cp/escreen-create-screen first (&optional n) activate)
+  (escreen-set-screen-name-default)
+  (escreen-get-active-screen-names-with-emphasis))
+
+(defadvice escreen-install (after cp/escreen-install activate)
+  (escreen-set-screen-name-default))
+
+(escreen-install)
 
 (define-key escreen-map "r"       'escreen-rename-screen)
 (global-set-key (kbd "C-\\")      'escreen-prefix)
