@@ -19,7 +19,6 @@
         evil-leader
         tuareg-mode
         org-mode
-        buffer-move
         xcscope))
 
 (el-get 'sync my-packages)
