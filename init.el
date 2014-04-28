@@ -215,14 +215,15 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (escreen-move-screen 'right)
   (escreen-get-active-screen-names-with-emphasis))
 
-(defun escreen-rename-screen (&optional name &optional number)
+(defun escreen-rename-screen (&optional name number suppress-message)
   (interactive "sNew screen name: ")
   (let ((screen-data (escreen-configuration-escreen (or number escreen-current-screen-number)))
 	(new-name (cond ((equal name "") nil)
 			((stringp name) name)
 			(t "default"))))
     (setcar (cdr screen-data) new-name)
-    (escreen-get-active-screen-names-with-emphasis)))
+    (when (not suppress-message)
+      (escreen-get-active-screen-names-with-emphasis))))
 
 (defun escreen-get-active-screen-names-with-emphasis()
   ; TODO: Perhaps you want to propertize the name or the number with
@@ -252,7 +253,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (escreen-get-active-screen-names-with-emphasis))
 
 (defadvice escreen-install (after cp/escreen-install activate)
-  (escreen-rename-screen))
+  (escreen-rename-screen nil nil t))
 
 (escreen-install)
 
