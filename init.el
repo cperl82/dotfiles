@@ -324,10 +324,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	  (lambda ()
 	    (define-key evil-normal-state-local-map (kbd "RET") 'cscope-select-entry-current-window)
 	    (define-key evil-normal-state-local-map (kbd "SPC") 'cscope-show-entry-other-window)
-	    (define-key evil-normal-state-local-map (kbd   "o") 'cscope-select-entry-other-window)
-	    (define-key evil-normal-state-local-map (kbd   "n") 'cscope-next-file-without-jump)
-	    (define-key evil-normal-state-local-map (kbd   "p") 'cscope-prev-file-without-jump)
-	    (define-key evil-normal-state-local-map (kbd "M-K") 'cscope-history-kill-result)
+	    (define-key evil-normal-state-local-map (kbd   "o") 'cscope-select-entry-one-window)
 	    (define-key evil-normal-state-local-map (kbd   "q") 'cscope-bury-buffer)))
 
 ; 2014-04-04: Holy moly its effort to get line numbers like vim!
