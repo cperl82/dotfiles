@@ -96,6 +96,7 @@
   "s" 'split-window-vertically
   "v" 'split-window-horizontally
   "k" 'kill-buffer
+  "K" 'kill-buffer-and-window
   "o" 'delete-other-windows
   "x" 'delete-window
   "e" 'escreen-get-active-screen-names-with-emphasis
