@@ -318,6 +318,35 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (define-key evil-normal-state-map (kbd "SPC") 'next-error)
 
+; 2014-04-29: man related
+(defun cperl-man-forward-sexp-fun (arg)
+    (let ((p (point)))
+      (forward-line 1)
+      (re-search-forward (concat
+			  Man-heading-regexp
+			  "\\|"
+			  "\\'"
+			  "\\|"
+			  "^[^[:space:]]"))
+      (beginning-of-line)
+      (forward-line -1)
+      (if (equal p (point)) (end-of-line))))
+
+(add-to-list
+ 'hs-special-modes-alist
+ `(Man-mode
+   ,Man-heading-regexp
+   nil
+   nil
+   cperl-man-forward-sexp-fun))
+
+(add-hook 'Man-mode-hook
+	  (lambda ()
+	    (setq-local comment-start "THISPROBABLYWONTEXIST")
+	    (setq-local comment-end "")
+	    (hs-minor-mode 1)
+	    (hs-hide-all)))
+			  
 ; 2014-04-06: cscope related
 (setq-default cscope-option-use-inverted-index t)
 (setq-default cscope-close-window-after-select t) 
