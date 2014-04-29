@@ -321,6 +321,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-normal-state-map (kbd "SPC") 'next-error)
 
 ; 2014-04-29: man related
+(require 'man)
 (defun cperl-man-forward-sexp-fun (arg)
     (let ((p (point)))
       (forward-line 1)
