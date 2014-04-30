@@ -264,8 +264,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (global-set-key (kbd "M-[")       'escreen-goto-prev-screen)
 (global-set-key (kbd "M-]")       'escreen-goto-next-screen)
 
-;2014-04-24: hide show related
-(evil-define-key 'normal hs-minor-mode-map (kbd "TAB") 'hs-toggle-hiding)
+; 2014-04-24: hide show related
+; 2014-04-30: I'm not sure why the hook works but the `evil-define-key' doesn't (well, I
+; mean it sort of works in that if I enter insert mode and then exit back into normal mode
+; the keybinding will be there, but I want it to just be there right away).
+(add-hook 'hs-minor-mode-hook
+	  (lambda ()
+	    (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))
+;(evil-define-key 'normal hs-minor-mode-map (kbd "TAB") 'hs-toggle-hiding)
 
 ; 2014-04-13: Custom keys for dired
 (evil-define-key 'normal dired-mode-map (kbd "TAB") 'dired-hide-subdir)
@@ -355,9 +361,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq-default cscope-close-window-after-select t) 
 (add-hook 'cscope-list-entry-hook
 	  (lambda ()
-	    (define-key evil-normal-state-local-map (kbd "RET") 'cscope-select-entry-current-window)
+	    (setq-local face-remapping-alist
+			'((cscope-separator-face   font-lock-string-face)
+			  (cscope-line-number-face font-lock-string-face)
+			  (cscope-file-face        font-lock-comment-face)
+			  (cscope-function-face    font-lock-function-name-face)))
+	    (define-key evil-normal-state-local-map (kbd "RET") 'cscope-select-entry-inplace)
 	    (define-key evil-normal-state-local-map (kbd "SPC") 'cscope-show-entry-other-window)
-	    (define-key evil-normal-state-local-map (kbd   "o") 'cscope-select-entry-one-window)
+	    (define-key evil-normal-state-local-map (kbd   "o") 'cscope-select-entry-other-window)
 	    (define-key evil-normal-state-local-map (kbd   "q") 'cscope-bury-buffer)))
 
 ; 2014-04-04: Holy moly its effort to get line numbers like vim!
