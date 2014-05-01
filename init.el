@@ -359,17 +359,21 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ; 2014-04-06: cscope related
 (setq-default cscope-option-use-inverted-index t)
 (setq-default cscope-close-window-after-select t) 
+(setq-default cscope-edit-single-match nil)
 (add-hook 'cscope-list-entry-hook
 	  (lambda ()
 	    (setq-local face-remapping-alist
 			'((cscope-separator-face   font-lock-string-face)
 			  (cscope-line-number-face font-lock-string-face)
-			  (cscope-file-face        font-lock-comment-face)
+			  (cscope-file-face        font-lock-doc-face)
 			  (cscope-function-face    font-lock-function-name-face)))
 	    (define-key evil-normal-state-local-map (kbd "RET") 'cscope-select-entry-inplace)
 	    (define-key evil-normal-state-local-map (kbd "SPC") 'cscope-show-entry-other-window)
 	    (define-key evil-normal-state-local-map (kbd   "o") 'cscope-select-entry-other-window)
-	    (define-key evil-normal-state-local-map (kbd   "q") 'cscope-bury-buffer)))
+	    (define-key evil-normal-state-local-map (kbd   "q") 'cscope-bury-buffer)
+	    (define-key evil-normal-state-local-map (kbd "M-n") 'cscope-history-forward-line)
+	    (define-key evil-normal-state-local-map (kbd "M-p") 'cscope-history-backward-line)
+	    (define-key evil-normal-state-local-map (kbd "M-k") 'cscope-history-kill-result)))
 
 ; 2014-04-04: Holy moly its effort to get line numbers like vim!
 ; http://www.emacswiki.org/emacs/LineNumbers#toc6
