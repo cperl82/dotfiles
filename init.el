@@ -355,6 +355,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	    (setq-local comment-end "")
 	    (hs-minor-mode 1)
 	    (hs-hide-all)))
+
+; 2014-05-07: function to revert all buffers
+(defun revert-buffer-all ()
+  "Revert all buffers that are either visiting a file or is a dired buffer"
+  (interactive)
+  (save-excursion
+    (dolist (b (buffer-list))
+      (set-buffer b)
+      (if (or (buffer-file-name) (eq major-mode 'dired-mode))
+	  (revert-buffer t t t)))))
 			  
 ; 2014-04-06: cscope related
 (setq-default cscope-option-use-inverted-index t)
