@@ -354,7 +354,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	    (setq-local comment-start "THISPROBABLYWONTEXIST")
 	    (setq-local comment-end "")
 	    (hs-minor-mode 1)
-	    (hs-hide-all)))
+	    (hs-hide-all)
+	    (goto-char (point-min))
+	    (re-search-forward "NAME" nil t)
+	    (hs-show-block)
+	    (re-search-forward "SYNOPSIS" nil t)
+	    (hs-show-block)
+	    (re-search-forward "COPYRIGHT" nil t)
+	    (hs-show-block)
+	    (re-search-forward "DESCRIPTION" nil t)
+	    (hs-show-block)))
 
 ; 2014-05-07: function to revert all buffers
 (defun revert-buffer-all ()
