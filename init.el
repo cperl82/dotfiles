@@ -349,10 +349,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
    nil
    cperl-man-forward-sexp-fun))
 
+; Copied from /usr/share/vim/vim74/syntax/man.vim
+(setq man-keywords
+      `((,Man-heading-regexp          . font-lock-comment-face)
+        ("^\\s-*[+-][a-zA-Z0-9]\\S-*" . font-lock-function-name-face)
+        ("^\\s-*--[a-zA-Z0-9-]\\S-*"  . font-lock-function-name-face)))
+
 (add-hook 'Man-mode-hook
 	  (lambda ()
 	    (setq-local comment-start "THISPROBABLYWONTEXIST")
-	    (setq-local comment-end "")
+	    (setq-local comment-end "THEREHASTOBEABETTERWAY")
 	    (hs-minor-mode 1)
 	    (hs-hide-all)
 	    (goto-char (point-min))
@@ -360,10 +366,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	    (hs-show-block)
 	    (re-search-forward "SYNOPSIS" nil t)
 	    (hs-show-block)
-	    (re-search-forward "COPYRIGHT" nil t)
-	    (hs-show-block)
 	    (re-search-forward "DESCRIPTION" nil t)
-	    (hs-show-block)))
+	    (hs-show-block)
+            (setq-local font-lock-defaults '(man-keywords))
+            (font-lock-mode 1)))
+
+
 
 ; 2014-05-07: function to revert all buffers
 (defun revert-buffer-all ()
