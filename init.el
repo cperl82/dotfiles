@@ -412,17 +412,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (unless window-system
   (setq linum-format 'linum-format-func))
 
-
-; 2014-05-01: http://www.emacswiki.org/emacs/RevertBuffer
-(defun revert-all-buffers ()
-  "Refreshes all open buffers from their respective files."
-  (interactive)
-  (dolist (buf (buffer-list))
-    (with-current-buffer buf
-      (when (and (buffer-file-name) (file-exists-p (buffer-file-name)) (not (buffer-modified-p)))
-        (revert-buffer t t t) )))
-  (message "Refreshed open files."))
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
