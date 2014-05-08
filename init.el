@@ -367,13 +367,18 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ; 2014-05-07: function to revert all buffers
 (defun revert-buffer-all ()
-  "Revert all buffers that are either visiting a file or is a dired buffer"
+  "Revert all buffers.  This reverts buffers that are visiting a file, kills
+buffers whose visited file has disappeared and refreshes dired buffers."
   (interactive)
   (save-excursion
     (dolist (b (buffer-list))
       (set-buffer b)
-      (if (or (buffer-file-name) (eq major-mode 'dired-mode))
-	  (revert-buffer t t t)))))
+      (cond
+       (buffer-file-name
+        (if (file-exists-p buffer-file-name)
+            (revert-buffer t t t)
+          (kill-buffer b)))
+       ((eq major-mode 'dired-mode) (revert-buffer t t t))))))
 			  
 ; 2014-04-06: cscope related
 (setq-default cscope-option-use-inverted-index t)
