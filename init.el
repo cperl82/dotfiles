@@ -143,6 +143,20 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq-default ack-and-a-half-use-ido t)
 (add-to-list 'ack-and-a-half-mode-type-default-alist '(tuareg-mode "ocaml" "cc"))
 
+(defun ack-and-a-half-read-type ()
+  ; TODO: completion using ack's known types
+  (let ((type (read-string "File type: ")))
+    (list "--type" type)))
+
+(defun ack-and-a-half-find-file-prompt (directory type)
+  "Prompt to find a file found by ack in DIRECTORY."
+  (interactive (list (ack-and-a-half-read-dir) (ack-and-a-half-read-type)))
+  (find-file (expand-file-name
+              (ack-and-a-half-read-file
+               "Find file: "
+               (apply 'ack-and-a-half-list-files directory type))
+              directory)))
+
 ; 2014-03-29: org-mode
 (require 'org)
 
@@ -349,16 +363,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
    nil
    cperl-man-forward-sexp-fun))
 
-; Copied from /usr/share/vim/vim74/syntax/man.vim
-(setq man-keywords
-      `((,Man-heading-regexp          . font-lock-comment-face)
-        ("^\\s-*[+-][a-zA-Z0-9]\\S-*" . font-lock-function-name-face)
-        ("^\\s-*--[a-zA-Z0-9-]\\S-*"  . font-lock-function-name-face)))
-
 (add-hook 'Man-mode-hook
 	  (lambda ()
-	    (setq-local comment-start "THISPROBABLYWONTEXIST")
-	    (setq-local comment-end "THEREHASTOBEABETTERWAY")
+	    (setq-local comment-start "$^")
+	    (setq-local comment-end   "$^")
 	    (hs-minor-mode 1)
 	    (hs-hide-all)
 	    (goto-char (point-min))
@@ -368,10 +376,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	    (hs-show-block)
 	    (re-search-forward "DESCRIPTION" nil t)
 	    (hs-show-block)
-            (setq-local font-lock-defaults '(man-keywords))
+	    (font-lock-add-keywords
+	     nil     ; Copied from /usr/share/vim/vim74/syntax/man.vim
+	     `((,Man-heading-regexp          . font-lock-comment-face)
+	       ("^\\s-*[+-][a-zA-Z0-9]\\S-*" . font-lock-function-name-face)
+	       ("^\\s-*--[a-zA-Z0-9-]\\S-*"  . font-lock-function-name-face))
+	     'set)
             (font-lock-mode 1)))
-
-
 
 ; 2014-05-07: function to revert all buffers
 (defun revert-buffer-all ()
