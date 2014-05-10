@@ -145,16 +145,26 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ; TODO can you use macros to reduce repition?
 (defun ack-and-a-half-read-type ()
-  ; TODO: completion using ack's known types
-  (read-string "ack file type: "))
+  ; TODO: completion by calling ack --help-types
+  (completing-read
+   "ack file type: "
+   '("ocaml" "cc" "cpp" "python" "ruby" "shell" "elisp")))
 
 (defun ack-and-a-half-type (type pattern &optional regexp directory)
-  (interactive  (cons (ack-and-a-half-read-type) (ack-and-a-half-interactive)))
+  ; This absurdness is because I want it to call
+  ; ack-and-a-half-interactive first.  I'm sure there is a better way.
+  (interactive
+   (reverse
+    (append
+     (reverse
+      (ack-and-a-half-interactive))
+     (list (ack-and-a-half-read-type)))))
   (apply 'ack-and-a-half-run directory regexp pattern `("--type" ,type)))
 
 (defun ack-and-a-half-find-file-type (type &optional directory)
-  "Prompt to find a file found by ack in DIRECTORY."
-  (interactive (list (ack-and-a-half-read-type) (ack-and-a-half-read-dir)))
+  (interactive
+   (reverse
+    (list (ack-and-a-half-read-dir) (ack-and-a-half-read-type))))
   (find-file (expand-file-name
               (ack-and-a-half-read-file
                "Find file: "
@@ -177,10 +187,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (interactive (list (ack-and-a-half-read-dir)))
   (ack-and-a-half-find-file-type "cc" directory))
   
-(defalias 'ack-ocaml 'ack-and-a-half-type-ocaml)
-(defalias 'ack-find-file-ocaml 'ack-and-a-half-find-file-type-ocaml)
-(defalias 'ack-cc 'ack-and-a-half-type-cc)
-(defalias 'ack-find-file-cc 'ack-and-a-half-find-file-type-cc)
+(defalias 'ack-type     'ack-and-a-half-type)
+(defalias 'ack-ff-type  'ack-and-a-half-find-file-type)
+(defalias 'ack-ocaml    'ack-and-a-half-type-ocaml)
+(defalias 'ack-ff-ocaml 'ack-and-a-half-find-file-type-ocaml)
+(defalias 'ack-cc       'ack-and-a-half-type-cc)
+(defalias 'ack-ff-cc    'ack-and-a-half-find-file-type-cc)
 
 ; 2014-03-29: org-mode
 (require 'org)
