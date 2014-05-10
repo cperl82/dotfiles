@@ -143,19 +143,44 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq-default ack-and-a-half-use-ido t)
 (add-to-list 'ack-and-a-half-mode-type-default-alist '(tuareg-mode "ocaml" "cc"))
 
+; TODO can you use macros to reduce repition?
 (defun ack-and-a-half-read-type ()
   ; TODO: completion using ack's known types
-  (let ((type (read-string "File type: ")))
-    (list "--type" type)))
+  (read-string "ack file type: "))
 
-(defun ack-and-a-half-find-file-prompt (directory type)
+(defun ack-and-a-half-type (type pattern &optional regexp directory)
+  (interactive  (cons (ack-and-a-half-read-type) (ack-and-a-half-interactive)))
+  (apply 'ack-and-a-half-run directory regexp pattern `("--type" ,type)))
+
+(defun ack-and-a-half-find-file-type (type &optional directory)
   "Prompt to find a file found by ack in DIRECTORY."
-  (interactive (list (ack-and-a-half-read-dir) (ack-and-a-half-read-type)))
+  (interactive (list (ack-and-a-half-read-type) (ack-and-a-half-read-dir)))
   (find-file (expand-file-name
               (ack-and-a-half-read-file
                "Find file: "
-               (apply 'ack-and-a-half-list-files directory type))
+               (apply 'ack-and-a-half-list-files directory `("--type" ,type)))
               directory)))
+
+(defun ack-and-a-half-type-ocaml (pattern &optional regexp directory)
+  (interactive (ack-and-a-half-interactive))
+  (ack-and-a-half-type "ocaml" pattern regexp directory))
+
+(defun ack-and-a-half-find-file-type-ocaml (&optional directory)
+  (interactive (list (ack-and-a-half-read-dir)))
+  (ack-and-a-half-find-file-type "ocaml" directory))
+
+(defun ack-and-a-half-type-cc (pattern &optional regexp directory)
+  (interactive (ack-and-a-half-interactive))
+  (ack-and-a-half-type "cc" pattern regexp directory))
+
+(defun ack-and-a-half-find-file-type-cc (&optional directory)
+  (interactive (list (ack-and-a-half-read-dir)))
+  (ack-and-a-half-find-file-type "cc" directory))
+  
+(defalias 'ack-ocaml 'ack-and-a-half-type-ocaml)
+(defalias 'ack-find-file-ocaml 'ack-and-a-half-find-file-type-ocaml)
+(defalias 'ack-cc 'ack-and-a-half-type-cc)
+(defalias 'ack-find-file-cc 'ack-and-a-half-find-file-type-cc)
 
 ; 2014-03-29: org-mode
 (require 'org)
