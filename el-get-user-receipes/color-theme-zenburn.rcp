@@ -1,0 +1,8 @@
+(:name color-theme-zenburn
+       :description "The Zenburn colour theme ported to Emacs"
+       :website "https://github.com/cperl82/zenburn-emacs"
+       :branch "darker-background"
+       :minimum-emacs-version "24"
+       :type github
+       :pkgname "cperl82/zenburn-emacs"
+       :prepare (add-to-list 'custom-theme-load-path default-directory))

@@ -479,7 +479,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (zenburn)))
- '(custom-safe-themes (quote ("c06241fdef16c336d0cc3a96cf5de5725fad678e9313513e586f0a243289ada5" "de892595c7a5462962a8f20e48f95f992e9eba367e920ac2add84bb95bd65366" "4031c1ea0bb235b75a048bd92f3bf3aa984c9f7cc5b408f00f62ed99a6eecc09" "8b30636c9a903a9fa38c7dcf779da0724a37959967b6e4c714fdc3b3fe0b8653" default))))
+ '(custom-safe-themes (quote ("e5067916703453e96ff3f9c1ce1f436aa0716f9207e2c53266a9d77d2b575669" "c06241fdef16c336d0cc3a96cf5de5725fad678e9313513e586f0a243289ada5" "de892595c7a5462962a8f20e48f95f992e9eba367e920ac2add84bb95bd65366" "4031c1ea0bb235b75a048bd92f3bf3aa984c9f7cc5b408f00f62ed99a6eecc09" "8b30636c9a903a9fa38c7dcf779da0724a37959967b6e4c714fdc3b3fe0b8653" default))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
