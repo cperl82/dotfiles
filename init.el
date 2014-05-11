@@ -187,6 +187,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (interactive (list (ack-and-a-half-read-dir)))
   (ack-and-a-half-find-file-type "cc" directory))
   
+(defalias 'ack-ff       'ack-find-file)
+(defalias 'ack-ff-same  'ack-find-file-same)
 (defalias 'ack-type     'ack-and-a-half-type)
 (defalias 'ack-ff-type  'ack-and-a-half-find-file-type)
 (defalias 'ack-ocaml    'ack-and-a-half-type-ocaml)
