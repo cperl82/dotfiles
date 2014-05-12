@@ -137,6 +137,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-visual-state-map "/" 'cp-evil-search-forward)
 (define-key evil-visual-state-map "?" 'cp-evil-search-backward)
 
+(defun cp-evil-dedent ()
+  ; 2014-05-12: a function to act like C-d while in insert mode in
+  ; vim.  See :help i_CTRL-d
+  (interactive)
+  (save-excursion
+    (let ((beg (evil-beginning-of-line)))
+      (evil-delete beg (+ beg evil-shift-width)))))
+
+(define-key evil-insert-state-map (kbd "C-d") 'cp-evil-dedent)
+
 ; 2014-03-27: ack-and-a-half: https://github.com/jhelwig/ack-and-a-half
 (require 'ack-and-a-half)
 (setq-default ack-and-a-half-prompt-for-directory t)
