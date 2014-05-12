@@ -82,6 +82,7 @@
 
 ; 2014-03-27: Evil
 (setq-default evil-symbol-word-search t)
+(setq-default evil-flash-delay 5)
 (require 'evil)
 (evil-mode 1)
 (evil-set-initial-state 'ibuffer-mode 'normal)
