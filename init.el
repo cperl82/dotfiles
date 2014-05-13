@@ -101,6 +101,7 @@
   "o" 'delete-other-windows
   "x" 'delete-window
   "e" 'escreen-get-active-screen-names-with-emphasis
+  "h" '(lambda () (interactive) (cp-evil-highlight-symbol))
   "E" '(lambda () (interactive) (message (buffer-file-name))))
 
 ; 2014-04-01: http://stackoverflow.com/questions/8483182/emacs-evil-mode-best-practice
@@ -137,6 +138,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (define-key evil-visual-state-map "/" 'cp-evil-search-forward)
 (define-key evil-visual-state-map "?" 'cp-evil-search-backward)
+
+(evil-define-operator cp-evil-highlight-symbol ()
+  (let* ((string (evil-find-symbol t))
+         (msg (format "Highlighting symbol: %s" string)))
+    (setq isearch-string string)
+    (evil-flash-search-pattern msg t)))
 
 (defun cp-evil-dedent ()
   ; 2014-05-12: a function to act like C-d while in insert mode in
