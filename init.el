@@ -143,6 +143,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (let* ((string (evil-find-symbol t))
          (msg (format "Highlighting symbol: %s" string)))
     (setq isearch-string string)
+    (setq isearch-forward t)
+    (isearch-update-ring string t)
     (evil-flash-search-pattern msg t)))
 
 (defun cp-evil-dedent ()
