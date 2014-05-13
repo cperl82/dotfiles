@@ -144,6 +144,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
          (msg (format "Highlighting symbol: %s" string)))
     (setq isearch-string string)
     (setq isearch-forward t)
+    (setq isearch-regexp t)
     (isearch-update-ring string t)
     (evil-flash-search-pattern msg t)))
 
