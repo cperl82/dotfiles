@@ -141,8 +141,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (defun cp-evil-highlight-symbol ()
   (interactive)
-  (save-excursion
-    (evil-search-symbol t)))
+  (let ((ws (window-start)))
+    (save-excursion
+      (evil-search-symbol t)
+      (evil-search-previous))
+    (message "Highlighting symbol under point")
+    (set-window-start nil ws)))
 
 ; 2014-03-27: ack-and-a-half: https://github.com/jhelwig/ack-and-a-half
 (require 'ack-and-a-half)
