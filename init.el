@@ -101,7 +101,7 @@
   "o" 'delete-other-windows
   "x" 'delete-window
   "e" 'escreen-get-active-screen-names-with-emphasis
-  "h" '(lambda () (interactive) (cp-evil-highlight-symbol))
+  "h" 'cp-evil-highlight-symbol
   "E" '(lambda () (interactive) (message (buffer-file-name))))
 
 ; 2014-04-01: http://stackoverflow.com/questions/8483182/emacs-evil-mode-best-practice
@@ -139,14 +139,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-visual-state-map "/" 'cp-evil-search-forward)
 (define-key evil-visual-state-map "?" 'cp-evil-search-backward)
 
-(evil-define-operator cp-evil-highlight-symbol ()
-  (let* ((string (evil-find-symbol t))
-         (msg (format "Highlighting symbol: %s" string)))
-    (setq isearch-string string)
-    (setq isearch-forward t)
-    (setq isearch-regexp t)
-    (isearch-update-ring string t)
-    (evil-flash-search-pattern msg t)))
+(defun cp-evil-highlight-symbol ()
+  (interactive)
+  (save-excursion
+    (evil-search-symbol t)))
 
 ; 2014-03-27: ack-and-a-half: https://github.com/jhelwig/ack-and-a-half
 (require 'ack-and-a-half)
