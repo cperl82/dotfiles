@@ -1,0 +1,6 @@
+(:name ido-vertical-mode
+       :type github
+       :pkgname "rson/ido-vertical-mode.el"
+       :branch "058c7ad3bbc4cf57fc1115d71af0b9ffe3f7f685"
+       :description "makes ido-mode display vertically"
+       :features ido-vertical-mode)

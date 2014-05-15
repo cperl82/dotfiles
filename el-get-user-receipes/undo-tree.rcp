@@ -2,5 +2,5 @@
        :description "Treat undo history as a tree"
        :website "http://www.dr-qubit.org/emacs.php"
        :type git
-       :brach "0.6.4"
+       :branch "0.6.4"
        :url "http://www.dr-qubit.org/git/undo-tree.git/")
