@@ -228,6 +228,37 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ; 2014-03-30: tuareg mode
 (require 'tuareg)
 
+; 2014-05-14: This isn't perfect, but it works well enough in practice
+; that I'm including it.
+(defun cperl-selective-display-forward-sexp-fun (arg)
+  (let* ((c (current-column))
+	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
+    (forward-line 1)
+    (re-search-forward re)
+    (beginning-of-line)
+    (back-to-indentation)
+    (if (not
+	 (or
+	  (looking-at "in")
+	  (looking-at "end")
+	  (looking-at ";;")
+	  (looking-at "with")))
+        (progn
+          (forward-line -1)
+          (move-end-of-line nil)))))
+
+(add-to-list
+ 'hs-special-modes-alist
+ `(tuareg-mode
+   ,(mapconcat
+     'identity
+     '("\\<module\\>\\s-+\\(?:\\S-+\\s-+=\\s-+\\<struct\\>\\|\\S-+\\s-+:\\s-+\\<sig\\>\\|\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>\\)"
+       "\\<end\\>\\s-+=\\s-+\\<struct\\>"
+       "\\<let\\>\\s-+"
+       "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+=")
+     "\\|")
+   nil nil  cperl-selective-display-forward-sexp-fun))
+
 ;;; escreen
 (require 'escreen)
 
