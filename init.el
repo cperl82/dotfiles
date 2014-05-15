@@ -140,13 +140,15 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-visual-state-map "?" 'cp-evil-search-backward)
 
 (defun cp-evil-highlight-symbol ()
+  "Do everything that `*' would do, but don't actually jump to the next match"
   (interactive)
-  (let ((ws (window-start)))
-    (save-excursion
-      (evil-search-symbol t)
-      (evil-search-previous))
-    (message "Highlighting symbol under point")
-    (set-window-start nil ws)))
+  (let ((string (evil-find-symbol t))
+	(isearch-regexp t)
+	(isearch-forward t))
+    (setq isearch-string string)
+    (isearch-update-ring string t)
+    (setq string (evil-search-message string t))
+    (evil-flash-search-pattern string t)))
 
 ; 2014-03-27: ack-and-a-half: https://github.com/jhelwig/ack-and-a-half
 (require 'ack-and-a-half)
