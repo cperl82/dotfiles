@@ -142,9 +142,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (defun cp-evil-highlight-symbol ()
   "Do everything that `*' would do, but don't actually jump to the next match"
   (interactive)
-  (let ((string (evil-find-symbol t))
-	(isearch-regexp t)
-	(isearch-forward t))
+  (let* ((string (evil-find-symbol t))
+	 (case-fold-search
+	  (unless (and search-upper-case
+		       (not (isearch-no-upper-case-p string nil)))
+	    case-fold-search))
+	 (isearch-regexp t)
+	 (isearch-forward t))
     (setq isearch-string string)
     (isearch-update-ring string t)
     (setq string (evil-search-message string t))
