@@ -337,12 +337,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	     (screen-name (nth 1 data))
 	     (star (propertize "*" 'face 'font-lock-string-face)))
 	(setq output
-	    (format "%s  %s" output
-		 (cond ((and (eq escreen-current-screen-number n) screen-name) (format "%d%s %s" n star screen-name))
-		       ((eq escreen-current-screen-number n) (format "%d%s" n star))
-		       (screen-name (format "%d- %s" n screen-name))
-		       (t (format "%d-" n))))))
-    (message "escreen: active screens: %s" output))))
+	      (format "%s  %s" output
+		      (cond ((and
+			      (eq escreen-current-screen-number n) screen-name)
+			     (format "%d%s %s" n star screen-name))
+			    ((eq escreen-current-screen-number n) (format "%d%s" n star))
+			    (screen-name (format "%d- %s" n screen-name))
+			    (t (format "%d-" n))))))
+      (message "escreen: active screens: %s" output))))
 
 (defadvice escreen-goto-screen (after cp/escreen-goto-screen first (n &optional dont-update-current) activate)
   (escreen-get-active-screen-names-with-emphasis))
