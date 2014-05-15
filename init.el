@@ -19,7 +19,9 @@
         evil-leader
         tuareg-mode
         org-mode
-        xcscope))
+        xcscope
+        ido-better-flex
+        ido-vertical-mode))
 
 (el-get 'sync my-packages)
 
@@ -227,7 +229,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ; 2014-03-29: ido
 (require 'ido)
+(require 'ido-vertical-mode)
 (ido-mode t)
+(ido-vertical-mode 1)
+(ido-better-flex/enable)
 
 ; 2014-03-30: tuareg mode
 (require 'tuareg)
