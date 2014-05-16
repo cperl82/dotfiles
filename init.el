@@ -261,10 +261,15 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  `(tuareg-mode
    ,(mapconcat
      'identity
-     '("\\<module\\>\\s-+\\(?:\\S-+\\s-+=\\s-+\\<struct\\>\\|\\S-+\\s-+:\\s-+\\<sig\\>\\|\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>\\)"
+     '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
+       "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
+       "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
        "\\<end\\>\\s-+=\\s-+\\<struct\\>"
        "\\<let\\>\\s-+"
-       "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+=")
+       "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
+       "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
+       "\\<TEST_UNIT\\>\\s-+="
+       )
      "\\|")
    nil nil  cperl-selective-display-forward-sexp-fun))
 
