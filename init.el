@@ -148,9 +148,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	 (case-fold-search
 	  (unless (and search-upper-case
 		       (not (isearch-no-upper-case-p string nil)))
-	    case-fold-search))
-	 (isearch-regexp t)
-	 (isearch-forward t))
+	    case-fold-search)))
+    (setq isearch-regexp t)
+    (setq isearch-forward t)
+    (setq string (format "\\_<%s\\_>" (regexp-quote string)))
     (setq isearch-string string)
     (isearch-update-ring string t)
     (setq string (evil-search-message string t))
