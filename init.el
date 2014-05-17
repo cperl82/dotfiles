@@ -232,6 +232,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (require 'ido)
 (require 'ido-vertical-mode)
 (ido-mode t)
+(setq-default ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
 (ido-vertical-mode 1)
 (ido-better-flex/enable)
 
