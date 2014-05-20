@@ -418,9 +418,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (evil-define-key 'insert org-mode-map (kbd "C-c .")
   '(lambda () (interactive) (org-time-stamp-inactive)))
 
+; Use F1 instead to access help
 (global-unset-key (kbd "C-h"))
-(global-set-key (kbd "C-c C-h") 'help)
-(global-set-key (kbd "C-c h")   'help)
 
 (define-key evil-normal-state-map "\C-j" 'evil-window-down)
 (define-key evil-normal-state-map "\C-k" 'evil-window-up)
