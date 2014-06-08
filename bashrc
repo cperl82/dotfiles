@@ -158,22 +158,53 @@ aes-256-cbc() {
 }
 
 # Emacs convience functions {{{2
-emd () {
-	name="${1}"
+emacs-client-daemon () {
+	if [[ "${1}" == "client" ]]
+	then
+		cmd='emacsclient -nw --socket-name="${name}" ${args}'
+		shift
+	elif [[ "${1}" == "daemon" ]]
+	then
+		cmd='emacs --daemon="${name}" ${args}'
+		shift
+	else
+		echo "Unknown mode"
+		return
+	fi
+
+	args=()
+	while [[ -n "${1}" ]]
+	do
+		case "${1}" in
+		--server | -s)
+			shift
+			name="${1}"
+			shift
+			;;
+		-*)
+			echo "WARN: Unknown option: ${1}"
+			shift
+			;;
+		*)
+			args[${#args[@]}]="${1}"
+			shift
+			;;
+		esac
+	done
+
 	if [[ -z "${name}" ]]
 	then
 		name="default"
 	fi
-	emacs --daemon="${name}"
+	eval ${cmd}
+}
+
+emd () {
+	emacs-client-daemon daemon ${@}
 }
 
 emc () {
-	name="${1}"
-	if [[ -z "${name}" ]]
-	then
-		name="default"
-	fi
-	emacsclient -nw --socket-name="${name}"
+	emacs-client-daemon client ${@}
 }
 
 # NHL Schedule scraping function {{{2
