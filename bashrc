@@ -162,8 +162,7 @@ emd () {
 	name="${1}"
 	if [[ -z "${name}" ]]
 	then
-		echo "emd [name-of-daemon-socket]"
-		return
+		name="default"
 	fi
 	emacs --daemon="${name}"
 }
@@ -172,8 +171,7 @@ emc () {
 	name="${1}"
 	if [[ -z "${name}" ]]
 	then
-		echo "emc [name-of-daemon-socket]"
-		return
+		name="default"
 	fi
 	emacsclient -nw --socket-name="${name}"
 }
