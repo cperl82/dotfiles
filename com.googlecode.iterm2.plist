@@ -524,7 +524,7 @@
 	<key>NSNavBrowserPreferedColumnContentWidth</key>
 	<real>186</real>
 	<key>NSNavLastRootDirectory</key>
-	<string>~/Desktop</string>
+	<string>~/tmp/2014-03-24</string>
 	<key>NSNavPanelExpandedSizeForOpenMode</key>
 	<string>{743, 450}</string>
 	<key>NSQuotedKeystrokeBinding</key>
@@ -707,17 +707,17 @@
 		<true/>
 	</array>
 	<key>NSWindow Frame Preferences</key>
-	<string>930 231 924 485 0 0 2560 1418 </string>
+	<string>737 300 605 485 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>187 174 10 416 0 0 2560 1418 </string>
+	<string>282 85 1501 1293 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>33 872 10 448 0 0 2560 1418 </string>
+	<string>409 882 570 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>39 246 570 423 0 0 2560 1418 </string>
+	<string>10 569 570 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
-	<string>460 622 570 423 0 0 2560 1418 </string>
+	<string>1321 38 1242 453 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
-	<string>778 147 1172 978 0 0 2560 1418 </string>
+	<string>380 66 570 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 5</key>
 	<string>768 444 570 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 6</key>
@@ -2774,7 +2774,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2014-03-16T02:06:31Z</date>
+	<date>2014-05-19T23:29:52Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
@@ -2808,7 +2808,7 @@
 	<key>WebKitDefaultFontSize</key>
 	<integer>11</integer>
 	<key>WebKitStandardFont</key>
-	<string>Lucida Grande</string>
+	<string>.Lucida Grande UI</string>
 	<key>WindowNumber</key>
 	<true/>
 	<key>WindowStyle</key>
@@ -2820,6 +2820,6 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>1.0.0.20140112</string>
+	<string>1.0.0.20140421</string>
 </dict>
 </plist>
