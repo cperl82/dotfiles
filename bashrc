@@ -263,6 +263,22 @@ nfs3-capture-filter-for-host () {
 	IFS="${OFS}"
 }
 
+nfs3-capture-filter-for-hosts () {
+	hosts="${@}"
+	result=""
+	for host in ${hosts}
+	do
+		s=$(nfs3-capture-filter-for-host "${host}")
+		if [[ -z "${result}" ]]
+		then
+			result="(${s})"
+		else
+			result="${result} or (${s})"
+		fi
+	done
+	printf "${result}\n"
+}
+
 # Misc Stuff {{{1
 
 # vim - function wrapper for use with screen {{{2
