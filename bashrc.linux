@@ -317,3 +317,79 @@ function proc-mounts {
 		}
 	}' /proc/mounts | sort -k 3,2
 }
+
+# 2014-07-01 mapping of NFS mount points to sockets
+function nfs-sockets {
+	ss -iepn '( dport = :nfs )' \
+	| awk '
+		BEGIN {
+			while ((getline < "/proc/mounts") > 0) {
+				if ($3 == "nfs") {
+					addr = gensub(/.*mountaddr=([^,]+).*/, "\\1", $4);
+					if (mounts[addr])
+						mounts[addr] = sprintf("%s %s", mounts[addr], $2);
+					else
+						mounts[addr] = $2
+				}
+			}
+			getline
+		}
+
+		{
+			state = $1;
+			rcvq  = $2;
+			sndq  = $3;
+			local = $4;
+			remot = $5;
+			ino   = $6;
+			sk    = $7;
+
+			getline;
+			opts = $0;
+			
+			new_w_state = length(state);
+			w_state = new_w_state > w_state ? new_w_state : w_state;
+
+			new_w_rcvq = length(rcvq);
+			w_rcvq = new_w_rcvq > w_rcvq ? new_w_rcvq : w_rcvq;
+
+			new_w_sndq = length(sndq);
+			w_sndq = new_w_sndq > w_sndq ? new_w_sndq : w_sndq;
+
+			new_w_local = length(local);
+			w_local = new_w_local > w_local ? new_w_local : w_local;
+
+			new_w_remot = length(remot);
+			w_remot = new_w_remot > w_remot ? new_w_remot : w_remot;
+			
+			new_w_ino = length(ino);
+			w_ino = new_w_ino > w_ino ? new_w_ino : w_ino;
+
+			new_w_sk = length(sk);
+			w_sk = new_w_sk > w_sk ? new_w_sk : w_sk;
+
+			new_w_opts = length(opts);
+			w_opts = new_w_opts > w_opts ? new_w_opts : w_opts;
+
+			lines[i++] = sprintf("%s|%s|%s|%s|%s|%s|%s|%s", state, rcvq, sndq, local, remot, ino, sk, opts);
+		}
+
+		END {
+			for (j=0; j<i; j++) {
+				split(lines[j], items, "|");
+				split(items[5], remote_endpoint, ":");
+				printf("%*s %*s %*s %*s %*s %*s %*s %-*s %s\n",
+					w_state, items[1],
+					w_rcvq,  items[2],
+					w_sndq,  items[3],
+					w_local, items[4],
+					w_remot, items[5],
+					w_ino,   items[6],
+					w_sk,    items[7],
+					w_opts,  items[8],
+					mounts[remote_endpoint[1]]);
+			}
+		}
+		
+		'
+}
