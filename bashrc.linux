@@ -341,11 +341,21 @@ function nfs-sockets {
 			sndq  = $3;
 			local = $4;
 			remot = $5;
-			ino   = $6;
-			sk    = $7;
+			timer = $6;
+
+			if (timer ~ /timer/) {
+				ino = $7;
+				sk  = $8;
+			}
+			else {
+				timer = "";
+				ino   = $6;
+				sk    = $7;
+			}
 
 			getline;
 			opts = $0;
+			opts = gensub(/^[\t ]+/, "", opts);
 			
 			new_w_state = length(state);
 			w_state = new_w_state > w_state ? new_w_state : w_state;
@@ -361,7 +371,10 @@ function nfs-sockets {
 
 			new_w_remot = length(remot);
 			w_remot = new_w_remot > w_remot ? new_w_remot : w_remot;
-			
+
+			new_w_timer = length(timer);
+			w_timer = new_w_timer > w_timer ? new_w_timer : w_timer;
+
 			new_w_ino = length(ino);
 			w_ino = new_w_ino > w_ino ? new_w_ino : w_ino;
 
@@ -371,14 +384,14 @@ function nfs-sockets {
 			new_w_opts = length(opts);
 			w_opts = new_w_opts > w_opts ? new_w_opts : w_opts;
 
-			lines[i++] = sprintf("%s|%s|%s|%s|%s|%s|%s|%s", state, rcvq, sndq, local, remot, ino, sk, opts);
+			lines[i++] = sprintf("%s|%s|%s|%s|%s|%s|%s|%s|%s", state, rcvq, sndq, local, remot, ino, sk, opts, timer);
 		}
 
 		END {
 			for (j=0; j<i; j++) {
 				split(lines[j], items, "|");
 				split(items[5], remote_endpoint, ":");
-				printf("%*s %*s %*s %*s %*s %*s %*s %-*s %s\n",
+				printf("%*s %*s %*s %*s %*s %-*s %*s %-*s %*s %s\n",
 					w_state, items[1],
 					w_rcvq,  items[2],
 					w_sndq,  items[3],
@@ -387,9 +400,8 @@ function nfs-sockets {
 					w_ino,   items[6],
 					w_sk,    items[7],
 					w_opts,  items[8],
+					w_timer, items[9],
 					mounts[remote_endpoint[1]]);
 			}
-		}
-		
-		'
+		}'
 }
