@@ -709,19 +709,19 @@
 	<key>NSWindow Frame Preferences</key>
 	<string>737 300 605 485 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>282 85 1501 1293 0 0 2560 1418 </string>
+	<string>769 104 1221 873 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>409 882 570 423 0 0 2560 1418 </string>
+	<string>15 713 1158 693 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>10 569 570 423 0 0 2560 1418 </string>
+	<string>20 279 570 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
-	<string>1321 38 1242 453 0 0 2560 1418 </string>
+	<string>8 995 570 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
-	<string>380 66 570 423 0 0 2560 1418 </string>
+	<string>17 193 941 663 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 5</key>
-	<string>768 444 570 423 0 0 2560 1418 </string>
+	<string>28 934 570 423 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 6</key>
-	<string>593 53 570 423 0 0 2560 1418 </string>
+	<string>163 70 1452 1098 0 0 2560 1418 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -2774,7 +2774,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2014-05-19T23:29:52Z</date>
+	<date>2014-07-04T00:48:23Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
@@ -2808,7 +2808,7 @@
 	<key>WebKitDefaultFontSize</key>
 	<integer>11</integer>
 	<key>WebKitStandardFont</key>
-	<string>.Lucida Grande UI</string>
+	<string>Lucida Grande</string>
 	<key>WindowNumber</key>
 	<true/>
 	<key>WindowStyle</key>
@@ -2820,6 +2820,6 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>1.0.0.20140421</string>
+	<string>1.0.0.20140518</string>
 </dict>
 </plist>
