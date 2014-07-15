@@ -104,4 +104,4 @@ realdelete = no
 
 # 2012-07-06
 # Adding cert_fingerprint for imap.gmail.com
-cert_fingerprint = b0ba392bba326e6feb1add4d04fa0fb86cd173fa
+cert_fingerprint = 89091347184d41768bfc0da9fad94bfe882dd358
