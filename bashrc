@@ -161,11 +161,11 @@ aes-256-cbc() {
 emacs-client-daemon () {
 	if [[ "${1}" == "client" ]]
 	then
-		cmd='emacsclient -nw --socket-name="${name}" ${args}'
+		cmd='emacsclient -nw --socket-name="${emacs_daemon_socket_name}" ${args}'
 		shift
 	elif [[ "${1}" == "daemon" ]]
 	then
-		cmd='emacs --daemon="${name}" ${args}'
+		cmd='emacs --daemon="${emacs_daemon_socket_name}" ${args}'
 		shift
 	else
 		echo "Unknown mode"
@@ -192,9 +192,9 @@ emacs-client-daemon () {
 		esac
 	done
 
-	if [[ -z "${name}" ]]
+	if [[ -z "${emacs_daemon_socket_name}" ]]
 	then
-		name="default"
+		emacs_daemon_socket_name="default"
 	fi
 	eval ${cmd}
 }
