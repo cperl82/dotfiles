@@ -389,9 +389,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;(evil-define-key 'normal hs-minor-mode-map (kbd "TAB") 'hs-toggle-hiding)
 
 ; 2014-04-13: Custom keys for dired
-(evil-define-key 'normal dired-mode-map (kbd "TAB") 'dired-hide-subdir)
-(evil-define-key 'normal dired-mode-map (kbd "n")   'evil-search-next)
-(evil-define-key 'normal dired-mode-map (kbd "N")   'evil-search-previous)
+(evil-define-key 'normal dired-mode-map (kbd "TAB")  'dired-hide-subdir)
+(evil-define-key 'normal dired-mode-map (kbd "n")    'evil-search-next)
+(evil-define-key 'normal dired-mode-map (kbd "N")    'evil-search-previous)
+(evil-define-key 'normal dired-mode-map (kbd "?")    'evil-search-backward)
+(evil-define-key 'normal dired-mode-map (kbd "G")    'evil-goto-line)
+(evil-define-key 'normal dired-mode-map (kbd "gg")   'evil-goto-first-line)
 (add-hook 'dired-mode-hook
 	  (lambda ()
 	    ;; Set dired-x buffer-local variables here.  For example:
