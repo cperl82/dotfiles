@@ -68,6 +68,11 @@
      (vc-mode vc-mode)
      "  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
 
+; 2014-08-12
+; I prefer the window to be split horizontally unless I explicitly split it
+; veritcally
+(setq split-height-threshold nil)
+
 ; 2014-04-24: Duplicate buffer names
 (require 'uniquify)
 (setq-default uniquify-buffer-name-style 'forward)
