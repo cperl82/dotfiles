@@ -408,7 +408,7 @@ function nfs-sockets {
 
 # 2014-09-04 ephemeral ports
 function ephemeral-ports-in-use {
-	netstat -an --tcp | \
+	netstat -n --protocol=inet --tcp | \
 	awk '
 	BEGIN {
 		getline < "/proc/sys/net/ipv4/ip_local_port_range";
