@@ -407,8 +407,8 @@ function nfs-sockets {
 }
 
 # 2014-09-04 ephemeral ports
-function ephemeral-ports-in-use {
-	netstat -n --protocol=inet --tcp |
+function ephemeral-port-netstat-ipv4 {
+	netstat -n --protocol=inet |
 	tail -n +3 | \
 	awk '
 	BEGIN {
@@ -426,6 +426,21 @@ function ephemeral-ports-in-use {
 	}'
 }
 
-function ephemeral-ports-in-use-unique {
-	ephemeral-ports-in-use | awk '{print $4}' | awk -F: '{print $2}' | sort -u
+function ephemeral-port-netstat-ipv4-unique-by-type {
+	ephemeral-port-netstat-ipv4 | \
+	awk '
+	BEGIN {
+		SUBSEP = " ";
+	}
+
+	{
+		split($4, a, ":");
+		by_type[$1, a[2]] = 1;
+	}
+
+	END {
+		for (key in by_type) {
+			print key
+		}
+	}' | sort
 }
