@@ -405,3 +405,26 @@ function nfs-sockets {
 			}
 		}'
 }
+
+# 2014-09-04 ephemeral ports
+function ephemeral-ports-in-use {
+	netstat -an --tcp | \
+	awk '
+	BEGIN {
+		getline < "/proc/sys/net/ipv4/ip_local_port_range";
+		low=int($1);
+		high=int($2);
+	}
+
+	{
+		split($4, a, ":");
+		port=int(a[2]);
+		if (port >= low && port <= high) {
+			print
+		}
+	}'
+}
+
+function ephemeral-ports-in-use-unique {
+	ephemeral-ports-in-use | awk '{print $4}' | awk -F: '{print $2}' | sort -u
+}
