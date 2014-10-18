@@ -514,6 +514,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 (setq-default cscope-option-use-inverted-index t)
 (setq-default cscope-close-window-after-select t) 
 (setq-default cscope-edit-single-match nil)
+(setq-default cscope-option-kernel-mode t)
 (add-hook 'cscope-list-entry-hook
 	  (lambda ()
 	    (setq-local face-remapping-alist
