@@ -5,7 +5,7 @@
     (goto-char (point-max)) (eval-print-last-sexp)))
 
 (setq el-get-verbose t)
-(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user-receipes")
+(add-to-list 'el-get-recipe-path "~/.emacs.d/user-receipes")
 
 (setq my-packages
       '(ack-and-a-half
