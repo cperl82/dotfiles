@@ -21,7 +21,8 @@
         org-mode
         xcscope
         ido-better-flex
-        ido-vertical-mode))
+        ido-vertical-mode
+        rainbow-mode))
 
 (el-get 'sync my-packages)
 
