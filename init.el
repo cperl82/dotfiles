@@ -9,9 +9,6 @@
 
 (setq my-packages
       '(ack-and-a-half
-        color-theme
-        color-theme-ir-black
-        color-theme-tomorrow
         color-theme-zenburn
         xoria256-emacs
         evil
