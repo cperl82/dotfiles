@@ -528,6 +528,8 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 	    (define-key evil-normal-state-local-map (kbd "M-p") 'cscope-history-backward-line)
 	    (define-key evil-normal-state-local-map (kbd "M-k") 'cscope-history-kill-result)))
 
+(setq c-default-style "linux")
+
 ; 2014-04-04: Holy moly its effort to get line numbers like vim!
 ; http://www.emacswiki.org/emacs/LineNumbers#toc6
 (unless window-system
@@ -562,7 +564,11 @@ buffers whose visited file has disappeared and refreshes dired buffers."
  ;; If there is more than one, they won't work right.
  '(dired-perm-write ((t nil))))
 
-(setq c-default-style "linux")
+; 2014-12-06 override zenburn's default isearch highlighting
+(custom-theme-set-faces
+ `zenburn
+ `(isearch ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F"))))
+ `(lazy-highlight ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F")))))
 
 ; 2014-04-08: local emacs overrides
 (let ((local "~/.emacs.local"))
