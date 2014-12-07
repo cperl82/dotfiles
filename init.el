@@ -17,7 +17,7 @@
         tuareg-mode
         org-mode
         xcscope
-        ido-better-flex
+        flx
         ido-vertical-mode
         rainbow-mode))
 
@@ -231,13 +231,20 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (process-send-string proc (format "https://mail.google.com/u/0/#all/%s" url))
     (process-send-eof proc)))
 
-; 2014-03-29: ido
+; 2014-12-07: ido / flx
 (require 'ido)
-(require 'ido-vertical-mode)
+(require 'flx-ido)
 (ido-mode t)
+(ido-everywhere t)
+(flx-ido-mode t)
+;; disable ido faces to see flx highlights.
+(setq ido-enable-flex-matching t)
+(setq ido-use-faces nil)
+
+; 2014-12-07 ido-vertical-mode
+(require 'ido-vertical-mode)
 (setq-default ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
 (ido-vertical-mode 1)
-(ido-better-flex/enable)
 
 ; 2014-03-30: tuareg mode
 (require 'tuareg)
