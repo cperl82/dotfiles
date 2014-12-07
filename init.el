@@ -591,3 +591,19 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 		  (error t))
 		(hs-show-all))
 	(toggle-selective-display column)))
+
+; 2014-12-07 Trying to make sh-mode indentation better
+; Copied from http://keramida.wordpress.com/2008/08/08/tweaking-shell-script-indentation-in-gnu-emacs
+(defun cperl-setup-sh-mode ()
+    "My own personal preferences for `sh-mode'.
+
+This is a custom function that sets up the parameters I usually
+prefer for `sh-mode'.  It is automatically added to
+`sh-mode-hook', but is can also be called interactively."
+    (interactive)
+    (progn
+      (setq sh-basic-offset 8
+	    sh-indentation 8)
+      ; TODO: Do you want to enable electric-indent-mode for everything?
+      (electric-indent-mode nil)))
+(add-hook 'sh-mode-hook 'cperl-setup-sh-mode)

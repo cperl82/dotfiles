@@ -4,7 +4,8 @@
        emulates the main features of Vim, and provides facilities
        for writing custom extensions."
        :type git
-       :branch "1.0.9"
+       :branch "master"
+       :checkout "1def26dc9c4d084e766364eff2d9f3aa51613cf7"
        :url "git://gitorious.org/evil/evil.git"
        :features evil
        :depends undo-tree
