@@ -569,7 +569,8 @@ buffers whose visited file has disappeared and refreshes dired buffers."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(dired-perm-write ((t nil))))
+ '(dired-perm-write ((t nil)))
+ '(flx-highlight-face ((t (:foreground "red" :weight normal)))))
 
 ; 2014-12-06 override zenburn's default isearch highlighting
 (custom-theme-set-faces
