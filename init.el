@@ -615,3 +615,9 @@ prefer for `sh-mode'.  It is automatically added to
       ; TODO: Do you want to enable electric-indent-mode for everything?
       (electric-indent-mode nil)))
 (add-hook 'sh-mode-hook 'cperl-setup-sh-mode)
+
+; 2014-12-10 Starting to play with helm.
+(require 'helm)
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-z")   'helm-select-action)
