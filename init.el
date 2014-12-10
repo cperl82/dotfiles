@@ -389,14 +389,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (global-set-key (kbd "M-[")       'escreen-goto-prev-screen)
 (global-set-key (kbd "M-]")       'escreen-goto-next-screen)
 
-; 2014-04-24: hide show related
-; 2014-04-30: I'm not sure why the hook works but the `evil-define-key' doesn't (well, I
-; mean it sort of works in that if I enter insert mode and then exit back into normal mode
-; the keybinding will be there, but I want it to just be there right away).
-(add-hook 'hs-minor-mode-hook
-	  (lambda ()
-	    (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))
-;(evil-define-key 'normal hs-minor-mode-map (kbd "TAB") 'hs-toggle-hiding)
+; 2014-12-10: hide show related
+(evil-define-key 'motion Man-mode-map (kbd "TAB") 'hs-toggle-hiding)
 
 ; 2014-04-13: Custom keys for dired
 (evil-define-key 'normal dired-mode-map (kbd "TAB")  'dired-hide-subdir)
