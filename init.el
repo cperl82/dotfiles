@@ -395,7 +395,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ; the keybinding will be there, but I want it to just be there right away).
 (add-hook 'hs-minor-mode-hook
 	  (lambda ()
-	    (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))
+            (cond ((eq major-mode 'Man-mode)
+                   (define-key evil-motion-state-local-map (kbd "TAB") 'hs-toggle-hiding))
+                  (t
+                   (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))))
 ;(evil-define-key 'normal hs-minor-mode-map (kbd "TAB") 'hs-toggle-hiding)
 
 ; 2014-04-13: Custom keys for dired
