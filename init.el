@@ -19,7 +19,8 @@
         xcscope
         flx
         ido-vertical-mode
-        rainbow-mode))
+        rainbow-mode
+        helm))
 
 (el-get 'sync my-packages)
 
