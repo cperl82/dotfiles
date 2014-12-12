@@ -436,7 +436,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   '(lambda () (interactive) (org-time-stamp-inactive)))
 
 ; Use F1 instead to access help
-(global-unset-key (kbd "C-h"))
+(global-set-key (kbd "C-x h") 'help-command)
 
 (define-key evil-normal-state-map "\C-j" 'evil-window-down)
 (define-key evil-normal-state-map "\C-k" 'evil-window-up)
