@@ -3,7 +3,7 @@
        :type github
        :pkgname "emacs-helm/helm"
        :branch "master"
-       :checkout "f058bf40ff55c96810f4f110c23f619ec361d2d8"
+       :checkout "ec516296231d2510efd7f61cfeaa3d0e47db1e0f"
        :build ("make")
        :build/darwin `(("make" ,(format "EMACS_COMMAND=%s" el-get-emacs)))
        ;; Windows probably doesn't have make available so we fake it.
