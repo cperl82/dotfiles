@@ -637,10 +637,9 @@ prefer for `sh-mode'.  It is automatically added to
 
 (defun helm-js-cmd-t (arg)
   (interactive "p")
-  (message (format "%d" arg))
   (if (eq arg 4)
       (call-interactively 'helm-cmd-t-repos)
     (let ((helm-ff-transformer-show-only-basename nil))
       (helm :sources (helm-js-cmd-t-sources)
-            :candidate-number-limit (if arg arg 200)
+            :candidate-number-limit (if (= arg 1) 200 arg)
             :buffer "*helm-cmd-t:*"))))
