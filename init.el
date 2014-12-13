@@ -20,7 +20,8 @@
         flx
         ido-vertical-mode
         rainbow-mode
-        helm))
+        helm
+	helm-cmd-t))
 
 (el-get 'sync my-packages)
 
@@ -625,3 +626,21 @@ prefer for `sh-mode'.  It is automatically added to
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-z")   'helm-select-action)
+
+; 2014-12-12 helm-cmd-t: Need larger candidate list
+(require 'helm-cmd-t)
+(defun helm-js-cmd-t-sources ()
+  (let ((root-data (helm-cmd-t-root-data)))
+    (if root-data
+	(helm-cmd-t-get-create-source root-data)
+      nil)))
+
+(defun helm-js-cmd-t (arg)
+  (interactive "p")
+  (message (format "%d" arg))
+  (if (eq arg 4)
+      (call-interactively 'helm-cmd-t-repos)
+    (let ((helm-ff-transformer-show-only-basename nil))
+      (helm :sources (helm-js-cmd-t-sources)
+            :candidate-number-limit (if arg arg 200)
+            :buffer "*helm-cmd-t:*"))))
