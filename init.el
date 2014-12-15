@@ -655,10 +655,13 @@ prefer for `sh-mode'.  It is automatically added to
          (candidate-buffer (get-buffer-create source-buffer-name))
          (data (buffer-local-value 'helm-cmd-t-data candidate-buffer)))
     (when (cdr (assq 'cached-p data))
-      (let ((cache-time-stamp (cdr (assq 'time-stamp data)))
-	    (work-directory-proxy (concat repo-root ".hg/dirstate")))
+      ; TODO: Support git, bzr, etc with a lookup table for what to
+      ; check to see if the working directory has changed
+      (let* ((work-directory-proxy (concat repo-root ".hg/dirstate"))
+	     (cache-time-stamp (cdr (assq 'time-stamp data)))
+	     (file-time-stamp (float-time (nth 5 (file-attributes work-directory-proxy)))))
 	(if (file-exists-p work-directory-proxy)
-	    (when (> (float-time (nth 5 (file-attributes work-directory-proxy))) cache-time-stamp)
+	    (when (> file-time-stamp cache-time-stamp)
 	      (progn
 		(message "Cache is older than mtime of %s, invalidating" work-directory-proxy)
 		(helm-cmd-t-invalidate-cache data)))
