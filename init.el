@@ -287,6 +287,45 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
      "\\|")
    nil nil  cperl-selective-display-forward-sexp-fun))
 
+; 2014-12-28: Functions for supporting "%" based jumping between "begin" and "end"
+(defun cperl-jump-begin-end ()
+  (let* ((begin "begin")
+	 (end   "end")
+	 (regex (format "\\<%s\\>\\|\\<%s\\>" begin end))
+	 (symbol (evil-find-symbol t)))
+    (cond ((string= symbol begin)
+	   (progn
+	     (forward-word)
+	     (cperl-jump-begin-end-aux 0 regex :forward end)))
+	  ((string= symbol end)
+	   (progn
+	     (backward-word)
+	     (cperl-jump-begin-end-aux 0 regex :backward begin)))
+	  (t
+	   (user-error "No matching item found on the current line")))))
+
+(defun cperl-jump-begin-end-aux (depth regex direction looking-for)
+  (let ((search-fun (cond ((eq direction :forward) 're-search-forward)
+			  ((eq direction :backward) 're-search-backward))))
+    (condition-case e
+	(apply search-fun regex ())
+	('error (message "Uncaught exception: %s" e)))
+    (let ((symbol (evil-find-symbol t)))
+      (cond ((not (string= symbol looking-for))
+	     (cperl-jump-begin-end-aux (1+ depth) regex direction looking-for))
+	    ((not (= depth 0))
+	     (cperl-jump-begin-end-aux (1- depth) regex direction looking-for))
+	    ((and (string= symbol looking-for) (= depth 0))
+	     t)))))
+
+(defun cperl-tuareg-overlay-evil-jump-item ()
+  (interactive)
+  (condition-case e
+      (evil-jump-item)
+      ('user-error (cperl-jump-begin-end))))
+
+(evil-define-key 'normal tuareg-mode-map (kbd "%") 'cperl-tuareg-overlay-evil-jump-item)
+
 ;;; escreen
 (require 'escreen)
 
