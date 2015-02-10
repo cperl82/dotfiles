@@ -1,0 +1,6 @@
+(:name systemtap-mode
+       :description "Emacs mode for SystemTap."
+       :type github
+       :pkgname "ruediger/systemtap-mode"
+       :branch "master"
+       :checkout "e2859b5c84e9a99493dee408644a09a71538c133")

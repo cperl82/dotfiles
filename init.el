@@ -21,7 +21,8 @@
         ido-vertical-mode
         rainbow-mode
         helm
-	helm-cmd-t))
+        helm-cmd-t
+        systemtap-mode))
 
 (el-get 'sync my-packages)
 
