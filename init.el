@@ -8,8 +8,7 @@
 (add-to-list 'el-get-recipe-path "~/.emacs.d/user-receipes")
 
 (setq my-packages
-      '(ack-and-a-half
-        color-theme-zenburn
+      '(color-theme-zenburn
         xoria256-emacs
         evil
         undo-tree
@@ -163,65 +162,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (isearch-update-ring string t)
     (setq string (evil-search-message string t))
     (evil-flash-search-pattern string t)))
-
-; 2014-03-27: ack-and-a-half: https://github.com/jhelwig/ack-and-a-half
-(require 'ack-and-a-half)
-(setq-default ack-and-a-half-prompt-for-directory t)
-(setq-default ack-and-a-half-use-ido t)
-(add-to-list 'ack-and-a-half-mode-type-default-alist '(tuareg-mode "ocaml" "cc"))
-
-; TODO can you use macros to reduce repition?
-(defun ack-and-a-half-read-type ()
-  ; TODO: completion by calling ack --help-types
-  (completing-read
-   "ack file type: "
-   '("ocaml" "cc" "cpp" "python" "ruby" "shell" "elisp")))
-
-(defun ack-and-a-half-type-explicit (type pattern &optional regexp directory)
-  ; This absurdness is because I want it to call
-  ; ack-and-a-half-interactive first.  I'm sure there is a better way.
-  (interactive
-   (reverse
-    (append
-     (reverse
-      (ack-and-a-half-interactive))
-     (list (ack-and-a-half-read-type)))))
-  (apply 'ack-and-a-half-run directory regexp pattern `("--type" ,type)))
-
-(defun ack-and-a-half-find-file-type (type &optional directory)
-  (interactive
-   (reverse
-    (list (ack-and-a-half-read-dir) (ack-and-a-half-read-type))))
-  (find-file (expand-file-name
-              (ack-and-a-half-read-file
-               "Find file: "
-               (apply 'ack-and-a-half-list-files directory `("--type" ,type)))
-              directory)))
-
-(defun ack-and-a-half-type-ocaml (pattern &optional regexp directory)
-  (interactive (ack-and-a-half-interactive))
-  (ack-and-a-half-type-explicit "ocaml" pattern regexp directory))
-
-(defun ack-and-a-half-find-file-type-ocaml (&optional directory)
-  (interactive (list (ack-and-a-half-read-dir)))
-  (ack-and-a-half-find-file-type "ocaml" directory))
-
-(defun ack-and-a-half-type-cc (pattern &optional regexp directory)
-  (interactive (ack-and-a-half-interactive))
-  (ack-and-a-half-type-explicit "cc" pattern regexp directory))
-
-(defun ack-and-a-half-find-file-type-cc (&optional directory)
-  (interactive (list (ack-and-a-half-read-dir)))
-  (ack-and-a-half-find-file-type "cc" directory))
-  
-(defalias 'ack-ff       'ack-find-file)
-(defalias 'ack-ff-same  'ack-find-file-same)
-(defalias 'ack-type     'ack-and-a-half-type-explicit)
-(defalias 'ack-ff-type  'ack-and-a-half-find-file-type)
-(defalias 'ack-ocaml    'ack-and-a-half-type-ocaml)
-(defalias 'ack-ff-ocaml 'ack-and-a-half-find-file-type-ocaml)
-(defalias 'ack-cc       'ack-and-a-half-type-cc)
-(defalias 'ack-ff-cc    'ack-and-a-half-find-file-type-cc)
 
 ; 2014-03-29: org-mode
 (require 'org)
