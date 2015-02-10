@@ -256,7 +256,7 @@ function rpmenv () {
 
 	case "${cmd}" in
 	enter)
-		if [[ "${name}" =~ ^http:.*.src.rpm$|^ftp:.*.src.rpm$ ]]
+		if [[ "${name}" =~ ^http(s)?:.*.src.rpm$|^ftp:.*.src.rpm$ ]]
 		then
 			url="${name}"
 			name=$(echo "${name}" | sed -e 's/^.*\/\(.*\).src.rpm/\1/')
