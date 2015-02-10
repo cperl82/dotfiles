@@ -22,7 +22,8 @@
         rainbow-mode
         helm
         helm-cmd-t
-        systemtap-mode))
+        systemtap-mode
+        haskell-mode))
 
 (el-get 'sync my-packages)
 

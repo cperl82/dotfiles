@@ -1,0 +1,12 @@
+(:name haskell-mode
+       :description "A Haskell editing mode"
+       :type github
+       :pkgname "haskell/haskell-mode"
+       :branch "master"
+       :checkout "ccbb6eb980f3d615ab47ef67b389f1e6c70a783b"
+       :info "."
+       :build `(("make" ,(format "EMACS=%s" el-get-emacs) "all"))
+       :post-init (progn
+                    (require 'haskell-mode-autoloads)
+                    (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+                    (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)))
