@@ -22,7 +22,8 @@
         helm
         helm-cmd-t
         systemtap-mode
-        haskell-mode))
+        haskell-mode
+        lua-mode))
 
 (el-get 'sync my-packages)
 
