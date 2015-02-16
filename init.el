@@ -651,3 +651,8 @@ prefer for `sh-mode'.  It is automatically added to
 	    (progn
 	      (message "Cache is older than 30m, invalidating")
 	      (helm-cmd-t-invalidate-cache data))))))))
+
+; 2015-02-16: grep related stuff
+(setq grep-find-use-xargs 'gnu)
+(add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
+(add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))
