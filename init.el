@@ -7,26 +7,24 @@
 (setq el-get-verbose t)
 (add-to-list 'el-get-recipe-path "~/.emacs.d/user-receipes")
 
-(setq my-packages
-      '(color-theme-zenburn
-        xoria256-emacs
-        undo-tree
-        evil
-        evil-leader
-	evil-matchit
-        tuareg-mode
-        org-mode
-        xcscope
-        flx
-        ido-vertical-mode
-        rainbow-mode
-        helm
-        helm-cmd-t
-        systemtap-mode
-        haskell-mode
-        lua-mode))
-
-(el-get 'sync my-packages)
+(el-get 'sync
+	'(color-theme-zenburn
+	  xoria256-emacs
+	  undo-tree
+	  evil
+	  evil-leader
+	  evil-matchit
+	  tuareg-mode
+	  org-mode
+	  xcscope
+	  flx
+	  ido-vertical-mode
+	  rainbow-mode
+	  helm
+	  helm-cmd-t
+	  systemtap-mode
+	  haskell-mode
+	  lua-mode))
 
 ; 2014-04-26: Loading other stuff
 (add-to-list 'load-path "~/.emacs.d/lisp")
