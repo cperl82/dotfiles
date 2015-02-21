@@ -10,9 +10,10 @@
 (setq my-packages
       '(color-theme-zenburn
         xoria256-emacs
-        evil
         undo-tree
+        evil
         evil-leader
+	evil-matchit
         tuareg-mode
         org-mode
         xcscope
