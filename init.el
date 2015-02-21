@@ -294,17 +294,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	   (let ((n (1- escreen-highest-screen-number-used)))
 	     (while (>= n 0)
 	       (escreen-swap-screen n)
-	       (setq n (1- n))))))))
+	       (setq n (1- n)))))))
+  (escreen-get-active-screen-names-with-emphasis))
 
 (defun escreen-move-screen-left ()
   (interactive)
-  (escreen-move-screen 'left)
-  (escreen-get-active-screen-names-with-emphasis))
+  (escreen-move-screen 'left))
 
 (defun escreen-move-screen-right ()
   (interactive)
-  (escreen-move-screen 'right)
-  (escreen-get-active-screen-names-with-emphasis))
+  (escreen-move-screen 'right))
 
 (defun escreen-rename-screen (&optional name number suppress-message)
   (interactive "sNew screen name: ")
