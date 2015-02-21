@@ -231,44 +231,28 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
      "\\|")
    nil nil  cperl-selective-display-forward-sexp-fun))
 
-; 2014-12-28: Functions for supporting "%" based jumping between "begin" and "end"
-(defun cperl-jump-begin-end ()
-  (let* ((begin "begin")
-	 (end   "end")
-	 (regex (format "\\<%s\\>\\|\\<%s\\>" begin end))
-	 (symbol (evil-find-symbol t)))
-    (cond ((string= symbol begin)
-	   (progn
-	     (forward-word)
-	     (cperl-jump-begin-end-aux 0 regex :forward end)))
-	  ((string= symbol end)
-	   (progn
-	     (backward-word)
-	     (cperl-jump-begin-end-aux 0 regex :backward begin)))
-	  (t
-	   (user-error "No matching item found on the current line")))))
 
-(defun cperl-jump-begin-end-aux (depth regex direction looking-for)
-  (let ((search-fun (cond ((eq direction :forward) 're-search-forward)
-			  ((eq direction :backward) 're-search-backward))))
-    (condition-case e
-	(apply search-fun regex ())
-	('error (message "Uncaught exception: %s" e)))
-    (let ((symbol (evil-find-symbol t)))
-      (cond ((not (string= symbol looking-for))
-	     (cperl-jump-begin-end-aux (1+ depth) regex direction looking-for))
-	    ((not (= depth 0))
-	     (cperl-jump-begin-end-aux (1- depth) regex direction looking-for))
-	    ((and (string= symbol looking-for) (= depth 0))
-	     t)))))
+; 2014-12-28: "%" based jumping between "begin" and "end" in ocaml
+(require 'evil-matchit)
+(global-evil-matchit-mode 1)
 
-(defun cperl-tuareg-overlay-evil-jump-item ()
-  (interactive)
-  (condition-case e
-      (evil-jump-item)
-      ('user-error (cperl-jump-begin-end))))
+(require 'evil-matchit-sdk)
 
-(evil-define-key 'normal tuareg-mode-map (kbd "%") 'cperl-tuareg-overlay-evil-jump-item)
+;; ocaml
+;; TODO: See if you can get this working with "if" "else if" "else"
+(defvar evilmi-ocaml-match-tags
+      '((("begin") () ("end"))))
+
+;;;###autoload
+(defun evilmi-ocaml-get-tag ()
+  (evilmi-sdk-get-tag evilmi-ocaml-match-tags evilmi-sdk-extract-keyword-howtos))
+
+;;;###autoload
+(defun evilmi-ocaml-jump (rlt NUM)
+  (evilmi-sdk-jump rlt NUM evilmi-ocaml-match-tags evilmi-sdk-extract-keyword-howtos))
+
+(plist-put evilmi-plugins 'tuareg-mode '((evilmi-ocaml-get-tag evilmi-ocaml-jump)))
+
 
 ;;; escreen
 (require 'escreen)
