@@ -7,24 +7,25 @@
 (setq el-get-verbose t)
 (add-to-list 'el-get-recipe-path "~/.emacs.d/user-receipes")
 
-(el-get 'sync
-	'(color-theme-zenburn
-	  xoria256-emacs
-	  undo-tree
-	  evil
-	  evil-leader
-	  evil-matchit
-	  tuareg-mode
-	  org-mode
-	  xcscope
-	  flx
-	  ido-vertical-mode
-	  rainbow-mode
-	  helm
-	  helm-cmd-t
-	  systemtap-mode
-	  haskell-mode
-	  lua-mode))
+(el-get
+ nil
+ '(color-theme-zenburn
+   xoria256-emacs
+   undo-tree
+   evil
+   evil-leader
+   evil-matchit
+   tuareg-mode
+   org-mode
+   xcscope
+   flx
+   ido-vertical-mode
+   rainbow-mode
+   helm
+   helm-cmd-t
+   systemtap-mode
+   haskell-mode
+   lua-mode))
 
 ; 2014-04-26: Loading other stuff
 (add-to-list 'load-path "~/.emacs.d/lisp")
@@ -52,22 +53,23 @@
       reduced)))
 
 ; 2014-04-22 mode-line-format
+(setq-default column-number-mode t)
 (setq-default mode-line-format
-    '("%e"
-     mode-line-front-space
-     mode-line-mule-info
-     mode-line-client
-     mode-line-modified
-     mode-line-remote
-     mode-line-frame-identification
-     mode-line-buffer-identification
-     "   "
-     (:eval (format-default-dir-for-mode-line default-directory 40))
-     "   "
-     mode-line-position
-     evil-mode-line-tag
-     (vc-mode vc-mode)
-     "  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
+	      '("%e"
+		mode-line-front-space
+		mode-line-mule-info
+		mode-line-client
+		mode-line-modified
+		mode-line-remote
+		mode-line-frame-identification
+		mode-line-buffer-identification
+		"   "
+		(:eval (format-default-dir-for-mode-line default-directory 40))
+		"   "
+		mode-line-position
+		evil-mode-line-tag
+		(vc-mode vc-mode)
+		"  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
 
 ; 2014-08-12
 ; I prefer the window to be split horizontally unless I explicitly split it
