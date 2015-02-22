@@ -545,10 +545,6 @@ buffers whose visited file has disappeared and refreshes dired buffers."
  `(isearch ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F"))))
  `(lazy-highlight ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F")))))
 
-; 2014-04-08: local emacs overrides
-(let ((local "~/.emacs.local"))
-  (when (file-exists-p local) (load-file local)))
-
 ; 2014-04-09: trying to get some stuff done with code folding
 ; http://www.emacswiki.org/emacs/HideShow
 (defun toggle-selective-display (column)
@@ -636,3 +632,7 @@ prefer for `sh-mode'.  It is automatically added to
 (setq grep-find-use-xargs 'gnu)
 (add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
 (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))
+
+; 2014-04-08: local emacs overrides
+(let ((local "~/.emacs.local"))
+  (when (file-exists-p local) (load-file local)))
