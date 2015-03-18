@@ -14,7 +14,6 @@
    undo-tree
    evil
    evil-leader
-   evil-matchit
    tuareg-mode
    org-mode
    xcscope
@@ -230,29 +229,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        )
      "\\|")
    nil nil  cperl-selective-display-forward-sexp-fun))
-
-
-; 2014-12-28: "%" based jumping between "begin" and "end" in ocaml
-(require 'evil-matchit)
-(global-evil-matchit-mode 1)
-
-(require 'evil-matchit-sdk)
-
-;; ocaml
-;; TODO: See if you can get this working with "if" "else if" "else"
-(defvar evilmi-ocaml-match-tags
-      '((("begin") () ("end"))))
-
-;;;###autoload
-(defun evilmi-ocaml-get-tag ()
-  (evilmi-sdk-get-tag evilmi-ocaml-match-tags evilmi-sdk-extract-keyword-howtos))
-
-;;;###autoload
-(defun evilmi-ocaml-jump (rlt NUM)
-  (evilmi-sdk-jump rlt NUM evilmi-ocaml-match-tags evilmi-sdk-extract-keyword-howtos))
-
-(plist-put evilmi-plugins 'tuareg-mode '((evilmi-ocaml-get-tag evilmi-ocaml-jump)))
-
 
 ;;; escreen
 (require 'escreen)
