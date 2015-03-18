@@ -515,24 +515,6 @@ buffers whose visited file has disappeared and refreshes dired buffers."
  `(isearch ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F"))))
  `(lazy-highlight ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F")))))
 
-; 2014-04-09: trying to get some stuff done with code folding
-; http://www.emacswiki.org/emacs/HideShow
-(defun toggle-selective-display (column)
-      (interactive "P")
-      (set-selective-display
-       (or column
-           (unless selective-display
-             (1+ (current-column))))))
-
-(defun toggle-hiding (column)
-      (interactive "P")
-      (if (boundp 'hs-minor-mode)
-	    (if (condition-case nil
-		    (hs-toggle-hiding)
-		  (error t))
-		(hs-show-all))
-	(toggle-selective-display column)))
-
 ; 2014-12-07 Trying to make sh-mode indentation better
 ; Copied from http://keramida.wordpress.com/2008/08/08/tweaking-shell-script-indentation-in-gnu-emacs
 (defun cperl-setup-sh-mode ()
