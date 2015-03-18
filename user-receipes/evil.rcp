@@ -6,7 +6,7 @@
        :type git
        :branch "master"
        :checkout "1def26dc9c4d084e766364eff2d9f3aa51613cf7"
-       :url "git://gitorious.org/evil/evil.git"
+       :url "http://gitorious.org/evil/evil.git"
        :features evil
        :depends undo-tree
        :build (("make" "all" "info"))
