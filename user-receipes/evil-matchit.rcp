@@ -1,7 +1,0 @@
-(:name evil-matchit
-       :type github
-       :description "Vim matchit ported to Evil"
-       :pkgname "redguardtoo/evil-matchit"
-       :branch "master"
-       :checkout "338a10ccd60e9501c6770c91a0a243291e634962"
-       :depends evil)
