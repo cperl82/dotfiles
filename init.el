@@ -340,7 +340,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
                    (define-key evil-motion-state-local-map (kbd "TAB") 'hs-toggle-hiding))
                   (t
                    (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))))
-;(evil-define-key 'normal hs-minor-mode-map (kbd "TAB") 'hs-toggle-hiding)
 
 ; 2014-04-13: Custom keys for dired
 (evil-define-key 'normal dired-mode-map (kbd "TAB")  'dired-hide-subdir)
@@ -359,15 +358,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-agenda-restore-windows-after-quit t)
 (setq org-agenda-files '("~/org"))
 (add-hook 'org-mode-hook 'auto-fill-mode)
-(evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
-(evil-define-key 'normal org-mode-map (kbd "M-h") 'org-metaleft)
-(evil-define-key 'normal org-mode-map (kbd "M-l") 'org-metaright)
-(evil-define-key 'normal org-mode-map (kbd "M-k") 'org-metaup)
-(evil-define-key 'normal org-mode-map (kbd "M-j") 'org-metadown)
-(evil-define-key 'normal org-mode-map (kbd "M-H") 'org-shiftmetaleft)
-(evil-define-key 'normal org-mode-map (kbd "M-L") 'org-shiftmetaright)
-(evil-define-key 'normal org-mode-map (kbd "M-K") 'org-shiftmetaup)
-(evil-define-key 'normal org-mode-map (kbd "M-J") 'org-shiftmetadown)
+(evil-define-key 'normal org-mode-map (kbd "TAB")   'org-cycle)
+(evil-define-key 'normal org-mode-map (kbd "M-h")   'org-metaleft)
+(evil-define-key 'normal org-mode-map (kbd "M-l")   'org-metaright)
+(evil-define-key 'normal org-mode-map (kbd "M-k")   'org-metaup)
+(evil-define-key 'normal org-mode-map (kbd "M-j")   'org-metadown)
+(evil-define-key 'normal org-mode-map (kbd "M-H")   'org-shiftmetaleft)
+(evil-define-key 'normal org-mode-map (kbd "M-L")   'org-shiftmetaright)
+(evil-define-key 'normal org-mode-map (kbd "M-K")   'org-shiftmetaup)
+(evil-define-key 'normal org-mode-map (kbd "M-J")   'org-shiftmetadown)
+(evil-define-key 'normal org-mode-map (kbd "C-c a") 'org-agenda)
 
 ; Use different keys to access help
 (global-set-key (kbd "C-x h") 'help-command)
