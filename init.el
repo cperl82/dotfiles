@@ -360,7 +360,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-agenda-files '("~/org"))
 (add-hook 'org-mode-hook 'auto-fill-mode)
 (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
-(evil-define-key 'normal org-mode-map (kbd "SPC") 'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "M-h") 'org-metaleft)
 (evil-define-key 'normal org-mode-map (kbd "M-l") 'org-metaright)
 (evil-define-key 'normal org-mode-map (kbd "M-k") 'org-metaup)
