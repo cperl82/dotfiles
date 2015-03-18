@@ -359,7 +359,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-agenda-restore-windows-after-quit t)
 (setq org-agenda-files '("~/org"))
 (setq org-capture-templates
-      '(("g" "Todo with Gmail Id" entry (file "~/org/capture.org") "* TODO  %?\n  %^L")
+      '(("g" "Todo with Gmail Id" entry (file "~/org/capture.org") "* TODO  %?\n  [[gmail:%^{gmail id}][%\\1]]")
 	("t" "Todo" entry (file "~/org/catpure.org") "* TODO  %?\n")))
 (setq org-refile-targets '((org-agenda-files . (:level . 1))))
 (evil-define-key 'normal org-mode-map (kbd "TAB")   'org-cycle)
