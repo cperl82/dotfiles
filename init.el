@@ -355,11 +355,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	    (dired-omit-mode 1)))
 
 ; 2014-04-03: Org mode customizations
+(add-hook 'org-mode-hook 'auto-fill-mode)
 (setq org-agenda-restore-windows-after-quit t)
 (setq org-agenda-files '("~/org"))
 (setq org-capture-templates
-      '(("c" "Capture with Gmail Id" entry (file "~/org/capture.org") "* TODO  %?\n  %^L")))
-(add-hook 'org-mode-hook 'auto-fill-mode)
+      '(("g" "Todo with Gmail Id" entry (file "~/org/capture.org") "* TODO  %?\n  %^L")
+	("t" "Todo" entry (file "~/org/catpure.org") "* TODO  %?\n")))
+(setq org-refile-targets '((org-agenda-files . (:level . 1))))
 (evil-define-key 'normal org-mode-map (kbd "TAB")   'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "M-h")   'org-metaleft)
 (evil-define-key 'normal org-mode-map (kbd "M-l")   'org-metaright)
@@ -370,6 +372,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (evil-define-key 'normal org-mode-map (kbd "M-K")   'org-shiftmetaup)
 (evil-define-key 'normal org-mode-map (kbd "M-J")   'org-shiftmetadown)
 (evil-define-key 'normal org-mode-map (kbd "C-c a") 'org-agenda)
+(evil-define-key 'normal org-mode-map (kbd "C-c c") 'org-capture)
 
 ; Use different keys to access help
 (global-set-key (kbd "C-x h") 'help-command)
