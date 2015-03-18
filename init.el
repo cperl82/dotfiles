@@ -8,7 +8,7 @@
 (add-to-list 'el-get-recipe-path "~/.emacs.d/user-receipes")
 
 (el-get
- nil
+ 'sync
  '(color-theme-zenburn
    xoria256-emacs
    undo-tree
