@@ -357,6 +357,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ; 2014-04-03: Org mode customizations
 (setq org-agenda-restore-windows-after-quit t)
+(setq org-agenda-files '("~/org"))
 (add-hook 'org-mode-hook 'auto-fill-mode)
 (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "SPC") 'org-cycle)
@@ -390,8 +391,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-motion-state-map (kbd "C-M-k") 'buf-move-up)
 (define-key evil-motion-state-map (kbd "C-M-h") 'buf-move-left)
 (define-key evil-motion-state-map (kbd "C-M-l") 'buf-move-right)
-
-(define-key evil-normal-state-map (kbd "SPC") 'next-error)
 
 ; 2014-04-29: man related
 (require 'man)
