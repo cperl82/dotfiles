@@ -356,6 +356,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	    (dired-omit-mode 1)))
 
 ; 2014-04-03: Org mode customizations
+(setq org-agenda-restore-windows-after-quit t)
 (add-hook 'org-mode-hook 'auto-fill-mode)
 (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "SPC") 'org-cycle)
