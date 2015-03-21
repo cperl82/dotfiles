@@ -362,7 +362,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       '(("g" "Todo with Gmail Id" entry (file "~/org/capture.org") "* TODO  %?\n  [[gmail:%^{gmail id}][%\\1]]")
 	("t" "Todo" entry (file "~/org/capture.org") "* TODO  %?\n")))
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "FOLLOW(f)" "DEFER(d)" "|" "DONE(d)")))
+      '((sequence "TODO(t)" "FOLLOW(f)" "DEFER(r)" "|" "DONE(d)")))
 (setq org-link-abbrev-alist
        '(("gmail"  . "https://mail.google.com/mail/u/0/#all/%s")))
 (setq org-agenda-custom-commands
