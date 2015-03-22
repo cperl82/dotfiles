@@ -369,7 +369,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        `(("u" "Unscheduled tasks" tags-todo "-DEADLINE={.+}&-SCHEDULED={.+}")))
 (setq org-refile-use-outline-path 'file)
 (setq org-hide-block-startup t)
-(setq org-refile-targets '((org-agenda-files . (:level . 1))))
+(setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
 (evil-define-key 'normal org-mode-map (kbd "TAB")   'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "M-h")   'org-metaleft)
 (evil-define-key 'normal org-mode-map (kbd "M-l")   'org-metaright)
