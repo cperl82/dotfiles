@@ -370,6 +370,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-refile-use-outline-path 'file)
 (setq org-hide-block-startup t)
 (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
+(setq org-agenda-skip-scheduled-if-done t)
+(setq org-agenda-skip-deadline-if-done t)
 (evil-define-key 'normal org-mode-map (kbd "TAB")   'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "M-h")   'org-metaleft)
 (evil-define-key 'normal org-mode-map (kbd "M-l")   'org-metaright)
