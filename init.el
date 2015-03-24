@@ -383,6 +383,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (evil-define-key 'normal org-mode-map (kbd "M-J")   'org-shiftmetadown)
 (evil-define-key 'normal org-mode-map (kbd "C-c a") 'org-agenda)
 (evil-define-key 'normal org-mode-map (kbd "C-c c") 'org-capture)
+(evil-define-key 'emacs org-agenda-mode-map (kbd "j") 'org-agenda-next-line)
+(evil-define-key 'emacs org-agenda-mode-map (kbd "k") 'org-agenda-previous-line)
+(evil-define-key 'emacs org-agenda-mode-map (kbd "h") 'left-char)
+(evil-define-key 'emacs org-agenda-mode-map (kbd "l") 'right-char)
 
 ; Use different keys to access help
 (global-set-key (kbd "C-x h") 'help-command)
