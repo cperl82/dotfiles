@@ -355,7 +355,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	    (dired-omit-mode 1)))
 
 ; 2014-04-03: Org mode customizations
-(add-hook 'org-mode-hook 'auto-fill-mode)
+(add-hook 'org-mode-hook
+          (lambda ()
+            (progn
+              'auto-fill-mode
+              (setq fill-column 90))))
 (setq org-agenda-restore-windows-after-quit t)
 (setq org-agenda-files '("~/org"))
 (setq org-capture-templates
