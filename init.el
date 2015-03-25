@@ -358,7 +358,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (add-hook 'org-mode-hook
           (lambda ()
             (progn
-              'auto-fill-mode
+              (auto-fill-mode)
               (setq fill-column 90))))
 (setq org-agenda-restore-windows-after-quit t)
 (setq org-agenda-files '("~/org"))
