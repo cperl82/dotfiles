@@ -379,9 +379,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-catch-invisible-edits 'error)
 (setq org-ctrl-k-protect-subtree t)
 (setq org-cycle-include-plain-lists 'integrate)
-(add-hook 'org-agenda-mode-hook
-          (lambda ()
-            (define-key org-agenda-mode-map " " 'org-agenda-cycle-show)))
 (evil-define-key 'normal org-mode-map (kbd "TAB")   'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "M-h")   'org-metaleft)
 (evil-define-key 'normal org-mode-map (kbd "M-l")   'org-metaright)
@@ -397,6 +394,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (evil-define-key 'emacs org-agenda-mode-map (kbd "k") 'org-agenda-previous-line)
 (evil-define-key 'emacs org-agenda-mode-map (kbd "h") 'left-char)
 (evil-define-key 'emacs org-agenda-mode-map (kbd "l") 'right-char)
+(evil-define-key 'emacs org-agenda-mode-map (kbd " ") 'org-agenda-cycle-show)
 
 ; Use different keys to access help
 (global-set-key (kbd "C-x h") 'help-command)
