@@ -377,6 +377,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-agenda-skip-scheduled-if-done t)
 (setq org-agenda-skip-deadline-if-done t)
 (setq org-catch-invisible-edits 'error)
+(setq org-ctrl-k-protect-subtree t)
 (evil-define-key 'normal org-mode-map (kbd "TAB")   'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "M-h")   'org-metaleft)
 (evil-define-key 'normal org-mode-map (kbd "M-l")   'org-metaright)
