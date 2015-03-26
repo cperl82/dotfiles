@@ -370,9 +370,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-link-abbrev-alist
        '(("gmail"  . "https://mail.google.com/mail/u/0/#all/%s")))
 (setq org-agenda-custom-commands
-       `(("u" "Unscheduled tasks     " tags-todo "-DEADLINE={.+}&-SCHEDULED={.+}")
-         ("r" "Deferred (< 3 months) " tags-todo "+TODO=\"DFER\"+DEADLINE<=\"<+3m>\"")
-         ("R" "Deferred (> 3 months) " tags-todo "+TODO=\"DFER\"+DEADLINE=>\"<+3m>\"")))
+       `(("u" "Unscheduled tasks" tags-todo "-DEADLINE={.+}&-SCHEDULED={.+}")
+         ("r" "Deferred  (< 3m) " tags-todo "+TODO=\"DFER\"+DEADLINE<=\"<+3m>\"")
+         ("R" "Deferred  (> 3m) " tags-todo "+TODO=\"DFER\"+DEADLINE=>\"<+3m>\"")
+         ("f" "Follow up (< 1w) " tags-todo "+TODO=\"FWUP\"+DEADLINE<=\"<+7d>\"")
+         ("F" "Follow up (> 1w) " tags-todo "+TODO=\"FWUP\"+DEADLINE=>\"<+7d>\"")))
 (setq org-refile-use-outline-path 'file)
 (setq org-hide-block-startup t)
 (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
