@@ -371,15 +371,47 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        '(("gmail"  . "https://mail.google.com/mail/u/0/#all/%s")))
 (setq org-agenda-custom-commands
        `(("u" "Unscheduled tasks  " tags-todo "-DEADLINE={.+}&-SCHEDULED={.+}")
+         ("n" "No todo keyword    " tags      "-TODO={.+}&+DEADLINE={.+}")
          ("r" "Deferred    (< 3m )" tags-todo "+TODO=\"DFER\"+DEADLINE<=\"<+3m>\"")
          ("R" "Deferred    (> 3m )" tags-todo "+TODO=\"DFER\"+DEADLINE=>\"<+3m>\"")
          ("f" "Follow up   (< 1w )" tags-todo "+TODO=\"FWUP\"+DEADLINE<=\"<+7d>\"")
          ("F" "Follow up   (> 1w )" tags-todo "+TODO=\"FWUP\"+DEADLINE=>\"<+7d>\"")
-         ("A" "Priority A, (today)" tags-todo "+PRIORITY=\"A\"+DEADLINE=\"<today>\"")
-         ("B" "Priority B, (today)" tags-todo "+PRIORITY=\"B\"+DEADLINE=\"<today>\"")
-         ("C" "Priority C, (today)" tags-todo "+PRIORITY=\"C\"+DEADLINE=\"<today>\"")
-         ("_" "Priority _, (today)" tags-todo "+DEADLINE=\"<today>\"")
-         ("+" "Priority _, (tmrw )" tags-todo "+DEADLINE=\"<tomorrow>\"")))
+         ("." . "TODAY Agenda Searches")
+         (".A" "Priority A, (today)" agenda ""
+          ((org-agenda-span 1)
+           (org-deadline-warning-days 1)
+           (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp "\\=.*\\[#A\\]"))))
+         (".B" "Priority B, (today)" agenda ""
+          ((org-agenda-span 1)
+           (org-deadline-warning-days 1)
+           (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp "\\=.*\\[#B\\]"))))
+         (".C" "Priority C, (today)" agenda ""
+          ((org-agenda-span 1)
+           (org-deadline-warning-days 1)
+           (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp "\\=.*\\[#C\\]"))))
+         ("._" "Priority _, (today)" agenda ""
+          ((org-agenda-span 1)
+           (org-deadline-warning-days 1)))
+         ("+" . "TOMORROW Agenda Searches")
+         ("+A" "Priority A, (tomorrow)" agenda ""
+          ((org-agenda-span 1)
+           (org-deadline-warning-days 1)
+           (org-agenda-start-day "+1d")
+           (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp "\\=.*\\[#A\\]"))))
+         ("+B" "Priority B, (tomorrow)" agenda ""
+          ((org-agenda-span 1)
+           (org-deadline-warning-days 1)
+           (org-agenda-start-day "+1d")
+           (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp "\\=.*\\[#B\\]"))))
+         ("+C" "Priority C, (tomorrow)" agenda ""
+          ((org-agenda-span 1)
+           (org-deadline-warning-days 1)
+           (org-agenda-start-day "+1d")
+           (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp "\\=.*\\[#C\\]"))))
+         ("+_" "Priority _, (tomorrow)" agenda ""
+          ((org-agenda-span 1)
+           (org-agenda-start-day "+1d")
+           (org-deadline-warning-days 1)))))
 (setq org-refile-use-outline-path 'file)
 (setq org-hide-block-startup t)
 (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
