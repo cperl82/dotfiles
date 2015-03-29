@@ -376,6 +376,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
          ("R" "Deferred    (> 3m )" tags-todo "+TODO=\"DFER\"+DEADLINE=>\"<+3m>\"")
          ("f" "Follow up   (< 1w )" tags-todo "+TODO=\"FWUP\"+DEADLINE<=\"<+7d>\"")
          ("F" "Follow up   (> 1w )" tags-todo "+TODO=\"FWUP\"+DEADLINE=>\"<+7d>\"")
+         ("M" "Month  (no dl warn)" agenda ""
+	  ((org-agenda-span 30)
+	   (org-deadline-warning-days 1)))
          ("." . "TODAY Agenda Searches")
          (".A" "Priority A, (today)" agenda ""
           ((org-agenda-span 1)
