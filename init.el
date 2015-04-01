@@ -536,7 +536,6 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 			  
 ; 2014-04-06: cscope related
 (setq-default cscope-option-use-inverted-index t)
-(setq-default cscope-close-window-after-select t) 
 (setq-default cscope-edit-single-match nil)
 (setq-default cscope-option-kernel-mode t)
 (add-hook 'cscope-list-entry-hook
@@ -548,7 +547,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 			  (cscope-function-face    font-lock-function-name-face)))
 	    (define-key evil-normal-state-local-map (kbd "RET") 'cscope-select-entry-inplace)
 	    (define-key evil-normal-state-local-map (kbd "SPC") 'cscope-show-entry-other-window)
-	    (define-key evil-normal-state-local-map (kbd   "o") 'cscope-select-entry-other-window)
+	    (define-key evil-normal-state-local-map (kbd "TAB") 'cscope-select-entry-other-window)
 	    (define-key evil-normal-state-local-map (kbd   "q") 'cscope-bury-buffer)
 	    (define-key evil-normal-state-local-map (kbd "M-n") 'cscope-history-forward-line)
 	    (define-key evil-normal-state-local-map (kbd "M-p") 'cscope-history-backward-line)
