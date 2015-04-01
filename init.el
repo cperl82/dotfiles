@@ -430,6 +430,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (add-to-list 'org-open-at-point-functions 'cp-ehco-gmail-link-at-point)
 ; Make the "DFER" keyword a slightly darker red
 (setq org-todo-keyword-faces '(("DFER" . "#8C5353") ("DONE" . "#FFFFFF")))
+(setq org-tags-column -90)
 (evil-define-key 'normal org-mode-map (kbd "TAB")   'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "M-h")   'org-metaleft)
 (evil-define-key 'normal org-mode-map (kbd "M-l")   'org-metaright)
