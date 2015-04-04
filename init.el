@@ -363,22 +363,17 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-agenda-restore-windows-after-quit t)
 (setq org-agenda-files '("~/org"))
 (setq org-capture-templates
-      '(("g" "Next Action with Gmail Id" entry (file "~/org/capture.org") "* NEXT %?\n  [[gmail:%^{gmail id}][%\\1]]")
-	("n" "Next Action" entry (file "~/org/capture.org") "* NEXT %?\n")
-	("p" "Project" entry (file "~/org/capture.org") "* %?\n")))
+      '(("g" "Next Action with Gmail Id" entry (file "~/org/capture.org") "* NEXT  %?\n  [[gmail:%^{gmail id}][%\\1]]")
+	("n" "Next Action" entry (file "~/org/capture.org") "* NEXT  %?\n")
+	("p" "Project" entry (file "~/org/capture.org") "*  %?\n")))
 (setq org-todo-keywords
       '((sequence "NEXT(n)" "WAIT(w)" "|" "DONE(d)" "CNCL(c)")
 	(sequence "DFER(r)" "|" "DONE(d)" "CNCL(c)")))
-; Make the "DFER" keyword a slightly darker red
-(setq org-todo-keyword-faces '(("DFER" . "#8C5353")
-			       ("WAIT" . "#8C5353")
-			       ("CNCL" . "#FFFFFF")
-			       ("DONE" . "#FFFFFF")))
-(setq org-tag-alist '(("tech"   . ?t)
-		      ("invest" . ?i)
-		      ("amy"    . ?a)
-		      ("kids"   . ?k)
-		      ("house"  . ?h)))
+(setq org-todo-keyword-faces
+      '(("DFER" . "#8C5353")
+	("WAIT" . "#8C5353")
+        ("CNCL" . "#FFFFFF")
+        ("DONE" . "#FFFFFF")))
 (setq org-link-abbrev-alist
        '(("gmail"  . "https://mail.google.com/mail/u/0/#all/%s")))
 (setq org-agenda-custom-commands
@@ -388,7 +383,34 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 		      (org-deadline-warning-days 1)))
 	  (tags-todo "read+TODO=\"NEXT\""
 		     ((org-agenda-overriding-header "NEXT ACTIONS, Read/Review")))))
-	("h" . "Home NEXT ACTION searches")
+         ("A" "ALL"
+	  ((agenda "" ((org-agenda-span 1)
+		       (org-deadline-warning-days 1)))
+	   (tags-todo "TODO=\"NEXT\""
+		      ((org-agenda-overriding-header "NEXT ACTIONS, ALL")))))
+         ("p" "Prompt for tag"
+	  ((agenda "" ((org-agenda-span 1)
+		       (org-deadline-warning-days 1)))
+	   (tags-todo ""
+		      ((org-agenda-overriding-header "NEXT ACTIONS")
+                       (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
+	("w" . "Work predefined NEXT ACTION searches")
+        ("wl" "Linux"
+         ((agenda "" ((org-agenda-span 1)
+                      (org-deadline-warning-days 1)))
+          (tags-todo "linux+TODO=\"NEXT\""
+                     ((org-agenda-overriding-header "NEXT ACTIONS, Linux")))))
+        ("wi" "Isilon"
+         ((agenda "" ((org-agenda-span 1)
+                      (org-deadline-warning-days 1)))
+          (tags-todo "isilon+TODO=\"NEXT\""
+                     ((org-agenda-overriding-header "NEXT ACTIONS, Isilon")))))
+        ("wg" "Ganeti"
+         ((agenda "" ((org-agenda-span 1)
+                      (org-deadline-warning-days 1)))
+          (tags-todo "ganeti+TODO=\"NEXT\""
+                     ((org-agenda-overriding-header "NEXT ACTIONS, Ganeti")))))
+	("h" . "Home predefined NEXT ACTION searches")
          ("ht" "Tech"
 	  ((agenda "" ((org-agenda-span 1)
 		       (org-deadline-warning-days 1)))
@@ -413,14 +435,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	  ((agenda "" ((org-agenda-span 1)
 		       (org-deadline-warning-days 1)))
 	   (tags-todo "house+TODO=\"NEXT\""
-		      ((org-agenda-overriding-header "NEXT ACTIONS, House")))))
-         ("hA" "ALL"
-	  ((agenda "" ((org-agenda-span 1)
-		       (org-deadline-warning-days 1)))
-	   (tags-todo "TODO=\"NEXT\""
-		      ((org-agenda-overriding-header "NEXT ACTIONS, ALL")))))))
-(setq org-tags-column -90)
-(setq org-agenda-tags-column -90)
+		      ((org-agenda-overriding-header "NEXT ACTIONS, House")))))))
+(setq org-tags-column -120)
+(setq org-agenda-tags-column -120)
 (setq org-refile-use-outline-path 'file)
 (setq org-hide-block-startup t)
 (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
