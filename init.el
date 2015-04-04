@@ -370,13 +370,24 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       '((sequence "NEXT(n)" "WAIT(w)" "|" "DONE(d)" "CNCL(c)")
 	(sequence "DFER(r)" "|" "DONE(d)" "CNCL(c)")))
 ; Make the "DFER" keyword a slightly darker red
-(setq org-todo-keyword-faces '(("DFER" . "#8C5353") ("WAIT" . "#8C5353") ("DONE" . "#FFFFFF")))
-(setq org-tag-alist '(("tech" . ?t) ("invest" . ?i) ("amy" . ?a) ("kids" . ?k) ("house" . ?h)))
+(setq org-todo-keyword-faces '(("DFER" . "#8C5353")
+			       ("WAIT" . "#8C5353")
+			       ("CNCL" . "#FFFFFF")
+			       ("DONE" . "#FFFFFF")))
+(setq org-tag-alist '(("tech"   . ?t)
+		      ("invest" . ?i)
+		      ("amy"    . ?a)
+		      ("kids"   . ?k)
+		      ("house"  . ?h)))
 (setq org-link-abbrev-alist
        '(("gmail"  . "https://mail.google.com/mail/u/0/#all/%s")))
 (setq org-agenda-custom-commands
       `(("W" "Waiting" tags-todo "TODO=\"WAIT\"")
-	("R" "Read/Review" tags-todo "read+TODO=\"NEXT\"")
+	("R" "Read/Review"
+	 ((agenda "" ((org-agenda-span 1)
+		      (org-deadline-warning-days 1)))
+	  (tags-todo "read+TODO=\"NEXT\""
+		     ((org-agenda-overriding-header "NEXT ACTIONS, Read/Review")))))
 	("h" . "Home NEXT ACTION searches")
          ("ht" "Tech"
 	  ((agenda "" ((org-agenda-span 1)
