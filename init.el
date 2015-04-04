@@ -377,23 +377,33 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-link-abbrev-alist
        '(("gmail"  . "https://mail.google.com/mail/u/0/#all/%s")))
 (setq org-agenda-custom-commands
-      `(("W" "Waiting" tags-todo "TODO=\"WAIT\"")
-	("R" "Read/Review"
+      `(("w" "Waiting"
+	 ((agenda "" ((org-agenda-span 1)
+		      (org-deadline-warning-days 1)))
+	  (tags-todo "TODO=\"WAIT\""
+		     ((org-agenda-overriding-header "WAITING FOR")))))
+	("r" "Read/Review"
 	 ((agenda "" ((org-agenda-span 1)
 		      (org-deadline-warning-days 1)))
 	  (tags-todo "read+TODO=\"NEXT\""
 		     ((org-agenda-overriding-header "NEXT ACTIONS, Read/Review")))))
-         ("A" "ALL"
-	  ((agenda "" ((org-agenda-span 1)
-		       (org-deadline-warning-days 1)))
-	   (tags-todo "TODO=\"NEXT\""
-		      ((org-agenda-overriding-header "NEXT ACTIONS, ALL")))))
-         ("p" "Prompt for tag"
-	  ((agenda "" ((org-agenda-span 1)
-		       (org-deadline-warning-days 1)))
-	   (tags-todo ""
-		      ((org-agenda-overriding-header "NEXT ACTIONS")
-                       (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
+        ("A" "ALL"
+         ((agenda "" ((org-agenda-span 1)
+                      (org-deadline-warning-days 1)))
+          (tags-todo "TODO=\"NEXT\""
+                     ((org-agenda-overriding-header "NEXT ACTIONS, ALL")))))
+        ("p" "Prompt for tag"
+         ((agenda "" ((org-agenda-span 1)
+                      (org-deadline-warning-days 1)))
+          (tags-todo ""
+                     ((org-agenda-overriding-header "NEXT ACTIONS")
+                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
+        ("u" "Untagged"
+         ((agenda "" ((org-agenda-span 1)
+                      (org-deadline-warning-days 1)))
+          (tags-todo "-{.*}"
+                     ((org-agenda-overriding-header "NEXT ACTIONS, no context")
+                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
 	("w" . "Work predefined NEXT ACTION searches")
         ("wl" "Linux"
          ((agenda "" ((org-agenda-span 1)
