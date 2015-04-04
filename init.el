@@ -363,58 +363,53 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-agenda-restore-windows-after-quit t)
 (setq org-agenda-files '("~/org"))
 (setq org-capture-templates
-      '(("g" "Todo with Gmail Id" entry (file "~/org/capture.org") "* TODO  %?\n  [[gmail:%^{gmail id}][%\\1]]")
-	("t" "Todo" entry (file "~/org/capture.org") "* TODO  %?\n")))
+      '(("g" "Next Action with Gmail Id" entry (file "~/org/capture.org") "* NEXT %?\n  [[gmail:%^{gmail id}][%\\1]]")
+	("n" "Next Action" entry (file "~/org/capture.org") "* NEXT %?\n")
+	("p" "Project" entry (file "~/org/capture.org") "* %?\n")))
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "FWUP(f)" "DFER(r)" "|" "DONE(d)")))
+      '((sequence "NEXT(n)" "WAIT(w)" "|" "DONE(d)" "CNCL(c)")
+	(sequence "DFER(r)" "|" "DONE(d)" "CNCL(c)")))
+; Make the "DFER" keyword a slightly darker red
+(setq org-todo-keyword-faces '(("DFER" . "#8C5353") ("WAIT" . "#8C5353") ("DONE" . "#FFFFFF")))
+(setq org-tag-alist '(("tech" . ?t) ("invest" . ?i) ("amy" . ?a) ("kids" . ?k) ("house" . ?h)))
 (setq org-link-abbrev-alist
        '(("gmail"  . "https://mail.google.com/mail/u/0/#all/%s")))
 (setq org-agenda-custom-commands
-       `(("u" "Unscheduled tasks  " tags-todo "-DEADLINE={.+}&-SCHEDULED={.+}")
-         ("n" "No todo keyword    " tags      "-TODO={.+}&+DEADLINE={.+}")
-         ("r" "Deferred    (< 3m )" tags-todo "+TODO=\"DFER\"+DEADLINE<=\"<+3m>\"")
-         ("R" "Deferred    (> 3m )" tags-todo "+TODO=\"DFER\"+DEADLINE=>\"<+3m>\"")
-         ("f" "Follow up   (< 1w )" tags-todo "+TODO=\"FWUP\"+DEADLINE<=\"<+7d>\"")
-         ("F" "Follow up   (> 1w )" tags-todo "+TODO=\"FWUP\"+DEADLINE=>\"<+7d>\"")
-         ("M" "Month  (no dl warn)" agenda ""
-	  ((org-agenda-span 30)
-	   (org-deadline-warning-days 1)))
-         ("." . "TODAY Agenda Searches")
-         (".A" "Priority A, (today)" agenda ""
-          ((org-agenda-span 1)
-           (org-deadline-warning-days 1)
-           (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp "\\=.*\\[#A\\]"))))
-         (".B" "Priority B, (today)" agenda ""
-          ((org-agenda-span 1)
-           (org-deadline-warning-days 1)
-           (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp "\\=.*\\[#B\\]"))))
-         (".C" "Priority C, (today)" agenda ""
-          ((org-agenda-span 1)
-           (org-deadline-warning-days 1)
-           (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp "\\=.*\\[#C\\]"))))
-         ("._" "Priority _, (today)" agenda ""
-          ((org-agenda-span 1)
-           (org-deadline-warning-days 1)))
-         ("+" . "TOMORROW Agenda Searches")
-         ("+A" "Priority A, (tomorrow)" agenda ""
-          ((org-agenda-span 1)
-           (org-deadline-warning-days 1)
-           (org-agenda-start-day "+1d")
-           (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp "\\=.*\\[#A\\]"))))
-         ("+B" "Priority B, (tomorrow)" agenda ""
-          ((org-agenda-span 1)
-           (org-deadline-warning-days 1)
-           (org-agenda-start-day "+1d")
-           (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp "\\=.*\\[#B\\]"))))
-         ("+C" "Priority C, (tomorrow)" agenda ""
-          ((org-agenda-span 1)
-           (org-deadline-warning-days 1)
-           (org-agenda-start-day "+1d")
-           (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp "\\=.*\\[#C\\]"))))
-         ("+_" "Priority _, (tomorrow)" agenda ""
-          ((org-agenda-span 1)
-           (org-agenda-start-day "+1d")
-           (org-deadline-warning-days 1)))))
+      `(("W" "Waiting" tags-todo "TODO=\"WAIT\"")
+	("R" "Read/Review" tags-todo "read+TODO=\"NEXT\"")
+	("h" . "Home NEXT ACTION searches")
+         ("ht" "Tech"
+	  ((agenda "" ((org-agenda-span 1)
+		       (org-deadline-warning-days 1)))
+	   (tags-todo "tech+TODO=\"NEXT\""
+		      ((org-agenda-overriding-header "NEXT ACTIONS, Tech")))))
+         ("hi" "Invest"
+	  ((agenda "" ((org-agenda-span 1)
+		       (org-deadline-warning-days 1)))
+	   (tags-todo "invest+TODO=\"NEXT\""
+		      ((org-agenda-overriding-header "NEXT ACTIONS, Invest")))))
+         ("ha" "Amy"
+	  ((agenda "" ((org-agenda-span 1)
+		       (org-deadline-warning-days 1)))
+	   (tags-todo "amy+TODO=\"NEXT\""
+		      ((org-agenda-overriding-header "NEXT ACTIONS, Amy")))))
+         ("hk" "Kids"
+	  ((agenda "" ((org-agenda-span 1)
+		       (org-deadline-warning-days 1)))
+	   (tags-todo "kids+TODO=\"NEXT\""
+		      ((org-agenda-overriding-header "NEXT ACTIONS, Kids")))))
+         ("hh" "House"
+	  ((agenda "" ((org-agenda-span 1)
+		       (org-deadline-warning-days 1)))
+	   (tags-todo "house+TODO=\"NEXT\""
+		      ((org-agenda-overriding-header "NEXT ACTIONS, House")))))
+         ("hA" "ALL"
+	  ((agenda "" ((org-agenda-span 1)
+		       (org-deadline-warning-days 1)))
+	   (tags-todo "TODO=\"NEXT\""
+		      ((org-agenda-overriding-header "NEXT ACTIONS, ALL")))))))
+(setq org-tags-column -90)
+(setq org-agenda-tags-column -90)
 (setq org-refile-use-outline-path 'file)
 (setq org-hide-block-startup t)
 (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
@@ -428,9 +423,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
          (raw-link (plist-get (cadr el) :raw-link)))
     (message "%s" raw-link)))
 (add-to-list 'org-open-at-point-functions 'cp-ehco-gmail-link-at-point)
-; Make the "DFER" keyword a slightly darker red
-(setq org-todo-keyword-faces '(("DFER" . "#8C5353") ("DONE" . "#FFFFFF")))
-(setq org-tags-column -90)
 (evil-define-key 'normal org-mode-map (kbd "TAB")   'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "M-h")   'org-metaleft)
 (evil-define-key 'normal org-mode-map (kbd "M-l")   'org-metaright)
@@ -663,6 +655,7 @@ prefer for `sh-mode'.  It is automatically added to
 
 ; 2015-02-16: grep related stuff
 (setq grep-find-use-xargs 'gnu)
+(evil-define-key 'normal grep-mode-map (kbd "TAB") 'compilation-display-error)
 (add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
 (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))
 
