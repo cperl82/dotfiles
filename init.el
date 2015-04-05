@@ -383,6 +383,18 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	  (tags-todo "TODO=\"WAIT\""
 		     ((org-agenda-overriding-header "WAITING FOR")
                       (org-agenda-sorting-strategy '(priority-down))))))
+	("d" "Deferred (with tickler)"
+	 ((agenda "" ((org-agenda-span 1)
+		      (org-deadline-warning-days 1)))
+	  (tags-todo "DEADLINE={.+}+TODO=\"DFER\""
+		     ((org-agenda-overriding-header "DEFERRED, with tickler")
+                      (org-agenda-sorting-strategy '(priority-down))))))
+	("D" "Deferred (without tickler)"
+	 ((agenda "" ((org-agenda-span 1)
+		      (org-deadline-warning-days 1)))
+	  (tags-todo "-DEADLINE={.+}+TODO=\"DFER\""
+		     ((org-agenda-overriding-header "DEFERRED, without tickler")
+                      (org-agenda-sorting-strategy '(priority-down))))))
 	("r" "Read/Review"
 	 ((agenda "" ((org-agenda-span 1)
 		      (org-deadline-warning-days 1)))
