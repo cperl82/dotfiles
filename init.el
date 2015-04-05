@@ -382,7 +382,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 		      (org-deadline-warning-days 1)))
 	  (tags-todo "TODO=\"WAIT\""
 		     ((org-agenda-overriding-header "WAITING FOR")
-                      (org-agenda-sorting-strategy '(priority-down)))))
+                      (org-agenda-sorting-strategy '(priority-down))))))
 	("r" "Read/Review"
 	 ((agenda "" ((org-agenda-span 1)
 		      (org-deadline-warning-days 1)))
@@ -429,36 +429,36 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
                      ((org-agenda-overriding-header "NEXT ACTIONS, Ganeti")
                       (org-agenda-sorting-strategy '(priority-down))))))
 	("h" . "Home predefined NEXT ACTION searches")
-         ("ht" "Tech"
-	  ((agenda "" ((org-agenda-span 1)
-		       (org-deadline-warning-days 1)))
-	   (tags-todo "tech+TODO=\"NEXT\""
-		      ((org-agenda-overriding-header "NEXT ACTIONS, Tech")
-                       (org-agenda-sorting-strategy '(priority-down))))))
-         ("hi" "Invest"
-	  ((agenda "" ((org-agenda-span 1)
-		       (org-deadline-warning-days 1)))
-	   (tags-todo "invest+TODO=\"NEXT\""
-		      ((org-agenda-overriding-header "NEXT ACTIONS, Invest")
-                       (org-agenda-sorting-strategy '(priority-down))))))
-         ("ha" "Amy"
-	  ((agenda "" ((org-agenda-span 1)
-		       (org-deadline-warning-days 1)))
-	   (tags-todo "amy+TODO=\"NEXT\""
-		      ((org-agenda-overriding-header "NEXT ACTIONS, Amy")
-                       (org-agenda-sorting-strategy '(priority-down))))))
-         ("hk" "Kids"
-	  ((agenda "" ((org-agenda-span 1)
-		       (org-deadline-warning-days 1)))
-	   (tags-todo "kids+TODO=\"NEXT\""
-		      ((org-agenda-overriding-header "NEXT ACTIONS, Kids")
-                       (org-agenda-sorting-strategy '(priority-down))))))
-         ("hh" "House"
-	  ((agenda "" ((org-agenda-span 1)
-		       (org-deadline-warning-days 1)))
-	   (tags-todo "house+TODO=\"NEXT\""
-		      ((org-agenda-overriding-header "NEXT ACTIONS, House")
-                       (org-agenda-sorting-strategy '(priority-down)))))))))
+	("ht" "Tech"
+	 ((agenda "" ((org-agenda-span 1)
+		      (org-deadline-warning-days 1)))
+	  (tags-todo "tech+TODO=\"NEXT\""
+		     ((org-agenda-overriding-header "NEXT ACTIONS, Tech")
+		      (org-agenda-sorting-strategy '(priority-down))))))
+	("hi" "Invest"
+	 ((agenda "" ((org-agenda-span 1)
+		      (org-deadline-warning-days 1)))
+	  (tags-todo "invest+TODO=\"NEXT\""
+		     ((org-agenda-overriding-header "NEXT ACTIONS, Invest")
+		      (org-agenda-sorting-strategy '(priority-down))))))
+	("ha" "Amy"
+	 ((agenda "" ((org-agenda-span 1)
+		      (org-deadline-warning-days 1)))
+	  (tags-todo "amy+TODO=\"NEXT\""
+		     ((org-agenda-overriding-header "NEXT ACTIONS, Amy")
+		      (org-agenda-sorting-strategy '(priority-down))))))
+	("hk" "Kids"
+	 ((agenda "" ((org-agenda-span 1)
+		      (org-deadline-warning-days 1)))
+	  (tags-todo "kids+TODO=\"NEXT\""
+		     ((org-agenda-overriding-header "NEXT ACTIONS, Kids")
+		      (org-agenda-sorting-strategy '(priority-down))))))
+	("hh" "House"
+	 ((agenda "" ((org-agenda-span 1)
+		      (org-deadline-warning-days 1)))
+	  (tags-todo "house+TODO=\"NEXT\""
+		     ((org-agenda-overriding-header "NEXT ACTIONS, House")
+		      (org-agenda-sorting-strategy '(priority-down))))))))
 (setq org-tags-column -120)
 (setq org-agenda-tags-column -120)
 (setq org-refile-use-outline-path 'file)
