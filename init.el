@@ -377,51 +377,51 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-link-abbrev-alist
        '(("gmail"  . "https://mail.google.com/mail/u/0/#all/%s")))
 (setq org-agenda-custom-commands
-      `(("w" "Waiting"
+      `(("w" "Waiting                    "
 	 ((agenda "" ((org-agenda-span 1)
 		      (org-deadline-warning-days 1)))
 	  (tags-todo "TODO=\"WAIT\""
 		     ((org-agenda-overriding-header "WAITING FOR")
                       (org-agenda-sorting-strategy '(priority-down))))))
-	("d" "Deferred (with tickler)"
+	("d" "Deferred (with tickler)    "
 	 ((agenda "" ((org-agenda-span 1)
 		      (org-deadline-warning-days 1)))
 	  (tags-todo "DEADLINE={.+}+TODO=\"DFER\""
 		     ((org-agenda-overriding-header "DEFERRED, with tickler")
                       (org-agenda-sorting-strategy '(priority-down))))))
-	("D" "Deferred (without tickler)"
+	("D" "Deferred (without tickler) "
 	 ((agenda "" ((org-agenda-span 1)
 		      (org-deadline-warning-days 1)))
 	  (tags-todo "-DEADLINE={.+}+TODO=\"DFER\""
 		     ((org-agenda-overriding-header "DEFERRED, without tickler")
                       (org-agenda-sorting-strategy '(priority-down))))))
-	("r" "Read/Review"
+	("r" "Read/Review                "
 	 ((agenda "" ((org-agenda-span 1)
 		      (org-deadline-warning-days 1)))
 	  (tags-todo "read+TODO=\"NEXT\""
 		     ((org-agenda-overriding-header "NEXT ACTIONS, Read/Review")
                       (org-agenda-sorting-strategy '(priority-down))))))
-        ("A" "ALL"
+        ("A" "ALL                        "
          ((agenda "" ((org-agenda-span 1)
                       (org-deadline-warning-days 1)))
           (tags-todo "TODO=\"NEXT\""
                      ((org-agenda-overriding-header "NEXT ACTIONS, ALL")
                       (org-agenda-sorting-strategy '(priority-down))))))
-        ("p" "Prompt for tag"
+        ("p" "Prompt for tag             "
          ((agenda "" ((org-agenda-span 1)
                       (org-deadline-warning-days 1)))
           (tags-todo ""
                      ((org-agenda-overriding-header "NEXT ACTIONS")
                       (org-agenda-sorting-strategy '(priority-down))
                       (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
-        ("u" "Untagged"
+        ("u" "Untagged                   "
          ((agenda "" ((org-agenda-span 1)
                       (org-deadline-warning-days 1)))
           (tags-todo "-{.*}"
                      ((org-agenda-overriding-header "NEXT ACTIONS, no context")
                       (org-agenda-sorting-strategy '(priority-down))
                       (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
-	("w" . "Work predefined NEXT ACTION searches")
+	("w" . "Work NEXT ACTION searches")
         ("wl" "Linux"
          ((agenda "" ((org-agenda-span 1)
                       (org-deadline-warning-days 1)))
@@ -440,7 +440,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
           (tags-todo "ganeti+TODO=\"NEXT\""
                      ((org-agenda-overriding-header "NEXT ACTIONS, Ganeti")
                       (org-agenda-sorting-strategy '(priority-down))))))
-	("h" . "Home predefined NEXT ACTION searches")
+	("h" . "Home NEXT ACTION searches")
 	("ht" "Tech"
 	 ((agenda "" ((org-agenda-span 1)
 		      (org-deadline-warning-days 1)))
