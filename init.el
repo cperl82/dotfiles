@@ -377,7 +377,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-link-abbrev-alist
        '(("gmail"  . "https://mail.google.com/mail/u/0/#all/%s")))
 (setq org-agenda-custom-commands
-      `(("w" "Waiting                    "
+      `(("W" "Waiting                    "
 	 ((agenda "" ((org-agenda-span 1)
 		      (org-deadline-warning-days 1)))
 	  (tags-todo "TODO=\"WAIT\""
