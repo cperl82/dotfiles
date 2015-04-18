@@ -86,7 +86,7 @@
 		     (and (eq major-mode 'dired-mode)
 			  (buffer-name buf)))))
 	       (buffer-list)))))))
-(global-set-key (kbd "C-x d") 'cp/ido-erc-buffer)
+(global-set-key (kbd "C-x d") 'cp/ido-dired-buffer)
 
 
 ; 2014-08-12
