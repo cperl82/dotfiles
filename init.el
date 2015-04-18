@@ -363,9 +363,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-agenda-restore-windows-after-quit t)
 (setq org-agenda-files '("~/org"))
 (setq org-capture-templates
-      '(("g" "Next Action with Gmail Id" entry (file "~/org/capture.org") "* NEXT  %?\n  [[gmail:%^{gmail id}][%\\1]]")
-	("n" "Next Action" entry (file "~/org/capture.org") "* NEXT  %?\n")
-	("p" "Project" entry (file "~/org/capture.org") "*  %?\n")))
+      '(("n" "Next Action" entry (file "~/org/capture.org") "* NEXT  %?\n")
+	("N" "Next Action with Gmail Id" entry (file "~/org/capture.org") "* NEXT  %?\n  [[gmail:%^{gmail id}][%\\1]]")
+	("p" "Project" entry (file "~/org/capture.org") "*  %?\n")
+	("P" "Project with Gmail Id" entry (file "~/org/capture.org") "* %?\n  [[gmail:%^{gmail id}][%\\1]]")))
 (setq org-todo-keywords
       '((sequence "NEXT(n)" "WAIT(w)" "|" "DONE(d)" "CNCL(c)")
 	(sequence "DFER(r)" "|" "DONE(d)" "CNCL(c)")))
@@ -377,7 +378,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-link-abbrev-alist
        '(("gmail"  . "https://mail.google.com/mail/u/0/#all/%s")))
 (setq org-agenda-custom-commands
-      `(        ("d" "Deferred (with tickler)    "
+      `(("d" "Deferred (with tickler)    "
 	 ((agenda "" ((org-agenda-span 1)
 		      (org-deadline-warning-days 1)))
 	  (tags-todo "DEADLINE={.+}+TODO=\"DFER\""
@@ -395,7 +396,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	  (tags-todo "read+TODO=\"NEXT\""
 		     ((org-agenda-overriding-header "NEXT ACTIONS, Read/Review")
                       (org-agenda-sorting-strategy '(priority-down))))))
-        ("N" "NEXT ACTION (all)         "
+        ("N" "NEXT ACTION (all)          "
          ((agenda "" ((org-agenda-span 1)
                       (org-deadline-warning-days 1)))
           (tags-todo "TODO=\"NEXT\""
@@ -427,57 +428,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
           (tags-todo "-{.*}"
                      ((org-agenda-overriding-header "NEXT ACTIONS, no context")
                       (org-agenda-sorting-strategy '(priority-down))
-                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
-	("x" . "Work NEXT ACTION searches")
-        ("xl" "Linux"
-         ((agenda "" ((org-agenda-span 1)
-                      (org-deadline-warning-days 1)))
-          (tags-todo "linux+TODO=\"NEXT\""
-                     ((org-agenda-overriding-header "NEXT ACTIONS, Linux")
-                      (org-agenda-sorting-strategy '(priority-down))))))
-        ("xi" "Isilon"
-         ((agenda "" ((org-agenda-span 1)
-                      (org-deadline-warning-days 1)))
-          (tags-todo "isilon+TODO=\"NEXT\""
-                     ((org-agenda-overriding-header "NEXT ACTIONS, Isilon")
-                      (org-agenda-sorting-strategy '(priority-down))))))
-        ("xg" "Ganeti"
-         ((agenda "" ((org-agenda-span 1)
-                      (org-deadline-warning-days 1)))
-          (tags-todo "ganeti+TODO=\"NEXT\""
-                     ((org-agenda-overriding-header "NEXT ACTIONS, Ganeti")
-                      (org-agenda-sorting-strategy '(priority-down))))))
-	("h" . "Home NEXT ACTION searches")
-	("ht" "Tech"
-	 ((agenda "" ((org-agenda-span 1)
-		      (org-deadline-warning-days 1)))
-	  (tags-todo "tech+TODO=\"NEXT\""
-		     ((org-agenda-overriding-header "NEXT ACTIONS, Tech")
-		      (org-agenda-sorting-strategy '(priority-down))))))
-	("hi" "Invest"
-	 ((agenda "" ((org-agenda-span 1)
-		      (org-deadline-warning-days 1)))
-	  (tags-todo "invest+TODO=\"NEXT\""
-		     ((org-agenda-overriding-header "NEXT ACTIONS, Invest")
-		      (org-agenda-sorting-strategy '(priority-down))))))
-	("ha" "Amy"
-	 ((agenda "" ((org-agenda-span 1)
-		      (org-deadline-warning-days 1)))
-	  (tags-todo "amy+TODO=\"NEXT\""
-		     ((org-agenda-overriding-header "NEXT ACTIONS, Amy")
-		      (org-agenda-sorting-strategy '(priority-down))))))
-	("hk" "Kids"
-	 ((agenda "" ((org-agenda-span 1)
-		      (org-deadline-warning-days 1)))
-	  (tags-todo "kids+TODO=\"NEXT\""
-		     ((org-agenda-overriding-header "NEXT ACTIONS, Kids")
-		      (org-agenda-sorting-strategy '(priority-down))))))
-	("hh" "House"
-	 ((agenda "" ((org-agenda-span 1)
-		      (org-deadline-warning-days 1)))
-	  (tags-todo "house+TODO=\"NEXT\""
-		     ((org-agenda-overriding-header "NEXT ACTIONS, House")
-		      (org-agenda-sorting-strategy '(priority-down))))))))
+                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))))
 (setq org-tags-column -120)
 (setq org-agenda-tags-column -120)
 (setq org-refile-use-outline-path 'file)
