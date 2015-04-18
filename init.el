@@ -70,23 +70,44 @@
 		(vc-mode vc-mode)
 		"  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
 
-;; 2015-04-18 function to switch only to dired buffers
+;; 2015-04-18 function to switch to buffers by mode 
 ;; Taken from http://emacswiki.org/emacs/InteractivelyDoThings
-(defun cp/ido-dired-buffer()
+(defun cp-ido-by-mode (prompt mode)
   (interactive)
   (switch-to-buffer
    (ido-completing-read
-    "Dired Buffer: "
+    prompt
     (save-excursion
       (delq
        nil
        (mapcar (lambda (buf)
 		 (when (buffer-live-p buf)
 		   (with-current-buffer buf
-		     (and (eq major-mode 'dired-mode)
+		     (and (eq major-mode mode)
 			  (buffer-name buf)))))
 	       (buffer-list)))))))
-(global-set-key (kbd "C-x d") 'cp/ido-dired-buffer)
+
+(defun cp-ido-dired-mode ()
+  (interactive)
+  (cp-ido-by-mode "Dired: " 'dired-mode))
+
+(defun cp-ido-tuareg-mode ()
+  (interactive)
+  (cp-ido-by-mode "Tuareg: " 'tuareg-mode))
+
+(defun cp-ido-org-mode ()
+  (interactive)
+  (cp-ido-by-mode "Org: " 'org-mode))
+
+(defun cp-ido-c-mode ()
+  (interactive)
+  (cp-ido-by-mode "C: " 'c-mode))
+
+(global-set-key (kbd "C-x m")   nil) ; remove the binding to compose mail, I don't use it
+(global-set-key (kbd "C-x md") 'cp-ido-dired-mode)
+(global-set-key (kbd "C-x mt") 'cp-ido-tuareg-mode)
+(global-set-key (kbd "C-x mo") 'cp-ido-org-mode)
+(global-set-key (kbd "C-x mc") 'cp-ido-c-mode)
 
 
 ; 2014-08-12
