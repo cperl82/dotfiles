@@ -70,6 +70,25 @@
 		(vc-mode vc-mode)
 		"  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
 
+;; 2015-04-18 function to switch only to dired buffers
+;; Taken from http://emacswiki.org/emacs/InteractivelyDoThings
+(defun cp/ido-dired-buffer()
+  (interactive)
+  (switch-to-buffer
+   (ido-completing-read
+    "Dired Buffer: "
+    (save-excursion
+      (delq
+       nil
+       (mapcar (lambda (buf)
+		 (when (buffer-live-p buf)
+		   (with-current-buffer buf
+		     (and (eq major-mode 'dired-mode)
+			  (buffer-name buf)))))
+	       (buffer-list)))))))
+(global-set-key (kbd "C-x d") 'cp/ido-erc-buffer)
+
+
 ; 2014-08-12
 ; I prefer the window to be split horizontally unless I explicitly split it
 ; veritcally
