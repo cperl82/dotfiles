@@ -1,15 +1,15 @@
 (:name evil
-       :website "http://gitorious.org/evil/pages/Home"
+       :website "https://bitbucket.org/lyro/evil"
        :description "Evil is an extensible vi layer for Emacs. It
        emulates the main features of Vim, and provides facilities
        for writing custom extensions."
-       :type git
-       :branch "master"
-       :checkout "1def26dc9c4d084e766364eff2d9f3aa51613cf7"
-       :url "http://gitorious.org/evil/evil.git"
+       :type hg
+       :url "https://bitbucket.org/lyro/evil"
        :features evil
-       :depends undo-tree
-       :build (("make" "all" "info"))
-       :build/berkeley-unix (("gmake" "all" "info"))
-       :build/darwin `(("make" ,(format "EMACS=%s" el-get-emacs) "all" "info" ))
-       :info "doc")
+       :depends (undo-tree goto-chg)
+       :build (("make" "info" "all"))
+       :build/berkeley-unix (("gmake" "info" "all"))
+       :build/darwin `(("make" ,(format "EMACS=%s" el-get-emacs) "info" "all"))
+       :info "doc"
+       :checkout "fc249515c0c8ae98f324df178c9661d8d89af6a3" ; 1.1.6
+       )

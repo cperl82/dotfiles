@@ -3,7 +3,7 @@
        :description "Add <leader> shortcuts to Evil, the extensible vim
        emulation layer"
        :type github
-       :branch "0.4.2"
+       :branch "0.4.3"
        :pkgname "cofi/evil-leader"
        :features evil-leader
        :depends evil)
