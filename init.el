@@ -24,7 +24,8 @@
    helm-cmd-t
    systemtap-mode
    haskell-mode
-   lua-mode))
+   lua-mode
+   projectile))
 
 ; 2014-04-26: Loading other stuff
 (add-to-list 'load-path "~/.emacs.d/lisp")
