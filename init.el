@@ -724,3 +724,10 @@ prefer for `sh-mode'.  It is automatically added to
 ; 2014-04-08: local emacs overrides
 (let ((local "~/.emacs.local"))
   (when (file-exists-p local) (load-file local)))
+
+; 2015-05-24 projectile settings
+(require 'projectile)
+(projectile-global-mode)
+(setq projectile-enable-caching t)
+(setq projectile-switch-project-action 'projectile-dired)
+(add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
