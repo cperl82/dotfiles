@@ -732,3 +732,8 @@ prefer for `sh-mode'.  It is automatically added to
 (setq projectile-enable-caching t)
 (setq projectile-switch-project-action 'projectile-dired)
 (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
+
+; 2015-05-27 helm-projectile specific
+(setq helm-projectile-fuzzy-match nil)
+(require 'helm-projectile)
+(helm-projectile-on)
