@@ -737,3 +737,4 @@ prefer for `sh-mode'.  It is automatically added to
 (setq helm-projectile-fuzzy-match nil)
 (require 'helm-projectile)
 (helm-projectile-on)
+(put 'narrow-to-region 'disabled nil)
