@@ -389,7 +389,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
           (lambda ()
             (progn
               (auto-fill-mode)
-              (setq fill-column 90))))
+              (setq fill-column 90)
+	      (add-hook
+	       'write-contents-functions
+	       (lambda ()
+		 (save-excursion
+		   (delete-trailing-whitespace)))))))
 (setq org-agenda-restore-windows-after-quit t)
 (setq org-agenda-files '("~/org"))
 (setq org-capture-templates
