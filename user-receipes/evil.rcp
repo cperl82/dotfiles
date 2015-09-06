@@ -11,5 +11,5 @@
        :build/berkeley-unix (("gmake" "info" "all"))
        :build/darwin `(("make" ,(format "EMACS=%s" el-get-emacs) "info" "all"))
        :info "doc"
-       :checkout "fc249515c0c8ae98f324df178c9661d8d89af6a3" ; 1.1.6
+       :checkout "aa960313ddedd7d1b24a6c42d760172112200397" ; few commits past 1.2.3
        )
