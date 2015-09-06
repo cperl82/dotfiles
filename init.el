@@ -357,10 +357,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (escreen-install)
 
 (global-set-key         (kbd "C-\\") 'escreen-prefix)
+(global-set-key         (kbd "M-[")  'escreen-goto-prev-screen)
+(global-set-key         (kbd "M-]")  'escreen-goto-next-screen)
 (define-key escreen-map (kbd "r")    'escreen-rename-screen)
 (define-key escreen-map (kbd "C-\\") 'escreen-goto-last-screen)
-(define-key escreen-map (kbd "M-[")  'escreen-goto-prev-screen)
-(define-key escreen-map (kbd "M-]")  'escreen-goto-next-screen)
 
 ; 2014-04-24: hide show related
 ; 2014-04-30: I'm not sure why the hook works but the `evil-define-key' doesn't (well, I
