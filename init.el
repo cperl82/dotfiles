@@ -208,13 +208,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (require 'org)
 
 ; 2014-04-27: Initial function for copying gmail links to clipboard
-(org-add-link-type "gmail" 'org-gmail-copy-to-clipboard)
-
 (defun org-gmail-copy-to-clipboard (url)
   (let* ((process-connection-type nil)
 	 (proc (start-process "pbcopy" nil "pbcopy")))
     (process-send-string proc (format "https://mail.google.com/u/0/#all/%s" url))
     (process-send-eof proc)))
+(org-add-link-type "gmail" 'org-gmail-copy-to-clipboard)
 
 ; 2014-12-07: ido / flx
 (require 'ido)
@@ -480,11 +479,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-catch-invisible-edits 'error)
 (setq org-ctrl-k-protect-subtree t)
 (setq org-cycle-include-plain-lists 'integrate)
-(defun cp-ehco-gmail-link-at-point ()
+(defun cp-echo-gmail-link-at-point ()
   (let* ((el (org-element-context))
          (raw-link (plist-get (cadr el) :raw-link)))
     (message "%s" raw-link)))
-(add-to-list 'org-open-at-point-functions 'cp-ehco-gmail-link-at-point)
+(add-to-list 'org-open-at-point-functions 'cp-echo-gmail-link-at-point)
+(defun cp-org-gmail-link-auto-desc (link desc)
+  (if (string-match "^gmail:\\([0-9a-zA-Z]+\\)" link)
+      (match-string 1 link)
+    desc))
+(setq org-make-link-description-function 'cp-org-gmail-link-auto-desc)
 (evil-define-key 'normal org-mode-map (kbd "TAB")   'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "M-h")   'org-metaleft)
 (evil-define-key 'normal org-mode-map (kbd "M-l")   'org-metaright)
