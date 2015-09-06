@@ -207,14 +207,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ; 2014-03-29: org-mode
 (require 'org)
 
-; 2014-04-27: Initial function for copying gmail links to clipboard
-(defun org-gmail-copy-to-clipboard (url)
-  (let* ((process-connection-type nil)
-	 (proc (start-process "pbcopy" nil "pbcopy")))
-    (process-send-string proc (format "https://mail.google.com/u/0/#all/%s" url))
-    (process-send-eof proc)))
-(org-add-link-type "gmail" 'org-gmail-copy-to-clipboard)
-
 ; 2014-12-07: ido / flx
 (require 'ido)
 (require 'flx-ido)
