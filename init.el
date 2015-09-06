@@ -32,24 +32,22 @@
 
 (defun format-default-dir-for-mode-line (d max-length)
   (let* ((reduced
-	  (if (string-match (format "^%s" (getenv "HOME")) d)
-	      (replace-match "~" t t d)
-	    d))
-	 (reduced (replace-regexp-in-string "/$" "" reduced)))
+          (if (string-match (format "^%s" (getenv "HOME")) d) (replace-match "~" t t d) d))
+         (reduced (replace-regexp-in-string "/$" "" reduced)))
     (if (> (length reduced) max-length)
-	(let* ((n 0)
-	       (further-reduced nil)
-	       (pieces
-		(reverse (remove-if (lambda (s) (equal "" s)) (split-string reduced "/"))))
-	       (len (length pieces)))
-	  (catch 'done
-	    (while (< n len)
-	      (setq further-reduced
-		    (if further-reduced
-			(format "%s/%s" (nth n pieces) further-reduced)
-		      (nth n pieces)))
-	      (when (> (length further-reduced) max-length) (throw 'done further-reduced))
-	      (setq n (1+ n)))))
+        (let* ((n 0)
+               (further-reduced nil)
+               (pieces
+                (reverse (remove-if (lambda (s) (equal "" s)) (split-string reduced "/"))))
+               (len (length pieces)))
+          (catch 'done
+            (while (< n len)
+              (setq further-reduced
+                    (if further-reduced
+                        (format "%s/%s" (nth n pieces) further-reduced)
+                      (nth n pieces)))
+              (when (> (length further-reduced) max-length) (throw 'done further-reduced))
+              (setq n (1+ n)))))
       reduced)))
 
 ; 2014-04-22 mode-line-format
