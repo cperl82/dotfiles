@@ -108,7 +108,6 @@
 (global-set-key (kbd "C-x mo") 'cp-ido-org-mode)
 (global-set-key (kbd "C-x mc") 'cp-ido-c-mode)
 
-
 ; 2014-08-12
 ; I prefer the window to be split horizontally unless I explicitly split it
 ; veritcally
@@ -147,7 +146,7 @@
   "K" 'kill-buffer-and-window
   "o" 'delete-other-windows
   "x" 'delete-window
-  "e" 'escreen-get-active-screen-names-with-emphasis
+  "e" 'cperl/escreen-get-active-screen-names-with-emphasis
   "h" 'cp-evil-highlight-symbol
   "E" '(lambda () (interactive) (message (buffer-file-name))))
 
@@ -262,7 +261,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;;; escreen
 (require 'escreen)
 
-(defun escreen-swap-screen (other-screen-number)
+(defun cperl/escreen-swap-screen (other-screen-number)
   (if (and
        (numberp other-screen-number)
        (not (eq other-screen-number escreen-current-screen-number)))
@@ -280,14 +279,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 		 (setcar screen-data-current other-screen-number)
 		 (setq escreen-current-screen-number other-screen-number)))))))
 
-(defun escreen-move-screen (direction)
+(defun cperl/escreen-move-screen (direction)
   (let ((other-screen-number
 	 (cond ((eq direction 'left)  (1- escreen-current-screen-number))
 	       ((eq direction 'right) (1+ escreen-current-screen-number)))))
     (cond ((and
 	    (>= other-screen-number 0)
 	    (<= other-screen-number escreen-highest-screen-number-used))
-	   (escreen-swap-screen other-screen-number))
+	   (cperl/escreen-swap-screen other-screen-number))
 	  ; These are the cases where we're moving right off the right
 	  ; end or left off the left end
 	  ; TODO: some of the below can probably be factored out
@@ -295,24 +294,24 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	   (let ((n 1)
 		 (end escreen-highest-screen-number-used))
 	    (while (<= n end)
-	      (escreen-swap-screen n)
+	      (cperl/escreen-swap-screen n)
 	      (setq n (1+ n)))))
 	  ((> other-screen-number escreen-highest-screen-number-used)
 	   (let ((n (1- escreen-highest-screen-number-used)))
 	     (while (>= n 0)
-	       (escreen-swap-screen n)
+	       (cperl/escreen-swap-screen n)
 	       (setq n (1- n)))))))
-  (escreen-get-active-screen-names-with-emphasis))
+  (cperl/escreen-get-active-screen-names-with-emphasis))
 
-(defun escreen-move-screen-left ()
+(defun cperl/escreen-move-screen-left ()
   (interactive)
-  (escreen-move-screen 'left))
+  (cperl/escreen-move-screen 'left))
 
-(defun escreen-move-screen-right ()
+(defun cperl/escreen-move-screen-right ()
   (interactive)
-  (escreen-move-screen 'right))
+  (cperl/escreen-move-screen 'right))
 
-(defun escreen-rename-screen (&optional name number suppress-message)
+(defun cperl/escreen-rename-screen (&optional name number suppress-message)
   (interactive "sNew screen name: ")
   (let ((screen-data (escreen-configuration-escreen (or number escreen-current-screen-number)))
 	(new-name (cond ((equal name "") nil)
@@ -320,9 +319,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 			(t "default"))))
     (setcar (cdr screen-data) new-name)
     (when (not suppress-message)
-      (escreen-get-active-screen-names-with-emphasis))))
+      (cperl/escreen-get-active-screen-names-with-emphasis))))
 
-(defun escreen-get-active-screen-names-with-emphasis()
+(defun cperl/escreen-get-active-screen-names-with-emphasis ()
   (interactive)
   (let ((output ""))
     (dolist (n (escreen-get-active-screen-numbers))
@@ -339,26 +338,31 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 			    (t (format "%d-" n))))))
       (message "escreen: active screens: %s" output))))
 
-(defadvice escreen-goto-screen (after cp/escreen-goto-screen first (n &optional dont-update-current) activate)
-  (escreen-get-active-screen-names-with-emphasis))
+(defun cperl/advice/escreen-goto-screen (n &optional dont-update-current)
+  (cperl/escreen-get-active-screen-names-with-emphasis))
 
-(defadvice escreen-kill-screen (after cp/escreen-kill-screen first (&optional n) activate)
-  (escreen-get-active-screen-names-with-emphasis))
+(defun cperl/advice/escreen-kill-screen (&optional n)
+  (cperl/escreen-get-active-screen-names-with-emphasis))
 
-(defadvice escreen-create-screen (after cp/escreen-create-screen first (&optional n) activate)
-  (escreen-rename-screen)
-  (escreen-get-active-screen-names-with-emphasis))
+(defun cperl/advice/escreen-create-screen (&optional n)
+  (cperl/escreen-rename-screen)
+  (cperl/escreen-get-active-screen-names-with-emphasis))
 
-(defadvice escreen-install (after cp/escreen-install activate)
-  (escreen-rename-screen nil nil t))
+(defun cperl/advice/escreen-install ()
+  (cperl/escreen-rename-screen nil nil t))
+
+(advice-add 'escreen-goto-screen   :after #'cperl/advice/escreen-goto-screen)
+(advice-add 'escreen-kill-screen   :after #'cperl/advice/escreen-kill-screen)
+(advice-add 'escreen-create-screen :after #'cperl/advice/escreen-create-screen)
+(advice-add 'escreen-install       :after #'cperl/advice/escreen-install)
 
 (escreen-install)
 
 (global-set-key         (kbd "C-\\") 'escreen-prefix)
 (global-set-key         (kbd "M-[")  'escreen-goto-prev-screen)
 (global-set-key         (kbd "M-]")  'escreen-goto-next-screen)
-(define-key escreen-map (kbd "r")    'escreen-rename-screen)
 (define-key escreen-map (kbd "C-\\") 'escreen-goto-last-screen)
+(define-key escreen-map (kbd "r")    'cperl/escreen-rename-screen)
 
 ; 2014-04-24: hide show related
 ; 2014-04-30: I'm not sure why the hook works but the `evil-define-key' doesn't (well, I
