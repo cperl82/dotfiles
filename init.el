@@ -171,9 +171,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (setq string (evil-search-message string t))
     (evil-flash-search-pattern string t)))
 
-; 2014-03-29: org-mode
-(require 'org)
-
 ; 2014-12-07: ido / flx
 (require 'ido)
 (require 'flx-ido)
@@ -364,6 +361,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ; 2014-04-03: Org mode customizations
+(require 'org)
 (add-hook 'org-mode-hook
           (lambda ()
             (progn
@@ -484,6 +482,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (evil-define-key 'emacs org-agenda-mode-map (kbd "C-h") 'evil-window-left)
 (evil-define-key 'emacs org-agenda-mode-map (kbd "C-l") 'evil-window-right)
 
+
 (define-key evil-normal-state-map "\C-j" 'evil-window-down)
 (define-key evil-normal-state-map "\C-k" 'evil-window-up)
 (define-key evil-normal-state-map "\C-h" 'evil-window-left)
@@ -493,6 +492,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-motion-state-map "\C-h" 'evil-window-left)
 (define-key evil-motion-state-map "\C-l" 'evil-window-right)
 
+
 (require 'buffer-move)
 (define-key evil-normal-state-map (kbd "C-M-j") 'buf-move-down)
 (define-key evil-normal-state-map (kbd "C-M-k") 'buf-move-up)
@@ -503,9 +503,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-motion-state-map (kbd "C-M-h") 'buf-move-left)
 (define-key evil-motion-state-map (kbd "C-M-l") 'buf-move-right)
 
+
 ; 2014-04-29: man related
 (require 'man)
-(defun cperl-man-forward-sexp-fun (arg)
+(defun cperl/man-forward-sexp-fun (arg)
     (let ((p (point)))
       (forward-line 1)
       (re-search-forward (concat
@@ -524,28 +525,29 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
    ,Man-heading-regexp
    nil
    nil
-   cperl-man-forward-sexp-fun))
+   cperl/man-forward-sexp-fun))
 
-(add-hook 'Man-mode-hook
-	  (lambda ()
-	    (setq-local comment-start "$^")
-	    (setq-local comment-end   "$^")
-	    (hs-minor-mode 1)
-	    (hs-hide-all)
-	    (goto-char (point-min))
-	    (re-search-forward "NAME" nil t)
-	    (hs-show-block)
-	    (re-search-forward "SYNOPSIS" nil t)
-	    (hs-show-block)
-	    (re-search-forward "DESCRIPTION" nil t)
-	    (hs-show-block)
-	    (font-lock-add-keywords
-	     nil     ; Copied from /usr/share/vim/vim74/syntax/man.vim
-	     `((,Man-heading-regexp          . font-lock-comment-face)
-	       ("^\\s-*[+-][a-zA-Z0-9]\\S-*" . font-lock-function-name-face)
-	       ("^\\s-*--[a-zA-Z0-9-]\\S-*"  . font-lock-function-name-face))
-	     'set)
-            (font-lock-mode 1)))
+(add-hook
+ 'Man-mode-hook
+ (lambda ()
+   (setq-local comment-start "$^")
+   (setq-local comment-end   "$^")
+   (hs-minor-mode 1)
+   (hs-hide-all)
+   (goto-char (point-min))
+   (re-search-forward "NAME" nil t)
+   (hs-show-block)
+   (re-search-forward "SYNOPSIS" nil t)
+   (hs-show-block)
+   (re-search-forward "DESCRIPTION" nil t)
+   (hs-show-block)
+   (font-lock-add-keywords
+    nil		     ; Copied from /usr/share/vim/vim74/syntax/man.vim
+    `((,Man-heading-regexp          . font-lock-comment-face)
+      ("^\\s-*[+-][a-zA-Z0-9]\\S-*" . font-lock-function-name-face)
+      ("^\\s-*--[a-zA-Z0-9-]\\S-*"  . font-lock-function-name-face))
+    'set)
+   (font-lock-mode 1)))
 
 ; 2014-05-07: function to revert all buffers
 (defun revert-buffer-all ()
@@ -628,7 +630,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 
 ; 2014-12-07 Trying to make sh-mode indentation better
 ; Copied from http://keramida.wordpress.com/2008/08/08/tweaking-shell-script-indentation-in-gnu-emacs
-(defun cperl-setup-sh-mode ()
+(defun cperl/setup-sh-mode ()
     "My own personal preferences for `sh-mode'.
 
 This is a custom function that sets up the parameters I usually
@@ -640,7 +642,7 @@ prefer for `sh-mode'.  It is automatically added to
 	    sh-indentation 8)
       ; TODO: Do you want to enable electric-indent-mode for everything?
       (electric-indent-mode nil)))
-(add-hook 'sh-mode-hook 'cperl-setup-sh-mode)
+(add-hook 'sh-mode-hook 'cperl/setup-sh-mode)
 
 ; 2014-12-10 Starting to play with helm.
 (require 'helm)
@@ -648,6 +650,7 @@ prefer for `sh-mode'.  It is automatically added to
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-z")   'helm-select-action)
+(global-set-key      (kbd "C-x b") 'helm-mini)
 
 ; 2014-12-12 helm-cmd-t: larger candidate list and cache invalidate
 (require 'helm-cmd-t)
@@ -692,12 +695,14 @@ prefer for `sh-mode'.  It is automatically added to
 	      (message "Cache is older than 30m, invalidating")
 	      (helm-cmd-t-invalidate-cache data))))))))
 
+
 ; 2015-02-16: grep related stuff
 (setq grep-find-use-xargs 'gnu)
 (evil-define-key 'normal grep-mode-map (kbd "TAB") 'compilation-display-error)
 (add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
 (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))
 
+
 ; 2015-05-24 projectile settings
 (require 'projectile)
 (projectile-global-mode)
@@ -710,6 +715,7 @@ prefer for `sh-mode'.  It is automatically added to
 (require 'helm-projectile)
 (helm-projectile-on)
 
+
 ; 2014-04-08: local emacs overrides
 (let ((local "~/.emacs.local"))
   (when (file-exists-p local) (load-file local)))
