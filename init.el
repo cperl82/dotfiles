@@ -672,6 +672,7 @@ prefer for `sh-mode'.  It is automatically added to
 
 ; 2014-12-10 Starting to play with helm.
 (require 'helm)
+(require 'helm-misc)
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-z")   'helm-select-action)
@@ -725,10 +726,6 @@ prefer for `sh-mode'.  It is automatically added to
 (add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
 (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))
 
-; 2014-04-08: local emacs overrides
-(let ((local "~/.emacs.local"))
-  (when (file-exists-p local) (load-file local)))
-
 ; 2015-05-24 projectile settings
 (require 'projectile)
 (projectile-global-mode)
@@ -741,3 +738,7 @@ prefer for `sh-mode'.  It is automatically added to
 (require 'helm-projectile)
 (helm-projectile-on)
 (put 'narrow-to-region 'disabled nil)
+
+; 2014-04-08: local emacs overrides
+(let ((local "~/.emacs.local"))
+  (when (file-exists-p local) (load-file local)))
