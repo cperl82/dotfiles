@@ -194,7 +194,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ; 2014-05-14: This isn't perfect, but it works well enough in practice
 ; that I'm including it.
-(defun cperl-selective-display-forward-sexp-fun (arg)
+(defun cperl/selective-display-forward-sexp-fun (arg)
   (let* ((c (current-column))
 	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
     (forward-line 1)
@@ -226,7 +226,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        "\\<TEST_UNIT\\>\\s-+="
        )
      "\\|")
-   nil nil  cperl-selective-display-forward-sexp-fun))
+   nil nil  cperl/selective-display-forward-sexp-fun))
 
 ;;; escreen
 (require 'escreen)
