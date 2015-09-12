@@ -109,7 +109,7 @@
 (evil-leader/set-leader ",")
 (evil-leader/set-key
   "f" 'find-file
-  "b" 'ibuffer
+  "b" 'helm-mini
   "s" 'split-window-vertically
   "v" 'split-window-horizontally
   "k" 'kill-buffer
@@ -672,7 +672,6 @@ prefer for `sh-mode'.  It is automatically added to
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-z")   'helm-select-action)
-(global-set-key      (kbd "C-x b") 'helm-mini)
 
 ; 2014-12-12 helm-cmd-t: larger candidate list and cache invalidate
 (require 'helm-cmd-t)
