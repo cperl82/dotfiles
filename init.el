@@ -72,11 +72,11 @@
 ; 2015-09-11 Enable narrowing command which are disabled by default
 (put 'narrow-to-region 'disabled nil)
 
-(global-set-key (kbd "C-x m")   nil) ; remove the binding to compose mail, I don't use it
-(global-set-key (kbd "C-x md") 'cp-ido-dired-mode)
-(global-set-key (kbd "C-x mt") 'cp-ido-tuareg-mode)
-(global-set-key (kbd "C-x mo") 'cp-ido-org-mode)
-(global-set-key (kbd "C-x mc") 'cp-ido-c-mode)
+; Remove the binding to compose mail, I don't use it
+(global-set-key (kbd "C-x m")   nil)
+
+; Use different keys to access help
+(global-set-key (kbd "C-x h") 'help-command)
 
 ; 2014-08-12
 ; I prefer the window to be split horizontally unless I explicitly split it
@@ -228,6 +228,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
      "\\|")
    nil nil  cperl/selective-display-forward-sexp-fun))
 
+
 ;;; escreen
 (require 'escreen)
 
@@ -334,17 +335,20 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key escreen-map (kbd "C-\\") 'escreen-goto-last-screen)
 (define-key escreen-map (kbd "r")    'cperl/escreen-rename-screen)
 
+
 ; 2014-04-24: hide show related
 ; 2014-04-30: I'm not sure why the hook works but the `evil-define-key' doesn't (well, I
 ; mean it sort of works in that if I enter insert mode and then exit back into normal mode
 ; the keybinding will be there, but I want it to just be there right away).
-(add-hook 'hs-minor-mode-hook
-	  (lambda ()
-            (cond ((eq major-mode 'Man-mode)
-                   (define-key evil-motion-state-local-map (kbd "TAB") 'hs-toggle-hiding))
-                  (t
-                   (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))))
+(add-hook
+ 'hs-minor-mode-hook
+ (lambda ()
+   (cond ((eq major-mode 'Man-mode)
+	  (define-key evil-motion-state-local-map (kbd "TAB") 'hs-toggle-hiding))
+	 (t
+	  (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))))
 
+
 ; 2014-04-13: Custom keys for dired
 (evil-define-key 'normal dired-mode-map (kbd "TAB")  'dired-hide-subdir)
 (evil-define-key 'normal dired-mode-map (kbd "n")    'evil-search-next)
@@ -358,6 +362,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	    (require 'dired-x)
 	    (dired-omit-mode 1)))
 
+
 ; 2014-04-03: Org mode customizations
 (add-hook 'org-mode-hook
           (lambda ()
@@ -478,9 +483,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (evil-define-key 'emacs org-agenda-mode-map (kbd "C-c c") 'org-capture)
 (evil-define-key 'emacs org-agenda-mode-map (kbd "C-h") 'evil-window-left)
 (evil-define-key 'emacs org-agenda-mode-map (kbd "C-l") 'evil-window-right)
-
-; Use different keys to access help
-(global-set-key (kbd "C-x h") 'help-command)
 
 (define-key evil-normal-state-map "\C-j" 'evil-window-down)
 (define-key evil-normal-state-map "\C-k" 'evil-window-up)
