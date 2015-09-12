@@ -69,38 +69,8 @@
 		(vc-mode vc-mode)
 		"  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
 
-;; 2015-04-18 function to switch to buffers by mode 
-;; Taken from http://emacswiki.org/emacs/InteractivelyDoThings
-(defun cp-ido-by-mode (prompt mode)
-  (interactive)
-  (switch-to-buffer
-   (ido-completing-read
-    prompt
-    (save-excursion
-      (delq
-       nil
-       (mapcar (lambda (buf)
-		 (when (buffer-live-p buf)
-		   (with-current-buffer buf
-		     (and (eq major-mode mode)
-			  (buffer-name buf)))))
-	       (buffer-list)))))))
-
-(defun cp-ido-dired-mode ()
-  (interactive)
-  (cp-ido-by-mode "Dired: " 'dired-mode))
-
-(defun cp-ido-tuareg-mode ()
-  (interactive)
-  (cp-ido-by-mode "Tuareg: " 'tuareg-mode))
-
-(defun cp-ido-org-mode ()
-  (interactive)
-  (cp-ido-by-mode "Org: " 'org-mode))
-
-(defun cp-ido-c-mode ()
-  (interactive)
-  (cp-ido-by-mode "C: " 'c-mode))
+; 2015-09-11 Enable narrowing command which are disabled by default
+(put 'narrow-to-region 'disabled nil)
 
 (global-set-key (kbd "C-x m")   nil) ; remove the binding to compose mail, I don't use it
 (global-set-key (kbd "C-x md") 'cp-ido-dired-mode)
@@ -737,7 +707,6 @@ prefer for `sh-mode'.  It is automatically added to
 (setq helm-projectile-fuzzy-match nil)
 (require 'helm-projectile)
 (helm-projectile-on)
-(put 'narrow-to-region 'disabled nil)
 
 ; 2014-04-08: local emacs overrides
 (let ((local "~/.emacs.local"))
