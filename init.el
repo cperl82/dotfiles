@@ -647,6 +647,28 @@ prefer for `sh-mode'.  It is automatically added to
 ; 2014-12-10 Starting to play with helm.
 (require 'helm)
 (require 'helm-misc)
+(require 's)
+; 2015-09-11 Ripped wholesale from helm-buffers.el so I could control the formatting of dir
+(defun cperl/advice/helm-buffer--show-details
+    (buf-name prefix help-echo size mode dir face1 face2 proc details type)
+  (let ((dir (s-chop-prefixes '("/home/cperl/" "/usr/local/home/cperl/") dir)))
+    (append
+     (list
+      (concat prefix
+	      (propertize buf-name 'face face1
+			  'help-echo help-echo
+			  'type type)))
+     (and details
+	  (list size mode
+		(propertize
+		 (if proc
+		     (format "(%s %s in `%s')"
+			     (process-name proc)
+			     (process-status proc) dir)
+		   (format "%s" dir))
+		 'face face2))))))
+(advice-add 'helm-buffer--show-details :override #'cperl/advice/helm-buffer--show-details)
+
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-z")   'helm-select-action)
