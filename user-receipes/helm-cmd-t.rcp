@@ -3,5 +3,5 @@
        :type github
        :pkgname "emacs-helm/helm-cmd-t"
        :branch "master"
-       :checkout "8714c1f96e7534d457de9556b53b3d483a287116"
+       :checkout "8749f0b2b8527423cd146fa2d5c0e7a9e159eefb"
        :depends (helm))

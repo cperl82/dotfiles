@@ -673,53 +673,11 @@ prefer for `sh-mode'.  It is automatically added to
 (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-z")   'helm-select-action)
 
-; 2014-12-12 helm-cmd-t: larger candidate list and cache invalidate
-(require 'helm-cmd-t)
-(defun js-helm-cmd-t-sources ()
-  (let ((root-data (helm-cmd-t-root-data)))
-    (if root-data
-	(helm-cmd-t-get-create-source root-data)
-      nil)))
-
-(defun js-helm-cmd-t (arg)
-  (interactive "p")
-  (if (eq arg 4)
-      (call-interactively 'helm-cmd-t-repos)
-    (let ((helm-ff-transformer-show-only-basename nil))
-      (helm :sources (js-helm-cmd-t-sources)
-            :candidate-number-limit (if (= arg 1) 200 arg)
-            :buffer "*helm-cmd-t:*"))))
-
-(defun helm-cmd-t-invalidate-cache (data)
-  (setf (cdr (assq 'cached-p data)) nil))
-
-(defadvice helm-cmd-t-get-create-source
-    (before cp/helm-cmd-t-get-create-source first (repo-root-data &optional skeleton) activate)
-  (let* ((repo-root (cdr repo-root-data))
-         (repo-type (car repo-root-data))
-         (source-buffer-name (helm-cmd-t-get-source-buffer-name repo-root))
-         (candidate-buffer (get-buffer-create source-buffer-name))
-         (data (buffer-local-value 'helm-cmd-t-data candidate-buffer)))
-    (when (cdr (assq 'cached-p data))
-      ; TODO: Support git, bzr, etc with a lookup table for what to
-      ; check to see if the working directory has changed
-      (let* ((work-directory-proxy (concat repo-root ".hg/dirstate"))
-	     (cache-time-stamp (cdr (assq 'time-stamp data)))
-	     (file-time-stamp (float-time (nth 5 (file-attributes work-directory-proxy)))))
-	(if (file-exists-p work-directory-proxy)
-	    (when (> file-time-stamp cache-time-stamp)
-	      (progn
-		(message "Cache is older than mtime of %s, invalidating" work-directory-proxy)
-		(helm-cmd-t-invalidate-cache data)))
-	  (when (> (- (float-time) 1800) cache-time-stamp)
-	    (progn
-	      (message "Cache is older than 30m, invalidating")
-	      (helm-cmd-t-invalidate-cache data))))))))
-
 
 ; 2015-02-16: grep related stuff
 (setq grep-find-use-xargs 'gnu)
 (evil-define-key 'normal grep-mode-map (kbd "TAB") 'compilation-display-error)
+(setq grep-files-aliases ())
 (add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
 (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))
 
