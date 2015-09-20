@@ -622,7 +622,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(dired-perm-write ((t nil)))
- '(flx-highlight-face ((t (:foreground "gold1" :weight normal))))
+ '(flx-highlight-face ((t (:foreground "#CC9393" :weight normal))))
  '(helm-match ((t (:foreground "gold1" :weight normal))))
  '(helm-buffer-directory ((t (:foreground "color-247"))))
  '(helm-ff-dotted-directory ((t (:foreground "color-247")))))
