@@ -620,7 +620,8 @@ buffers whose visited file has disappeared and refreshes dired buffers."
  ;; If there is more than one, they won't work right.
  '(dired-perm-write ((t nil)))
  '(flx-highlight-face ((t (:foreground "#CC9393" :weight normal))))
- '(helm-buffer-directory ((t (:foreground "color-247")))))
+ '(helm-buffer-directory ((t (:foreground "color-247"))))
+ '(helm-ff-dotted-directory ((t (:foreground "color-247")))))
 
 ; 2014-12-06 override zenburn's default isearch highlighting
 (custom-theme-set-faces
