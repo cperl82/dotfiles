@@ -619,7 +619,8 @@ buffers whose visited file has disappeared and refreshes dired buffers."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(dired-perm-write ((t nil)))
- '(flx-highlight-face ((t (:foreground "#CC9393" :weight normal))))
+ '(flx-highlight-face ((t (:foreground "gold1" :weight normal))))
+ '(helm-match ((t (:foreground "gold1" :weight normal))))
  '(helm-buffer-directory ((t (:foreground "color-247"))))
  '(helm-ff-dotted-directory ((t (:foreground "color-247")))))
 
@@ -652,7 +653,12 @@ prefer for `sh-mode'.  It is automatically added to
 ; 2015-09-11 Ripped wholesale from helm-buffers.el so I could control the formatting of dir
 (defun cperl/advice/helm-buffer--show-details
     (buf-name prefix help-echo size mode dir face1 face2 proc details type)
-  (let ((dir (s-chop-prefixes '("/home/cperl/" "/usr/local/home/cperl/") dir)))
+  (let ((dir (s-chop-prefixes
+	      '("/home/cperl/"
+		"/usr/local/home/cperl/"
+		"/usr/local/home/cperl/workspaces/"
+		"/usr/local/home/cperl/repos/")
+	      dir)))
     (append
      (list
       (concat prefix
