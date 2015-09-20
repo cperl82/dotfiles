@@ -181,6 +181,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq ido-enable-flex-matching t)
 (setq ido-use-faces nil)
 
+; 2015-09-20: I never want ido-find-files to auto-merge, drives me nuts
+(setq ido-auto-merge-work-directories-length -1)
+
 ; 2014-12-07 ido-vertical-mode
 (require 'ido-vertical-mode)
 (setq-default ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
