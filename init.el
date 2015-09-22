@@ -660,8 +660,10 @@ prefer for `sh-mode'.  It is automatically added to
   (let ((dir (s-chop-prefixes
 	      '("/home/cperl/"
 		"/usr/local/home/cperl/"
-		"/usr/local/home/cperl/workspaces/"
-		"/usr/local/home/cperl/repos/")
+		"workspaces/"
+		"repos/"
+		"rpmbuild/"
+		"src/")
 	      dir)))
     (append
      (list
