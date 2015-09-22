@@ -2,7 +2,7 @@
        :website "https://github.com/ocaml/tuareg"
        :description "Emacs OCaml mode"
        :type github
-       :branch "2.0.8"
+       :branch "2.0.9"
        :pkgname "ocaml/tuareg"
        :load-path (".")
        :prepare
