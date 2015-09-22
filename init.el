@@ -649,11 +649,11 @@ prefer for `sh-mode'.  It is automatically added to
 (add-hook 'sh-mode-hook 'cperl/setup-sh-mode)
 
 ; 2014-12-10 Starting to play with helm.
-;(setq helm-split-window-default-side 'right)
 ;(setq helm-always-two-windows t)
 (require 'helm)
 (require 'helm-misc)
 (require 's)
+(setq helm-split-window-default-side 'right)
 ; 2015-09-11 Ripped wholesale from helm-buffers.el so I could control the formatting of dir
 (defun cperl/advice/helm-buffer--show-details
     (buf-name prefix help-echo size mode dir face1 face2 proc details type)
