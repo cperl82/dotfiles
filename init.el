@@ -650,6 +650,8 @@ prefer for `sh-mode'.  It is automatically added to
 (add-hook 'sh-mode-hook 'cperl/setup-sh-mode)
 
 ; 2014-12-10 Starting to play with helm.
+;(setq helm-split-window-default-side 'right)
+;(setq helm-always-two-windows t)
 (require 'helm)
 (require 'helm-misc)
 (require 's)
