@@ -21,7 +21,6 @@
    ido-vertical-mode
    rainbow-mode
    helm
-   helm-cmd-t
    systemtap-mode
    haskell-mode
    lua-mode
