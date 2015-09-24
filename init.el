@@ -702,6 +702,60 @@ prefer for `sh-mode'.  It is automatically added to
 (setq projectile-switch-project-action 'projectile-dired)
 (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
 
+; 2015-09-23 advice for the low level projectile functions that manage
+; the cache so I can track (roughly) when a project was cached and
+; invalidate the cache if I determine there is a good reason
+; (e.g. ".hg/dirstate" is newer than the time the projects file were
+; cached
+(setq cperl/projectile-projects-cache-shadow (make-hash-table :test 'equal))
+
+(defun cperl/projectile-projects-cache-shadow-sync (data)
+  (let* ((projectile-keys (projectile-hash-keys data))
+	 (shadow-keys (projectile-hash-keys cperl/projectile-projects-cache-shadow))
+	 (keys-to-add (set-difference projectile-keys shadow-keys))
+	 (keys-to-delete (set-difference shadow-keys projectile-keys)))
+    (progn
+      (dolist (project keys-to-add)
+	(puthash project (current-time) cperl/projectile-projects-cache-shadow))
+      (dolist (project keys-to-delete)
+	(remhash project cperl/projectile-projects-cache-shadow)))))
+
+(defun cperl/advice/projectile-serialize (data filename)
+  (when (eq filename projectile-cache-file)
+    (cperl/projectile-projects-cache-shadow-sync data)))
+
+(defun cperl/advice/projectile-unserialize (orig-fun filename)
+  (if (eq filename projectile-cache-file)
+      (let ((data (apply orig-fun filename ())))
+	(progn (cperl/projectile-projects-cache-shadow-sync data) data))
+    (apply orig-fun filename ())))
+
+(defun cperl/advice/projectile-maybe-invalidate-cache (orig-fun force)
+  (or
+   (when (and (not force)
+	      (projectile-project-p)
+	      (eq (projectile-project-vcs) 'hg))
+     (let* ((project-root (projectile-project-root))
+	    (project-cached-at-or-before
+	      (gethash project-root cperl/projectile-projects-cache-shadow))
+	    (cache-invalidate-proxy (concat project-root ".hg/dirstate")))
+       (when (and project-cached-at-or-before (file-exists-p cache-invalidate-proxy))
+	 (let ((dirstate-time-stamp (float-time (nth 5 (file-attributes cache-invalidate-proxy))))
+	       (project-time-stamp (float-time project-cached-at-or-before)))
+	   (when (> dirstate-time-stamp project-time-stamp)
+	     (progn
+	       (message
+		"Projectile project %s was cached at or before %s, which is older than mtime of %s"
+		project-root
+		(current-time-string project-cached-at-or-before)
+		cache-invalidate-proxy)
+	       (projectile-invalidate-cache nil)))))))
+   (apply orig-fun force ())))
+
+(advice-add 'projectile-serialize              :after  #'cperl/advice/projectile-serialize)
+(advice-add 'projectile-unserialize            :around #'cperl/advice/projectile-unserialize)
+(advice-add 'projectile-maybe-invalidate-cache :around #'cperl/advice/projectile-maybe-invalidate-cache)
+
 ; 2015-05-27 helm-projectile specific
 (setq helm-projectile-fuzzy-match nil)
 (require 'helm-projectile)
