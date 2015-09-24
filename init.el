@@ -697,10 +697,6 @@ prefer for `sh-mode'.  It is automatically added to
 
 ; 2015-05-24 projectile settings
 (require 'projectile)
-(projectile-global-mode)
-(setq projectile-enable-caching t)
-(setq projectile-switch-project-action 'projectile-dired)
-(add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
 
 ; 2015-09-23 advice for the low level projectile functions that manage
 ; the cache so I can track (roughly) when a project was cached and
@@ -755,6 +751,11 @@ prefer for `sh-mode'.  It is automatically added to
 (advice-add 'projectile-serialize              :after  #'cperl/advice/projectile-serialize)
 (advice-add 'projectile-unserialize            :around #'cperl/advice/projectile-unserialize)
 (advice-add 'projectile-maybe-invalidate-cache :around #'cperl/advice/projectile-maybe-invalidate-cache)
+
+(projectile-global-mode)
+(setq projectile-enable-caching t)
+(setq projectile-switch-project-action 'projectile-dired)
+(add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
 
 ; 2015-05-27 helm-projectile specific
 (setq helm-projectile-fuzzy-match nil)
