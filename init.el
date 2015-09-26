@@ -29,6 +29,9 @@
 ; 2014-04-26: Loading other stuff
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
+; 2015-09-26: Disable startup message
+(setq inhibit-startup-message t)
+
 (defun format-default-dir-for-mode-line (d max-length)
   (let* ((reduced
           (if (string-match (format "^%s" (getenv "HOME")) d) (replace-match "~" t t d) d))
