@@ -728,25 +728,27 @@ prefer for `sh-mode'.  It is automatically added to
 
 (defun cperl/advice/projectile-maybe-invalidate-cache (orig-fun force)
   (or
-   (when (and (not force)
-	      (projectile-project-p)
-	      (eq (projectile-project-vcs) 'hg))
-     (let* ((project-root (projectile-project-root))
-	    (project-cached-at-or-before
-	      (gethash project-root cperl/projectile-projects-cache-shadow))
-	    (cache-invalidate-proxy (concat project-root ".hg/dirstate")))
-       (when (and project-cached-at-or-before (file-exists-p cache-invalidate-proxy))
-	 (let ((dirstate-time-stamp (float-time (nth 5 (file-attributes cache-invalidate-proxy))))
-	       (project-time-stamp (float-time project-cached-at-or-before)))
-	   (when (> dirstate-time-stamp project-time-stamp)
-	     (progn
-	       (message
-		"Projectile project %s was cached at or before %s, which is older than mtime of %s"
-		project-root
-		(current-time-string project-cached-at-or-before)
-		cache-invalidate-proxy)
-	       (projectile-invalidate-cache nil)))))))
-   (apply orig-fun force ())))
+   (when (and (not force) (projectile-project-p))
+     (let* ((vcs (projectile-project-vcs))
+	    (cache-invalidate-proxy
+	     (cond ((eq vcs 'hg)  ".hg/dirstate")
+		   ((eq vcs 'git) ".git/logs/HEAD"))))
+       (when cache-invalidate-proxy
+	 (let* ((project-root (projectile-project-root))
+		(project-cached-at-or-before (gethash project-root cperl/projectile-projects-cache-shadow))
+		(proxy (concat project-root cache-invalidate-proxy)))
+	   (when (and project-cached-at-or-before (file-exists-p proxy))
+	     (let ((proxy-time-stamp (float-time (nth 5 (file-attributes proxy))))
+		   (project-time-stamp (float-time project-cached-at-or-before)))
+	       (when (> proxy-time-stamp project-time-stamp)
+		 (progn
+		   (message
+		    "Project %s was cached at or before %s, which is older than mtime of %s, invalidating cache"
+		    project-root
+		    (current-time-string project-cached-at-or-before)
+		    cache-invalidate-proxy)
+		   (projectile-invalidate-cache nil)))))))))
+   (funcall orig-fun force)))
 
 (advice-add 'projectile-serialize              :after  #'cperl/advice/projectile-serialize)
 (advice-add 'projectile-unserialize            :around #'cperl/advice/projectile-unserialize)
