@@ -383,10 +383,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	("p" "Project" entry (file "~/org/capture.org") "*  %?\n")
 	("P" "Project with Gmail Id" entry (file "~/org/capture.org") "* %?\n  [[gmail:%^{gmail id}][%\\1]]")))
 (setq org-todo-keywords
-      '((sequence "NEXT(n)" "WAIT(w)" "|" "DONE(d)" "CNCL(c)")
+      '((sequence "NEXT(n)" "DPND(x)" "WAIT(w)" "|" "DONE(d)" "CNCL(c)")
 	(sequence "DFER(r)" "|" "DONE(d)" "CNCL(c)")))
 (setq org-todo-keyword-faces
       '(("DFER" . "#767676")
+	("DPND" . "#767676")
 	("WAIT" . "#8C5353")
         ("CNCL" . "#FFFFFF")
         ("DONE" . "#FFFFFF")))
