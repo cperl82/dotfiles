@@ -332,8 +332,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (escreen-install)
 
 (global-set-key         (kbd "C-\\") 'escreen-prefix)
-(global-set-key         (kbd "M-[")  'escreen-goto-prev-screen)
-(global-set-key         (kbd "M-]")  'escreen-goto-next-screen)
 (define-key escreen-map (kbd "C-\\") 'escreen-goto-last-screen)
 (define-key escreen-map (kbd "r")    'cperl/escreen-rename-screen)
 
