@@ -364,6 +364,23 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ; 2014-04-03: Org mode customizations
+(defun cperl/echo-gmail-link-at-point ()
+  (let* ((el (org-element-context))
+         (raw-link (plist-get (cadr el) :raw-link)))
+    (message "%s" raw-link)))
+
+(defun cperl/org-gmail-link-auto-description (link desc)
+  (if (string-match "^gmail:\\([0-9a-zA-Z]+\\)" link)
+      (match-string 1 link)
+    desc))
+
+(defun cperl/org-insert-gmail-link (prefix)
+  (interactive "P")
+  (let ((gmail-url (read-string "gmail url:")))
+    (string-match "/\\([0-9a-zA-Z]+\\)$" gmail-url)
+    (let ((gmail-id (match-string 1 gmail-url)))
+      (org-insert-link nil (concat "gmail:" gmail-id) gmail-id))))
+
 (require 'org)
 (add-hook 'org-mode-hook
           (lambda ()
@@ -424,7 +441,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
           (tags-todo ""
                      ((org-agenda-overriding-header "NEXT ACTIONS")
                       (org-agenda-sorting-strategy '(priority-down))
-             (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
+                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
         ("W" "WAITING FOR (all)          "
 	 ((agenda "" ((org-agenda-span 1)
 		      (org-deadline-warning-days 1)))
@@ -455,16 +472,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-catch-invisible-edits 'error)
 (setq org-ctrl-k-protect-subtree t)
 (setq org-cycle-include-plain-lists 'integrate)
-(defun cp-echo-gmail-link-at-point ()
-  (let* ((el (org-element-context))
-         (raw-link (plist-get (cadr el) :raw-link)))
-    (message "%s" raw-link)))
-(add-to-list 'org-open-at-point-functions 'cp-echo-gmail-link-at-point)
-(defun cp-org-gmail-link-auto-desc (link desc)
-  (if (string-match "^gmail:\\([0-9a-zA-Z]+\\)" link)
-      (match-string 1 link)
-    desc))
-(setq org-make-link-description-function 'cp-org-gmail-link-auto-desc)
+(add-to-list 'org-open-at-point-functions 'cperl/echo-gmail-link-at-point)
+(setq org-make-link-description-function 'cperl/org-gmail-link-auto-description)
 (evil-define-key 'normal org-mode-map (kbd "TAB")   'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "M-h")   'org-metaleft)
 (evil-define-key 'normal org-mode-map (kbd "M-l")   'org-metaright)
@@ -476,6 +485,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (evil-define-key 'normal org-mode-map (kbd "M-J")   'org-shiftmetadown)
 (evil-define-key 'normal org-mode-map (kbd "C-c a") 'org-agenda)
 (evil-define-key 'normal org-mode-map (kbd "C-c c") 'org-capture)
+(evil-define-key 'insert org-mode-map (kbd "C-c ;") 'cperl/org-insert-gmail-link)
 (evil-define-key 'emacs org-agenda-mode-map (kbd "j") 'org-agenda-next-line)
 (evil-define-key 'emacs org-agenda-mode-map (kbd "k") 'org-agenda-previous-line)
 (evil-define-key 'emacs org-agenda-mode-map (kbd "h") 'left-char)
