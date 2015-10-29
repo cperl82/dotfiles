@@ -367,7 +367,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (defun cperl/echo-gmail-link-at-point ()
   (let* ((el (org-element-context))
          (raw-link (plist-get (cadr el) :raw-link)))
-    (message "%s" raw-link)))
+    (if (string-match "^https://mail.google.com/" raw-link)
+	(message "%s" raw-link))))
 
 (defun cperl/org-gmail-link-auto-description (link desc)
   (if (string-match "^gmail:\\([0-9a-zA-Z]+\\)" link)
