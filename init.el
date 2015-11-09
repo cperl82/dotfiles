@@ -222,7 +222,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
        "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
        "\\<end\\>\\s-+=\\s-+\\<struct\\>"
-       "\\<let\\>\\s-+"
+       "\\<let?\\(%test_.+\\)\\>\\s-+"
        "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
        "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
        "\\<TEST_UNIT\\>\\s-+="
@@ -579,7 +579,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 		(revert-buffer t t t)
 	      (kill-buffer b)))
 	   ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
-			  
+
 ; 2014-04-06: cscope related
 (setq-default cscope-option-use-inverted-index t)
 (setq-default cscope-edit-single-match nil)
