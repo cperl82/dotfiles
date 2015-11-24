@@ -364,11 +364,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ; 2014-04-03: Org mode customizations
-(defun cperl/echo-gmail-link-at-point ()
+(defun cperl/echo-link-at-point ()
   (let* ((el (org-element-context))
          (raw-link (plist-get (cadr el) :raw-link)))
-    (if (string-match "^https://mail.google.com/" raw-link)
-	(message "%s" raw-link))))
+    (message "%s" raw-link)))
 
 (defun cperl/org-gmail-link-auto-description (link desc)
   (if (string-match "^gmail:\\([0-9a-zA-Z]+\\)" link)
@@ -473,7 +472,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-catch-invisible-edits 'error)
 (setq org-ctrl-k-protect-subtree t)
 (setq org-cycle-include-plain-lists 'integrate)
-(add-to-list 'org-open-at-point-functions 'cperl/echo-gmail-link-at-point)
+(add-to-list 'org-open-at-point-functions 'cperl/echo-link-at-point)
 (setq org-make-link-description-function 'cperl/org-gmail-link-auto-description)
 (evil-define-key 'normal org-mode-map (kbd "TAB")         'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "M-h")         'org-metaleft)
