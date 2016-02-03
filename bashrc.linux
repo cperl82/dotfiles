@@ -147,13 +147,13 @@ function _ps_helper () {
 }
 
 function pse () {
-	_ps_helper "user:12,pid,ppid,tid,nlwp,class,rtprio:3=RTP,ni,pri,bsdstart,vsz:9,rss:9,psr,pcpu,stat,wchan:25,tty,args" "${@}"
+	_ps_helper "user:12,pid,ppid,tid,nlwp,class,rtprio:3=RTP,ni,pri,bsdstart,vsz:9,rss:9,psr,pcpu,stat,wchan:25,tty,comm:15,args" "${@}"
 }
 alias psef='pse --forest'
 alias psel='pse -L'
 
 function pss () {
-	_ps_helper "user:12,pid,ppid,tid,nlwp,class,rtprio:3=RTP,ni,pri,lstart,vsz:9,rss:9,psr,pcpu,stat,wchan:25,tty,args" "${@}"
+	_ps_helper "user:12,pid,ppid,tid,nlwp,class,rtprio:3=RTP,ni,pri,lstart,vsz:9,rss:9,psr,pcpu,stat,wchan:25,tty,comm:15,args" "${@}"
 }
 alias pssf='pss --forest'
 alias pssl='pss -L'
