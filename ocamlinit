@@ -7,14 +7,8 @@ let () =
 #use "topfind"
 #thread
 #require "dynlink"
-#camlp4o
-#require "bin_prot.syntax"
-#require "sexplib.syntax"
-#require "variantslib.syntax"
-#require "fieldslib.syntax"
-#require "comparelib.syntax"
+#require "ppx_deriving"
+#require "ppx_sexp_conv"
+#require "ppx_fields_conv"
+#require "ppx_compare"
 #require "core"
-#require "async"
-#require "core_extended"
-#require "core.top"
-open Core.Std
