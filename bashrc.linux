@@ -124,9 +124,14 @@ then
 	}
 fi
 
-# 2013-03-08: convert pse alias to function
-function _ps_helper () {
-	local fmt="${1}"
+# 2016-02-07: updates to ps functions
+function _ps () {
+	local pre="user:15,pid,ppid,tid,nlwp,class,rtprio:3=RTP,ni,pri"
+	local post="vsz:9,rss:9,psr,pcpu,stat,wchan:25,tty"
+
+	local show_comm="${1}"
+	shift
+	local timefmt="${1}"
 	shift
 
 	local args=("${@}")
@@ -141,22 +146,37 @@ function _ps_helper () {
 		fi
 	done
 
-	[[ "${selector}" -eq 0 ]] && args=("${args[@]}" "-e")
-	cmd=$(printf "ps -o %s %s" "${fmt}" "${args[*]}")
+	[[ "${selector}"  -eq 0 ]] && args=("${args[@]}" "-e")
+
+	[[ "${show_comm}" -eq 1 ]] && post=$(printf "%s,comm:15" "${post}")
+
+	cmd=$(printf "ps -o %s,%s,%s,args %s" "${pre}" "${timefmt}" "${post}" "${args[*]}")
 	eval "${cmd}"
 }
 
 function pse () {
-	_ps_helper "user:12,pid,ppid,tid,nlwp,class,rtprio:3=RTP,ni,pri,bsdstart,vsz:9,rss:9,psr,pcpu,stat,wchan:25,tty,comm:15,args" "${@}"
+	_ps 1 "bsdstart" "${@}"
 }
-alias psef='pse --forest'
-alias psel='pse -L'
+
+function psel () {
+	_ps 1 "bsdstart" "${@}" -L
+}
+
+function psef () {
+	_ps 0 "bsdstart" "${@}" --forest
+}
 
 function pss () {
-	_ps_helper "user:12,pid,ppid,tid,nlwp,class,rtprio:3=RTP,ni,pri,lstart,vsz:9,rss:9,psr,pcpu,stat,wchan:25,tty,comm:15,args" "${@}"
+	_ps 1 "lstart"   "${@}"
 }
-alias pssf='pss --forest'
-alias pssl='pss -L'
+
+function pssl () {
+	_ps 1 "lstart"   "${@}" -L
+}
+
+function pssf () {
+	_ps 0 "lstart"   "${@}" --forest
+}
 
 # 2013-04-16: wrapper for nfsiostat to make it easier to read
 # TODO: Remove the ability to pass flags that break parsing, i.e. `-h'.
