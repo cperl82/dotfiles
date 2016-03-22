@@ -213,6 +213,25 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
           (forward-line -1)
           (move-end-of-line nil)))))
 
+;; 2016-03-21: Alternative implementation that deals with functions without ;; better
+;; (defun cperl/selective-display-forward-sexp-fun (arg)
+;;   (let* ((c (current-column))
+;; 	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
+;;     (forward-line 1)
+;;     (re-search-forward re)
+;;     (beginning-of-line)
+;;     (back-to-indentation)
+;;     (if (not
+;; 	 (or
+;; 	  (looking-at "in")
+;; 	  (looking-at "end")
+;; 	  (looking-at ";;")
+;; 	  (looking-at "with")
+;;        (eq (point) (buffer-size))))
+;;         (progn
+;;           (re-search-backward "^[:space:]*[^:space:].")
+;;           (move-end-of-line nil)))))
+
 (add-to-list
  'hs-special-modes-alist
  `(tuareg-mode
@@ -222,7 +241,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
        "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
        "\\<end\\>\\s-+=\\s-+\\<struct\\>"
-       "\\<let\\(%test_.+\\)?\\>\\s-+"
+       "\\<let\\>\\s-+"
+       "\\<and\\>\\s-+"
+       "\\<let%\\S-+\\>\\s-+"
        "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
        "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
        "\\<TEST_UNIT\\>\\s-+="
