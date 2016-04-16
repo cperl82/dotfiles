@@ -323,12 +323,12 @@ function rpmenv () {
 			enter_env "${dir}" "${name}"
 		elif [[ -n "${url}" ]]
 		then
-			name=$(basename "${url}" | sed -e 's/^.*\/\(.*\).src.rpm/\1/')
+			name=$(basename "${url}" | sed -e 's/.src.rpm$//')
 			enter_env "${RPMENV}/${name}" "${name}"
 			wget "${url}"
 		elif [[ -n "${file}" ]]
 		then
-			name=$(basename "${file}" | sed -e 's/^.*\/\(.*\).src.rpm/\1/')
+			name=$(basename "${file}" | sed -e 's/.src.rpm$//')
 			enter_env "${RPMENV}/${name}" "${name}"
 			cp "${file}" ./
 		else
