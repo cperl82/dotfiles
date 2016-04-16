@@ -265,12 +265,12 @@ function nfsiostat-formatted () {
 
 # 2013-05-08: rpmenv function
 function rpmenv () {
-	local dir
-	local url
-	local file
+	local fetch_uri
+	local fetch_get
+	local base
 
 	usage () {
-		echo "rpmenv enter (-d DIR | -u URL | -f FILE)"
+		echo "rpmenv enter (directory | auto (-u URL | -f FILE) [--base BASE (defaults to RPMENV)])"
 		echo "rpmenv exit"
 	}
 
@@ -289,52 +289,66 @@ function rpmenv () {
 	case "${1}" in
 	enter)
 		shift
-		while [[ -n "${1}" ]]
-		do
-			case "${1}" in
-			-d|--dir|--directory)
-				[[ -n "${url}" || -n "${file}" ]] && usage && return
-				dir="${2}"
-				shift
-				shift
-				;;
-			-u|--url)
-				[[ -n "${dir}" || -n "${file}" ]] && usage && return
-				url="${2}"
-				shift
-				shift
-				;;
-			-f|--file)
-				[[ -n "${dir}" || -n "${url}" ]] && usage && return
-				file="${2}"
-				shift
-				shift
-				;;
-			*)
-				usage
-				return
-				;;
-			esac
-		done
-
-		if [[ -n "${dir}" ]]
-		then
+		case "${1}" in
+		d|dir|directory)
+			shift
+			dir="${1}"
 			name=$(basename "${dir}")
 			enter_env "${dir}" "${name}"
-		elif [[ -n "${url}" ]]
-		then
-			name=$(basename "${url}" | sed -e 's/.src.rpm$//')
-			enter_env "${RPMENV}/${name}" "${name}"
-			wget "${url}"
-		elif [[ -n "${file}" ]]
-		then
-			name=$(basename "${file}" | sed -e 's/.src.rpm$//')
-			enter_env "${RPMENV}/${name}" "${name}"
-			cp "${file}" ./
-		else
+			;;
+		a|au|aut|auto)
+			shift
+			while [[ -n "${1}" ]]
+			do
+				case "${1}" in
+				-u|--url)
+					[[ -n "${fetch_uri}" ]] && usage && return
+					fetch_uri="${2}"
+					fetch_get="wget %s"
+					shift
+					shift
+					;;
+				-f|--file)
+					[[ -n "${fetch_uri}" ]] && usage && return
+					fetch_uri="${2}"
+					fetch_get="cp %s ./"
+					shift
+					shift
+					;;
+				-b|--base)
+					base="${2}"
+					shift
+					shift
+					;;
+				*)
+					usage
+					return
+					;;
+				esac
+			done
+
+			if [[ -z "${base}" && -z "${RPMENV}" ]]
+			then
+				echo "You have no RPMENV variable defined and did not specify --base, cannot continue"
+				return
+			fi
+
+			if [[ -n "${base}" ]]
+			then
+				BASE="${base}"
+			else
+				BASE="${RPMENV}"
+			fi
+
+			name=$(basename "${fetch_uri}" | sed -e 's/.src.rpm$//')
+			enter_env "${BASE}/${name}" "${name}"
+			cmd=$(printf "$fetch_get" "${fetch_uri}")
+			eval "${cmd}"
+			;;
+		*)
 			usage
 			return
-		fi
+		esac
 		;;
 	exit)
 		shift
