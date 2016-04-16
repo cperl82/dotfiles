@@ -265,40 +265,89 @@ function nfsiostat-formatted () {
 
 # 2013-05-08: rpmenv function
 function rpmenv () {
-	cmd="${1}"
-	dir="${2}"
-	url="${3}"
+	local dir
+	local url
+	local file
 
-	if [[ ! "${cmd}" =~ ^enter$|^exit$ ]]
-	then
-		echo "rpmenv enter dir [url]"
+	usage () {
+		echo "rpmenv enter (-d DIR | -u URL | -f FILE)"
 		echo "rpmenv exit"
-		return
-	fi
+	}
 
-	case "${cmd}" in
-	enter)
-		d="${dir}"
-		test \! -d ${d} && mkdir -p ${d}
+	enter_env () {
+		d="${1}"
+		n="${2}"
+		test \! -d "${d}" && mkdir -p "${d}"
 		export _RPMENV_SAVED_PS1=${PS1}
 		export _RPMENV_SAVED_PWD=${PWD}
-		export PS1='[\u@\h [RPMENV:'${d}'] \w]\$ '
+		export PS1='[\u@\h [RPMENV:'${n}'] \w]\$ '
 		cd ${d}
 		alias rpmbuild="rpmbuild --define '_topdir ${d}'"
 		alias rpm="rpm --define '_topdir ${d}'"
+	}
 
-		if [[ -n "${url}" && "${url}" =~ ^http(s)?:.*.src.rpm$|^ftp:.*.src.rpm$ ]]
+	case "${1}" in
+	enter)
+		shift
+		while [[ -n "${1}" ]]
+		do
+			case "${1}" in
+			-d|--dir|--directory)
+				[[ -n "${url}" || -n "${file}" ]] && usage && return
+				dir="${2}"
+				shift
+				shift
+				;;
+			-u|--url)
+				[[ -n "${dir}" || -n "${file}" ]] && usage && return
+				url="${2}"
+				shift
+				shift
+				;;
+			-f|--file)
+				[[ -n "${dir}" || -n "${url}" ]] && usage && return
+				file="${2}"
+				shift
+				shift
+				;;
+			*)
+				usage
+				return
+				;;
+			esac
+		done
+
+		if [[ -n "${dir}" ]]
 		then
+			name=$(basename "${dir}")
+			enter_env "${dir}" "${name}"
+		elif [[ -n "${url}" ]]
+		then
+			name=$(basename "${url}" | sed -e 's/^.*\/\(.*\).src.rpm/\1/')
+			enter_env "${RPMENV}/${name}" "${name}"
 			wget "${url}"
+		elif [[ -n "${file}" ]]
+		then
+			name=$(basename "${file}" | sed -e 's/^.*\/\(.*\).src.rpm/\1/')
+			enter_env "${RPMENV}/${name}" "${name}"
+			cp "${file}" ./
+		else
+			usage
+			return
 		fi
 		;;
 	exit)
+		shift
 		cd ${_RPMENV_SAVED_PWD}
 		export PS1=${_RPMENV_SAVED_PS1}
 		unset _RPMENV_SAVED_PWD
 		unset _RPMENV_SAVED_PS1
 		unalias rpm
 		unalias rpmbuild
+		;;
+	*)
+		usage
+		return
 		;;
 	esac
 }
@@ -310,7 +359,7 @@ function _with_topdir {
 	shift
 	shift
 	rest="${@}"
-	printf "%s --define \"_topdir %s\" %s" "${cmd}" "${dir}" "${rest}"
+	printf '%s --define "_topdir %s" %s' "${cmd}" "${dir}" "${rest}"
 }
 
 function rpm-with-topdir {
