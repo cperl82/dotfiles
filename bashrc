@@ -4,8 +4,8 @@ export PAGER=less
 export MYSQL_PS1="\u@\h [\d]> "
 export HISTIGNORE=' *'
 
-# Functions {{{1
-# tmpmkcd {{{2
+# Functions
+# tmpmkcd
 function tmpmkcd
 {
 	today=$(date '+%Y-%m-%d')
@@ -18,7 +18,7 @@ function tmpmkcd
 	fi
 }
 
-# xt - xterm title setter {{{2
+# xt - xterm title setter
 function xt
 {
 	if [[ -z "${1}" ]]
@@ -30,7 +30,7 @@ function xt
 	printf "\033]0;${NAME}\007"
 }
 
-# st - screen window title setter {{{2
+# st - screen window title setter
 function st
 {
 	if [[ -z "${1}" ]]
@@ -42,14 +42,14 @@ function st
 	printf "\033k${NAME}\033\\"
 }
 
-# cl - reset all attributes {{{2
+# cl - reset all attributes
 function cl
 {
 	printf '\033[;0m'
 }
 
 
-# Bash path canonicalization {{{2
+# Bash path canonicalization
 # Copied from comment at
 # http://blog.publicobject.com/2006/06/canonical-path-of-file-in-bash.html
 # and adapted to further fit my needs and be more cross platform compatible
@@ -57,7 +57,7 @@ function cl
 # Resolves symlinks for path components, but will not resolve if the last
 # component, file or directory is a symlink
 
-# path-canonical-simple {{{3
+# path-canonical-simple
 function path-canonical-simple() {
 	local dst="${1}"
 	if [[ -z "${dst}" ]]; then
@@ -69,7 +69,7 @@ function path-canonical-simple() {
 		cd -- - >/dev/null 2>&1
 }
 
-# path-canonical {{{3
+# path-canonical
 # Resolves symlinks for all path components, including the final component
 function path-canonical() {
 	local dst="${1}"
@@ -103,7 +103,7 @@ function path-canonical() {
 	echo "${dst}"
 }
 
-# AES Encryption via command line {{{2
+# AES Encryption via command line
 # This is meant to be simplified interface to the aes-256-cbc encryption
 # available in openssl.  Note that output is always "ascii armored" as that just
 # makes life easier.
@@ -157,84 +157,7 @@ aes-256-cbc() {
 
 }
 
-# Emacs convience functions {{{2
-emacs-client-daemon () {
-	if [[ "${1}" == "client" ]]
-	then
-		cmd='emacsclient -nw --socket-name="${emacs_daemon_socket_name}" ${args}'
-		shift
-	elif [[ "${1}" == "daemon" ]]
-	then
-		cmd='emacs --daemon="${emacs_daemon_socket_name}" ${args}'
-		shift
-	else
-		echo "Unknown mode"
-		return
-	fi
-
-	args=()
-	while [[ -n "${1}" ]]
-	do
-		case "${1}" in
-		--server | -s)
-			shift
-			name="${1}"
-			shift
-			;;
-		-*)
-			echo "WARN: Unknown option: ${1}"
-			shift
-			;;
-		*)
-			args[${#args[@]}]="${1}"
-			shift
-			;;
-		esac
-	done
-
-	if [[ -z "${emacs_daemon_socket_name}" ]]
-	then
-		emacs_daemon_socket_name="default"
-	fi
-	eval ${cmd}
-}
-
-emd () {
-	emacs-client-daemon daemon ${@}
-}
-
-emc () {
-	emacs-client-daemon client ${@}
-}
-
-# NHL Schedule scraping function {{{2
-# argument is a regex that is matched against the est node from the xml
-nhl-schedule () {
-	TMPFILE="/tmp/nhl-sched-by-date.$$"
-	SOURCE="http://www.nhl.com/feeds/public/SeasonSchedule.xml"
-
-	what="${1}"
-	if [[ -z "${what}" ]]
-	then
-		what=$(date '+%Y-%m-%d')
-	fi
-	curl -qs -o "${TMPFILE}" "${SOURCE}"
-	local i=0
-	while read gameId est awayTeam homeTeam
-	do
-		est=${est/T/ }
-		line="${est}  ${gameId}  ${awayTeam} @ ${homeTeam}"
-		if [[ "${line}" =~ ${what} ]];
-		then
-			echo "${line}"
-			i=$((i+1))
-		fi
-	done < <(xmlstarlet sel -t -m "schedule/game" -v "concat(gameId,' ',est,' ',awayTeam,' ',homeTeam)" -n "${TMPFILE}")
-	echo ${i}
-	rm -f "${TMPFILE}"
-}
-
-# NFSv3 Capture Filter {{{2
+# NFSv3 Capture Filter
 # Generate tcpdump capture filter for host running nfsv3
 nfs3-capture-filter-for-host () {
 	local host="${1}"
@@ -279,7 +202,7 @@ nfs3-capture-filter-for-hosts () {
 	printf "${result}\n"
 }
 
-# Misc Stuff {{{1
+# Misc Stuff
 
 # vim - function wrapper for use with screen {{{2
 # A conditional function definition to work around the fact that when screen
@@ -319,7 +242,7 @@ function vman
 	vim -c ":Man $*" -c ":only"
 }
 
-# add-path {{{2
+# add-path
 # function to add something to PATH, skipping duplicates
 function add-path
 {
@@ -344,18 +267,17 @@ function add-path
 	fi
 }
 
-# Important variable setting {{{1
+# Important variable setting
 ENV_ROOT="$(dirname "$(dirname "$(path-canonical ${BASH_ARGV[0]})")")"
 DOTFILES_ROOT="${ENV_ROOT}/dotfiles"
-HG_EXT_ROOT="${ENV_ROOT}/hgext"
 BUNDLE_ROOT="${ENV_ROOT}/bundles"
 
-export ENV_ROOT DOTFILES_ROOT HG_EXT_ROOT BUNDLE_ROOT
+export ENV_ROOT DOTFILES_ROOT BUNDLE_ROOT
 
 add-path ${ENV_ROOT}/bin
 add-path ${HOME}/bin
 
-# OS Specific bashrc file inclusion {{{1
+# OS Specific bashrc file inclusion
 OSNAME=$(uname -s | tr '[A-Z]' '[a-z]')
 OSFILE="${DOTFILES_ROOT}/bashrc.${OSNAME}"
 if [[ -f "${OSFILE}" ]]
@@ -365,7 +287,7 @@ else
 	echo "Unknown Operating System"
 fi
 
-# Local bashrc file inclustion {{{1
+# Local bashrc file inclustion
 # Allows inclusion of initialization stuff that I don't want to keep in my
 # dotfiles repo
 LOCALRC="${HOME}/.bashrc.local"
@@ -373,5 +295,3 @@ if [[ -f "${LOCALRC}" ]]
 then
 	source "${LOCALRC}"
 fi
-
-# vim: tw=80 fdm=marker
