@@ -266,33 +266,28 @@ function nfsiostat-formatted () {
 # 2013-05-08: rpmenv function
 function rpmenv () {
 	cmd="${1}"
-	name="${2}"
+	dir="${2}"
+	url="${3}"
 
 	if [[ ! "${cmd}" =~ ^enter$|^exit$ ]]
 	then
-		echo "rpmenv enter|exit [name]"
+		echo "rpmenv enter dir [url]"
+		echo "rpmenv exit"
 		return
 	fi
 
 	case "${cmd}" in
 	enter)
-		if [[ "${name}" =~ ^http(s)?:.*.src.rpm$|^ftp:.*.src.rpm$ ]]
-		then
-			url="${name}"
-			name=$(echo "${name}" | sed -e 's/^.*\/\(.*\).src.rpm/\1/')
-		fi
-
-		name=$(basename ${name})
-		d=${RPMENV_BASE}/${name}
+		d="${dir}"
 		test \! -d ${d} && mkdir -p ${d}
 		export _RPMENV_SAVED_PS1=${PS1}
 		export _RPMENV_SAVED_PWD=${PWD}
-		export PS1='[\u@\h [RPMENV:'${name}'] \w]\$ '
+		export PS1='[\u@\h [RPMENV:'${d}'] \w]\$ '
 		cd ${d}
 		alias rpmbuild="rpmbuild --define '_topdir ${d}'"
 		alias rpm="rpm --define '_topdir ${d}'"
 
-		if [[ -n "${url}" ]]
+		if [[ -n "${url}" && "${url}" =~ ^http(s)?:.*.src.rpm$|^ftp:.*.src.rpm$ ]]
 		then
 			wget "${url}"
 		fi
@@ -306,6 +301,26 @@ function rpmenv () {
 		unalias rpmbuild
 		;;
 	esac
+}
+
+# 2016-04-16: more rpm related helpers, for when I don't want the full thing above
+function _with_topdir {
+	cmd="${1}"
+	dir="${2}"
+	shift
+	shift
+	rest="${@}"
+	printf "%s --define \"_topdir %s\" %s" "${cmd}" "${dir}" "${rest}"
+}
+
+function rpm-with-topdir {
+	cmd=$(_with_topdir rpm "${@}")
+	eval "${cmd}"
+}
+
+function rpmbuild-with-topdir {
+	cmd=$(_with_topdir rpmbuild "${@}")
+	eval "${cmd}"
 }
 
 # 2014-03-21 formatted printing of /proc/mounts
