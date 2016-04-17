@@ -266,7 +266,7 @@ function nfsiostat-formatted () {
 # 2013-05-08: rpmenv function
 function rpmenv () {
 	local fetch_uri
-	local fetch_get
+	local fetch_fmt
 	local base
 
 	usage () {
@@ -304,14 +304,14 @@ function rpmenv () {
 				-u|--url)
 					[[ -n "${fetch_uri}" ]] && usage && return
 					fetch_uri="${2}"
-					fetch_get="wget %s"
+					fetch_fmt="wget %s -O %s"
 					shift
 					shift
 					;;
 				-f|--file)
 					[[ -n "${fetch_uri}" ]] && usage && return
 					fetch_uri="${2}"
-					fetch_get="cp %s ./"
+					fetch_fmt="cp %s %s"
 					shift
 					shift
 					;;
@@ -341,9 +341,18 @@ function rpmenv () {
 			fi
 
 			name=$(basename "${fetch_uri}" | sed -e 's/.src.rpm$//')
-			enter_env "${BASE}/${name}" "${name}"
-			cmd=$(printf "$fetch_get" "${fetch_uri}")
+			tmp=$(mktemp -t "${name}.XXXXXX")
+			cmd=$(printf "${fetch_fmt}" "${fetch_uri}" "${tmp}")
 			eval "${cmd}"
+			if [[ ${?} -ne 0 ]]
+			then
+				echo "Unable to fetch ${fetch_uri}"
+				return
+			else
+				env="${BASE}/${name}"
+				enter_env "${env}" "${name}"
+				mv "${tmp}" "${env}/${name}"
+			fi
 			;;
 		*)
 			usage
