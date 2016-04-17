@@ -33,16 +33,9 @@ set hidden
 set splitbelow
 set splitright
 
-" 2013-07-31
-" I don't want tab completion of file/dir names to work on these.  Mostly this
-" is for OCaml compiler stuff
-set wildignore=*.cmi,*.cmx,*.cmt,*.cmti,*.o,*.ml.d,*.mli.d,*.objdeps
-
 " Use the man.vim plugin if its available
 runtime! ftplugin/man.vim
 
-" colorscheme asmdev
-" colorscheme norwaytoday
 if (&term == "rxvt-unicode") || ($COLORTERM =~ 'rxvt.*')
 	" the first check catches normal urxvt, the second catches screen
 	" inside urxvt
@@ -59,15 +52,6 @@ elseif  &term =~ "screen-256color"
 else
 	colorscheme ir_black
 endif
-
-" 2011-02-08
-" Set the NERDTree status line such that it always shows the full path of the
-" currently selected node.  I realize this is a little inefficient at the moment
-" since it calls GetSelected() twice, but I cannot figure out a way to get
-" around that at the moment.  This status line pretty much makes my
-" path_copy.vim NERDTree plugin useless, but whatever.
-" let g:NERDTreeStatusline='%{has_key(g:NERDTreeFileNode.GetSelected(), "path") ? g:NERDTreeFileNode.GetSelected().path.str() : b:NERDTreeRoot.path.str()}'
-let g:NERDTreeStatusline = '%{ getcwd() }'
 
 " 2011-04-14
 " Use the fancy arrows for the NERDtree interface and turn off the AutoCenter
@@ -117,12 +101,6 @@ nnoremap <C-l> <C-W>l
 nnoremap <silent> <Leader>bd :Kwbd<CR>
 nnoremap <silent> <Leader>bw :Kwbw<CR>
 
-" 2012-11-20
-" Easier tab jumping
-for i in range(1,12)
-	exec printf("nnoremap <silent> <F%d> :%dtabn<CR>", i, i)
-endfor
-
 " 2013-02-05
 " Easier tab moving
 nnoremap <silent> <C-Left>  :tabp<CR>
@@ -131,30 +109,6 @@ nnoremap <silent> <C-Right> :tabn<CR>
 " 2013-10-02
 " I have come to expect that space with expand and collapse folds
 nnoremap <Space> za
-
-" 2011-12-15
-" Vimwiki Configuration
-let wiki_0 = {}
-let wiki_0.path = '~/Dropbox/vimwiki/markup'
-let wiki_0.path_html = '~/Dropbox/vimwiki/html'
-let wiki_0.nested_syntaxes = {
-			\ 'python': 'python',
-			\ 'ansi-c': 'c',
-			\ 'perl': 'perl',
-			\ 'shell': 'sh',
-			\ 'config': 'config',
-			\ 'vimscript': 'vim',
-			\ 'java': 'java' }
-let wiki_0.auto_export = 0
-let wiki_0.syntax = 'markdown'
-
-let g:vimwiki_list = [ wiki_0 ]
-let g:vimwiki_camel_case = 0
-let g:vimwiki_folding = 0
-let g:vimwiki_fold_lists = 0
-
-" Fixup some vimwiki colors
-hi link VimwikiNoExistsLink Comment
 
 " 2012-12-20 Embedded syntax highlighting for markdown filetype via tpope's
 " vim-markdown: https://github.com/tpope/vim-markdown
@@ -217,14 +171,7 @@ nmap <silent> <Leader>n :exec &number ? ":set nonu" : ":set nu"<CR>
 " http://stevelosh.com/blog/2010/09/coming-home-to-vim/
 nnoremap ,<Space> :nohl<CR>
 
-" 2010-09-24
-" Added newer python syntax highlighting script
-" Enable all the syntax options in it (.vim/syntax/python.vim)
-let python_highlight_all = 1
-let python_highlight_indent_errors = 0
-let python_highlight_space_errors = 0
-
-" 2011-03-30
+" 2010-09-2" 2011-03-30
 " Vim's error highlighting of vimscript isn't always correct, turn it off
 " :help ft-vim-syntax
 let g:vimsyn_noerror = 1
@@ -270,22 +217,3 @@ let g:local_rc_file = $HOME . "/.vimrc.local"
 if filereadable(g:local_rc_file)
 	exec printf("source %s", g:local_rc_file)
 endif
-
-" 2012-08-01
-" Just noticed this "recentering" while using the ocaml plugin to view types,
-" but its really annoying.
-" http://vim.wikia.com/wiki/Avoid_scrolling_when_switch_buffers
-" When switching buffers, preserve window view.
-if v:version >= 700
-    au BufLeave *.ml,*.mli let b:winview = winsaveview()
-    au BufEnter *.ml,*.mli if exists('b:winview') | call winrestview(b:winview) | endif
-endif
-
-" 2012-08-16
-" Keep find myself wanting a shortcut to echo the path of the current file
-" while not in NERDTree.  Note that this conflicts with mappings I have setup
-" for NERDTree buffers that basically do the same thing (except they are
-" operating on a NERDTree node, not a buffer).  But thats fine because
-" NERDTree will override this global mapping and it "just works".
-nnoremap <silent> <leader>e :echo expand("%")<CR>
-nnoremap <silent> <leader>E :echo expand("%:p")<CR>
