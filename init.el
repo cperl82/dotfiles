@@ -686,8 +686,7 @@ prefer for `sh-mode'.  It is automatically added to
 
 ; 2014-12-10 Starting to play with helm.
 ;(setq helm-always-two-windows t)
-(require 'helm)
-(require 'helm-misc)
+(require 'helm-config)
 (require 's)
 (setq helm-split-window-default-side 'right)
 ; 2015-09-11 Ripped wholesale from helm-buffers.el so I could control the formatting of dir
@@ -717,18 +716,19 @@ prefer for `sh-mode'.  It is automatically added to
 		   (format "%s" dir))
 		 'face face2))))))
 (advice-add 'helm-buffer--show-details :override #'cperl/advice/helm-buffer--show-details)
-
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-z")   'helm-select-action)
+(helm-mode 0)
 
 
 ; 2015-02-16: grep related stuff
-(setq grep-find-use-xargs 'gnu)
-(evil-define-key 'normal grep-mode-map (kbd "TAB") 'compilation-display-error)
-(setq grep-files-aliases ())
-(add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
-(add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))
+(with-eval-after-load 'grep
+  (progn
+    (setq grep-find-use-xargs 'gnu)
+    (evil-define-key 'normal grep-mode-map (kbd "TAB") 'compilation-display-error)
+    (add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
+    (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))))
 
 
 ; 2015-05-24 projectile settings
