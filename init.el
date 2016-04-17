@@ -10,21 +10,24 @@
 (el-get
  'sync
  '(color-theme-zenburn
-   xoria256-emacs
-   undo-tree
    evil
    evil-leader
-   tuareg-mode
-   org-mode
-   xcscope
    flx
-   ido-vertical-mode
-   rainbow-mode
-   helm
-   systemtap-mode
    haskell-mode
+   helm
+   helm-projectile
+   ido-vertical-mode
    lua-mode
-   projectile))
+   org-mode
+   projectile
+   rainbow-mode
+   s
+   systemtap-mode
+   tuareg-mode
+   undo-tree
+   xcscope
+   xoria256-emacs
+   ))
 
 ; 2014-04-26: Loading other stuff
 (add-to-list 'load-path "~/.emacs.d/lisp")
@@ -627,7 +630,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
  '(custom-enabled-themes (quote (zenburn)))
  '(custom-safe-themes
    (quote
-    ("94dfc2b6a8ac8b651f9aab66bc83bd5601f47166d86ee6d2d32de7dfb881185c" "acd48beaecc038c0c990e8ac11a4a80e72f6b57a3c43f4b97d8f69ade64ff294" "f37d09076188b2e8d2a6847931deec17f640853aedd8ea4ef3ac57db01335008" "e4e97731f52a5237f37ceb2423cb327778c7d3af7dc831788473d4a76bcc9760" "e5067916703453e96ff3f9c1ce1f436aa0716f9207e2c53266a9d77d2b575669" "c06241fdef16c336d0cc3a96cf5de5725fad678e9313513e586f0a243289ada5" "de892595c7a5462962a8f20e48f95f992e9eba367e920ac2add84bb95bd65366" "4031c1ea0bb235b75a048bd92f3bf3aa984c9f7cc5b408f00f62ed99a6eecc09" "8b30636c9a903a9fa38c7dcf779da0724a37959967b6e4c714fdc3b3fe0b8653" default))))
+    ("799291799f87afb7a2a55bd63082c58fb58912bee0a6e3d5c1ce0e083ed046c9" default))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -635,9 +638,9 @@ buffers whose visited file has disappeared and refreshes dired buffers."
  ;; If there is more than one, they won't work right.
  '(dired-perm-write ((t nil)))
  '(flx-highlight-face ((t (:foreground "#CC9393" :weight normal))))
- '(helm-match ((t (:foreground "gold1" :weight normal))))
  '(helm-buffer-directory ((t (:foreground "color-247"))))
- '(helm-ff-dotted-directory ((t (:foreground "color-247")))))
+ '(helm-ff-dotted-directory ((t (:foreground "color-247"))))
+ '(helm-match ((t (:foreground "gold1" :weight normal)))))
 
 ; 2014-12-06 override zenburn's default isearch highlighting
 (custom-theme-set-faces

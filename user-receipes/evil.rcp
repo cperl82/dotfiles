@@ -11,5 +11,5 @@
        :build/berkeley-unix (("gmake" "info" "all"))
        :build/darwin `(("make" ,(format "EMACS=%s" el-get-emacs) "info" "all"))
        :info "doc"
-       :checkout "1.2.4"
+       :checkout "1.2.12"
        )
