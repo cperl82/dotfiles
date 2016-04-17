@@ -216,6 +216,25 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
           (forward-line -1)
           (move-end-of-line nil)))))
 
+;; 2016-03-21: Alternative implementation that deals with functions without ;; better
+;; (defun cperl/selective-display-forward-sexp-fun (arg)
+;;   (let* ((c (current-column))
+;; 	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
+;;     (forward-line 1)
+;;     (re-search-forward re)
+;;     (beginning-of-line)
+;;     (back-to-indentation)
+;;     (if (not
+;; 	 (or
+;; 	  (looking-at "in")
+;; 	  (looking-at "end")
+;; 	  (looking-at ";;")
+;; 	  (looking-at "with")
+;;        (eq (point) (buffer-size))))
+;;         (progn
+;;           (re-search-backward "^[:space:]*[^:space:].")
+;;           (move-end-of-line nil)))))
+
 (add-to-list
  'hs-special-modes-alist
  `(tuareg-mode
@@ -226,6 +245,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
        "\\<end\\>\\s-+=\\s-+\\<struct\\>"
        "\\<let\\>\\s-+"
+       "\\<and\\>\\s-+"
+       "\\<let%\\S-+\\>\\s-+"
        "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
        "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
        "\\<TEST_UNIT\\>\\s-+="
@@ -367,11 +388,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ; 2014-04-03: Org mode customizations
-(defun cperl/echo-gmail-link-at-point ()
+(defun cperl/echo-link-at-point ()
   (let* ((el (org-element-context))
          (raw-link (plist-get (cadr el) :raw-link)))
-    (if (string-match "^https://mail.google.com/" raw-link)
-	(message "%s" raw-link))))
+    (message "%s" raw-link)))
 
 (defun cperl/org-gmail-link-auto-description (link desc)
   (if (string-match "^gmail:\\([0-9a-zA-Z]+\\)" link)
@@ -476,7 +496,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-catch-invisible-edits 'error)
 (setq org-ctrl-k-protect-subtree t)
 (setq org-cycle-include-plain-lists 'integrate)
-(add-to-list 'org-open-at-point-functions 'cperl/echo-gmail-link-at-point)
+(add-to-list 'org-open-at-point-functions 'cperl/echo-link-at-point)
 (setq org-make-link-description-function 'cperl/org-gmail-link-auto-description)
 (evil-define-key 'normal org-mode-map (kbd "TAB")         'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "M-h")         'org-metaleft)
@@ -582,7 +602,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 		(revert-buffer t t t)
 	      (kill-buffer b)))
 	   ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
-			  
+
 ; 2014-04-06: cscope related
 (setq-default cscope-option-use-inverted-index t)
 (setq-default cscope-edit-single-match nil)
