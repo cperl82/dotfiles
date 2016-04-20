@@ -388,6 +388,20 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ; 2014-04-03: Org mode customizations
+(require 'org)
+(add-hook
+ 'org-mode-hook
+ (lambda ()
+   (progn
+     (auto-fill-mode)
+     (setq fill-column 90)
+     (setq indent-tabs-mode nil)
+     (add-hook
+      'write-contents-functions
+      (lambda ()
+	(save-excursion
+	  (delete-trailing-whitespace)))))))
+
 (defun cperl/echo-link-at-point ()
   (let* ((el (org-element-context))
          (raw-link (plist-get (cadr el) :raw-link)))
