@@ -402,14 +402,22 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	(save-excursion
 	  (delete-trailing-whitespace)))))))
 
-(defun cperl/echo-link-at-point ()
-  (let* ((el (org-element-context))
-         (raw-link (plist-get (cadr el) :raw-link)))
-    (message "%s" raw-link)))
+(defun cperl/echo-link-at-point-if-not-darwin ()
+  (when (not (string-equal system-type "darwin"))
+    (let* ((el (org-element-context))
+           (raw-link (plist-get (cadr el) :raw-link)))
+      (message "%s" raw-link))))
 
-(defun cperl/org-link-auto-description (link desc)
-  (cond ((string-match "^gmail:\\([0-9a-zA-Z]+\\)" link) (match-string 1 link))
-	(t desc)))
+(defun cperl/org-link-auto-desc-from-abbrev-tags (link desc)
+  (let ((abbrevs
+	 (append (mapcar 'car org-link-abbrev-alist-local)
+		 (mapcar 'car org-link-abbrev-alist))))
+    (catch 'found
+      (dolist (abbrev abbrevs)
+	(let ((s (format "^%s:\\(.+\\)" abbrev)))
+	  (when (string-match s link)
+	    (throw 'found (match-string 1 link)))))
+      desc)))
 
 (setq org-agenda-restore-windows-after-quit t)
 (setq org-agenda-files '("~/org"))
@@ -491,8 +499,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq org-catch-invisible-edits 'error)
 (setq org-ctrl-k-protect-subtree t)
 (setq org-cycle-include-plain-lists 'integrate)
-(add-to-list 'org-open-at-point-functions 'cperl/echo-link-at-point)
-(setq org-make-link-description-function 'cperl/org-link-auto-description)
+(add-to-list 'org-open-at-point-functions 'cperl/echo-link-at-point-if-not-darwin)
+(setq org-make-link-description-function 'cperl/org-link-auto-desc-from-abbrev-tags)
 (evil-define-key 'normal org-mode-map (kbd "TAB")         'org-cycle)
 (evil-define-key 'normal org-mode-map (kbd "M-h")         'org-metaleft)
 (evil-define-key 'normal org-mode-map (kbd "M-l")         'org-metaright)
