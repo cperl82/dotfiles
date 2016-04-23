@@ -1,4 +1,3 @@
-;;; el-get / el-get-lock
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 (unless (require 'el-get nil 'noerror) (with-current-buffer
     (url-retrieve-synchronously
@@ -7,15 +6,6 @@
 
 (setq el-get-verbose t)
 (add-to-list 'el-get-recipe-path "~/.emacs.d/user-receipes")
-
-(el-get-bundle tarao/el-get-lock)
-(el-get-lock)
-(el-get-lock-unlock
- 'color-theme-zenburn
- 'haskell-mode
- 'lua-mode
- 'systemap-mode
- 'xoria256-emacs)
 
 (el-get
  'sync
@@ -36,7 +26,8 @@
    tuareg-mode
    undo-tree
    xcscope
-   xoria256-emacs))
+   xoria256-emacs
+   ))
 
 ; 2014-04-26: Loading other stuff
 (add-to-list 'load-path "~/.emacs.d/lisp")

@@ -1,0 +1,6 @@
+(:name pkg-info
+       :description "Provide information about Emacs packages."
+       :type github
+       :pkgname "lunaryorn/pkg-info.el"
+       :checkout "4dbe328c9eced79e0004e3fdcd7bfb997a928be5"
+       :depends (dash epl))
