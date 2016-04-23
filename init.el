@@ -12,7 +12,6 @@
 (el-get-lock)
 (el-get-lock-unlock
  'color-theme-zenburn
- 'haskell-mode
  'lua-mode
  'systemap-mode
  'xoria256-emacs)
