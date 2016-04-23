@@ -19,8 +19,7 @@
         (epl :checksum "a5ad061d0a5eb42f66c384e55d102da7d52c96b0")
         (el-get-lock :checksum "046ffb568c6964ea30813338234aea2d60a5c632")
         (el-get :checksum "c4ed895f435f57a547c84498f6c7d88c3814bb8f")
-        (haskell-mode :checksum "ccbb6eb980f3d615ab47ef67b389f1e6c70a783b")
         (ample-regexps :checksum "d5194b289f45c1aafe028a4a0b699b48d2938867")))
 (setq el-get-lock-locked-packages 'nil)
 (setq el-get-lock-unlocked-packages
-      '(xoria256-emacs systemap-mode lua-mode color-theme-zenburn))
+      '(xoria256-emacs systemap-mode lua-mode haskell-mode color-theme-zenburn))
