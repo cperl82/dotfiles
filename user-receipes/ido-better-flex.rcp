@@ -1,7 +1,0 @@
-(:name ido-better-flex
-       :description "A better fuzzy matching algorithm for emacs ido-mode"
-       :website "https://github.com/vic/ido-better-flex.git"
-       :branch "0.0.2"
-       :minimum-emacs-version "24"
-       :type github
-       :pkgname "vic/ido-better-flex")

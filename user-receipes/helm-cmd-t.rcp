@@ -1,7 +1,0 @@
-(:name helm-cmd-t
-       :description "Cmd-t style completion of files in repository."
-       :type github
-       :pkgname "emacs-helm/helm-cmd-t"
-       :branch "master"
-       :checkout "8749f0b2b8527423cd146fa2d5c0e7a9e159eefb"
-       :depends (helm))

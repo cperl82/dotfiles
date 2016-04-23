@@ -1,6 +1,0 @@
-(:name undo-tree
-       :description "Treat undo history as a tree"
-       :website "http://www.dr-qubit.org/emacs.php"
-       :type git
-       :checkout "a3e81b682053a81e082139300ef0a913a7a610a2"
-       :url "http://www.dr-qubit.org/git/undo-tree.git/")
