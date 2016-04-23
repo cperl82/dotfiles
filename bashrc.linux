@@ -270,7 +270,7 @@ function rpmenv () {
 	local base
 
 	usage () {
-		echo "rpmenv enter (directory | auto (-u URL | -f FILE) [--base BASE (defaults to RPMENV)])"
+		echo "rpmenv enter (directory | auto (--url URL | --file FILE) [--base BASE (defaults to RPMENV)])"
 		echo "rpmenv exit"
 	}
 
@@ -292,7 +292,7 @@ function rpmenv () {
 		case "${1}" in
 		d|dir|directory)
 			shift
-			dir="${1}"
+			dir=$(path-canonical "${1}")
 			name=$(basename "${dir}")
 			enter_env "${dir}" "${name}"
 			;;
@@ -340,7 +340,8 @@ function rpmenv () {
 				BASE="${RPMENV}"
 			fi
 
-			name=$(basename "${fetch_uri}" | sed -e 's/.src.rpm$//')
+			srpm=$(basename "${fetch_uri}")
+			name=$(echo "${srpm}" | sed -e 's/.src.rpm$//')
 			tmp=$(mktemp -t "${name}.XXXXXX")
 			cmd=$(printf "${fetch_fmt}" "${fetch_uri}" "${tmp}")
 			eval "${cmd}"
@@ -351,7 +352,7 @@ function rpmenv () {
 			else
 				env="${BASE}/${name}"
 				enter_env "${env}" "${name}"
-				mv "${tmp}" "${env}/${name}"
+				mv "${tmp}" "${env}/${srpm}"
 			fi
 			;;
 		*)

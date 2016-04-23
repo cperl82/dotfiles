@@ -64,8 +64,8 @@ function path-canonical-simple() {
 		dst="${PWD}"
 	fi
 
-	cd -- "$(dirname -- "${dst}")" > /dev/null 2>&1 && \
-		echo "$(pwd -P)/$(basename "${dst}")" && \
+	cd -- $(dirname -- "${dst}") > /dev/null 2>&1 &&	\
+		echo $(pwd -P)/$(basename "${dst}") &&		\
 		cd -- - >/dev/null 2>&1
 }
 
@@ -77,14 +77,14 @@ function path-canonical() {
 		dst="${PWD}"
 	fi
 
-	dst="$(path-canonical-simple "${1}")"
+	dst=$(path-canonical-simple "${1}")
 
 	# Strip an potential trailing slash as it can cause `test -h' to fail
 	while [[ -h "${dst%/}" ]]; do
-		local link_dst="$(command ls -l "${dst}" | sed -e 's/^.*[ \t]*->[ \t]*\(.*\)[ \t]*$/\1/g')"
+		local link_dst=$(command ls -l "${dst}" | sed -e 's/^.*[ \t]*->[ \t]*\(.*\)[ \t]*$/\1/g')
 		if   [[ "${link_dst}" =~ ^..$ ]]; then
 			# special case
-			dst="$(dirname -- "$(dirname -- "${dst}")")"
+			dst=$(dirname $(dirname "${dst}"))
 		elif [[ "${link_dst}" =~ ^.$  ]]; then
 			# special case
 			dst="${dst}"
@@ -93,13 +93,16 @@ function path-canonical() {
 			dst="${link_dst}"
 		else
 			# relative symlink
-			dst="$(dirname "${dst}")/${link_dst}"
+			dst=$(dirname "${dst}")/"${link_dst}"
 		fi
 	done
 	# This call IS necessary as the traversal of symlinks above in the while
 	# loop may have introduced additional symlinks into the path where the
 	# symlink is NOT the last path component.
-	dst="$(path-canonical-simple "${dst}")"
+	dst=$(path-canonical-simple "${dst}")
+	# Remove duplicate // and a trailing /.
+	dst=${dst//\/\//\/}
+	dst=${dst%/.}
 	echo "${dst}"
 }
 
