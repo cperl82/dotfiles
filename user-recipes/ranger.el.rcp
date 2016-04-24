@@ -1,0 +1,6 @@
+(:name ranger.el
+       :description "Bringing the goodness of ranger to dired!"
+       :type github
+       :pkgname "ralesi/ranger"
+       :branch "master"
+       :checkout "942f3bccf7cf081010708e2dddc30d92d01fdda9")

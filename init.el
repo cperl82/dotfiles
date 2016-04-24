@@ -21,13 +21,14 @@
    org-mode
    projectile
    rainbow-mode
+   ranger.el
    s
    systemtap-mode
    tuareg-mode
    undo-tree
+   use-package
    xcscope
-   xoria256-emacs
-   ))
+   xoria256-emacs))
 
 ; 2014-04-26: Loading other stuff
 (add-to-list 'load-path "~/.emacs.d/lisp")
@@ -718,11 +719,12 @@ prefer for `sh-mode'.  It is automatically added to
 			     (process-status proc) dir)
 		   (format "%s" dir))
 		 'face face2))))))
-(advice-add 'helm-buffer--show-details :override #'cperl/advice/helm-buffer--show-details)
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-(define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
-(define-key helm-map (kbd "C-z")   'helm-select-action)
-(helm-mode 0)
+(with-eval-after-load 'helm
+  (progn
+    (advice-add 'helm-buffer--show-details :override #'cperl/advice/helm-buffer--show-details)
+    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+    (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
+    (define-key helm-map (kbd "C-z")   'helm-select-action)))
 
 
 ; 2015-02-16: grep related stuff

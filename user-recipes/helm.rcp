@@ -13,5 +13,4 @@
              (backup-inhibited t))
          (update-directory-autoloads default-directory)
          nil)
-       :features "helm-config"
-       :post-init (helm-mode))
+       :features "helm-config")
