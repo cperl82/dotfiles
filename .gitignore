@@ -2,3 +2,7 @@ auto-save-list/*
 el-get/*
 elpa/*
 *.elc
+bookmarks
+projectile-bookmarks.eld
+projectile.cache
+recentf
