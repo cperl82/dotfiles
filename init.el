@@ -87,6 +87,7 @@
 ; I prefer the window to be split horizontally unless I explicitly split it
 ; veritcally
 (setq split-height-threshold nil)
+(setq split-width-threshold 999)
 
 ; 2014-04-24: Duplicate buffer names
 (require 'uniquify)
