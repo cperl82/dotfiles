@@ -33,6 +33,8 @@
 ; 2014-04-26: Loading other stuff
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
+(require 'use-package)
+
 ; 2015-09-26: Disable startup message
 (setq inhibit-startup-message t)
 
@@ -55,6 +57,22 @@
               (when (> (length further-reduced) max-length) (throw 'done further-reduced))
               (setq n (1+ n)))))
       reduced)))
+
+; 2014-05-07: function to revert all buffers
+(defun revert-buffer-all ()
+  "Revert all buffers.  This reverts buffers that are visiting a file, kills
+buffers whose visited file has disappeared and refreshes dired buffers."
+  (interactive)
+  (if (y-or-n-p "Revert ALL buffers? ")
+      (save-excursion
+	(dolist (b (buffer-list))
+	  (set-buffer b)
+	  (cond
+	   (buffer-file-name
+	    (if (file-exists-p buffer-file-name)
+		(revert-buffer t t t)
+	      (kill-buffer b)))
+	   ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
 
 ; 2014-04-22 mode-line-format
 (setq-default column-number-mode t)
@@ -257,9 +275,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
    nil nil  cperl/selective-display-forward-sexp-fun))
 
 
-;;; escreen
-(require 'escreen)
-
+;; escreen
 (defun cperl/escreen-swap-screen (other-screen-number)
   (if (and
        (numberp other-screen-number)
@@ -350,16 +366,18 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (defun cperl/advice/escreen-install ()
   (cperl/escreen-rename-screen nil nil t))
 
-(advice-add 'escreen-goto-screen   :after #'cperl/advice/escreen-goto-screen)
-(advice-add 'escreen-kill-screen   :after #'cperl/advice/escreen-kill-screen)
-(advice-add 'escreen-create-screen :after #'cperl/advice/escreen-create-screen)
-(advice-add 'escreen-install       :after #'cperl/advice/escreen-install)
-
-(escreen-install)
-
-(global-set-key         (kbd "C-\\") 'escreen-prefix)
-(define-key escreen-map (kbd "C-\\") 'escreen-goto-last-screen)
-(define-key escreen-map (kbd "r")    'cperl/escreen-rename-screen)
+(use-package escreen
+  :defer t
+  :commands (escreen-get-active-screen-numbers)
+  :bind-keymap ("C-\\" . escreen-map)
+  :config
+  (progn
+    (advice-add 'escreen-goto-screen   :after #'cperl/advice/escreen-goto-screen)
+    (advice-add 'escreen-kill-screen   :after #'cperl/advice/escreen-kill-screen)
+    (advice-add 'escreen-create-screen :after #'cperl/advice/escreen-create-screen)
+    (advice-add 'escreen-install       :after #'cperl/advice/escreen-install)
+    (escreen-install)
+    (define-key escreen-map (kbd "r")    'cperl/escreen-rename-screen)))
 
 
 ; 2014-04-24: hide show related
@@ -535,96 +553,88 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-motion-state-map "\C-l" 'evil-window-right)
 
 
-(require 'buffer-move)
-(define-key evil-normal-state-map (kbd "C-M-j") 'buf-move-down)
-(define-key evil-normal-state-map (kbd "C-M-k") 'buf-move-up)
-(define-key evil-normal-state-map (kbd "C-M-h") 'buf-move-left)
-(define-key evil-normal-state-map (kbd "C-M-l") 'buf-move-right)
-(define-key evil-motion-state-map (kbd "C-M-j") 'buf-move-down)
-(define-key evil-motion-state-map (kbd "C-M-k") 'buf-move-up)
-(define-key evil-motion-state-map (kbd "C-M-h") 'buf-move-left)
-(define-key evil-motion-state-map (kbd "C-M-l") 'buf-move-right)
+;; buffer-move
+(use-package buffer-move
+  :commands (buf-move-down buf-move-up buf-move-left buf-move-rigth)
+  :init
+  (progn
+    (define-key evil-normal-state-map (kbd "C-M-j") 'buf-move-down)
+    (define-key evil-normal-state-map (kbd "C-M-k") 'buf-move-up)
+    (define-key evil-normal-state-map (kbd "C-M-h") 'buf-move-left)
+    (define-key evil-normal-state-map (kbd "C-M-l") 'buf-move-right)
+    (define-key evil-motion-state-map (kbd "C-M-j") 'buf-move-down)
+    (define-key evil-motion-state-map (kbd "C-M-k") 'buf-move-up)
+    (define-key evil-motion-state-map (kbd "C-M-h") 'buf-move-left)
+    (define-key evil-motion-state-map (kbd "C-M-l") 'buf-move-right)))
 
 
-; 2014-04-29: man related
-(require 'man)
+;; man
 (defun cperl/man-forward-sexp-fun (arg)
     (let ((p (point)))
       (forward-line 1)
-      (re-search-forward (concat
-			  Man-heading-regexp
-			  "\\|"
-			  "\\'"
-			  "\\|"
-			  "^[^[:space:]]"))
+      (re-search-forward
+       (concat Man-heading-regexp "\\|" "\\'" "\\|" "^[^[:space:]]"))
       (beginning-of-line)
       (forward-line -1)
       (if (equal p (point)) (end-of-line))))
 
-(add-to-list
- 'hs-special-modes-alist
- `(Man-mode
-   ,Man-heading-regexp
-   nil
-   nil
-   cperl/man-forward-sexp-fun))
+(use-package man
+  :defer t
+  :config
+  (progn
+    (add-to-list
+     'hs-special-modes-alist
+     `(Man-mode
+       ,Man-heading-regexp
+       nil
+       nil
+       cperl/man-forward-sexp-fun))
+    (add-hook
+     'Man-mode-hook
+     (lambda ()
+       (setq-local comment-start "$^")
+       (setq-local comment-end   "$^")
+       (hs-minor-mode 1)
+       (hs-hide-all)
+       (goto-char (point-min))
+       (re-search-forward "NAME" nil t)
+       (hs-show-block)
+       (re-search-forward "SYNOPSIS" nil t)
+       (hs-show-block)
+       (re-search-forward "DESCRIPTION" nil t)
+       (hs-show-block)
+       (font-lock-add-keywords
+	nil	     ; Copied from /usr/share/vim/vim74/syntax/man.vim
+	`((,Man-heading-regexp          . font-lock-comment-face)
+	  ("^\\s-*[+-][a-zA-Z0-9]\\S-*" . font-lock-function-name-face)
+	  ("^\\s-*--[a-zA-Z0-9-]\\S-*"  . font-lock-function-name-face))
+	'set)
+       (font-lock-mode 1)))))
 
-(add-hook
- 'Man-mode-hook
- (lambda ()
-   (setq-local comment-start "$^")
-   (setq-local comment-end   "$^")
-   (hs-minor-mode 1)
-   (hs-hide-all)
-   (goto-char (point-min))
-   (re-search-forward "NAME" nil t)
-   (hs-show-block)
-   (re-search-forward "SYNOPSIS" nil t)
-   (hs-show-block)
-   (re-search-forward "DESCRIPTION" nil t)
-   (hs-show-block)
-   (font-lock-add-keywords
-    nil		     ; Copied from /usr/share/vim/vim74/syntax/man.vim
-    `((,Man-heading-regexp          . font-lock-comment-face)
-      ("^\\s-*[+-][a-zA-Z0-9]\\S-*" . font-lock-function-name-face)
-      ("^\\s-*--[a-zA-Z0-9-]\\S-*"  . font-lock-function-name-face))
-    'set)
-   (font-lock-mode 1)))
-
-; 2014-05-07: function to revert all buffers
-(defun revert-buffer-all ()
-  "Revert all buffers.  This reverts buffers that are visiting a file, kills
-buffers whose visited file has disappeared and refreshes dired buffers."
-  (interactive)
-  (if (yes-or-no-p "Revert ALL buffers? ")
-      (save-excursion
-	(dolist (b (buffer-list))
-	  (set-buffer b)
-	  (cond
-	   (buffer-file-name
-	    (if (file-exists-p buffer-file-name)
-		(revert-buffer t t t)
-	      (kill-buffer b)))
-	   ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
-
-; 2014-04-06: cscope related
-(setq-default cscope-option-use-inverted-index t)
-(setq-default cscope-edit-single-match nil)
-(setq-default cscope-option-kernel-mode t)
-(add-hook 'cscope-list-entry-hook
-	  (lambda ()
-	    (setq-local face-remapping-alist
-			'((cscope-separator-face   font-lock-string-face)
-			  (cscope-line-number-face font-lock-string-face)
-			  (cscope-file-face        font-lock-doc-face)
-			  (cscope-function-face    font-lock-function-name-face)))
-	    (define-key evil-normal-state-local-map (kbd "RET") 'cscope-select-entry-inplace)
-	    (define-key evil-normal-state-local-map (kbd "SPC") 'cscope-show-entry-other-window)
-	    (define-key evil-normal-state-local-map (kbd "TAB") 'cscope-select-entry-other-window)
-	    (define-key evil-normal-state-local-map (kbd   "q") 'cscope-bury-buffer)
-	    (define-key evil-normal-state-local-map (kbd "M-n") 'cscope-history-forward-line)
-	    (define-key evil-normal-state-local-map (kbd "M-p") 'cscope-history-backward-line)
-	    (define-key evil-normal-state-local-map (kbd "M-k") 'cscope-history-kill-result)))
+
+;; xcscope
+(use-package xcscope
+  :defer t
+  :config
+  (progn
+    (setq cscope-option-use-inverted-index t)
+    (setq cscope-edit-single-match nil)
+    (setq cscope-option-kernel-mode t)
+    (add-hook
+     'cscope-list-entry-hook
+     (lambda ()
+       (setq-local face-remapping-alist
+		   '((cscope-separator-face   font-lock-string-face)
+		     (cscope-line-number-face font-lock-string-face)
+		     (cscope-file-face        font-lock-doc-face)
+		     (cscope-function-face    font-lock-function-name-face)))
+       (define-key evil-normal-state-local-map (kbd "RET") 'cscope-select-entry-inplace)
+       (define-key evil-normal-state-local-map (kbd "SPC") 'cscope-show-entry-other-window)
+       (define-key evil-normal-state-local-map (kbd "TAB") 'cscope-select-entry-other-window)
+       (define-key evil-normal-state-local-map (kbd   "q") 'cscope-bury-buffer)
+       (define-key evil-normal-state-local-map (kbd "M-n") 'cscope-history-forward-line)
+       (define-key evil-normal-state-local-map (kbd "M-p") 'cscope-history-backward-line)
+       (define-key evil-normal-state-local-map (kbd "M-k") 'cscope-history-kill-result)))))
 
 (setq c-default-style "linux")
 
@@ -688,11 +698,7 @@ prefer for `sh-mode'.  It is automatically added to
       (electric-indent-mode nil)))
 (add-hook 'sh-mode-hook 'cperl/setup-sh-mode)
 
-; 2014-12-10 Starting to play with helm.
-;(setq helm-always-two-windows t)
-(require 'helm-config)
 (require 's)
-(setq helm-split-window-default-side 'right)
 ; 2015-09-11 Ripped wholesale from helm-buffers.el so I could control the formatting of dir
 (defun cperl/advice/helm-buffer--show-details
     (buf-name prefix help-echo size mode dir face1 face2 proc details type)
@@ -719,16 +725,20 @@ prefer for `sh-mode'.  It is automatically added to
 			     (process-status proc) dir)
 		   (format "%s" dir))
 		 'face face2))))))
-(with-eval-after-load 'helm
+(use-package helm
+  :defer t
+  :config
   (progn
     (advice-add 'helm-buffer--show-details :override #'cperl/advice/helm-buffer--show-details)
+    (setq helm-split-window-default-side 'right)
     (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
     (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
     (define-key helm-map (kbd "C-z")   'helm-select-action)))
 
 
-; 2015-02-16: grep related stuff
-(with-eval-after-load 'grep
+;; grep
+(use-package grep
+  :config
   (progn
     (setq grep-find-use-xargs 'gnu)
     (evil-define-key 'normal grep-mode-map (kbd "TAB") 'compilation-display-error)
@@ -736,9 +746,7 @@ prefer for `sh-mode'.  It is automatically added to
     (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))))
 
 
-; 2015-05-24 projectile settings
-(require 'projectile)
-
+;; projectile
 ; 2015-09-23 advice for the low level projectile functions that manage
 ; the cache so I can track (roughly) when a project was cached and
 ; invalidate the cache if I determine there is a good reason
@@ -791,19 +799,35 @@ prefer for `sh-mode'.  It is automatically added to
 		   (projectile-invalidate-cache nil)))))))))
    (funcall orig-fun force)))
 
-(advice-add 'projectile-serialize              :after  #'cperl/advice/projectile-serialize)
-(advice-add 'projectile-unserialize            :around #'cperl/advice/projectile-unserialize)
-(advice-add 'projectile-maybe-invalidate-cache :around #'cperl/advice/projectile-maybe-invalidate-cache)
+(use-package projectile
+  :defer t
+  :config
+  (progn
+    (advice-add 'projectile-serialize              :after  #'cperl/advice/projectile-serialize)
+    (advice-add 'projectile-unserialize            :around #'cperl/advice/projectile-unserialize)
+    (advice-add 'projectile-maybe-invalidate-cache :around #'cperl/advice/projectile-maybe-invalidate-cache)
+    (projectile-global-mode)
+    (setq projectile-enable-caching t)
+    (setq projectile-switch-project-action 'projectile-dired)
+    (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")))
 
-(projectile-global-mode)
-(setq projectile-enable-caching t)
-(setq projectile-switch-project-action 'projectile-dired)
-(add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
+
+;; helm-projectile
+(use-package helm-projectile
+  :defer t
+  :init
+  (setq helm-projectile-fuzzy-match nil)
+  :config
+  (helm-projectile-on))
 
-; 2015-05-27 helm-projectile specific
-(setq helm-projectile-fuzzy-match nil)
-(require 'helm-projectile)
-(helm-projectile-on)
+
+;; ranger
+(use-package ranger
+  :defer t
+  :config
+  (progn
+    (setq ranger-show-dotfiles t)
+    (setq ranger-parent-depth 0)))
 
 
 ; 2014-04-08: local emacs overrides
