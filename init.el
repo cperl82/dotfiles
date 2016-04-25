@@ -554,7 +554,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ;; buffer-move
 (use-package buffer-move
-  :commands (buf-move-down buf-move-up buf-move-left buf-move-rigth)
+  :commands (buf-move-down buf-move-up buf-move-left buf-move-right)
   :init
   (progn
     (define-key evil-normal-state-map (kbd "C-M-j") 'buf-move-down)
@@ -695,6 +695,7 @@ prefer for `sh-mode'.  It is automatically added to
 	    sh-indentation 8)
       ; TODO: Do you want to enable electric-indent-mode for everything?
       (electric-indent-mode nil)))
+
 (add-hook 'sh-mode-hook 'cperl/setup-sh-mode)
 
 (require 's)
@@ -724,6 +725,7 @@ prefer for `sh-mode'.  It is automatically added to
 			     (process-status proc) dir)
 		   (format "%s" dir))
 		 'face face2))))))
+
 (use-package helm
   :defer t
   :config
@@ -737,6 +739,7 @@ prefer for `sh-mode'.  It is automatically added to
 
 ;; grep
 (use-package grep
+  :defer t
   :config
   (progn
     (setq grep-find-use-xargs 'gnu)
@@ -800,24 +803,23 @@ prefer for `sh-mode'.  It is automatically added to
 
 (use-package projectile
   :defer t
+  :bind-keymap
+  ("C-c p" . projectile-mode-map)
   :config
   (progn
+    (setq projectile-enable-caching t)
+    (setq projectile-switch-project-action 'projectile-dired)
+    (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
     (advice-add 'projectile-serialize              :after  #'cperl/advice/projectile-serialize)
     (advice-add 'projectile-unserialize            :around #'cperl/advice/projectile-unserialize)
     (advice-add 'projectile-maybe-invalidate-cache :around #'cperl/advice/projectile-maybe-invalidate-cache)
     (projectile-global-mode)
-    (setq projectile-enable-caching t)
-    (setq projectile-switch-project-action 'projectile-dired)
-    (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")))
 
-
-;; helm-projectile
-(use-package helm-projectile
-  :defer t
-  :init
-  (setq helm-projectile-fuzzy-match nil)
-  :config
-  (helm-projectile-on))
+    (use-package helm-projectile
+      :init
+      (setq helm-projectile-fuzzy-match nil)
+      :config
+      (helm-projectile-on))))
 
 
 ;; ranger
