@@ -678,8 +678,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ; 2014-12-06 override zenburn's default isearch highlighting
 (custom-theme-set-faces
  `zenburn
- `(isearch ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F"))))
- `(lazy-highlight ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F")))))
+ `(isearch        ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F"))))
+ `(lazy-highlight ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F"))))
+ `(diff-added     ((t (:foreground, "#7F9F7F" :weight bold))))
+ `(diff-removed   ((t (:foreground, "#CC9393")))))
 
 ; 2014-12-07 Trying to make sh-mode indentation better
 ; Copied from http://keramida.wordpress.com/2008/08/08/tweaking-shell-script-indentation-in-gnu-emacs
