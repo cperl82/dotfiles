@@ -99,9 +99,6 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 ; Remove the binding to compose mail, I don't use it
 (global-set-key (kbd "C-x m")   nil)
 
-; Use different keys to access help
-(global-set-key (kbd "C-x h") 'help-command)
-
 ; 2014-08-12
 ; I prefer the window to be split horizontally unless I explicitly split it
 ; veritcally
@@ -133,7 +130,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 (evil-leader/set-leader ",")
 (evil-leader/set-key
   "f" 'find-file
-  "b" 'helm-mini
+  "b" 'switch-to-buffer
   "s" 'split-window-vertically
   "v" 'split-window-horizontally
   "k" 'kill-buffer
@@ -141,7 +138,8 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   "o" 'delete-other-windows
   "x" 'delete-window
   "e" 'cperl/escreen-get-active-screen-names-with-emphasis
-  "h" 'cp-evil-highlight-symbol
+  "h" 'help-command
+  "*" 'cp-evil-highlight-symbol
   "E" '(lambda () (interactive) (message (buffer-file-name))))
 
 ; 2014-04-01: http://stackoverflow.com/questions/8483182/emacs-evil-mode-best-practice
