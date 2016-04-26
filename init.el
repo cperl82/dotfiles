@@ -749,70 +749,71 @@ prefer for `sh-mode'.  It is automatically added to
 
 
 ;; projectile
-; 2015-09-23 advice for the low level projectile functions that manage
-; the cache so I can track (roughly) when a project was cached and
-; invalidate the cache if I determine there is a good reason
-; (e.g. ".hg/dirstate" is newer than the time the projects file were
-; cached
-(setq cperl/projectile-projects-cache-shadow (make-hash-table :test 'equal))
+; 2016-04-25: Advice for the low level projectile functions that manage the cache so I can
+; track (roughly) when a project was cached and invalidate the cache if I determine there
+; is a good reason (e.g. ".hg/dirstate" is newer than the time the projects file were
+; cached). In addition, don't serialize to disk, only keep the cache in memory.
+(setq cperl/projectile-projects-cache-by-time (make-hash-table :test 'equal))
 
-(defun cperl/projectile-projects-cache-shadow-sync (data)
+(defun cperl/projectile-projects-cache-by-time-sync (data)
   (let* ((projectile-keys (projectile-hash-keys data))
-	 (shadow-keys (projectile-hash-keys cperl/projectile-projects-cache-shadow))
-	 (keys-to-add (set-difference projectile-keys shadow-keys))
-	 (keys-to-delete (set-difference shadow-keys projectile-keys)))
+	 (time-keys (projectile-hash-keys cperl/projectile-projects-cache-by-time))
+	 (keys-to-add (set-difference projectile-keys time-keys))
+	 (keys-to-delete (set-difference time-keys projectile-keys)))
     (progn
       (dolist (project keys-to-add)
-	(puthash project (current-time) cperl/projectile-projects-cache-shadow))
+	(puthash project (current-time) cperl/projectile-projects-cache-by-time))
       (dolist (project keys-to-delete)
-	(remhash project cperl/projectile-projects-cache-shadow)))))
+	(remhash project cperl/projectile-projects-cache-by-time)))))
 
-(defun cperl/advice/projectile-serialize (data filename)
-  (when (eq filename projectile-cache-file)
-    (cperl/projectile-projects-cache-shadow-sync data)))
+(defun cperl/advice/projectile-serialize (orig-fun data filename)
+  (cond ((eq filename projectile-cache-file) (cperl/projectile-projects-cache-by-time-sync data))
+        ((eq filename projectile-known-projects-file) nil)
+        (t (apply orig-fun data filename ()))))
 
 (defun cperl/advice/projectile-unserialize (orig-fun filename)
-  (if (eq filename projectile-cache-file)
-      (let ((data (apply orig-fun filename ())))
-	(progn (cperl/projectile-projects-cache-shadow-sync data) data))
-    (apply orig-fun filename ())))
+  (cond ((eq filename projectile-cache-file) nil)
+        ((eq filename projectile-known-projects-file) nil)
+        (t (apply orig-fun filename ()))))
 
 (defun cperl/advice/projectile-maybe-invalidate-cache (orig-fun force)
   (or
    (when (and (not force) (projectile-project-p))
      (let* ((vcs (projectile-project-vcs))
-	    (cache-invalidate-proxy
-	     (cond ((eq vcs 'hg)  ".hg/dirstate")
-		   ((eq vcs 'git) ".git/logs/HEAD"))))
+            (cache-invalidate-proxy
+             (cond ((eq vcs 'hg)  ".hg/dirstate")
+                   ((eq vcs 'git) ".git/logs/HEAD"))))
        (when cache-invalidate-proxy
-	 (let* ((project-root (projectile-project-root))
-		(project-cached-at-or-before (gethash project-root cperl/projectile-projects-cache-shadow))
-		(proxy (concat project-root cache-invalidate-proxy)))
-	   (when (and project-cached-at-or-before (file-exists-p proxy))
-	     (let ((proxy-time-stamp (float-time (nth 5 (file-attributes proxy))))
-		   (project-time-stamp (float-time project-cached-at-or-before)))
-	       (when (> proxy-time-stamp project-time-stamp)
-		 (progn
-		   (message
-		    "Project %s was cached at or before %s, which is older than mtime of %s, invalidating cache"
-		    project-root
-		    (current-time-string project-cached-at-or-before)
-		    cache-invalidate-proxy)
-		   (projectile-invalidate-cache nil)))))))))
+         (let* ((project-root (projectile-project-root))
+                (project-cached-at-or-before (gethash project-root cperl/projectile-projects-cache-by-time))
+                (proxy (concat project-root cache-invalidate-proxy)))
+           (when (and project-cached-at-or-before (file-exists-p proxy))
+             (let ((proxy-time-stamp (float-time (nth 5 (file-attributes proxy))))
+                   (project-time-stamp (float-time project-cached-at-or-before)))
+               (when (> proxy-time-stamp project-time-stamp)
+                 (progn
+                   (message
+                    "Project %s was cached at or before %s, which is older than mtime of %s, invalidating cache"
+                    project-root
+                    (current-time-string project-cached-at-or-before)
+                    cache-invalidate-proxy)
+                   (projectile-invalidate-cache nil)))))))))
    (funcall orig-fun force)))
 
 (use-package projectile
   :defer t
   :bind-keymap
   ("C-c p" . projectile-mode-map)
+  :init
+  (progn
+    (advice-add 'projectile-serialize              :around #'cperl/advice/projectile-serialize)
+    (advice-add 'projectile-unserialize            :around #'cperl/advice/projectile-unserialize)
+    (advice-add 'projectile-maybe-invalidate-cache :around #'cperl/advice/projectile-maybe-invalidate-cache))
   :config
   (progn
     (setq projectile-enable-caching t)
     (setq projectile-switch-project-action 'projectile-dired)
     (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
-    (advice-add 'projectile-serialize              :after  #'cperl/advice/projectile-serialize)
-    (advice-add 'projectile-unserialize            :around #'cperl/advice/projectile-unserialize)
-    (advice-add 'projectile-maybe-invalidate-cache :around #'cperl/advice/projectile-maybe-invalidate-cache)
     (projectile-global-mode)
 
     (use-package helm-projectile
