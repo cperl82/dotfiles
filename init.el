@@ -796,7 +796,7 @@ prefer for `sh-mode'.  It is automatically added to
 
 (defun cperl/advice/projectile-unserialize (orig-fun filename)
   (cond ((eq filename projectile-cache-file) nil)
-        ((eq filename projectile-known-projects-file) nil)
+        ((eq filename projectile-known-projects-file) (projectile-hash-keys cperl/projectile-projects-cache-by-time))
         (t (apply orig-fun filename ()))))
 
 (defun cperl/advice/projectile-maybe-invalidate-cache (orig-fun force)
