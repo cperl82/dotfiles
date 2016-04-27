@@ -75,8 +75,8 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 	   ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
 
 ; 2014-04-22 mode-line-format
-(setq-default column-number-mode t)
-(setq-default mode-line-format
+(setq column-number-mode t)
+(setq mode-line-format
 	      '("%e"
 		mode-line-front-space
 		mode-line-mule-info
@@ -106,42 +106,20 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 
 ; 2014-04-24: Duplicate buffer names
 (require 'uniquify)
-(setq-default uniquify-buffer-name-style 'forward)
+(setq uniquify-buffer-name-style 'forward)
 
 ; 2014-03-27: Turn off the menu bar
 (menu-bar-mode -1)
 
 ; 2014-03-27: Always show matching parents
-(setq-default show-paren-delay 0)
+(setq show-paren-delay 0)
 (show-paren-mode)
 
 ; 2014-03-27: Do not want backup files
 (setq make-backup-files nil)
 
-; 2014-03-27: Evil
-(setq-default evil-symbol-word-search t)
-(setq-default evil-flash-delay 5)
-(require 'evil)
-(evil-mode 1)
-
-; 2014-03-27: Evil Leader
-(require 'evil-leader)
-(global-evil-leader-mode)
-(evil-leader/set-leader ",")
-(evil-leader/set-key
-  "f" 'find-file
-  "b" 'switch-to-buffer
-  "s" 'split-window-vertically
-  "v" 'split-window-horizontally
-  "k" 'kill-buffer
-  "K" 'kill-buffer-and-window
-  "o" 'delete-other-windows
-  "x" 'delete-window
-  "e" 'cperl/escreen-get-active-screen-names-with-emphasis
-  "h" 'help-command
-  "*" 'cp-evil-highlight-symbol
-  "E" '(lambda () (interactive) (message (buffer-file-name))))
-
+
+; evil
 ; 2014-04-01: http://stackoverflow.com/questions/8483182/emacs-evil-mode-best-practice
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
@@ -152,31 +130,55 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       (setq deactivate-mark  t)
     (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
     (abort-recursive-edit)))
-(define-key evil-normal-state-map [escape] 'keyboard-quit)
-(define-key evil-visual-state-map [escape] 'keyboard-quit)
-(define-key minibuffer-local-map  [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-ns-map         [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-isearch-map    [escape] 'minibuffer-keyboard-quit)
+
+(use-package evil
+  :init
+  (progn
+    (setq-default evil-symbol-word-search t)
+    (setq-default evil-flash-delay 5))
+  :config
+  (progn
+    (define-key evil-normal-state-map [escape] 'keyboard-quit)
+    (define-key evil-visual-state-map [escape] 'keyboard-quit)
+    (define-key minibuffer-local-map  [escape] 'minibuffer-keyboard-quit)
+    (define-key minibuffer-local-ns-map         [escape] 'minibuffer-keyboard-quit)
+    (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+    (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+    (define-key minibuffer-local-isearch-map    [escape] 'minibuffer-keyboard-quit)
+
+    (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+    (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+    (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+    (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+    (define-key evil-motion-state-map (kbd "C-j") 'evil-window-down)
+    (define-key evil-motion-state-map (kbd "C-k") 'evil-window-up)
+    (define-key evil-motion-state-map (kbd "C-h") 'evil-window-left)
+    (define-key evil-motion-state-map (kbd "C-l") 'evil-window-right)
+    (evil-mode 1)))
+
+
+; evil-leader
+(use-package evil-leader
+  :config
+  (progn
+    (global-evil-leader-mode)
+    (evil-leader/set-leader ",")
+    (evil-leader/set-key
+      "f" 'find-file
+      "b" 'switch-to-buffer
+      "s" 'split-window-vertically
+      "v" 'split-window-horizontally
+      "k" 'kill-buffer
+      "K" 'kill-buffer-and-window
+      "o" 'delete-other-windows
+      "x" 'delete-window
+      "e" 'cperl/escreen-get-active-screen-names-with-emphasis
+      "H" 'help-command
+      "h" 'cp-evil-highlight-symbol
+      "E" '(lambda () (interactive) (message (buffer-file-name))))))
 
 ; 2014-03-28: Functions to support selecting something in Visual mode
 ; and then automatically start searching for it by pressing "/" or "?"
-(evil-define-operator cp-evil-search (beg end forward)
-  (let* ((search-string (buffer-substring-no-properties beg end))
-	 (quoted-string (regexp-quote search-string)))
-    (setq isearch-forward forward)
-    (evil-search quoted-string forward t)))
-
-(evil-define-operator cp-evil-search-forward (beg end type)
-  (cp-evil-search beg end t))
-
-(evil-define-operator cp-evil-search-backward (beg end type)
-  (cp-evil-search beg end nil))
-
-(define-key evil-visual-state-map "/" 'cp-evil-search-forward)
-(define-key evil-visual-state-map "?" 'cp-evil-search-backward)
-
 (defun cp-evil-highlight-symbol ()
   "Do everything that `*' would do, but don't actually jump to the next match"
   (interactive)
@@ -192,6 +194,79 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (isearch-update-ring string t)
     (setq string (evil-search-message string t))
     (evil-flash-search-pattern string t)))
+
+(evil-define-operator cp-evil-search (beg end forward)
+  (let* ((search-string (buffer-substring-no-properties beg end))
+	 (quoted-string (regexp-quote search-string)))
+    (setq isearch-forward forward)
+    (evil-search quoted-string forward t)))
+
+(evil-define-operator cp-evil-search-forward (beg end type)
+  (cp-evil-search beg end t))
+
+(evil-define-operator cp-evil-search-backward (beg end type)
+  (cp-evil-search beg end nil))
+
+(define-key evil-visual-state-map "/" 'cp-evil-search-forward)
+
+(define-key evil-visual-state-map "?" 'cp-evil-search-backward)
+
+
+;; tuareg-mode customizations
+(defun cperl/tuareg-mode-forward-sexp-fun (arg)
+  (let* ((c (current-column))
+	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
+    (forward-line 1)
+    (re-search-forward re)
+    (beginning-of-line)
+    (back-to-indentation)
+    (if (not
+	 (or
+	  (looking-at "in")
+	  (looking-at "end")
+	  (looking-at ";;")
+	  (looking-at "with")))
+        (progn
+          (forward-line -1)
+          (move-end-of-line nil)))))
+
+;; 2016-03-21: Alternative implementation that deals with functions without ;; better
+(defun cperl/tuareg-mode-forward-sexp-fun-alt (arg)
+  (let* ((c (current-column))
+	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
+    (forward-line 1)
+    (re-search-forward re)
+    (beginning-of-line)
+    (back-to-indentation)
+    (if (not
+	 (or
+	  (looking-at "in")
+	  (looking-at "end")
+	  (looking-at ";;")
+	  (looking-at "with")
+       (eq (point) (buffer-size))))
+        (progn
+          (re-search-backward "^[:space:]*[^:space:].")
+          (move-end-of-line nil)))))
+
+(add-to-list
+ 'hs-special-modes-alist
+ `(tuareg-mode
+   ,(mapconcat
+     'identity
+     '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
+       "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
+       "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
+       "\\<end\\>\\s-+=\\s-+\\<struct\\>"
+       "\\<let\\>\\s-+"
+       "\\<and\\>\\s-+"
+       "\\<let%\\S-+\\>\\s-+"
+       "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
+       "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
+       "\\<TEST_UNIT\\>\\s-+="
+       )
+     "\\|")
+   nil nil  cperl/tuareg-mode-forward-sexp-fun))
 
 
 ; ido / ido-vertical-mode / flx
@@ -214,66 +289,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (use-package flx-ido
       :config
       (flx-ido-mode t))))
-
-; 2014-03-30: tuareg mode
-(require 'tuareg)
-
-; 2014-05-14: This isn't perfect, but it works well enough in practice
-; that I'm including it.
-(defun cperl/selective-display-forward-sexp-fun (arg)
-  (let* ((c (current-column))
-	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
-    (forward-line 1)
-    (re-search-forward re)
-    (beginning-of-line)
-    (back-to-indentation)
-    (if (not
-	 (or
-	  (looking-at "in")
-	  (looking-at "end")
-	  (looking-at ";;")
-	  (looking-at "with")))
-        (progn
-          (forward-line -1)
-          (move-end-of-line nil)))))
-
-;; 2016-03-21: Alternative implementation that deals with functions without ;; better
-;; (defun cperl/selective-display-forward-sexp-fun (arg)
-;;   (let* ((c (current-column))
-;; 	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
-;;     (forward-line 1)
-;;     (re-search-forward re)
-;;     (beginning-of-line)
-;;     (back-to-indentation)
-;;     (if (not
-;; 	 (or
-;; 	  (looking-at "in")
-;; 	  (looking-at "end")
-;; 	  (looking-at ";;")
-;; 	  (looking-at "with")
-;;        (eq (point) (buffer-size))))
-;;         (progn
-;;           (re-search-backward "^[:space:]*[^:space:].")
-;;           (move-end-of-line nil)))))
-
-(add-to-list
- 'hs-special-modes-alist
- `(tuareg-mode
-   ,(mapconcat
-     'identity
-     '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
-       "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
-       "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
-       "\\<end\\>\\s-+=\\s-+\\<struct\\>"
-       "\\<let\\>\\s-+"
-       "\\<and\\>\\s-+"
-       "\\<let%\\S-+\\>\\s-+"
-       "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
-       "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
-       "\\<TEST_UNIT\\>\\s-+="
-       )
-     "\\|")
-   nil nil  cperl/selective-display-forward-sexp-fun))
 
 
 ;; escreen
@@ -394,35 +409,22 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	  (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))))
 
 
-; 2014-04-13: Custom keys for dired
-(evil-define-key 'normal dired-mode-map (kbd "TAB")  'dired-hide-subdir)
-(evil-define-key 'normal dired-mode-map (kbd "n")    'evil-search-next)
-(evil-define-key 'normal dired-mode-map (kbd "N")    'evil-search-previous)
-(evil-define-key 'normal dired-mode-map (kbd "?")    'evil-search-backward)
-(evil-define-key 'normal dired-mode-map (kbd "G")    'evil-goto-line)
-(evil-define-key 'normal dired-mode-map (kbd "gg")   'evil-goto-first-line)
-(add-hook 'dired-mode-hook
-	  (lambda ()
-	    ;; Set dired-x buffer-local variables here.  For example:
-	    (require 'dired-x)
-	    (dired-omit-mode 1)))
+;; dired
+(use-package dired
+  :defer t
+  :config
+  (progn
+    (use-package dired-x)
+    (evil-define-key 'normal dired-mode-map (kbd "TAB")  'dired-hide-subdir)
+    (evil-define-key 'normal dired-mode-map (kbd "n")    'evil-search-next)
+    (evil-define-key 'normal dired-mode-map (kbd "N")    'evil-search-previous)
+    (evil-define-key 'normal dired-mode-map (kbd "?")    'evil-search-backward)
+    (evil-define-key 'normal dired-mode-map (kbd "G")    'evil-goto-line)
+    (evil-define-key 'normal dired-mode-map (kbd "gg")   'evil-goto-first-line)
+    (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))))
 
 
-; 2014-04-03: Org mode customizations
-(require 'org)
-(add-hook
- 'org-mode-hook
- (lambda ()
-   (progn
-     (auto-fill-mode)
-     (setq fill-column 90)
-     (setq indent-tabs-mode nil)
-     (add-hook
-      'write-contents-functions
-      (lambda ()
-	(save-excursion
-	  (delete-trailing-whitespace)))))))
-
+;; org
 (defun cperl/echo-link-at-point-if-not-darwin ()
   (when (not (string-equal system-type "darwin"))
     (let* ((el (org-element-context))
@@ -440,118 +442,123 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	    (throw 'found (match-string 1 link)))))
       desc)))
 
-(setq org-agenda-restore-windows-after-quit t)
-(setq org-agenda-files '("~/org"))
-(setq org-capture-templates
-      '(("n" "Next Action" entry (file "~/org/capture.org") "* NEXT  %?\n")
-	("N" "Next Action with Gmail Id" entry (file "~/org/capture.org") "* NEXT  %?\n  [[gmail:%^{gmail id}][%\\1]]")
-	("p" "Project" entry (file "~/org/capture.org") "*  %?\n")
-	("P" "Project with Gmail Id" entry (file "~/org/capture.org") "* %?\n  [[gmail:%^{gmail id}][%\\1]]")))
-(setq org-todo-keywords
-      '((sequence "NEXT(n)" "DPND(x)" "WAIT(w)" "|" "DONE(d)" "CNCL(c)")
-	(sequence "DFER(r)" "|" "DONE(d)" "CNCL(c)")))
-(setq org-todo-keyword-faces
-      '(("DFER" . "#767676")
-	("DPND" . "#767676")
-	("WAIT" . "#8C5353")
-        ("CNCL" . "#FFFFFF")
-        ("DONE" . "#FFFFFF")))
-(setq org-link-abbrev-alist
-       '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
-(setq org-agenda-custom-commands
-      `(("d" "Deferred (with tickler)    "
-	 ((agenda "" ((org-agenda-span 1)
-		      (org-deadline-warning-days 1)))
-	  (tags-todo "DEADLINE={.+}+TODO=\"DFER\""
-		     ((org-agenda-overriding-header "DEFERRED, with tickler")
-                      (org-agenda-sorting-strategy '(priority-down))))))
-	("D" "Deferred (without tickler) "
-	 ((agenda "" ((org-agenda-span 1)
-		      (org-deadline-warning-days 1)))
-	  (tags-todo "-DEADLINE={.+}+TODO=\"DFER\""
-		     ((org-agenda-overriding-header "DEFERRED, without tickler")
-                      (org-agenda-sorting-strategy '(priority-down))))))
-	("r" "Read/Review                "
-	 ((agenda "" ((org-agenda-span 1)
-		      (org-deadline-warning-days 1)))
-	  (tags-todo "read+TODO=\"NEXT\""
-		     ((org-agenda-overriding-header "NEXT ACTIONS, Read/Review")
-                      (org-agenda-sorting-strategy '(priority-down))))))
-        ("N" "NEXT ACTION (all)          "
-         ((agenda "" ((org-agenda-span 1)
-                      (org-deadline-warning-days 1)))
-          (tags-todo "TODO=\"NEXT\""
-                     ((org-agenda-overriding-header "NEXT ACTIONS, ALL")
-                      (org-agenda-sorting-strategy '(priority-down))))))
-        ("n" "NEXT ACTION by tag         "
-         ((agenda "" ((org-agenda-span 1)
-                      (org-deadline-warning-days 1)))
-          (tags-todo ""
-                     ((org-agenda-overriding-header "NEXT ACTIONS")
-                      (org-agenda-sorting-strategy '(priority-down))
-                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
-        ("W" "WAITING FOR (all)          "
-	 ((agenda "" ((org-agenda-span 1)
-		      (org-deadline-warning-days 1)))
-	  (tags-todo "TODO=\"WAIT\""
-		     ((org-agenda-overriding-header "WAITING FOR")
-                      (org-agenda-sorting-strategy '(priority-down))))))
-        ("w" "WAITING FOR by tag         "
-         ((agenda "" ((org-agenda-span 1)
-                      (org-deadline-warning-days 1)))
-          (tags-todo ""
-                     ((org-agenda-overriding-header "WAITING FOR")
-                      (org-agenda-sorting-strategy '(priority-down))
-                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("WAIT")))))))
-        ("u" "Untagged                   "
-         ((agenda "" ((org-agenda-span 1)
-                      (org-deadline-warning-days 1)))
-          (tags-todo "-{.*}"
-                     ((org-agenda-overriding-header "NEXT ACTIONS, no context")
-                      (org-agenda-sorting-strategy '(priority-down))
-                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))))
-(setq org-tags-column -120)
-(setq org-agenda-tags-column -120)
-(setq org-refile-use-outline-path 'file)
-(setq org-hide-block-startup t)
-(setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
-(setq org-agenda-skip-scheduled-if-done t)
-(setq org-agenda-skip-deadline-if-done t)
-(setq org-catch-invisible-edits 'error)
-(setq org-ctrl-k-protect-subtree t)
-(setq org-cycle-include-plain-lists 'integrate)
-(add-to-list 'org-open-at-point-functions 'cperl/echo-link-at-point-if-not-darwin)
-(setq org-make-link-description-function 'cperl/org-link-auto-desc-from-abbrev-tags)
-(evil-define-key 'normal org-mode-map (kbd "TAB")         'org-cycle)
-(evil-define-key 'normal org-mode-map (kbd "M-h")         'org-metaleft)
-(evil-define-key 'normal org-mode-map (kbd "M-l")         'org-metaright)
-(evil-define-key 'normal org-mode-map (kbd "M-k")         'org-metaup)
-(evil-define-key 'normal org-mode-map (kbd "M-j")         'org-metadown)
-(evil-define-key 'normal org-mode-map (kbd "M-H")         'org-shiftmetaleft)
-(evil-define-key 'normal org-mode-map (kbd "M-L")         'org-shiftmetaright)
-(evil-define-key 'normal org-mode-map (kbd "M-K")         'org-shiftmetaup)
-(evil-define-key 'normal org-mode-map (kbd "M-J")         'org-shiftmetadown)
-(evil-define-key 'normal org-mode-map (kbd "C-c a")       'org-agenda)
-(evil-define-key 'normal org-mode-map (kbd "C-c c")       'org-capture)
-(evil-define-key 'emacs org-agenda-mode-map (kbd "j")     'org-agenda-next-line)
-(evil-define-key 'emacs org-agenda-mode-map (kbd "k")     'org-agenda-previous-line)
-(evil-define-key 'emacs org-agenda-mode-map (kbd "h")     'left-char)
-(evil-define-key 'emacs org-agenda-mode-map (kbd "l")     'right-char)
-(evil-define-key 'emacs org-agenda-mode-map (kbd " ")     'org-agenda-cycle-show)
-(evil-define-key 'emacs org-agenda-mode-map (kbd "C-c a") 'org-agenda)
-(evil-define-key 'emacs org-agenda-mode-map (kbd "C-c c") 'org-capture)
-(evil-define-key 'emacs org-agenda-mode-map (kbd "C-h")   'evil-window-left)
-(evil-define-key 'emacs org-agenda-mode-map (kbd "C-l")   'evil-window-right)
-
-
-(define-key evil-normal-state-map "\C-j" 'evil-window-down)
-(define-key evil-normal-state-map "\C-k" 'evil-window-up)
-(define-key evil-normal-state-map "\C-h" 'evil-window-left)
-(define-key evil-normal-state-map "\C-l" 'evil-window-right)
-(define-key evil-motion-state-map "\C-j" 'evil-window-down)
-(define-key evil-motion-state-map "\C-k" 'evil-window-up)
-(define-key evil-motion-state-map "\C-h" 'evil-window-left)
-(define-key evil-motion-state-map "\C-l" 'evil-window-right)
+(use-package org
+  :config
+  (progn
+    (add-hook
+     'org-mode-hook
+     (lambda ()
+       (progn
+	 (auto-fill-mode)
+	 (setq fill-column 90)
+	 (setq indent-tabs-mode nil)
+	 (add-hook
+	  'write-contents-functions
+	  (lambda ()
+	    (save-excursion
+	      (delete-trailing-whitespace)))))))
+    (setq org-agenda-restore-windows-after-quit t)
+    (setq org-agenda-files '("~/org"))
+    (setq org-capture-templates
+	  '(("n" "Next Action" entry (file "~/org/capture.org") "* NEXT  %?\n")
+	    ("N" "Next Action with Gmail Id" entry (file "~/org/capture.org") "* NEXT  %?\n  [[gmail:%^{gmail id}][%\\1]]")
+	    ("p" "Project" entry (file "~/org/capture.org") "*  %?\n")
+	    ("P" "Project with Gmail Id" entry (file "~/org/capture.org") "* %?\n  [[gmail:%^{gmail id}][%\\1]]")))
+    (setq org-todo-keywords
+	  '((sequence "NEXT(n)" "DPND(x)" "WAIT(w)" "|" "DONE(d)" "CNCL(c)")
+	    (sequence "DFER(r)" "|" "DONE(d)" "CNCL(c)")))
+    (setq org-todo-keyword-faces
+	  '(("DFER" . "#767676")
+	    ("DPND" . "#767676")
+	    ("WAIT" . "#8C5353")
+	    ("CNCL" . "#FFFFFF")
+	    ("DONE" . "#FFFFFF")))
+    (setq org-link-abbrev-alist
+	  '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
+    (setq org-agenda-custom-commands
+	  `(("d" "Deferred (with tickler)    "
+	     ((agenda "" ((org-agenda-span 1)
+			  (org-deadline-warning-days 1)))
+	      (tags-todo "DEADLINE={.+}+TODO=\"DFER\""
+			 ((org-agenda-overriding-header "DEFERRED, with tickler")
+			  (org-agenda-sorting-strategy '(priority-down))))))
+	    ("D" "Deferred (without tickler) "
+	     ((agenda "" ((org-agenda-span 1)
+			  (org-deadline-warning-days 1)))
+	      (tags-todo "-DEADLINE={.+}+TODO=\"DFER\""
+			 ((org-agenda-overriding-header "DEFERRED, without tickler")
+			  (org-agenda-sorting-strategy '(priority-down))))))
+	    ("r" "Read/Review                "
+	     ((agenda "" ((org-agenda-span 1)
+			  (org-deadline-warning-days 1)))
+	      (tags-todo "read+TODO=\"NEXT\""
+			 ((org-agenda-overriding-header "NEXT ACTIONS, Read/Review")
+			  (org-agenda-sorting-strategy '(priority-down))))))
+	    ("N" "NEXT ACTION (all)          "
+	     ((agenda "" ((org-agenda-span 1)
+			  (org-deadline-warning-days 1)))
+	      (tags-todo "TODO=\"NEXT\""
+			 ((org-agenda-overriding-header "NEXT ACTIONS, ALL")
+			  (org-agenda-sorting-strategy '(priority-down))))))
+	    ("n" "NEXT ACTION by tag         "
+	     ((agenda "" ((org-agenda-span 1)
+			  (org-deadline-warning-days 1)))
+	      (tags-todo ""
+			 ((org-agenda-overriding-header "NEXT ACTIONS")
+			  (org-agenda-sorting-strategy '(priority-down))
+			  (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
+	    ("W" "WAITING FOR (all)          "
+	     ((agenda "" ((org-agenda-span 1)
+			  (org-deadline-warning-days 1)))
+	      (tags-todo "TODO=\"WAIT\""
+			 ((org-agenda-overriding-header "WAITING FOR")
+			  (org-agenda-sorting-strategy '(priority-down))))))
+	    ("w" "WAITING FOR by tag         "
+	     ((agenda "" ((org-agenda-span 1)
+			  (org-deadline-warning-days 1)))
+	      (tags-todo ""
+			 ((org-agenda-overriding-header "WAITING FOR")
+			  (org-agenda-sorting-strategy '(priority-down))
+			  (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("WAIT")))))))
+	    ("u" "Untagged                   "
+	     ((agenda "" ((org-agenda-span 1)
+			  (org-deadline-warning-days 1)))
+	      (tags-todo "-{.*}"
+			 ((org-agenda-overriding-header "NEXT ACTIONS, no context")
+			  (org-agenda-sorting-strategy '(priority-down))
+			  (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))))
+    (setq org-tags-column -120)
+    (setq org-agenda-tags-column -120)
+    (setq org-refile-use-outline-path 'file)
+    (setq org-hide-block-startup t)
+    (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
+    (setq org-agenda-skip-scheduled-if-done t)
+    (setq org-agenda-skip-deadline-if-done t)
+    (setq org-catch-invisible-edits 'error)
+    (setq org-ctrl-k-protect-subtree t)
+    (setq org-cycle-include-plain-lists 'integrate)
+    (add-to-list 'org-open-at-point-functions 'cperl/echo-link-at-point-if-not-darwin)
+    (setq org-make-link-description-function 'cperl/org-link-auto-desc-from-abbrev-tags)
+    (evil-define-key 'normal org-mode-map        (kbd "TAB")   'org-cycle)
+    (evil-define-key 'normal org-mode-map        (kbd "M-h")   'org-metaleft)
+    (evil-define-key 'normal org-mode-map        (kbd "M-l")   'org-metaright)
+    (evil-define-key 'normal org-mode-map        (kbd "M-k")   'org-metaup)
+    (evil-define-key 'normal org-mode-map        (kbd "M-j")   'org-metadown)
+    (evil-define-key 'normal org-mode-map        (kbd "M-H")   'org-shiftmetaleft)
+    (evil-define-key 'normal org-mode-map        (kbd "M-L")   'org-shiftmetaright)
+    (evil-define-key 'normal org-mode-map        (kbd "M-K")   'org-shiftmetaup)
+    (evil-define-key 'normal org-mode-map        (kbd "M-J")   'org-shiftmetadown)
+    (evil-define-key 'normal org-mode-map        (kbd "C-c a") 'org-agenda)
+    (evil-define-key 'normal org-mode-map        (kbd "C-c c") 'org-capture)
+    (evil-define-key 'emacs  org-agenda-mode-map (kbd "j")     'org-agenda-next-line)
+    (evil-define-key 'emacs  org-agenda-mode-map (kbd "k")     'org-agenda-previous-line)
+    (evil-define-key 'emacs  org-agenda-mode-map (kbd "h")     'left-char)
+    (evil-define-key 'emacs  org-agenda-mode-map (kbd "l")     'right-char)
+    (evil-define-key 'emacs  org-agenda-mode-map (kbd " ")     'org-agenda-cycle-show)
+    (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-c a") 'org-agenda)
+    (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-c c") 'org-capture)
+    (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-h")   'evil-window-left)
+    (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-l")   'evil-window-right)))
 
 
 ;; buffer-move
