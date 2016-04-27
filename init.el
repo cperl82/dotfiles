@@ -9,8 +9,8 @@
 
 (el-get
  'sync
- '(diminish
-   color-theme-zenburn
+ '(color-theme-zenburn
+   diminish
    evil
    evil-leader
    flx
@@ -19,6 +19,7 @@
    helm-projectile
    ido-vertical-mode
    lua-mode
+   neotree
    org-mode
    projectile
    rainbow-mode
@@ -122,6 +123,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 
 ;; which-key
 (use-package which-key
+  :diminish which-key-mode
   :config
   (progn
     (which-key-mode)))
@@ -140,6 +142,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (abort-recursive-edit)))
 
 (use-package evil
+  :diminish (undo-tree-mode . "UT")
   :init
   (progn
     (setq-default evil-symbol-word-search t)
