@@ -9,7 +9,8 @@
 
 (el-get
  'sync
- '(color-theme-zenburn
+ '(diminish
+   color-theme-zenburn
    evil
    evil-leader
    flx
@@ -27,6 +28,7 @@
    tuareg-mode
    undo-tree
    use-package
+   which-key
    xcscope
    xoria256-emacs))
 
@@ -34,11 +36,16 @@
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
 (require 'use-package)
+(require 'diminish)
 
-; 2015-09-26: Disable startup message
-(setq inhibit-startup-message t)
+; misc settings
+(setq
+ inhibit-startup-message t
+ column-number-mode      t
+ split-height-threshold  nil
+ make-backup-files       nil)
 
-(defun format-default-dir-for-mode-line (d max-length)
+(defun cp/format-default-dir-for-mode-line (d max-length)
   (let* ((reduced
           (if (string-match (format "^%s" (getenv "HOME")) d) (replace-match "~" t t d) d))
          (reduced (replace-regexp-in-string "/$" "" reduced)))
@@ -75,7 +82,6 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 	   ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
 
 ; 2014-04-22 mode-line-format
-(setq column-number-mode t)
 (setq mode-line-format
 	      '("%e"
 		mode-line-front-space
@@ -86,7 +92,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 		mode-line-frame-identification
 		mode-line-buffer-identification
 		"   "
-		(:eval (format-default-dir-for-mode-line default-directory 40))
+		(:eval (cp/format-default-dir-for-mode-line default-directory 40))
 		"   "
 		mode-line-position
 		evil-mode-line-tag
@@ -99,15 +105,6 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 ; Remove the binding to compose mail, I don't use it
 (global-set-key (kbd "C-x m")   nil)
 
-; 2014-08-12
-; I prefer the window to be split horizontally unless I explicitly split it
-; veritcally
-(setq split-height-threshold nil)
-
-; 2014-04-24: Duplicate buffer names
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
-
 ; 2014-03-27: Turn off the menu bar
 (menu-bar-mode -1)
 
@@ -115,8 +112,19 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 (setq show-paren-delay 0)
 (show-paren-mode)
 
-; 2014-03-27: Do not want backup files
-(setq make-backup-files nil)
+
+;; uniquify
+(use-package uniquify
+  :config
+  (progn
+    (setq uniquify-buffer-name-style 'forward)))
+
+
+;; which-key
+(use-package which-key
+  :config
+  (progn
+    (which-key-mode)))
 
 
 ; evil
@@ -175,6 +183,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       "e" 'cperl/escreen-get-active-screen-names-with-emphasis
       "H" 'help-command
       "h" 'cp-evil-highlight-symbol
+      "R" 'revert-buffer-all
       "E" '(lambda () (interactive) (message (buffer-file-name))))))
 
 ; 2014-03-28: Functions to support selecting something in Visual mode
