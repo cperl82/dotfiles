@@ -46,6 +46,22 @@
  split-height-threshold  nil
  make-backup-files       nil)
 
+; 2014-05-07: function to revert all buffers
+(defun revert-buffer-all ()
+  "Revert all buffers.  This reverts buffers that are visiting a file, kills
+buffers whose visited file has disappeared and refreshes dired buffers."
+  (interactive)
+  (if (y-or-n-p "Revert ALL buffers? ")
+      (save-excursion
+	(dolist (b (buffer-list))
+	  (set-buffer b)
+	  (cond
+	   (buffer-file-name
+	    (if (file-exists-p buffer-file-name)
+		(revert-buffer t t t)
+	      (kill-buffer b)))
+	   ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
+
 (defun cp/format-default-dir-for-mode-line (d max-length)
   (let* ((reduced
           (if (string-match (format "^%s" (getenv "HOME")) d) (replace-match "~" t t d) d))
@@ -66,39 +82,23 @@
               (setq n (1+ n)))))
       reduced)))
 
-; 2014-05-07: function to revert all buffers
-(defun revert-buffer-all ()
-  "Revert all buffers.  This reverts buffers that are visiting a file, kills
-buffers whose visited file has disappeared and refreshes dired buffers."
-  (interactive)
-  (if (y-or-n-p "Revert ALL buffers? ")
-      (save-excursion
-	(dolist (b (buffer-list))
-	  (set-buffer b)
-	  (cond
-	   (buffer-file-name
-	    (if (file-exists-p buffer-file-name)
-		(revert-buffer t t t)
-	      (kill-buffer b)))
-	   ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
-
 ; 2014-04-22 mode-line-format
 (setq mode-line-format
-	      '("%e"
-		mode-line-front-space
-		mode-line-mule-info
-		mode-line-client
-		mode-line-modified
-		mode-line-remote
-		mode-line-frame-identification
-		mode-line-buffer-identification
-		"   "
-		(:eval (cp/format-default-dir-for-mode-line default-directory 40))
-		"   "
-		mode-line-position
-		evil-mode-line-tag
-		(vc-mode vc-mode)
-		"  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
+      '("%e"
+	mode-line-front-space
+	mode-line-mule-info
+	mode-line-client
+	mode-line-modified
+	mode-line-remote
+	mode-line-frame-identification
+	mode-line-buffer-identification
+	"   "
+	(:eval (cp/format-default-dir-for-mode-line default-directory 40))
+	"   "
+	mode-line-position
+	evil-mode-line-tag
+	(vc-mode vc-mode)
+	"  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
 
 ; 2015-09-11 Enable narrowing command which are disabled by default
 (put 'narrow-to-region 'disabled nil)
@@ -724,36 +724,32 @@ prefer for `sh-mode'.  It is automatically added to
 (require 's)
 ; 2015-09-11 Ripped wholesale from helm-buffers.el so I could control the formatting of dir
 (defun cperl/advice/helm-buffer--show-details
-    (buf-name prefix help-echo size mode dir face1 face2 proc details type)
-  (let ((dir (s-chop-prefixes
-	      '("/home/cperl/"
-		"/usr/local/home/cperl/"
-		"workspaces/"
-		"repos/"
-		"rpmbuild/"
-		"src/")
-	      dir)))
-    (append
-     (list
-      (concat prefix
-	      (propertize buf-name 'face face1
-			  'help-echo help-echo
-			  'type type)))
-     (and details
-	  (list size mode
-		(propertize
-		 (if proc
-		     (format "(%s %s in `%s')"
-			     (process-name proc)
-			     (process-status proc) dir)
-		   (format "%s" dir))
-		 'face face2))))))
+    (orig-fun buf-name prefix help-echo size mode dir face1 face2 proc details type)
+  (if (projectile-project-p)
+      (let* ((regex (format "^\\(.*\\)%s.*$" (projectile-project-name)))
+	     (dir (replace-regexp-in-string regex "" dir nil nil 1)))
+	(append
+	 (list
+	  (concat prefix
+		  (propertize buf-name 'face face1
+			      'help-echo help-echo
+			      'type type)))
+	 (and details
+	      (list size mode
+		    (propertize
+		     (if proc
+			 (format "(%s %s in `%s')"
+				 (process-name proc)
+				 (process-status proc) dir)
+		       (format "%s" dir))
+		     'face face2)))))
+    (apply orig-fun buf-name prefix help-echo size mode dir face1 face2 proc details type ())))
 
 (use-package helm
   :defer t
   :config
   (progn
-    (advice-add 'helm-buffer--show-details :override #'cperl/advice/helm-buffer--show-details)
+    (advice-add 'helm-buffer--show-details :around #'cperl/advice/helm-buffer--show-details)
     (setq helm-split-window-default-side 'right)
     (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
     (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
@@ -824,6 +820,7 @@ prefer for `sh-mode'.  It is automatically added to
    (funcall orig-fun force)))
 
 (use-package projectile
+  :commands (projectile-project-p)
   :defer t
   :bind-keymap
   ("C-c p" . projectile-mode-map)
