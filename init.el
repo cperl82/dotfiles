@@ -11,6 +11,7 @@
  'sync
  '(color-theme-zenburn
    diminish
+   elisp-slime-nav
    evil
    evil-leader
    flx
@@ -49,6 +50,34 @@
 (if (fboundp 'tool-bar-mode)   (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
+; 2014-04-22 mode-line-format
+(setq mode-line-format
+      '("%e"
+	mode-line-front-space
+	mode-line-mule-info
+	mode-line-client
+	mode-line-modified
+	mode-line-remote
+	mode-line-frame-identification
+	mode-line-buffer-identification
+	"   "
+	(:eval (cp/format-default-dir-for-mode-line default-directory 40))
+	"   "
+	mode-line-position
+	evil-mode-line-tag
+	(vc-mode vc-mode)
+	"  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
+
+; 2015-09-11 Enable narrowing command which are disabled by default
+(put 'narrow-to-region 'disabled nil)
+
+; Remove the binding to compose mail, I don't use it
+(global-set-key (kbd "C-x m")   nil)
+
+; 2014-03-27: Always show matching parents
+(setq show-paren-delay 0)
+(show-paren-mode)
+
 ; 2014-05-07: function to revert all buffers
 (defun revert-buffer-all ()
   "Revert all buffers.  This reverts buffers that are visiting a file, kills
@@ -85,33 +114,39 @@ buffers whose visited file has disappeared and refreshes dired buffers."
               (setq n (1+ n)))))
       reduced)))
 
-; 2014-04-22 mode-line-format
-(setq mode-line-format
-      '("%e"
-	mode-line-front-space
-	mode-line-mule-info
-	mode-line-client
-	mode-line-modified
-	mode-line-remote
-	mode-line-frame-identification
-	mode-line-buffer-identification
-	"   "
-	(:eval (cp/format-default-dir-for-mode-line default-directory 40))
-	"   "
-	mode-line-position
-	evil-mode-line-tag
-	(vc-mode vc-mode)
-	"  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
+; 2014-03-28: Functions to support selecting something in Visual mode
+; and then automatically start searching for it by pressing "/" or "?"
+(defun cp-evil-highlight-symbol ()
+  "Do everything that `*' would do, but don't actually jump to the next match"
+  (interactive)
+  (let* ((string (evil-find-symbol t))
+	 (case-fold-search
+	  (unless (and search-upper-case
+		       (not (isearch-no-upper-case-p string nil)))
+	    case-fold-search)))
+    (setq isearch-regexp t)
+    (setq isearch-forward t)
+    (setq string (format "\\_<%s\\_>" (regexp-quote string)))
+    (setq isearch-string string)
+    (isearch-update-ring string t)
+    (setq string (evil-search-message string t))
+    (evil-flash-search-pattern string t)))
 
-; 2015-09-11 Enable narrowing command which are disabled by default
-(put 'narrow-to-region 'disabled nil)
+(evil-define-operator cp-evil-search (beg end forward)
+  (let* ((search-string (buffer-substring-no-properties beg end))
+	 (quoted-string (regexp-quote search-string)))
+    (setq isearch-forward forward)
+    (evil-search quoted-string forward t)))
 
-; Remove the binding to compose mail, I don't use it
-(global-set-key (kbd "C-x m")   nil)
+(evil-define-operator cp-evil-search-forward (beg end type)
+  (cp-evil-search beg end t))
 
-; 2014-03-27: Always show matching parents
-(setq show-paren-delay 0)
-(show-paren-mode)
+(evil-define-operator cp-evil-search-backward (beg end type)
+  (cp-evil-search beg end nil))
+
+(define-key evil-visual-state-map "/" 'cp-evil-search-forward)
+
+(define-key evil-visual-state-map "?" 'cp-evil-search-backward)
 
 
 ;; uniquify
@@ -188,97 +223,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       "h" 'cp-evil-highlight-symbol
       "R" 'revert-buffer-all
       "E" '(lambda () (interactive) (message (buffer-file-name))))))
-
-; 2014-03-28: Functions to support selecting something in Visual mode
-; and then automatically start searching for it by pressing "/" or "?"
-(defun cp-evil-highlight-symbol ()
-  "Do everything that `*' would do, but don't actually jump to the next match"
-  (interactive)
-  (let* ((string (evil-find-symbol t))
-	 (case-fold-search
-	  (unless (and search-upper-case
-		       (not (isearch-no-upper-case-p string nil)))
-	    case-fold-search)))
-    (setq isearch-regexp t)
-    (setq isearch-forward t)
-    (setq string (format "\\_<%s\\_>" (regexp-quote string)))
-    (setq isearch-string string)
-    (isearch-update-ring string t)
-    (setq string (evil-search-message string t))
-    (evil-flash-search-pattern string t)))
-
-(evil-define-operator cp-evil-search (beg end forward)
-  (let* ((search-string (buffer-substring-no-properties beg end))
-	 (quoted-string (regexp-quote search-string)))
-    (setq isearch-forward forward)
-    (evil-search quoted-string forward t)))
-
-(evil-define-operator cp-evil-search-forward (beg end type)
-  (cp-evil-search beg end t))
-
-(evil-define-operator cp-evil-search-backward (beg end type)
-  (cp-evil-search beg end nil))
-
-(define-key evil-visual-state-map "/" 'cp-evil-search-forward)
-
-(define-key evil-visual-state-map "?" 'cp-evil-search-backward)
-
-
-;; tuareg-mode customizations
-(defun cp/tuareg-mode-forward-sexp-fun (arg)
-  (let* ((c (current-column))
-	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
-    (forward-line 1)
-    (re-search-forward re)
-    (beginning-of-line)
-    (back-to-indentation)
-    (if (not
-	 (or
-	  (looking-at "in")
-	  (looking-at "end")
-	  (looking-at ";;")
-	  (looking-at "with")))
-        (progn
-          (forward-line -1)
-          (move-end-of-line nil)))))
-
-;; 2016-03-21: Alternative implementation that deals with functions without ;; better
-(defun cp/tuareg-mode-forward-sexp-fun-alt (arg)
-  (let* ((c (current-column))
-	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
-    (forward-line 1)
-    (re-search-forward re)
-    (beginning-of-line)
-    (back-to-indentation)
-    (if (not
-	 (or
-	  (looking-at "in")
-	  (looking-at "end")
-	  (looking-at ";;")
-	  (looking-at "with")
-       (eq (point) (buffer-size))))
-        (progn
-          (re-search-backward "^[:space:]*[^:space:].")
-          (move-end-of-line nil)))))
-
-(add-to-list
- 'hs-special-modes-alist
- `(tuareg-mode
-   ,(mapconcat
-     'identity
-     '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
-       "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
-       "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
-       "\\<end\\>\\s-+=\\s-+\\<struct\\>"
-       "\\<let\\>\\s-+"
-       "\\<and\\>\\s-+"
-       "\\<let%\\S-+\\>\\s-+"
-       "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
-       "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
-       "\\<TEST_UNIT\\>\\s-+="
-       )
-     "\\|")
-   nil nil  cp/tuareg-mode-forward-sexp-fun))
 
 
 ; ido / ido-vertical-mode / flx
@@ -408,18 +352,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (define-key escreen-map (kbd "r")    'cp/escreen-rename-screen)))
 
 
-; 2014-04-24: hide show related
-; 2014-04-30: I'm not sure why the hook works but the `evil-define-key' doesn't (well, I
-; mean it sort of works in that if I enter insert mode and then exit back into normal mode
-; the keybinding will be there, but I want it to just be there right away).
-(add-hook
- 'hs-minor-mode-hook
- (lambda ()
-   (cond ((eq major-mode 'Man-mode)
-	  (define-key evil-motion-state-local-map (kbd "TAB") 'hs-toggle-hiding))
-	 (t
-	  (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))))
-
 
 ;; dired
 (use-package dired
@@ -817,8 +749,7 @@ prefer for `sh-mode'.  It is automatically added to
 (use-package projectile
   :commands (projectile-project-p)
   :defer t
-  :bind-keymap
-  ("C-c p" . projectile-mode-map)
+  :bind-keymap ("C-c p" . projectile-mode-map)
   :init
   (progn
     (advice-add 'projectile-serialize              :around #'cp/advice/projectile-serialize)
@@ -836,6 +767,91 @@ prefer for `sh-mode'.  It is automatically added to
       (setq helm-projectile-fuzzy-match nil)
       :config
       (helm-projectile-on))))
+
+
+;; elisp-slime-nav
+(use-package elisp-slime-nav
+  :init
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-elisp-slime-nav-mode)
+  :config
+  (progn
+    (evil-define-key 'normal elisp-slime-nav-mode-map
+      (kbd "C-c l") 'elisp-slime-nav-find-elisp-thing-at-point)
+    (evil-define-key 'normal elisp-slime-nav-mode-map
+      (kbd "C-c &") 'pop-tag-mark)
+    (evil-define-key 'normal elisp-slime-nav-mode-map
+      (kbd "C-c C-t") 'elisp-slime-nav-describe-elisp-thing-at-point)))
+
+
+;; random other things
+(add-hook 'emacs-lisp-mode-hook (lambda () (hs-minor-mode) (hs-hide-all)))
+
+; 2014-04-30: I'm not sure why the hook works but the `evil-define-key' doesn't (well, I
+; mean it sort of works in that if I enter insert mode and then exit back into normal mode
+; the keybinding will be there, but I want it to just be there right away).
+(add-hook
+ 'hs-minor-mode-hook
+ (lambda ()
+   (cond ((eq major-mode 'Man-mode)
+	  (define-key evil-motion-state-local-map (kbd "TAB") 'hs-toggle-hiding))
+	 (t
+	  (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))))
+
+;; tuareg-mode custom forward-sexp fun for hs-minor-mode
+(defun cp/tuareg-mode-forward-sexp-fun (arg)
+  (let* ((c (current-column))
+	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
+    (forward-line 1)
+    (re-search-forward re)
+    (beginning-of-line)
+    (back-to-indentation)
+    (if (not
+	 (or
+	  (looking-at "in")
+	  (looking-at "end")
+	  (looking-at ";;")
+	  (looking-at "with")))
+        (progn
+          (forward-line -1)
+          (move-end-of-line nil)))))
+
+;; 2016-03-21: Alternative implementation that deals with functions without ;; better
+(defun cp/tuareg-mode-forward-sexp-fun-alt (arg)
+  (let* ((c (current-column))
+	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
+    (forward-line 1)
+    (re-search-forward re)
+    (beginning-of-line)
+    (back-to-indentation)
+    (if (not
+	 (or
+	  (looking-at "in")
+	  (looking-at "end")
+	  (looking-at ";;")
+	  (looking-at "with")
+       (eq (point) (buffer-size))))
+        (progn
+          (re-search-backward "^[:space:]*[^:space:].")
+          (move-end-of-line nil)))))
+
+(add-to-list
+ 'hs-special-modes-alist
+ `(tuareg-mode
+   ,(mapconcat
+     'identity
+     '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
+       "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
+       "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
+       "\\<end\\>\\s-+=\\s-+\\<struct\\>"
+       "\\<let\\>\\s-+"
+       "\\<and\\>\\s-+"
+       "\\<let%\\S-+\\>\\s-+"
+       "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
+       "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
+       "\\<TEST_UNIT\\>\\s-+="
+       )
+     "\\|")
+   nil nil  cp/tuareg-mode-forward-sexp-fun))
 
 
 ; 2014-04-08: local emacs overrides
