@@ -182,7 +182,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       "K" 'kill-buffer-and-window
       "o" 'delete-other-windows
       "x" 'delete-window
-      "e" 'cperl/escreen-get-active-screen-names-with-emphasis
+      "e" 'cp/escreen-get-active-screen-names-with-emphasis
       "H" 'help-command
       "h" 'cp-evil-highlight-symbol
       "R" 'revert-buffer-all
@@ -224,7 +224,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ;; tuareg-mode customizations
-(defun cperl/tuareg-mode-forward-sexp-fun (arg)
+(defun cp/tuareg-mode-forward-sexp-fun (arg)
   (let* ((c (current-column))
 	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
     (forward-line 1)
@@ -242,7 +242,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
           (move-end-of-line nil)))))
 
 ;; 2016-03-21: Alternative implementation that deals with functions without ;; better
-(defun cperl/tuareg-mode-forward-sexp-fun-alt (arg)
+(defun cp/tuareg-mode-forward-sexp-fun-alt (arg)
   (let* ((c (current-column))
 	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
     (forward-line 1)
@@ -277,7 +277,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        "\\<TEST_UNIT\\>\\s-+="
        )
      "\\|")
-   nil nil  cperl/tuareg-mode-forward-sexp-fun))
+   nil nil  cp/tuareg-mode-forward-sexp-fun))
 
 
 ; ido / ido-vertical-mode / flx
@@ -303,7 +303,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ;; escreen
-(defun cperl/escreen-swap-screen (other-screen-number)
+(defun cp/escreen-swap-screen (other-screen-number)
   (if (and
        (numberp other-screen-number)
        (not (eq other-screen-number escreen-current-screen-number)))
@@ -321,14 +321,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 		 (setcar screen-data-current other-screen-number)
 		 (setq escreen-current-screen-number other-screen-number)))))))
 
-(defun cperl/escreen-move-screen (direction)
+(defun cp/escreen-move-screen (direction)
   (let ((other-screen-number
 	 (cond ((eq direction 'left)  (1- escreen-current-screen-number))
 	       ((eq direction 'right) (1+ escreen-current-screen-number)))))
     (cond ((and
 	    (>= other-screen-number 0)
 	    (<= other-screen-number escreen-highest-screen-number-used))
-	   (cperl/escreen-swap-screen other-screen-number))
+	   (cp/escreen-swap-screen other-screen-number))
 	  ; These are the cases where we're moving right off the right
 	  ; end or left off the left end
 	  ; TODO: some of the below can probably be factored out
@@ -336,24 +336,24 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	   (let ((n 1)
 		 (end escreen-highest-screen-number-used))
 	    (while (<= n end)
-	      (cperl/escreen-swap-screen n)
+	      (cp/escreen-swap-screen n)
 	      (setq n (1+ n)))))
 	  ((> other-screen-number escreen-highest-screen-number-used)
 	   (let ((n (1- escreen-highest-screen-number-used)))
 	     (while (>= n 0)
-	       (cperl/escreen-swap-screen n)
+	       (cp/escreen-swap-screen n)
 	       (setq n (1- n)))))))
-  (cperl/escreen-get-active-screen-names-with-emphasis))
+  (cp/escreen-get-active-screen-names-with-emphasis))
 
-(defun cperl/escreen-move-screen-left ()
+(defun cp/escreen-move-screen-left ()
   (interactive)
-  (cperl/escreen-move-screen 'left))
+  (cp/escreen-move-screen 'left))
 
-(defun cperl/escreen-move-screen-right ()
+(defun cp/escreen-move-screen-right ()
   (interactive)
-  (cperl/escreen-move-screen 'right))
+  (cp/escreen-move-screen 'right))
 
-(defun cperl/escreen-rename-screen (&optional name number suppress-message)
+(defun cp/escreen-rename-screen (&optional name number suppress-message)
   (interactive "sNew screen name: ")
   (let ((screen-data (escreen-configuration-escreen (or number escreen-current-screen-number)))
 	(new-name (cond ((equal name "") nil)
@@ -361,9 +361,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 			(t "default"))))
     (setcar (cdr screen-data) new-name)
     (when (not suppress-message)
-      (cperl/escreen-get-active-screen-names-with-emphasis))))
+      (cp/escreen-get-active-screen-names-with-emphasis))))
 
-(defun cperl/escreen-get-active-screen-names-with-emphasis ()
+(defun cp/escreen-get-active-screen-names-with-emphasis ()
   (interactive)
   (let ((output ""))
     (dolist (n (escreen-get-active-screen-numbers))
@@ -380,18 +380,18 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 			    (t (format "%d-" n))))))
       (message "escreen: active screens: %s" output))))
 
-(defun cperl/advice/escreen-goto-screen (n &optional dont-update-current)
-  (cperl/escreen-get-active-screen-names-with-emphasis))
+(defun cp/advice/escreen-goto-screen (n &optional dont-update-current)
+  (cp/escreen-get-active-screen-names-with-emphasis))
 
-(defun cperl/advice/escreen-kill-screen (&optional n)
-  (cperl/escreen-get-active-screen-names-with-emphasis))
+(defun cp/advice/escreen-kill-screen (&optional n)
+  (cp/escreen-get-active-screen-names-with-emphasis))
 
-(defun cperl/advice/escreen-create-screen (&optional n)
-  (cperl/escreen-rename-screen)
-  (cperl/escreen-get-active-screen-names-with-emphasis))
+(defun cp/advice/escreen-create-screen (&optional n)
+  (cp/escreen-rename-screen)
+  (cp/escreen-get-active-screen-names-with-emphasis))
 
-(defun cperl/advice/escreen-install ()
-  (cperl/escreen-rename-screen nil nil t))
+(defun cp/advice/escreen-install ()
+  (cp/escreen-rename-screen nil nil t))
 
 (use-package escreen
   :defer t
@@ -399,12 +399,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :bind-keymap ("C-\\" . escreen-map)
   :config
   (progn
-    (advice-add 'escreen-goto-screen   :after #'cperl/advice/escreen-goto-screen)
-    (advice-add 'escreen-kill-screen   :after #'cperl/advice/escreen-kill-screen)
-    (advice-add 'escreen-create-screen :after #'cperl/advice/escreen-create-screen)
-    (advice-add 'escreen-install       :after #'cperl/advice/escreen-install)
+    (advice-add 'escreen-goto-screen   :after #'cp/advice/escreen-goto-screen)
+    (advice-add 'escreen-kill-screen   :after #'cp/advice/escreen-kill-screen)
+    (advice-add 'escreen-create-screen :after #'cp/advice/escreen-create-screen)
+    (advice-add 'escreen-install       :after #'cp/advice/escreen-install)
     (escreen-install)
-    (define-key escreen-map (kbd "r")    'cperl/escreen-rename-screen)))
+    (define-key escreen-map (kbd "r")    'cp/escreen-rename-screen)))
 
 
 ; 2014-04-24: hide show related
@@ -436,13 +436,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ;; org
-(defun cperl/echo-link-at-point-if-not-darwin ()
+(defun cp/echo-link-at-point-if-not-darwin ()
   (when (not (string-equal system-type "darwin"))
     (let* ((el (org-element-context))
            (raw-link (plist-get (cadr el) :raw-link)))
       (message "%s" raw-link))))
 
-(defun cperl/org-link-auto-desc-from-abbrev-tags (link desc)
+(defun cp/org-link-auto-desc-from-abbrev-tags (link desc)
   (let ((abbrevs
 	 (append (mapcar 'car org-link-abbrev-alist-local)
 		 (mapcar 'car org-link-abbrev-alist))))
@@ -548,8 +548,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (setq org-catch-invisible-edits 'error)
     (setq org-ctrl-k-protect-subtree t)
     (setq org-cycle-include-plain-lists 'integrate)
-    (add-to-list 'org-open-at-point-functions 'cperl/echo-link-at-point-if-not-darwin)
-    (setq org-make-link-description-function 'cperl/org-link-auto-desc-from-abbrev-tags)
+    (add-to-list 'org-open-at-point-functions 'cp/echo-link-at-point-if-not-darwin)
+    (setq org-make-link-description-function 'cp/org-link-auto-desc-from-abbrev-tags)
     (evil-define-key 'normal org-mode-map        (kbd "TAB")   'org-cycle)
     (evil-define-key 'normal org-mode-map        (kbd "M-h")   'org-metaleft)
     (evil-define-key 'normal org-mode-map        (kbd "M-l")   'org-metaright)
@@ -588,7 +588,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ;; man
-(defun cperl/man-forward-sexp-fun (arg)
+(defun cp/man-forward-sexp-fun (arg)
     (let ((p (point)))
       (forward-line 1)
       (re-search-forward
@@ -607,7 +607,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        ,Man-heading-regexp
        nil
        nil
-       cperl/man-forward-sexp-fun))
+       cp/man-forward-sexp-fun))
     (add-hook
      'Man-mode-hook
      (lambda ()
@@ -705,7 +705,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ; 2014-12-07 Trying to make sh-mode indentation better
 ; Copied from http://keramida.wordpress.com/2008/08/08/tweaking-shell-script-indentation-in-gnu-emacs
-(defun cperl/setup-sh-mode ()
+(defun cp/setup-sh-mode ()
     "My own personal preferences for `sh-mode'.
 
 This is a custom function that sets up the parameters I usually
@@ -718,11 +718,11 @@ prefer for `sh-mode'.  It is automatically added to
       ; TODO: Do you want to enable electric-indent-mode for everything?
       (electric-indent-mode nil)))
 
-(add-hook 'sh-mode-hook 'cperl/setup-sh-mode)
+(add-hook 'sh-mode-hook 'cp/setup-sh-mode)
 
 (require 's)
 ; 2015-09-11 Ripped wholesale from helm-buffers.el so I could control the formatting of dir
-(defun cperl/advice/helm-buffer--show-details
+(defun cp/advice/helm-buffer--show-details
     (orig-fun buf-name prefix help-echo size mode dir face1 face2 proc details type)
   (if (projectile-project-p)
       (let* ((regex (format "^\\(.*\\)%s.*$" (projectile-project-name)))
@@ -748,7 +748,7 @@ prefer for `sh-mode'.  It is automatically added to
   :defer t
   :config
   (progn
-    (advice-add 'helm-buffer--show-details :around #'cperl/advice/helm-buffer--show-details)
+    (advice-add 'helm-buffer--show-details :around #'cp/advice/helm-buffer--show-details)
     (setq helm-split-window-default-side 'right)
     (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
     (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
@@ -771,30 +771,30 @@ prefer for `sh-mode'.  It is automatically added to
 ; track (roughly) when a project was cached and invalidate the cache if I determine there
 ; is a good reason (e.g. ".hg/dirstate" is newer than the time the projects file were
 ; cached). In addition, don't serialize to disk, only keep the cache in memory.
-(setq cperl/projectile-projects-cache-by-time (make-hash-table :test 'equal))
+(setq cp/projectile-projects-cache-by-time (make-hash-table :test 'equal))
 
-(defun cperl/projectile-projects-cache-by-time-sync (data)
+(defun cp/projectile-projects-cache-by-time-sync (data)
   (let* ((projectile-keys (projectile-hash-keys data))
-	 (time-keys (projectile-hash-keys cperl/projectile-projects-cache-by-time))
+	 (time-keys (projectile-hash-keys cp/projectile-projects-cache-by-time))
 	 (keys-to-add (set-difference projectile-keys time-keys))
 	 (keys-to-delete (set-difference time-keys projectile-keys)))
     (progn
       (dolist (project keys-to-add)
-	(puthash project (current-time) cperl/projectile-projects-cache-by-time))
+	(puthash project (current-time) cp/projectile-projects-cache-by-time))
       (dolist (project keys-to-delete)
-	(remhash project cperl/projectile-projects-cache-by-time)))))
+	(remhash project cp/projectile-projects-cache-by-time)))))
 
-(defun cperl/advice/projectile-serialize (orig-fun data filename)
-  (cond ((eq filename projectile-cache-file) (cperl/projectile-projects-cache-by-time-sync data))
+(defun cp/advice/projectile-serialize (orig-fun data filename)
+  (cond ((eq filename projectile-cache-file) (cp/projectile-projects-cache-by-time-sync data))
         ((eq filename projectile-known-projects-file) nil)
         (t (apply orig-fun data filename ()))))
 
-(defun cperl/advice/projectile-unserialize (orig-fun filename)
+(defun cp/advice/projectile-unserialize (orig-fun filename)
   (cond ((eq filename projectile-cache-file) nil)
-        ((eq filename projectile-known-projects-file) (projectile-hash-keys cperl/projectile-projects-cache-by-time))
+        ((eq filename projectile-known-projects-file) (projectile-hash-keys cp/projectile-projects-cache-by-time))
         (t (apply orig-fun filename ()))))
 
-(defun cperl/advice/projectile-maybe-invalidate-cache (orig-fun force)
+(defun cp/advice/projectile-maybe-invalidate-cache (orig-fun force)
   (or
    (when (and (not force) (projectile-project-p))
      (let* ((vcs (projectile-project-vcs))
@@ -803,7 +803,7 @@ prefer for `sh-mode'.  It is automatically added to
                    ((eq vcs 'git) ".git/logs/HEAD"))))
        (when cache-invalidate-proxy
          (let* ((project-root (projectile-project-root))
-                (project-cached-at-or-before (gethash project-root cperl/projectile-projects-cache-by-time))
+                (project-cached-at-or-before (gethash project-root cp/projectile-projects-cache-by-time))
                 (proxy (concat project-root cache-invalidate-proxy)))
            (when (and project-cached-at-or-before (file-exists-p proxy))
              (let ((proxy-time-stamp (float-time (nth 5 (file-attributes proxy))))
@@ -825,9 +825,9 @@ prefer for `sh-mode'.  It is automatically added to
   ("C-c p" . projectile-mode-map)
   :init
   (progn
-    (advice-add 'projectile-serialize              :around #'cperl/advice/projectile-serialize)
-    (advice-add 'projectile-unserialize            :around #'cperl/advice/projectile-unserialize)
-    (advice-add 'projectile-maybe-invalidate-cache :around #'cperl/advice/projectile-maybe-invalidate-cache))
+    (advice-add 'projectile-serialize              :around #'cp/advice/projectile-serialize)
+    (advice-add 'projectile-unserialize            :around #'cp/advice/projectile-unserialize)
+    (advice-add 'projectile-maybe-invalidate-cache :around #'cp/advice/projectile-maybe-invalidate-cache))
   :config
   (progn
     (setq projectile-enable-caching t)
