@@ -685,24 +685,19 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(custom-safe-themes
    (quote
     ("799291799f87afb7a2a55bd63082c58fb58912bee0a6e3d5c1ce0e083ed046c9" default))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(dired-perm-write ((t nil)))
- '(flx-highlight-face ((t (:foreground "#CC9393" :weight normal))))
- '(helm-buffer-directory ((t (:foreground "color-247"))))
- '(helm-ff-dotted-directory ((t (:foreground "color-247"))))
- '(helm-match ((t (:foreground "gold1" :weight normal)))))
 
 ; 2014-12-06 override zenburn's default isearch highlighting
 (custom-theme-set-faces
  `zenburn
- `(isearch        ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F"))))
- `(lazy-highlight ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F"))))
- `(diff-added     ((t (:foreground, "#7F9F7F" :weight bold))))
- `(diff-removed   ((t (:foreground, "#CC9393")))))
+ `(isearch                  ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F"))))
+ `(lazy-highlight           ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F"))))
+ `(diff-added               ((t (:foreground, "#7F9F7F" :weight bold))))
+ `(diff-removed             ((t (:foreground, "#CC9393"))))
+ '(dired-perm-write         ((t nil)))
+ '(flx-highlight-face       ((t (:foreground "#CC9393" :weight normal))))
+ '(helm-buffer-directory    ((t (:foreground "color-247"))))
+ '(helm-ff-dotted-directory ((t (:foreground "color-247"))))
+ '(helm-match               ((t (:foreground "gold1" :weight normal)))))
 
 ; 2014-12-07 Trying to make sh-mode indentation better
 ; Copied from http://keramida.wordpress.com/2008/08/08/tweaking-shell-script-indentation-in-gnu-emacs
