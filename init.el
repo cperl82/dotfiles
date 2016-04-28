@@ -838,15 +838,6 @@ prefer for `sh-mode'.  It is automatically added to
       (helm-projectile-on))))
 
 
-;; ranger
-(use-package ranger
-  :defer t
-  :config
-  (progn
-    (setq ranger-show-dotfiles t)
-    (setq ranger-parent-depth 0)))
-
-
 ; 2014-04-08: local emacs overrides
 (let ((local "~/.emacs.local"))
   (when (file-exists-p local) (load-file local)))
