@@ -1,11 +1,11 @@
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(add-to-list 'load-path (concat user-emacs-directory "el-get/el-get"))
 (unless (require 'el-get nil 'noerror) (with-current-buffer
     (url-retrieve-synchronously
     "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
     (goto-char (point-max)) (eval-print-last-sexp)))
 
 (setq el-get-verbose t)
-(add-to-list 'el-get-recipe-path "~/.emacs.d/user-recipes")
+(add-to-list 'el-get-recipe-path (concat user-emacs-directory "user-recipes"))
 
 (el-get
  'sync
@@ -23,7 +23,6 @@
    org-mode
    projectile
    rainbow-mode
-   ranger.el
    s
    systemtap-mode
    tuareg-mode
@@ -34,7 +33,7 @@
    xoria256-emacs))
 
 ; 2014-04-26: Loading other stuff
-(add-to-list 'load-path "~/.emacs.d/lisp")
+(add-to-list 'load-path (concat user-emacs-directory "lisp"))
 
 (require 'use-package)
 (require 'diminish)
