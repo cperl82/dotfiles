@@ -45,6 +45,10 @@
  split-height-threshold  nil
  make-backup-files       nil)
 
+(if (fboundp 'menu-bar-mode)   (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode)   (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
 ; 2014-05-07: function to revert all buffers
 (defun revert-buffer-all ()
   "Revert all buffers.  This reverts buffers that are visiting a file, kills
@@ -104,9 +108,6 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 
 ; Remove the binding to compose mail, I don't use it
 (global-set-key (kbd "C-x m")   nil)
-
-; 2014-03-27: Turn off the menu bar
-(menu-bar-mode -1)
 
 ; 2014-03-27: Always show matching parents
 (setq show-paren-delay 0)
@@ -725,8 +726,8 @@ prefer for `sh-mode'.  It is automatically added to
 (defun cp/advice/helm-buffer--show-details
     (orig-fun buf-name prefix help-echo size mode dir face1 face2 proc details type)
   (if (projectile-project-p)
-      (let* ((regex (format "^\\(.*\\)%s.*$" (projectile-project-name)))
-	     (dir (replace-regexp-in-string regex "" dir nil nil 1)))
+      (let* ((regex (format "^.*\\(%s.*\\)$" (projectile-project-name)))
+	     (dir (replace-regexp-in-string regex "\\1" dir)))
 	(append
 	 (list
 	  (concat prefix
