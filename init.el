@@ -50,9 +50,29 @@
 (if (fboundp 'tool-bar-mode)   (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
+(defun cp/format-default-dir-for-mode-line (d max-length)
+  (let* ((reduced
+          (if (string-match (format "^%s" (getenv "HOME")) d) (replace-match "~" t t d) d))
+         (reduced (replace-regexp-in-string "/$" "" reduced)))
+    (if (> (length reduced) max-length)
+        (let* ((n 0)
+               (further-reduced nil)
+               (pieces
+                (reverse (remove-if (lambda (s) (equal "" s)) (split-string reduced "/"))))
+               (len (length pieces)))
+          (catch 'done
+            (while (< n len)
+              (setq further-reduced
+                    (if further-reduced
+                        (format "%s/%s" (nth n pieces) further-reduced)
+                      (nth n pieces)))
+              (when (> (length further-reduced) max-length) (throw 'done further-reduced))
+              (setq n (1+ n)))))
+      reduced)))
+
 ; 2014-04-22 mode-line-format
 (setq mode-line-format
-      '("%e"
+      `("%e"
 	mode-line-front-space
 	mode-line-mule-info
 	mode-line-client
@@ -60,13 +80,16 @@
 	mode-line-remote
 	mode-line-frame-identification
 	mode-line-buffer-identification
-	"   "
+	" "
 	(:eval (cp/format-default-dir-for-mode-line default-directory 40))
-	"   "
+	" "
 	mode-line-position
 	evil-mode-line-tag
 	(vc-mode vc-mode)
-	"  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
+	" "
+	mode-line-modes
+	mode-line-misc-info
+	mode-line-end-spaces))
 
 ; 2015-09-11 Enable narrowing command which are disabled by default
 (put 'narrow-to-region 'disabled nil)
@@ -93,26 +116,6 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 		(revert-buffer t t t)
 	      (kill-buffer b)))
 	   ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
-
-(defun cp/format-default-dir-for-mode-line (d max-length)
-  (let* ((reduced
-          (if (string-match (format "^%s" (getenv "HOME")) d) (replace-match "~" t t d) d))
-         (reduced (replace-regexp-in-string "/$" "" reduced)))
-    (if (> (length reduced) max-length)
-        (let* ((n 0)
-               (further-reduced nil)
-               (pieces
-                (reverse (remove-if (lambda (s) (equal "" s)) (split-string reduced "/"))))
-               (len (length pieces)))
-          (catch 'done
-            (while (< n len)
-              (setq further-reduced
-                    (if further-reduced
-                        (format "%s/%s" (nth n pieces) further-reduced)
-                      (nth n pieces)))
-              (when (> (length further-reduced) max-length) (throw 'done further-reduced))
-              (setq n (1+ n)))))
-      reduced)))
 
 ; 2014-03-28: Functions to support selecting something in Visual mode
 ; and then automatically start searching for it by pressing "/" or "?"
