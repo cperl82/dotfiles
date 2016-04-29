@@ -468,6 +468,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         (insert username)
         (insert-char ?\s)))))
 
+(defun cp/org-next-gmail-link ()
+  (interactive)
+  (let ((matched (re-search-forward "\\[\\[gmail:[[:alnum:]]\\{16\\}\\]" nil t)))
+    (when matched (evil-forward-word-begin))))
+
 (use-package org
   :config
   (progn
@@ -565,6 +570,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (evil-define-key 'normal org-mode-map        (kbd "M-J")   'org-shiftmetadown)
     (evil-define-key 'normal org-mode-map        (kbd "C-c a") 'org-agenda)
     (evil-define-key 'normal org-mode-map        (kbd "C-c c") 'org-capture)
+    (evil-define-key 'normal org-mode-map        (kbd "<SPC>") 'cp/org-next-gmail-link)
     (evil-define-key 'emacs  org-agenda-mode-map (kbd "j")     'org-agenda-next-line)
     (evil-define-key 'emacs  org-agenda-mode-map (kbd "k")     'org-agenda-previous-line)
     (evil-define-key 'emacs  org-agenda-mode-map (kbd "h")     'left-char)
