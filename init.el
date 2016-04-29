@@ -425,6 +425,48 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (interactive)
   (cp/org-surround ?*))
 
+(setq cp/org-helm-username-list-command-alist
+      '((darwin . "dscacheutil -q user | grep -A 3 -B 2 -e uid:\\ 5'[0-9][0-9]' | grep name | cut -d' ' -f2")
+        (linux  . "getent passwd | cut -d: -f1")))
+
+(setq cp/org-list-all-usernames-value
+ (lexical-let ((expire 86400)
+               (cache `(,(current-time) . nil)))
+   (lambda ()
+     (let* ((cmd (assq system-type cp/org-helm-username-list-command-alist))
+            (cached-at (car cache))
+            (usernames (cdr cache))
+            (now (current-time))
+            (diff (time-subtract now cached-at)))
+       (when cmd
+         (let ((cmd (cdr cmd)))
+           (if (or (not usernames) (> (time-to-seconds diff) expire))
+               (progn
+                 (message "Org Helm username cache older than %ds, cached at %s, expiring" expire (current-time-string cached-at))
+                 (let ((result (split-string (shell-command-to-string cmd))))
+                   (setq cache `(,now . ,result))
+                   result))
+             usernames)))))))
+
+(defun cp/org-list-all-usernames ()
+  (funcall cp/org-list-all-usernames-value))
+
+(defun cp/org-helm-usernames (username)
+  (helm :input username
+        :sources
+        (helm-build-sync-source "usernames" :candidates (cp/org-list-all-usernames))
+        :buffer "*helm usernames*"))
+
+(defun cp/org-helm-complete-user-name-at-point ()
+  (interactive)
+  (let* ((partial  (word-at-point))
+         (username (cp/org-helm-usernames partial)))
+    (when username
+      (progn
+        (backward-kill-word 1)
+        (insert username)
+        (insert-char ?\s)))))
+
 (use-package org
   :config
   (progn
@@ -534,6 +576,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (evil-define-key 'insert org-mode-map        (kbd "M-.")   'cp/org-surround-tilda)
     (evil-define-key 'insert org-mode-map        (kbd "M-v")   'cp/org-surround-equal)
     (evil-define-key 'insert org-mode-map        (kbd "M-b")   'cp/org-surround-star)
+    (evil-define-key 'insert org-mode-map        (kbd "M-u")   'cp/org-helm-complete-user-name-at-point)
     (add-hook
      'org-mode-hook
      (lambda ()
