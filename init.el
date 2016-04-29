@@ -464,7 +464,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
          (username (cp/org-helm-usernames partial)))
     (when username
       (progn
-        (backward-kill-word 1)
+	(when partial
+	  (backward-kill-word 1))
         (insert username)
         (insert-char ?\s)))))
 
