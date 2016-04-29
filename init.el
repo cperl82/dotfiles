@@ -81,7 +81,7 @@
 	mode-line-frame-identification
 	mode-line-buffer-identification
 	" "
-	(:eval (cp/format-default-dir-for-mode-line default-directory 40))
+	(eval (cp/format-default-dir-for-mode-line default-directory 40))
 	" "
 	mode-line-position
 	evil-mode-line-tag
@@ -355,7 +355,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (define-key escreen-map (kbd "r")    'cp/escreen-rename-screen)))
 
 
-
 ;; dired
 (use-package dired
   :defer t
@@ -372,7 +371,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ;; org
-(defun cp/echo-link-at-point-if-not-darwin ()
+(defun cp/org-echo-link-at-point-if-not-darwin ()
   (when (not (string-equal system-type "darwin"))
     (let* ((el (org-element-context))
            (raw-link (plist-get (cadr el) :raw-link)))
@@ -388,6 +387,31 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	  (when (string-match s link)
 	    (throw 'found (match-string 1 link)))))
       desc)))
+
+(defun cp/org-surround (s)
+  (let ((c (string-to-char s)))
+    (progn
+      (evil-backward-WORD-begin)
+      (insert-char c)
+      (evil-forward-WORD-end)
+      (forward-char)
+      (insert-char c)))
+  (when (not (looking-back " "))
+    (if (eq (point) (point-max))
+	(insert-char (string-to-char " "))
+      (forward-char))))
+
+(defun cp/org-surround-tilda ()
+  (interactive)
+  (cp/org-surround "~"))
+
+(defun cp/org-surround-equal ()
+  (interactive)
+  (cp/org-surround "="))
+
+(defun cp/org-surround-star ()
+  (interactive)
+  (cp/org-surround "*"))
 
 (use-package org
   :config
@@ -484,8 +508,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (setq org-catch-invisible-edits 'error)
     (setq org-ctrl-k-protect-subtree t)
     (setq org-cycle-include-plain-lists 'integrate)
-    (add-to-list 'org-open-at-point-functions 'cp/echo-link-at-point-if-not-darwin)
-    (setq org-make-link-description-function 'cp/org-link-auto-desc-from-abbrev-tags)
+    (setq org-hide-leading-stars t)
+    (setq org-make-link-description-function  'cp/org-link-auto-desc-from-abbrev-tags)
+    (add-to-list 'org-open-at-point-functions 'cp/org-echo-link-at-point-if-not-darwin)
     (evil-define-key 'normal org-mode-map        (kbd "TAB")   'org-cycle)
     (evil-define-key 'normal org-mode-map        (kbd "M-h")   'org-metaleft)
     (evil-define-key 'normal org-mode-map        (kbd "M-l")   'org-metaright)
@@ -505,7 +530,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-c a") 'org-agenda)
     (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-c c") 'org-capture)
     (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-h")   'evil-window-left)
-    (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-l")   'evil-window-right)))
+    (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-l")   'evil-window-right)
+    (evil-define-key 'insert org-mode-map        (kbd "M-.")   'cp/org-surround-tilda)
+    (evil-define-key 'insert org-mode-map        (kbd "M-v")   'cp/org-surround-equal)
+    (evil-define-key 'insert org-mode-map        (kbd "M-b")   'cp/org-surround-star)))
 
 
 ;; buffer-move
@@ -786,21 +814,7 @@ prefer for `sh-mode'.  It is automatically added to
       (kbd "C-c C-t") 'elisp-slime-nav-describe-elisp-thing-at-point)))
 
 
-;; random other things
-(add-hook 'emacs-lisp-mode-hook (lambda () (hs-minor-mode) (hs-hide-all)))
-
-; 2014-04-30: I'm not sure why the hook works but the `evil-define-key' doesn't (well, I
-; mean it sort of works in that if I enter insert mode and then exit back into normal mode
-; the keybinding will be there, but I want it to just be there right away).
-(add-hook
- 'hs-minor-mode-hook
- (lambda ()
-   (cond ((eq major-mode 'Man-mode)
-	  (define-key evil-motion-state-local-map (kbd "TAB") 'hs-toggle-hiding))
-	 (t
-	  (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))))
-
-;; tuareg-mode custom forward-sexp fun for hs-minor-mode
+;; tuareg-mode 
 (defun cp/tuareg-mode-forward-sexp-fun (arg)
   (let* ((c (current-column))
 	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
@@ -837,24 +851,44 @@ prefer for `sh-mode'.  It is automatically added to
           (re-search-backward "^[:space:]*[^:space:].")
           (move-end-of-line nil)))))
 
-(add-to-list
- 'hs-special-modes-alist
- `(tuareg-mode
-   ,(mapconcat
-     'identity
-     '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
-       "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
-       "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
-       "\\<end\\>\\s-+=\\s-+\\<struct\\>"
-       "\\<let\\>\\s-+"
-       "\\<and\\>\\s-+"
-       "\\<let%\\S-+\\>\\s-+"
-       "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
-       "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
-       "\\<TEST_UNIT\\>\\s-+="
-       )
-     "\\|")
-   nil nil  cp/tuareg-mode-forward-sexp-fun))
+(use-package tuareg
+  :defer t
+  :config
+  (progn
+    (add-to-list
+     'hs-special-modes-alist
+     `(tuareg-mode
+       ,(mapconcat
+	 'identity
+	 '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
+	   "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
+	   "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
+	   "\\<end\\>\\s-+=\\s-+\\<struct\\>"
+	   "\\<let\\>\\s-+"
+	   "\\<and\\>\\s-+"
+	   "\\<let%\\S-+\\>\\s-+"
+	   "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
+	   "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
+	   "\\<TEST_UNIT\\>\\s-+="
+	   )
+	 "\\|")
+       nil nil  cp/tuareg-mode-forward-sexp-fun))))
+
+
+
+;; random other things
+(add-hook 'emacs-lisp-mode-hook (lambda () (hs-minor-mode) (hs-hide-all)))
+
+; 2014-04-30: I'm not sure why the hook works but the `evil-define-key' doesn't (well, I
+; mean it sort of works in that if I enter insert mode and then exit back into normal mode
+; the keybinding will be there, but I want it to just be there right away).
+(add-hook
+ 'hs-minor-mode-hook
+ (lambda ()
+   (cond ((eq major-mode 'Man-mode)
+	  (define-key evil-motion-state-local-map (kbd "TAB") 'hs-toggle-hiding))
+	 (t
+	  (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))))
 
 
 ; 2014-04-08: local emacs overrides
