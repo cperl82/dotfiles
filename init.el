@@ -14,6 +14,7 @@
    elisp-slime-nav
    evil
    evil-leader
+   evil-surround
    flx
    haskell-mode
    helm
@@ -228,6 +229,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       "E" '(lambda () (interactive) (message (buffer-file-name))))))
 
 
+;; evil-surround
+(use-package evil-surround
+  :defer t)
+
+
 ; ido / ido-vertical-mode / flx
 (use-package ido
   :config
@@ -388,14 +394,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	    (throw 'found (match-string 1 link)))))
       desc)))
 
-(defun cp/org-surround (s)
-  (let ((c (string-to-char s)))
-    (progn
-      (evil-backward-WORD-begin)
-      (insert-char c)
-      (evil-forward-WORD-end)
-      (forward-char)
-      (insert-char c)))
+(defun cp/org-surround (c)
+  (progn
+    (evil-backward-WORD-begin)
+    (insert-char c)
+    (evil-forward-WORD-end)
+    (forward-char)
+    (insert-char c))
   (when (not (looking-back " "))
     (if (eq (point) (point-max))
 	(insert-char (string-to-char " "))
@@ -403,31 +408,19 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (defun cp/org-surround-tilda ()
   (interactive)
-  (cp/org-surround "~"))
+  (cp/org-surround ?~))
 
 (defun cp/org-surround-equal ()
   (interactive)
-  (cp/org-surround "="))
+  (cp/org-surround ?=))
 
 (defun cp/org-surround-star ()
   (interactive)
-  (cp/org-surround "*"))
+  (cp/org-surround ?*))
 
 (use-package org
   :config
   (progn
-    (add-hook
-     'org-mode-hook
-     (lambda ()
-       (progn
-	 (auto-fill-mode)
-	 (setq fill-column 90)
-	 (setq indent-tabs-mode nil)
-	 (add-hook
-	  'write-contents-functions
-	  (lambda ()
-	    (save-excursion
-	      (delete-trailing-whitespace)))))))
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-agenda-files '("~/org"))
     (setq org-capture-templates
@@ -533,7 +526,23 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-l")   'evil-window-right)
     (evil-define-key 'insert org-mode-map        (kbd "M-.")   'cp/org-surround-tilda)
     (evil-define-key 'insert org-mode-map        (kbd "M-v")   'cp/org-surround-equal)
-    (evil-define-key 'insert org-mode-map        (kbd "M-b")   'cp/org-surround-star)))
+    (evil-define-key 'insert org-mode-map        (kbd "M-b")   'cp/org-surround-star)
+    (add-hook
+     'org-mode-hook
+     (lambda ()
+       (progn
+	 (auto-fill-mode)
+	 (setq fill-column 90)
+	 (setq indent-tabs-mode nil)
+	 (push '(?~ . ("~" . "~")) evil-surround-pairs-alist)
+	 (push '(?* . ("*" . "*")) evil-surround-pairs-alist)
+	 (push '(?= . ("=" . "=")) evil-surround-pairs-alist)
+	 (turn-on-evil-surround-mode)
+	 (add-hook
+	  'write-contents-functions
+	  (lambda ()
+	    (save-excursion
+	      (delete-trailing-whitespace)))))))))
 
 
 ;; buffer-move
