@@ -45,7 +45,8 @@
  inhibit-startup-message t
  column-number-mode      t
  split-height-threshold  nil
- make-backup-files       nil)
+ make-backup-files       nil
+ c-default-style         "linux")
 
 (if (fboundp 'menu-bar-mode)   (menu-bar-mode -1))
 (if (fboundp 'tool-bar-mode)   (tool-bar-mode -1))
@@ -72,35 +73,31 @@
       reduced)))
 
 ; 2014-04-22 mode-line-format
-(setq mode-line-format
-      `("%e"
-	mode-line-front-space
-	mode-line-mule-info
-	mode-line-client
-	mode-line-modified
-	mode-line-remote
-	mode-line-frame-identification
-	mode-line-buffer-identification
-	" "
-	(eval (cp/format-default-dir-for-mode-line default-directory 40))
-	" "
-	mode-line-position
-	evil-mode-line-tag
-	(vc-mode vc-mode)
-	" "
-	mode-line-modes
-	mode-line-misc-info
-	mode-line-end-spaces))
+(setq-default mode-line-format
+	      `("%e"
+		mode-line-front-space
+		mode-line-mule-info
+		mode-line-client
+		mode-line-modified
+		mode-line-remote
+		mode-line-frame-identification
+		mode-line-buffer-identification
+		" "
+		(:eval (cp/format-default-dir-for-mode-line default-directory 40))
+		" "
+		mode-line-position
+		evil-mode-line-tag
+		(vc-mode vc-mode)
+		" "
+		mode-line-modes
+		mode-line-misc-info
+		mode-line-end-spaces))
 
 ; 2015-09-11 Enable narrowing command which are disabled by default
 (put 'narrow-to-region 'disabled nil)
 
 ; Remove the binding to compose mail, I don't use it
 (global-set-key (kbd "C-x m")   nil)
-
-; 2014-03-27: Always show matching parents
-(setq show-paren-delay 0)
-(show-paren-mode)
 
 ; 2014-05-07: function to revert all buffers
 (defun revert-buffer-all ()
@@ -151,6 +148,16 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 (define-key evil-visual-state-map "/" 'cp-evil-search-forward)
 
 (define-key evil-visual-state-map "?" 'cp-evil-search-backward)
+
+
+;; paren
+(use-package paren
+  :init
+  (progn
+    (setq show-paren-delay 0))
+  :config
+  (progn
+    (show-paren-mode)))
 
 
 ;; uniquify
@@ -628,8 +635,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        (define-key evil-normal-state-local-map (kbd "M-p") 'cscope-history-backward-line)
        (define-key evil-normal-state-local-map (kbd "M-k") 'cscope-history-kill-result)))))
 
-(setq c-default-style "linux")
-
 ; 2014-04-04: Holy moly its effort to get line numbers like vim!
 ; http://www.emacswiki.org/emacs/LineNumbers#toc6
 (unless window-system
@@ -882,7 +887,6 @@ prefer for `sh-mode'.  It is automatically added to
 	   )
 	 "\\|")
        nil nil  cp/tuareg-mode-forward-sexp-fun))))
-
 
 
 ;; random other things
