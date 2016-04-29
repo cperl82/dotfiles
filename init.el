@@ -454,7 +454,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (defun cp/org-helm-usernames (username)
   (helm :input username
         :sources
-        (helm-build-sync-source "usernames" :candidates (cp/org-list-all-usernames))
+        (helm-build-sync-source "usernames"
+	  :candidate-number-limit nil
+	  :candidates (cp/org-list-all-usernames))
         :buffer "*helm usernames*"))
 
 (defun cp/org-helm-complete-user-name-at-point ()
