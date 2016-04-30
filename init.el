@@ -497,8 +497,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-agenda-files '("~/org"))
     (setq org-capture-templates
-	  '(("n" "Next Action" entry (file "~/org/capture.org") "* NEXT  %?\n  %T")
-	    ("N" "Next Action with Gmail Id" entry (file "~/org/capture.org") "* NEXT  %?\n  %T\n  [[gmail:%^{gmail id}][%\\1]]")))
+	  '(("n" "Next Action" entry
+	     (file "~/org/capture.org") "* NEXT  %?\n  Captured: %U")
+	    ("N" "Next Action with Gmail Id" entry
+	     (file "~/org/capture.org") "* NEXT  %?\n  Captured: %U\n  [[gmail:%^{gmail id}][%\\1]]")))
     (setq org-todo-keywords
 	  '((sequence "NEXT(n)" "DPND(x)" "WAIT(w)" "|" "DONE(d)" "CNCL(c)")
 	    (sequence "DFER(r)" "|" "DONE(d)" "CNCL(c)")))
