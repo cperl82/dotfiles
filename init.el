@@ -149,6 +149,18 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 
 (define-key evil-visual-state-map "?" 'cp-evil-search-backward)
 
+; http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp
+(defmacro define-and-bind-text-object (key start-regex end-regex)
+  (let ((inner-name (make-symbol "inner-name"))
+	(outer-name (make-symbol "outer-name")))
+    `(progn
+       (evil-define-text-object ,inner-name (count &optional beg end type)
+	 (evil-select-paren ,start-regex ,end-regex beg end type count nil))
+       (evil-define-text-object ,outer-name (count &optional beg end type)
+	 (evil-select-paren ,start-regex ,end-regex beg end type count t))
+       (define-key evil-inner-text-objects-map ,key (quote ,inner-name))
+       (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
+
 
 ;; paren
 (use-package paren
@@ -402,16 +414,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       desc)))
 
 (defun cp/org-surround (c)
-  (progn
-    (evil-backward-WORD-begin)
-    (insert-char c)
-    (evil-forward-WORD-end)
-    (forward-char)
-    (insert-char c))
-  (when (not (looking-back " "))
-    (if (eq (point) (point-max))
-	(insert-char (string-to-char " "))
-      (forward-char))))
+  (let ((spc (looking-back " ")))
+    (progn
+      (evil-backward-WORD-begin)
+      (insert-char c)
+      (evil-forward-WORD-end)
+      (forward-char)
+      (insert-char c))
+    (when spc (insert-char ?\s))))
 
 (defun cp/org-surround-tilda ()
   (interactive)
@@ -426,8 +436,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (cp/org-surround ?*))
 
 (setq cp/org-helm-username-list-command-alist
-      '((darwin . "dscacheutil -q user | grep -A 3 -B 2 -e uid:\\ 5'[0-9][0-9]' | grep name | cut -d' ' -f2")
-        (linux  . "getent passwd | cut -d: -f1")))
+      '((darwin     . "dscacheutil -q user | awk -F: '$1 ~ /name/ {print $2}'")
+        (gnu/linux  . "getent passwd | cut -d: -f1")))
 
 (setq cp/org-list-all-usernames-value
  (lexical-let ((expire 86400)
@@ -454,6 +464,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (defun cp/org-helm-usernames (username)
   (helm :input username
 	:candidate-number-limit nil
+	:fuzzy-match t
         :sources
         (helm-build-sync-source "usernames" :candidates (cp/org-list-all-usernames))
         :buffer "*helm usernames*"))
@@ -466,8 +477,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       (progn
 	(when partial
 	  (backward-kill-word 1))
-        (insert username)
-        (insert-char ?\s)))))
+        (insert username)))))
 
 (defun cp/org-next-gmail-link ()
   (interactive)
@@ -592,9 +602,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	 (auto-fill-mode)
 	 (setq fill-column 90)
 	 (setq indent-tabs-mode nil)
-	 (push '(?~ . ("~" . "~")) evil-surround-pairs-alist)
-	 (push '(?* . ("*" . "*")) evil-surround-pairs-alist)
-	 (push '(?= . ("=" . "=")) evil-surround-pairs-alist)
+	 (define-and-bind-text-object "~" "\\~" "\\~")
+	 (define-and-bind-text-object "*" "\\*" "\\*")
+	 (define-and-bind-text-object "=" "\\=" "\\=")
 	 (turn-on-evil-surround-mode)
 	 (add-hook
 	  'write-contents-functions
@@ -872,7 +882,7 @@ prefer for `sh-mode'.  It is automatically added to
   :config
   (progn
     (evil-define-key 'normal elisp-slime-nav-mode-map
-      (kbd "C-c l") 'elisp-slime-nav-find-elisp-thing-at-point)
+      (kbd "C-c ;") 'elisp-slime-nav-find-elisp-thing-at-point)
     (evil-define-key 'normal elisp-slime-nav-mode-map
       (kbd "C-c &") 'pop-tag-mark)
     (evil-define-key 'normal elisp-slime-nav-mode-map
