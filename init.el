@@ -481,8 +481,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (defun cp/org-next-gmail-link ()
   (interactive)
-  (let ((matched (re-search-forward "\\[\\[gmail:[[:alnum:]]\\{16\\}\\]" nil t)))
-    (when matched (evil-forward-word-begin))))
+  (progn
+    (push-mark)
+    (let* ((search-fun (lambda () (re-search-forward "\\[\\[gmail:[[:alnum:]]\\{16\\}\\]" nil t)))
+	   (matched (funcall search-fun)))
+      (if matched (evil-forward-word-begin)
+	(progn
+	  (goto-char (point-min))
+	  (funcall search-fun))))))
 
 (use-package org
   :config
