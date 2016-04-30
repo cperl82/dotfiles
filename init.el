@@ -46,7 +46,8 @@
  column-number-mode      t
  split-height-threshold  nil
  make-backup-files       nil
- c-default-style         "linux")
+ c-default-style         "linux"
+ ad-redefinition-action  'accept)
 
 (if (fboundp 'menu-bar-mode)   (menu-bar-mode -1))
 (if (fboundp 'tool-bar-mode)   (tool-bar-mode -1))
@@ -496,10 +497,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-agenda-files '("~/org"))
     (setq org-capture-templates
-	  '(("n" "Next Action" entry (file "~/org/capture.org") "* NEXT  %?\n")
-	    ("N" "Next Action with Gmail Id" entry (file "~/org/capture.org") "* NEXT  %?\n  [[gmail:%^{gmail id}][%\\1]]")
-	    ("p" "Project" entry (file "~/org/capture.org") "*  %?\n")
-	    ("P" "Project with Gmail Id" entry (file "~/org/capture.org") "* %?\n  [[gmail:%^{gmail id}][%\\1]]")))
+	  '(("n" "Next Action" entry (file "~/org/capture.org") "* NEXT  %?\n  %T")
+	    ("N" "Next Action with Gmail Id" entry (file "~/org/capture.org") "* NEXT  %?\n  %T\n  [[gmail:%^{gmail id}][%\\1]]")))
     (setq org-todo-keywords
 	  '((sequence "NEXT(n)" "DPND(x)" "WAIT(w)" "|" "DONE(d)" "CNCL(c)")
 	    (sequence "DFER(r)" "|" "DONE(d)" "CNCL(c)")))
@@ -509,8 +508,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	    ("WAIT" . "#8C5353")
 	    ("CNCL" . "#FFFFFF")
 	    ("DONE" . "#FFFFFF")))
-    (setq org-link-abbrev-alist
-	  '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
+    (setq org-link-abbrev-alist '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
     (setq org-agenda-custom-commands
 	  `(("d" "Deferred (with tickler)    "
 	     ((agenda "" ((org-agenda-span 1)
