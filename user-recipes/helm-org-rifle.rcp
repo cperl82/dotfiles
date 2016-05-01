@@ -1,0 +1,7 @@
+(:name helm-org-rifle
+       :website "https://github.com/alphapapa/helm-org-rifle"
+       :description "Rifle through your Org buffers and acquire your target"
+       :depends (f s dash helm)
+       :type github
+       :branch "master"
+       :checkout "66b85c6ff1c73186ee9248c00f9221e023f18aa8")

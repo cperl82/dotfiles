@@ -16,9 +16,11 @@
    evil
    evil-leader
    evil-surround
+   f
    flx
    haskell-mode
    helm
+   helm-org-rifle
    helm-projectile
    ido-vertical-mode
    lua-mode
@@ -797,6 +799,14 @@ prefer for `sh-mode'.  It is automatically added to
     (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
     (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
     (define-key helm-map (kbd "C-z")   'helm-select-action)))
+
+
+;; helm-org-rifle
+(use-package helm-org-rifle
+  :defer t
+  :config
+  (progn
+    (setq helm-org-rifle-show-path t)))
 
 
 ;; grep
