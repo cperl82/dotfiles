@@ -734,7 +734,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(custom-enabled-themes (quote (zenburn)))
  '(custom-safe-themes
    (quote
-    ("799291799f87afb7a2a55bd63082c58fb58912bee0a6e3d5c1ce0e083ed046c9" default))))
+    ("f34b107e8c8443fe22f189816c134a2cc3b1452c8874d2a4b2e7bb5fe681a10b" default))))
 
 ; 2014-12-06 override zenburn's default isearch highlighting
 (custom-theme-set-faces
