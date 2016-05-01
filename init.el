@@ -715,13 +715,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 					    (count-lines (point-min) (point-max))))))
 			    (concat "%" (number-to-string w) "d"))))))
 
-(defun linum-format-func (line)
+(defun cp/linum-format (line)
   (concat
    (propertize (format linum-format-fmt line) 'face 'linum)
    (propertize " " 'face 'linum)))
 
 (unless window-system
-  (setq linum-format 'linum-format-func))
+  (setq linum-format 'cp/linum-format))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
