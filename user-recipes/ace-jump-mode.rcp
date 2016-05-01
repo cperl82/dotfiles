@@ -1,0 +1,7 @@
+(:name ace-jump-mode
+       :website "https://github.com/winterTTr/ace-jump-mode/wiki"
+       :description "A quick cursor location minor mode for emacs."
+       :type github
+       :pkgname "winterTTr/ace-jump-mode"
+       :branch "master"
+       :checkout "8351e2df4fbbeb2a4003f2fb39f46d33803f3dac")

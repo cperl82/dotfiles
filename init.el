@@ -9,7 +9,8 @@
 
 (el-get
  'sync
- '(color-theme-zenburn
+ '(ace-jump-mode
+   color-theme-zenburn
    diminish
    elisp-slime-nav
    evil
@@ -956,6 +957,11 @@ prefer for `sh-mode'.  It is automatically added to
 	   )
 	 "\\|")
        nil nil  cp/tuareg-mode-forward-sexp-fun))))
+
+
+;; ace-jump
+(use-package ace-jump
+  :defer t)
 
 
 ;; random other things
