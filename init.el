@@ -501,10 +501,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (setq org-agenda-files '("~/org"))
     (setq org-capture-templates
 	  '(("n" "Next Action" entry
-	     (file "~/org/capture.org") "* NEXT  %?\n  Captured: %U"
+	     (file "~/org/capture.org") "* NEXT  %?\n  captured: %U"
 	     :empty-lines 1)
 	    ("N" "Next Action with Gmail Id" entry
-	     (file "~/org/capture.org") "* NEXT  %?\n  Captured: %U\n  [[gmail:%^{gmail id}][%\\1]]"
+	     (file "~/org/capture.org") "* NEXT  %?\n  captured: %U\n  [[gmail:%^{gmail id}][%\\1]]"
 	     :empty-lines 1)))
     (setq org-todo-keywords
 	  '((sequence "NEXT(n)" "DPND(x)" "WAIT(w)" "|" "DONE(d)" "CNCL(c)")
