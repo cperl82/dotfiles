@@ -593,7 +593,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (evil-define-key 'normal org-mode-map        (kbd "C-c a")  'org-agenda)
     (evil-define-key 'normal org-mode-map        (kbd "C-c c")  'org-capture)
     (evil-define-key 'normal org-mode-map        (kbd "<SPC>g") 'cp/org-next-gmail-link)
-    (evil-define-key 'normal org-mode-map        (kbd "<SPC>a") 'ace-jump-mode)
     (evil-define-key 'emacs  org-agenda-mode-map (kbd "j")      'org-agenda-next-line)
     (evil-define-key 'emacs  org-agenda-mode-map (kbd "k")      'org-agenda-previous-line)
     (evil-define-key 'emacs  org-agenda-mode-map (kbd "h")      'left-char)
@@ -972,7 +971,10 @@ prefer for `sh-mode'.  It is automatically added to
 
 ;; ace-jump
 (use-package ace-jump
-  :defer t)
+  :defer t
+  :init
+  (progn
+    (define-key evil-normal-state-map (kbd "<SPC>a") 'ace-jump-mode)))
 
 
 ;; random other things
