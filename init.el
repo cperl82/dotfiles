@@ -422,11 +422,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ;; org
+(defun cp/org-echo-link-at-point ()
+  (let* ((el (org-element-context))
+         (raw-link (plist-get (cadr el) :raw-link)))
+    (message "%s" raw-link)))
+
 (defun cp/org-echo-link-at-point-if-not-darwin ()
-  (when (not (string-equal system-type "darwin"))
-    (let* ((el (org-element-context))
-           (raw-link (plist-get (cadr el) :raw-link)))
-      (message "%s" raw-link))))
+  (when (not (equal system-type 'darwin))
+    (cp/org-echo-link-at-point)))
 
 (defun cp/org-link-auto-desc-from-abbrev-tags (link desc)
   (let ((abbrevs
@@ -465,7 +468,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       '((darwin     . "dscacheutil -q user | awk -F: '$1 ~ /name/ {print $2}'")
         (gnu/linux  . "getent passwd | cut -d: -f1")))
 
-(setq cp/org-list-all-usernames-value
+(setq cp/org-list-all-usernames
  (lexical-let ((expire 86400)
                (cache `(,(current-time) . nil)))
    (lambda ()
@@ -485,7 +488,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
              usernames)))))))
 
 (defun cp/org-list-all-usernames ()
-  (funcall cp/org-list-all-usernames-value))
+  (funcall cp/org-list-all-usernames))
 
 (defun cp/org-helm-usernames (username)
   (helm :input username
@@ -511,10 +514,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (push-mark)
     (let* ((search-fun (lambda () (re-search-forward "\\[\\[gmail:[[:alnum:]]\\{16\\}\\]" nil t)))
 	   (matched (funcall search-fun)))
-      (if matched (evil-forward-word-begin)
+      (if matched
+          (progn
+            (evil-forward-word-begin)
+            (cp/org-echo-link-at-point))
 	(progn
 	  (goto-char (point-min))
-	  (funcall search-fun))))))
+	  (cp/org-next-gmail-link))))))
 
 (use-package org
   :config
@@ -601,8 +607,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (setq org-ctrl-k-protect-subtree t)
     (setq org-cycle-include-plain-lists 'integrate)
     (setq org-hide-leading-stars t)
-    (setq org-make-link-description-function  'cp/org-link-auto-desc-from-abbrev-tags)
-    (add-to-list 'org-open-at-point-functions 'cp/org-echo-link-at-point-if-not-darwin)
+    (setq org-make-link-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
+    (add-to-list 'org-open-at-point-functions #'cp/org-echo-link-at-point-if-not-darwin)
     (evil-define-key 'normal org-mode-map        (kbd "TAB")    'org-cycle)
     (evil-define-key 'normal org-mode-map        (kbd "M-h")    'org-metaleft)
     (evil-define-key 'normal org-mode-map        (kbd "M-l")    'org-metaright)
