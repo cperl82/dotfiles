@@ -1022,9 +1022,6 @@ prefer for `sh-mode'.  It is automatically added to
               (hs-minor-mode)
               (hs-hide-all))))
 
-; 2014-04-30: I'm not sure why the hook works but the `evil-define-key' doesn't (well, I
-; mean it sort of works in that if I enter insert mode and then exit back into normal mode
-; the keybinding will be there, but I want it to just be there right away).
 (add-hook
  'hs-minor-mode-hook
  (lambda ()
