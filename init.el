@@ -402,6 +402,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :config
   (progn
     (use-package dired-x)
+    (put 'dired-find-alternate-file 'disabled nil)
     (evil-define-key 'normal dired-mode-map (kbd "TAB") #'dired-hide-subdir)
     (evil-define-key 'normal dired-mode-map (kbd "n")   #'evil-search-next)
     (evil-define-key 'normal dired-mode-map (kbd "N")   #'evil-search-previous)
