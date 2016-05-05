@@ -44,6 +44,8 @@
 (require 'diminish)
 
 (defun cp/confirm-before-quit (force)
+  "Ask for confirmation before quiting emacs.  If a prefix argument is
+given, it skips the confirmation"
   (interactive "P")
   (let ((f #'save-buffers-kill-terminal))
     (if force
