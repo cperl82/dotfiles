@@ -911,7 +911,7 @@ prefer for `sh-mode'.  It is automatically added to
   :config
   (progn
     (setq projectile-enable-caching t)
-    (setq projectile-switch-project-action 'projectile-dired)
+    (setq projectile-switch-project-action #'helm-projectile)
     (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
     (projectile-global-mode)
 
