@@ -391,7 +391,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (advice-add 'escreen-create-screen :after #'cp/advice/escreen-create-screen)
     (advice-add 'escreen-install       :after #'cp/advice/escreen-install)
     (escreen-install)
-    (define-key escreen-map (kbd "r")    'cp/escreen-rename-screen)))
+    (define-key escreen-map (kbd "r") #'cp/escreen-rename-screen)
+    (define-key escreen-map (kbd "l") #'escreen-goto-next-screen)
+    (define-key escreen-map (kbd "h") #'escreen-goto-prev-screen)))
 
 
 ;; dired
@@ -400,12 +402,22 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :config
   (progn
     (use-package dired-x)
-    (evil-define-key 'normal dired-mode-map (kbd "TAB")  'dired-hide-subdir)
-    (evil-define-key 'normal dired-mode-map (kbd "n")    'evil-search-next)
-    (evil-define-key 'normal dired-mode-map (kbd "N")    'evil-search-previous)
-    (evil-define-key 'normal dired-mode-map (kbd "?")    'evil-search-backward)
-    (evil-define-key 'normal dired-mode-map (kbd "G")    'evil-goto-line)
-    (evil-define-key 'normal dired-mode-map (kbd "gg")   'evil-goto-first-line)
+    (evil-define-key 'normal dired-mode-map (kbd "TAB") #'dired-hide-subdir)
+    (evil-define-key 'normal dired-mode-map (kbd "n")   #'evil-search-next)
+    (evil-define-key 'normal dired-mode-map (kbd "N")   #'evil-search-previous)
+    (evil-define-key 'normal dired-mode-map (kbd "?")   #'evil-search-backward)
+    (evil-define-key 'normal dired-mode-map (kbd "G")   #'evil-goto-line)
+    (evil-define-key 'normal dired-mode-map (kbd "gg")  #'evil-goto-first-line)
+    (evil-define-key 'normal dired-mode-map (kbd "M-k") #'dired-kill-subdir)
+    (evil-define-key 'normal dired-mode-map (kbd "h")   #'dired-up-directory)
+    (evil-define-key 'normal dired-mode-map (kbd "l")   #'dired-find-alternate-file)
+    (evil-define-key 'normal dired-mode-map (kbd "o")   #'dired-sort-toggle-or-edit)
+    (evil-define-key 'normal dired-mode-map (kbd "v")   #'dired-toggle-marks)
+    (evil-define-key 'normal dired-mode-map (kbd "m")   #'dired-mark)
+    (evil-define-key 'normal dired-mode-map (kbd "u")   #'dired-unmark)
+    (evil-define-key 'normal dired-mode-map (kbd "U")   #'dired-unmark-all-marks)
+    (evil-define-key 'normal dired-mode-map (kbd "c")   #'dired-create-directory)
+    (evil-define-key 'normal dired-mode-map (kbd "q")   #'kill-this-buffer)
     (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))))
 
 
