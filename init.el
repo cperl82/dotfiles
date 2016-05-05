@@ -911,17 +911,17 @@ prefer for `sh-mode'.  It is automatically added to
 ;; tuareg-mode 
 (defun cp/tuareg-mode-forward-sexp-fun (arg)
   (let* ((c (current-column))
-	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
+         (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
     (forward-line 1)
     (re-search-forward re)
     (beginning-of-line)
     (back-to-indentation)
     (if (not
-	 (or
-	  (looking-at "in")
-	  (looking-at "end")
-	  (looking-at ";;")
-	  (looking-at "with")))
+         (or
+          (looking-at "in")
+          (looking-at "end")
+          (looking-at ";;")
+          (looking-at "with")))
         (progn
           (forward-line -1)
           (move-end-of-line nil)))))
@@ -929,17 +929,17 @@ prefer for `sh-mode'.  It is automatically added to
 ;; 2016-03-21: Alternative implementation that deals with functions without ;; better
 (defun cp/tuareg-mode-forward-sexp-fun-alt (arg)
   (let* ((c (current-column))
-	 (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
+         (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
     (forward-line 1)
     (re-search-forward re)
     (beginning-of-line)
     (back-to-indentation)
     (if (not
-	 (or
-	  (looking-at "in")
-	  (looking-at "end")
-	  (looking-at ";;")
-	  (looking-at "with")
+         (or
+          (looking-at "in")
+          (looking-at "end")
+          (looking-at ";;")
+          (looking-at "with")
        (eq (point) (buffer-size))))
         (progn
           (re-search-backward "^[:space:]*[^:space:].")
@@ -953,19 +953,19 @@ prefer for `sh-mode'.  It is automatically added to
      'hs-special-modes-alist
      `(tuareg-mode
        ,(mapconcat
-	 'identity
-	 '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
-	   "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
-	   "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
-	   "\\<end\\>\\s-+=\\s-+\\<struct\\>"
-	   "\\<let\\>\\s-+"
-	   "\\<and\\>\\s-+"
-	   "\\<let%\\S-+\\>\\s-+"
-	   "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
-	   "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
-	   "\\<TEST_UNIT\\>\\s-+="
-	   )
-	 "\\|")
+         'identity
+         '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
+           "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
+           "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
+           "\\<end\\>\\s-+=\\s-+\\<struct\\>"
+           "\\<let\\>\\s-+"
+           "\\<and\\>\\s-+"
+           "\\<let%\\S-+\\>\\s-+"
+           "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
+           "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
+           "\\<TEST_UNIT\\>\\s-+="
+           )
+         "\\|")
        nil nil  cp/tuareg-mode-forward-sexp-fun))))
 
 
@@ -978,7 +978,12 @@ prefer for `sh-mode'.  It is automatically added to
 
 
 ;; random other things
-(add-hook 'emacs-lisp-mode-hook (lambda () (hs-minor-mode) (hs-hide-all)))
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (progn
+              (setq indent-tabs-mode nil)
+              (hs-minor-mode)
+              (hs-hide-all))))
 
 ; 2014-04-30: I'm not sure why the hook works but the `evil-define-key' doesn't (well, I
 ; mean it sort of works in that if I enter insert mode and then exit back into normal mode
