@@ -848,6 +848,14 @@ prefer for `sh-mode'.  It is automatically added to
     (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))))
 
 
+;; man
+(use-package man
+  :defer t
+  :config
+  (progn
+    (evil-define-key 'motion Man-mode-map (kbd "TAB") 'hs-toggle-hiding)))
+
+
 ;; projectile
 ; 2016-04-25: Advice for the low level projectile functions that manage the cache so I can
 ; track (roughly) when a project was cached and invalidate the cache if I determine there
@@ -1020,10 +1028,7 @@ prefer for `sh-mode'.  It is automatically added to
 (add-hook
  'hs-minor-mode-hook
  (lambda ()
-   (cond ((eq major-mode 'Man-mode)
-	  (define-key evil-motion-state-local-map (kbd "TAB") 'hs-toggle-hiding))
-	 (t
-	  (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))))
+   (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))
 
 
 ; 2014-04-08: local emacs overrides
