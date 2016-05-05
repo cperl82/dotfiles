@@ -43,6 +43,14 @@
 (require 'use-package)
 (require 'diminish)
 
+(defun cp/confirm-before-quit (force)
+  (interactive "P")
+  (let ((f #'save-buffers-kill-terminal))
+    (if force
+        (funcall f)
+      (when (y-or-n-p "Really quit emacs? ") (funcall f)))))
+(global-set-key (kbd "C-x C-c") #'cp/confirm-before-quit)
+
 ; misc settings
 (setq
  inhibit-startup-message t
