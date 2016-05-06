@@ -870,9 +870,11 @@ prefer for `sh-mode'.  It is automatically added to
 	 (keys-to-delete (set-difference time-keys projectile-keys)))
     (progn
       (dolist (project keys-to-add)
-	(puthash project (current-time) cp/projectile-projects-cache-by-time))
+        (puthash project (current-time) cp/projectile-projects-cache-by-time)
+        (projectile-add-known-project project))
       (dolist (project keys-to-delete)
-	(remhash project cp/projectile-projects-cache-by-time)))))
+        (remhash project cp/projectile-projects-cache-by-time)
+        (projectile-remove-known-project project)))))
 
 (defun cp/advice/projectile-serialize (orig-fun data filename)
   (cond ((eq filename projectile-cache-file) (cp/projectile-projects-cache-by-time-sync data))
