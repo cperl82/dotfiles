@@ -412,7 +412,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (evil-define-key 'normal dired-mode-map (kbd "M-k") #'dired-kill-subdir)
     (evil-define-key 'normal dired-mode-map (kbd "h")   #'dired-up-directory)
     (evil-define-key 'normal dired-mode-map (kbd "l")   #'dired-find-alternate-file)
-    (evil-define-key 'normal dired-mode-map (kbd "o")   #'dired-sort-toggle-or-edit)
+    (evil-define-key 'normal dired-mode-map (kbd "o")   #'dired-display-file)
     (evil-define-key 'normal dired-mode-map (kbd "v")   #'dired-toggle-marks)
     (evil-define-key 'normal dired-mode-map (kbd "m")   #'dired-mark)
     (evil-define-key 'normal dired-mode-map (kbd "u")   #'dired-unmark)
