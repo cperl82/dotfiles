@@ -1014,18 +1014,26 @@ prefer for `sh-mode'.  It is automatically added to
     (define-key evil-normal-state-map (kbd "<SPC>a") 'ace-jump-mode)))
 
 
-;; random other things
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (progn
-              (setq indent-tabs-mode nil)
-              (hs-minor-mode)
-              (hs-hide-all))))
+;; lisp-mode
+(use-package lisp-mode
+  :defer t
+  :config
+  (add-hook 'emacs-lisp-mode-hook
+            (lambda ()
+              (progn
+                (setq indent-tabs-mode nil)
+                (hs-minor-mode)
+                (hs-hide-all)))))
 
-(add-hook
- 'hs-minor-mode-hook
- (lambda ()
-   (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding)))
+
+;; hideshow
+(use-package hideshow
+  :defer t
+  :config
+  (add-hook
+   'hs-minor-mode-hook
+   (lambda ()
+     (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding))))
 
 
 ; 2014-04-08: local emacs overrides
