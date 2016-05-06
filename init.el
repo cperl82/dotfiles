@@ -853,7 +853,7 @@ prefer for `sh-mode'.  It is automatically added to
   :defer t
   :config
   (progn
-    (evil-define-key 'motion Man-mode-map (kbd "TAB") 'hs-toggle-hiding)))
+    (evil-define-key 'motion Man-mode-map (kbd "TAB") #'hs-toggle-hiding)))
 
 
 ;; projectile
@@ -1031,10 +1031,8 @@ prefer for `sh-mode'.  It is automatically added to
 (use-package hideshow
   :defer t
   :config
-  (add-hook
-   'hs-minor-mode-hook
-   (lambda ()
-     (define-key evil-normal-state-local-map (kbd "TAB") 'hs-toggle-hiding))))
+  (progn
+     (evil-define-key 'normal hs-minor-mode-map (kbd "TAB") #'hs-toggle-hiding)))
 
 
 ; 2014-04-08: local emacs overrides
