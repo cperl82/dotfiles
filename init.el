@@ -695,7 +695,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        (define-key evil-normal-state-local-map (kbd "M-p") 'cscope-history-backward-line)
        (define-key evil-normal-state-local-map (kbd "M-k") 'cscope-history-kill-result)))))
 
-(require 's)
 ; 2015-09-11 Ripped wholesale from helm-buffers.el so I could control the formatting of dir
 (defun cp/advice/helm-buffer--show-details
     (orig-fun buf-name prefix help-echo size mode dir face1 face2 proc details type)
