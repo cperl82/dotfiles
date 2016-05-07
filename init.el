@@ -40,9 +40,6 @@
 ; 2014-04-26: Loading other stuff
 (add-to-list 'load-path (concat user-emacs-directory "lisp"))
 
-(require 'use-package)
-(require 'diminish)
-
 (defun cp/confirm-before-quit (force)
   "Ask for confirmation before quiting emacs.  If a prefix argument is
 given, it skips the confirmation"
@@ -128,6 +125,9 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 		(revert-buffer t t t)
 	      (kill-buffer b)))
 	   ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
+
+(require 'use-package)
+(require 'diminish)
 
 ; http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp
 (defmacro define-and-bind-text-object (key start-regex end-regex)
