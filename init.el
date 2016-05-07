@@ -953,7 +953,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ;; tuareg-mode 
-(defun cp/tuareg-mode-forward-sexp-fun (arg)
+(defun cp/tuareg-mode-hs-forward-sexp-fun (arg)
   (let* ((c (current-column))
          (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
     (forward-line 1)
@@ -971,7 +971,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
           (move-end-of-line nil)))))
 
 ;; 2016-03-21: Alternative implementation that deals with functions without ;; better
-(defun cp/tuareg-mode-forward-sexp-fun-alt (arg)
+(defun cp/tuareg-mode-hs-forward-sexp-fun-alt (arg)
   (let* ((c (current-column))
          (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
     (forward-line 1)
@@ -989,28 +989,29 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
           (re-search-backward "^[:space:]*[^:space:].")
           (move-end-of-line nil)))))
 
+(setq cp/tuareg-mode-hs-start-regexp
+      (mapconcat
+       'identity
+       '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
+         "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
+         "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
+         "\\<end\\>\\s-+=\\s-+\\<struct\\>"
+         "\\<let\\>\\s-+"
+         "\\<and\\>\\s-+"
+         "\\<let%\\S-+\\>\\s-+"
+         "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
+         "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
+         "\\<TEST_UNIT\\>\\s-+="
+         )
+       "\\|"))
+
 (use-package tuareg
   :defer t
   :config
   (progn
     (add-to-list
      'hs-special-modes-alist
-     `(tuareg-mode
-       ,(mapconcat
-         'identity
-         '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
-           "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
-           "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
-           "\\<end\\>\\s-+=\\s-+\\<struct\\>"
-           "\\<let\\>\\s-+"
-           "\\<and\\>\\s-+"
-           "\\<let%\\S-+\\>\\s-+"
-           "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
-           "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
-           "\\<TEST_UNIT\\>\\s-+="
-           )
-         "\\|")
-       nil nil  cp/tuareg-mode-forward-sexp-fun))
+     `(tuareg-mode ,cp/tuareg-mode-hs-start-regexp nil nil  cp/tuareg-mode-hs-forward-sexp-fun))
     (add-hook 'tuareg-mode-hook (lambda () (hs-minor-mode)))))
 
 
