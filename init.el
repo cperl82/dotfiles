@@ -244,19 +244,20 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (global-evil-leader-mode)
     (evil-leader/set-leader ",")
     (evil-leader/set-key
-      "f" 'find-file
-      "b" 'switch-to-buffer
-      "s" 'split-window-vertically
-      "v" 'split-window-horizontally
-      "k" 'kill-buffer
-      "K" 'kill-buffer-and-window
-      "o" 'delete-other-windows
-      "x" 'delete-window
-      "e" 'cp/escreen-get-active-screen-names-with-emphasis
-      "H" 'help-command
-      "h" 'cp/evil-highlight-symbol
-      "R" 'revert-buffer-all
-      "E" '(lambda () (interactive) (message (buffer-file-name))))))
+      "f" #'find-file
+      "b" #'switch-to-buffer
+      "s" #'split-window-vertically
+      "v" #'split-window-horizontally
+      "k" #'kill-buffer
+      "K" #'kill-buffer-and-window
+      "o" #'delete-other-windows
+      "x" #'delete-window
+      "e" #'cp/escreen-get-active-screen-names-with-emphasis
+      "H" #'help-command
+      "h" #'cp/evil-highlight-symbol
+      "R" #'revert-buffer-all
+      "j" #'dired-jump
+      "E" #'(lambda () (interactive) (message (buffer-file-name))))))
 
 
 ;; evil-surround
@@ -690,16 +691,21 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (progn
     (use-package dired-x)
     (put 'dired-find-alternate-file 'disabled nil)
-    (evil-define-key 'normal dired-mode-map (kbd "TAB") #'dired-hide-subdir)
     (evil-define-key 'normal dired-mode-map (kbd "n")   #'evil-search-next)
     (evil-define-key 'normal dired-mode-map (kbd "N")   #'evil-search-previous)
     (evil-define-key 'normal dired-mode-map (kbd "?")   #'evil-search-backward)
     (evil-define-key 'normal dired-mode-map (kbd "G")   #'evil-goto-line)
     (evil-define-key 'normal dired-mode-map (kbd "gg")  #'evil-goto-first-line)
     (evil-define-key 'normal dired-mode-map (kbd "M-k") #'dired-kill-subdir)
+    (evil-define-key 'normal dired-mode-map (kbd "j")   #'dired-next-line)
+    (evil-define-key 'normal dired-mode-map (kbd "k")   #'dired-previous-line)
     (evil-define-key 'normal dired-mode-map (kbd "h")   #'dired-up-directory)
     (evil-define-key 'normal dired-mode-map (kbd "l")   #'dired-find-alternate-file)
-    (evil-define-key 'normal dired-mode-map (kbd "o")   #'dired-display-file)
+    (evil-define-key 'normal dired-mode-map (kbd "J")   #'dired-next-subdir)
+    (evil-define-key 'normal dired-mode-map (kbd "K")   #'dired-prev-subdir)
+    (evil-define-key 'normal dired-mode-map (kbd "TAB") #'dired-display-file)
+    ;; (evil-define-key 'normal dired-mode-map (kbd "TAB") #'dired-hide-subdir)
+    (evil-define-key 'normal dired-mode-map (kbd "o")   #'dired-find-file-other-window)
     (evil-define-key 'normal dired-mode-map (kbd "v")   #'dired-toggle-marks)
     (evil-define-key 'normal dired-mode-map (kbd "m")   #'dired-mark)
     (evil-define-key 'normal dired-mode-map (kbd "u")   #'dired-unmark)
