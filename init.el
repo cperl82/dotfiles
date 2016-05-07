@@ -640,50 +640,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (define-key evil-motion-state-map (kbd "C-M-l") 'buf-move-right)))
 
 
-;; man
-(defun cp/man-forward-sexp-fun (arg)
-    (let ((p (point)))
-      (forward-line 1)
-      (re-search-forward
-       (concat Man-heading-regexp "\\|" "\\'" "\\|" "^[^[:space:]]"))
-      (beginning-of-line)
-      (forward-line -1)
-      (if (equal p (point)) (end-of-line))))
-
-(use-package man
-  :defer t
-  :config
-  (progn
-    (add-to-list
-     'hs-special-modes-alist
-     `(Man-mode
-       ,Man-heading-regexp
-       nil
-       nil
-       cp/man-forward-sexp-fun))
-    (add-hook
-     'Man-mode-hook
-     (lambda ()
-       (setq-local comment-start "$^")
-       (setq-local comment-end   "$^")
-       (hs-minor-mode 1)
-       (hs-hide-all)
-       (goto-char (point-min))
-       (re-search-forward "NAME" nil t)
-       (hs-show-block)
-       (re-search-forward "SYNOPSIS" nil t)
-       (hs-show-block)
-       (re-search-forward "DESCRIPTION" nil t)
-       (hs-show-block)
-       (font-lock-add-keywords
-	nil	     ; Copied from /usr/share/vim/vim74/syntax/man.vim
-	`((,Man-heading-regexp          . font-lock-comment-face)
-	  ("^\\s-*[+-][a-zA-Z0-9]\\S-*" . font-lock-function-name-face)
-	  ("^\\s-*--[a-zA-Z0-9-]\\S-*"  . font-lock-function-name-face))
-	'set)
-       (font-lock-mode 1)))))
-
-
 ;; dired
 (use-package dired
   :defer t
@@ -739,65 +695,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        (define-key evil-normal-state-local-map (kbd "M-p") 'cscope-history-backward-line)
        (define-key evil-normal-state-local-map (kbd "M-k") 'cscope-history-kill-result)))))
 
-; 2014-04-04: Holy moly its effort to get line numbers like vim!
-; http://www.emacswiki.org/emacs/LineNumbers#toc6
-(unless window-system
-  (add-hook 'linum-before-numbering-hook
-	    (lambda ()
-	      (setq-local linum-format-fmt
-			  (let ((w (length (number-to-string
-					    (count-lines (point-min) (point-max))))))
-			    (concat "%" (number-to-string w) "d"))))))
-
-(defun cp/linum-format (line)
-  (concat
-   (propertize (format linum-format-fmt line) 'face 'linum)
-   (propertize " " 'face 'linum)))
-
-(unless window-system
-  (setq linum-format 'cp/linum-format))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (zenburn)))
- '(custom-safe-themes
-   (quote
-    ("f34b107e8c8443fe22f189816c134a2cc3b1452c8874d2a4b2e7bb5fe681a10b" default))))
-
-; 2014-12-06 override zenburn's default isearch highlighting
-(custom-theme-set-faces
- `zenburn
- `(isearch                  ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F"))))
- `(lazy-highlight           ((t (:foreground ,"#383838" :weight bold :background ,"#DFAF8F"))))
- `(diff-added               ((t (:foreground, "#7F9F7F" :weight bold))))
- `(diff-removed             ((t (:foreground, "#CC9393"))))
- '(dired-perm-write         ((t nil)))
- '(flx-highlight-face       ((t (:foreground "#CC9393" :weight normal))))
- '(helm-buffer-directory    ((t (:foreground "color-247"))))
- '(helm-ff-dotted-directory ((t (:foreground "color-247"))))
- '(helm-match               ((t (:foreground "gold1" :weight normal)))))
-
-
-;; sh-script
-; 2014-12-07 Trying to make sh-mode indentation better
-(defun cp/sh-switch-to-indentation (n)
-  (interactive "p")
-  (progn
-    (setq sh-basic-offset n)
-    (setq sh-indentation n)))
-
-(use-package sh-script
-  :defer t
-  :config
-  (progn
-    (add-hook 'sh-mode-hook
-              (lambda ()
-                (cp/sh-switch-to-indentation 8)
-                (electric-indent-mode nil)))))
-
 (require 's)
 ; 2015-09-11 Ripped wholesale from helm-buffers.el so I could control the formatting of dir
 (defun cp/advice/helm-buffer--show-details
@@ -839,25 +736,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :config
   (progn
     (setq helm-org-rifle-show-path t)))
-
-
-;; grep
-(use-package grep
-  :defer t
-  :config
-  (progn
-    (setq grep-find-use-xargs 'gnu)
-    (evil-define-key 'normal grep-mode-map (kbd "TAB") 'compilation-display-error)
-    (add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
-    (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))))
-
-
-;; man
-(use-package man
-  :defer t
-  :config
-  (progn
-    (evil-define-key 'motion Man-mode-map (kbd "TAB") #'hs-toggle-hiding)))
 
 
 ;; projectile
@@ -1043,6 +921,124 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (add-hook 'hs-minor-mode-hook
               (lambda ()
                 (evil-local-set-key 'normal (kbd "TAB") #'hs-toggle-hiding)))))
+
+
+;; sh-script
+; 2014-12-07 Trying to make sh-mode indentation better
+(defun cp/sh-switch-to-indentation (n)
+  (interactive "p")
+  (progn
+    (setq sh-basic-offset n)
+    (setq sh-indentation n)))
+
+(use-package sh-script
+  :defer t
+  :config
+  (progn
+    (add-hook 'sh-mode-hook
+              (lambda ()
+                (cp/sh-switch-to-indentation 8)
+                (electric-indent-mode nil)))))
+
+
+;; grep
+(use-package grep
+  :defer t
+  :config
+  (progn
+    (setq grep-find-use-xargs 'gnu)
+    (evil-define-key 'normal grep-mode-map (kbd "TAB") 'compilation-display-error)
+    (add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
+    (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))))
+
+
+;; man
+(defun cp/man-forward-sexp-fun (arg)
+    (let ((p (point)))
+      (forward-line 1)
+      (re-search-forward
+       (concat Man-heading-regexp "\\|" "\\'" "\\|" "^[^[:space:]]"))
+      (beginning-of-line)
+      (forward-line -1)
+      (if (equal p (point)) (end-of-line))))
+
+(use-package man
+  :defer t
+  :config
+  (progn
+    (evil-define-key 'motion Man-mode-map (kbd "TAB") #'hs-toggle-hiding)
+    (add-to-list
+     'hs-special-modes-alist
+     `(Man-mode
+       ,Man-heading-regexp
+       nil
+       nil
+       cp/man-forward-sexp-fun))
+    (add-hook
+     'Man-mode-hook
+     (lambda ()
+       (setq-local comment-start "$^")
+       (setq-local comment-end   "$^")
+       (hs-minor-mode 1)
+       (hs-hide-all)
+       (goto-char (point-min))
+       (re-search-forward "NAME" nil t)
+       (hs-show-block)
+       (re-search-forward "SYNOPSIS" nil t)
+       (hs-show-block)
+       (re-search-forward "DESCRIPTION" nil t)
+       (hs-show-block)
+       (font-lock-add-keywords
+	nil	     ; Copied from /usr/share/vim/vim74/syntax/man.vim
+	`((,Man-heading-regexp          . font-lock-comment-face)
+	  ("^\\s-*[+-][a-zA-Z0-9]\\S-*" . font-lock-function-name-face)
+	  ("^\\s-*--[a-zA-Z0-9-]\\S-*"  . font-lock-function-name-face))
+	'set)
+       (font-lock-mode 1)))))
+
+
+;; Random other things
+
+; 2014-04-04: Holy moly its effort to get line numbers like vim!
+; http://www.emacswiki.org/emacs/LineNumbers#toc6
+(unless window-system
+  (add-hook 'linum-before-numbering-hook
+	    (lambda ()
+	      (setq-local linum-format-fmt
+			  (let ((w (length (number-to-string
+					    (count-lines (point-min) (point-max))))))
+			    (concat "%" (number-to-string w) "d"))))))
+
+(defun cp/linum-format (line)
+  (concat
+   (propertize (format linum-format-fmt line) 'face 'linum)
+   (propertize " " 'face 'linum)))
+
+(unless window-system
+  (setq linum-format 'cp/linum-format))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (zenburn)))
+ '(custom-safe-themes
+   (quote
+    ("f34b107e8c8443fe22f189816c134a2cc3b1452c8874d2a4b2e7bb5fe681a10b" default))))
+
+; 2014-12-06 override zenburn's default isearch highlighting
+(custom-theme-set-faces
+ `zenburn
+ `(isearch                  ((t (:foreground, "#383838" :weight bold :background ,"#DFAF8F"))))
+ `(lazy-highlight           ((t (:foreground, "#383838" :weight bold :background ,"#DFAF8F"))))
+ `(diff-added               ((t (:foreground, "#7F9F7F" :weight bold))))
+ `(diff-removed             ((t (:foreground, "#CC9393"))))
+ '(dired-perm-write         ((t nil)))
+ '(flx-highlight-face       ((t (:foreground "#CC9393" :weight normal))))
+ '(helm-buffer-directory    ((t (:foreground "color-247"))))
+ '(helm-ff-dotted-directory ((t (:foreground "color-247"))))
+ '(helm-match               ((t (:foreground "gold1" :weight normal)))))
 
 
 ; 2014-04-08: local emacs overrides
