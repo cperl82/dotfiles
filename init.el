@@ -129,40 +129,6 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 	      (kill-buffer b)))
 	   ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
 
-; 2014-03-28: Functions to support selecting something in Visual mode
-; and then automatically start searching for it by pressing "/" or "?"
-(defun cp-evil-highlight-symbol ()
-  "Do everything that `*' would do, but don't actually jump to the next match"
-  (interactive)
-  (let* ((string (evil-find-symbol t))
-	 (case-fold-search
-	  (unless (and search-upper-case
-		       (not (isearch-no-upper-case-p string nil)))
-	    case-fold-search)))
-    (setq isearch-regexp t)
-    (setq isearch-forward t)
-    (setq string (format "\\_<%s\\_>" (regexp-quote string)))
-    (setq isearch-string string)
-    (isearch-update-ring string t)
-    (setq string (evil-search-message string t))
-    (evil-flash-search-pattern string t)))
-
-(evil-define-operator cp-evil-search (beg end forward)
-  (let* ((search-string (buffer-substring-no-properties beg end))
-	 (quoted-string (regexp-quote search-string)))
-    (setq isearch-forward forward)
-    (evil-search quoted-string forward t)))
-
-(evil-define-operator cp-evil-search-forward (beg end type)
-  (cp-evil-search beg end t))
-
-(evil-define-operator cp-evil-search-backward (beg end type)
-  (cp-evil-search beg end nil))
-
-(define-key evil-visual-state-map "/" 'cp-evil-search-forward)
-
-(define-key evil-visual-state-map "?" 'cp-evil-search-backward)
-
 ; http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp
 (defmacro define-and-bind-text-object (key start-regex end-regex)
   (let ((inner-name (make-symbol "inner-name"))
@@ -213,6 +179,36 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
     (abort-recursive-edit)))
 
+; 2014-03-28: Functions to support selecting something in Visual mode
+; and then automatically start searching for it by pressing "/" or "?"
+(defun cp/evil-highlight-symbol ()
+  "Do everything that `*' would do, but don't actually jump to the next match"
+  (interactive)
+  (let* ((string (evil-find-symbol t))
+	 (case-fold-search
+	  (unless (and search-upper-case
+		       (not (isearch-no-upper-case-p string nil)))
+	    case-fold-search)))
+    (setq isearch-regexp t)
+    (setq isearch-forward t)
+    (setq string (format "\\_<%s\\_>" (regexp-quote string)))
+    (setq isearch-string string)
+    (isearch-update-ring string t)
+    (setq string (evil-search-message string t))
+    (evil-flash-search-pattern string t)))
+
+(evil-define-operator cp/evil-search (beg end forward)
+  (let* ((search-string (buffer-substring-no-properties beg end))
+	 (quoted-string (regexp-quote search-string)))
+    (setq isearch-forward forward)
+    (evil-search quoted-string forward t)))
+
+(evil-define-operator cp/evil-search-forward (beg end type)
+  (cp/evil-search beg end t))
+
+(evil-define-operator cp/evil-search-backward (beg end type)
+  (cp/evil-search beg end nil))
+
 (use-package evil
   :diminish (undo-tree-mode . "UT")
   :init
@@ -228,15 +224,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
     (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
     (define-key minibuffer-local-isearch-map    [escape] 'minibuffer-keyboard-quit)
-
-    (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-    (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-    (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-    (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-    (define-key evil-motion-state-map (kbd "C-j") 'evil-window-down)
-    (define-key evil-motion-state-map (kbd "C-k") 'evil-window-up)
-    (define-key evil-motion-state-map (kbd "C-h") 'evil-window-left)
-    (define-key evil-motion-state-map (kbd "C-l") 'evil-window-right)
+    (define-key evil-normal-state-map (kbd "C-j") #'evil-window-down)
+    (define-key evil-normal-state-map (kbd "C-k") #'evil-window-up)
+    (define-key evil-normal-state-map (kbd "C-h") #'evil-window-left)
+    (define-key evil-normal-state-map (kbd "C-l") #'evil-window-right)
+    (define-key evil-motion-state-map (kbd "C-j") #'evil-window-down)
+    (define-key evil-motion-state-map (kbd "C-k") #'evil-window-up)
+    (define-key evil-motion-state-map (kbd "C-h") #'evil-window-left)
+    (define-key evil-motion-state-map (kbd "C-l") #'evil-window-right)
+    (define-key evil-visual-state-map (kbd "/")   #'cp/evil-search-forward)
+    (define-key evil-visual-state-map (kbd "?")   #'cp/evil-search-backward)
     (evil-mode 1)))
 
 
@@ -257,7 +254,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       "x" 'delete-window
       "e" 'cp/escreen-get-active-screen-names-with-emphasis
       "H" 'help-command
-      "h" 'cp-evil-highlight-symbol
+      "h" 'cp/evil-highlight-symbol
       "R" 'revert-buffer-all
       "E" '(lambda () (interactive) (message (buffer-file-name))))))
 
@@ -394,32 +391,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (define-key escreen-map (kbd "r") #'cp/escreen-rename-screen)
     (define-key escreen-map (kbd "l") #'escreen-goto-next-screen)
     (define-key escreen-map (kbd "h") #'escreen-goto-prev-screen)))
-
-
-;; dired
-(use-package dired
-  :defer t
-  :config
-  (progn
-    (use-package dired-x)
-    (put 'dired-find-alternate-file 'disabled nil)
-    (evil-define-key 'normal dired-mode-map (kbd "TAB") #'dired-hide-subdir)
-    (evil-define-key 'normal dired-mode-map (kbd "n")   #'evil-search-next)
-    (evil-define-key 'normal dired-mode-map (kbd "N")   #'evil-search-previous)
-    (evil-define-key 'normal dired-mode-map (kbd "?")   #'evil-search-backward)
-    (evil-define-key 'normal dired-mode-map (kbd "G")   #'evil-goto-line)
-    (evil-define-key 'normal dired-mode-map (kbd "gg")  #'evil-goto-first-line)
-    (evil-define-key 'normal dired-mode-map (kbd "M-k") #'dired-kill-subdir)
-    (evil-define-key 'normal dired-mode-map (kbd "h")   #'dired-up-directory)
-    (evil-define-key 'normal dired-mode-map (kbd "l")   #'dired-find-alternate-file)
-    (evil-define-key 'normal dired-mode-map (kbd "o")   #'dired-display-file)
-    (evil-define-key 'normal dired-mode-map (kbd "v")   #'dired-toggle-marks)
-    (evil-define-key 'normal dired-mode-map (kbd "m")   #'dired-mark)
-    (evil-define-key 'normal dired-mode-map (kbd "u")   #'dired-unmark)
-    (evil-define-key 'normal dired-mode-map (kbd "U")   #'dired-unmark-all-marks)
-    (evil-define-key 'normal dired-mode-map (kbd "c")   #'dired-create-directory)
-    (evil-define-key 'normal dired-mode-map (kbd "q")   #'kill-this-buffer)
-    (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))))
 
 
 ;; org
@@ -712,6 +683,32 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        (font-lock-mode 1)))))
 
 
+;; dired
+(use-package dired
+  :defer t
+  :config
+  (progn
+    (use-package dired-x)
+    (put 'dired-find-alternate-file 'disabled nil)
+    (evil-define-key 'normal dired-mode-map (kbd "TAB") #'dired-hide-subdir)
+    (evil-define-key 'normal dired-mode-map (kbd "n")   #'evil-search-next)
+    (evil-define-key 'normal dired-mode-map (kbd "N")   #'evil-search-previous)
+    (evil-define-key 'normal dired-mode-map (kbd "?")   #'evil-search-backward)
+    (evil-define-key 'normal dired-mode-map (kbd "G")   #'evil-goto-line)
+    (evil-define-key 'normal dired-mode-map (kbd "gg")  #'evil-goto-first-line)
+    (evil-define-key 'normal dired-mode-map (kbd "M-k") #'dired-kill-subdir)
+    (evil-define-key 'normal dired-mode-map (kbd "h")   #'dired-up-directory)
+    (evil-define-key 'normal dired-mode-map (kbd "l")   #'dired-find-alternate-file)
+    (evil-define-key 'normal dired-mode-map (kbd "o")   #'dired-display-file)
+    (evil-define-key 'normal dired-mode-map (kbd "v")   #'dired-toggle-marks)
+    (evil-define-key 'normal dired-mode-map (kbd "m")   #'dired-mark)
+    (evil-define-key 'normal dired-mode-map (kbd "u")   #'dired-unmark)
+    (evil-define-key 'normal dired-mode-map (kbd "U")   #'dired-unmark-all-marks)
+    (evil-define-key 'normal dired-mode-map (kbd "c")   #'dired-create-directory)
+    (evil-define-key 'normal dired-mode-map (kbd "q")   #'kill-this-buffer)
+    (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))))
+
+
 ;; xcscope
 (use-package xcscope
   :defer t
@@ -777,22 +774,23 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(helm-ff-dotted-directory ((t (:foreground "color-247"))))
  '(helm-match               ((t (:foreground "gold1" :weight normal)))))
 
+
+;; sh-script
 ; 2014-12-07 Trying to make sh-mode indentation better
-; Copied from http://keramida.wordpress.com/2008/08/08/tweaking-shell-script-indentation-in-gnu-emacs
-(defun cp/setup-sh-mode ()
-    "My own personal preferences for `sh-mode'.
+(defun cp/sh-switch-to-indentation (n)
+  (interactive "p")
+  (progn
+    (setq sh-basic-offset n)
+    (setq sh-indentation n)))
 
-This is a custom function that sets up the parameters I usually
-prefer for `sh-mode'.  It is automatically added to
-`sh-mode-hook', but is can also be called interactively."
-    (interactive)
-    (progn
-      (setq sh-basic-offset 8
-	    sh-indentation 8)
-      ; TODO: Do you want to enable electric-indent-mode for everything?
-      (electric-indent-mode nil)))
-
-(add-hook 'sh-mode-hook 'cp/setup-sh-mode)
+(use-package sh-script
+  :defer t
+  :config
+  (progn
+    (add-hook 'sh-mode-hook
+              (lambda ()
+                (cp/sh-switch-to-indentation 8)
+                (electric-indent-mode nil)))))
 
 (require 's)
 ; 2015-09-11 Ripped wholesale from helm-buffers.el so I could control the formatting of dir
@@ -1034,7 +1032,9 @@ prefer for `sh-mode'.  It is automatically added to
   :defer t
   :config
   (progn
-     (evil-define-key 'normal hs-minor-mode-map (kbd "TAB") #'hs-toggle-hiding)))
+    (add-hook 'hs-minor-mode-hook
+              (lambda ()
+                (evil-local-set-key 'normal (kbd "TAB") #'hs-toggle-hiding)))))
 
 
 ; 2014-04-08: local emacs overrides
