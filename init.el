@@ -1010,7 +1010,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
            "\\<TEST_UNIT\\>\\s-+="
            )
          "\\|")
-       nil nil  cp/tuareg-mode-forward-sexp-fun))))
+       nil nil  cp/tuareg-mode-forward-sexp-fun))
+    (add-hook 'tuareg-mode-hook (lambda () (hs-minor-mode)))))
 
 
 ;; ace-jump
