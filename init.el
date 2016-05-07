@@ -659,8 +659,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (evil-define-key 'normal dired-mode-map (kbd "l")   #'dired-find-alternate-file)
     (evil-define-key 'normal dired-mode-map (kbd "J")   #'dired-next-subdir)
     (evil-define-key 'normal dired-mode-map (kbd "K")   #'dired-prev-subdir)
-    (evil-define-key 'normal dired-mode-map (kbd "TAB") #'dired-display-file)
-    ;; (evil-define-key 'normal dired-mode-map (kbd "TAB") #'dired-hide-subdir)
+    (evil-define-key 'normal dired-mode-map (kbd "SPC") #'dired-display-file)
+    (evil-define-key 'normal dired-mode-map (kbd "TAB") #'dired-hide-subdir)
     (evil-define-key 'normal dired-mode-map (kbd "o")   #'dired-find-file-other-window)
     (evil-define-key 'normal dired-mode-map (kbd "v")   #'dired-toggle-marks)
     (evil-define-key 'normal dired-mode-map (kbd "m")   #'dired-mark)
@@ -687,13 +687,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 		     (cscope-line-number-face font-lock-string-face)
 		     (cscope-file-face        font-lock-doc-face)
 		     (cscope-function-face    font-lock-function-name-face)))
-       (define-key evil-normal-state-local-map (kbd "RET") 'cscope-select-entry-inplace)
-       (define-key evil-normal-state-local-map (kbd "SPC") 'cscope-show-entry-other-window)
-       (define-key evil-normal-state-local-map (kbd "TAB") 'cscope-select-entry-other-window)
-       (define-key evil-normal-state-local-map (kbd   "q") 'cscope-bury-buffer)
-       (define-key evil-normal-state-local-map (kbd "M-n") 'cscope-history-forward-line)
-       (define-key evil-normal-state-local-map (kbd "M-p") 'cscope-history-backward-line)
-       (define-key evil-normal-state-local-map (kbd "M-k") 'cscope-history-kill-result)))))
+       (define-key evil-normal-state-local-map (kbd "RET") #'cscope-select-entry-inplace)
+       (define-key evil-normal-state-local-map (kbd "SPC") #'cscope-show-entry-other-window)
+       (define-key evil-normal-state-local-map (kbd   "o") #'cscope-select-entry-other-window)
+       (define-key evil-normal-state-local-map (kbd   "q") #'cscope-bury-buffer)
+       (define-key evil-normal-state-local-map (kbd "M-n") #'cscope-history-forward-line)
+       (define-key evil-normal-state-local-map (kbd "M-p") #'cscope-history-backward-line)
+       (define-key evil-normal-state-local-map (kbd "M-k") #'cscope-history-kill-result)))))
 
 ; 2015-09-11 Ripped wholesale from helm-buffers.el so I could control the formatting of dir
 (defun cp/advice/helm-buffer--show-details
@@ -946,7 +946,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :config
   (progn
     (setq grep-find-use-xargs 'gnu)
-    (evil-define-key 'normal grep-mode-map (kbd "TAB") 'compilation-display-error)
+    (evil-define-key 'normal grep-mode-map (kbd "SPC") #'compilation-display-error)
+    (evil-define-key 'normal grep-mode-map (kbd   "j") #'compilation-next-error)
+    (evil-define-key 'normal grep-mode-map (kbd   "p") #'compilation-next-error)
     (add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
     (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))))
 
