@@ -817,6 +817,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ;; elisp-slime-nav
 (use-package elisp-slime-nav
+  :diminish (elisp-slime-nav-mode . "SN")
   :init
   (add-hook 'emacs-lisp-mode-hook 'turn-on-elisp-slime-nav-mode)
   :config
