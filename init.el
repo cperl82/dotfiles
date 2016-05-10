@@ -609,7 +609,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	  'write-contents-functions
 	  (lambda ()
 	    (save-excursion
-	      (delete-trailing-whitespace)))))))))
+	      (delete-trailing-whitespace)))))))
+    (add-hook
+     'org-src-mode-hook
+     (lambda ()
+       (setq electric-indent-mode nil)))))
 
 
 ;; buffer-move
