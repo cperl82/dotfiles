@@ -44,10 +44,7 @@
   "Ask for confirmation before quiting emacs.  If a prefix argument is
 given, it skips the confirmation"
   (interactive "P")
-  (let ((f #'save-buffers-kill-terminal))
-    (if force
-        (funcall f)
-      (when (y-or-n-p "Really quit emacs? ") (funcall f)))))
+  (when (or force (y-or-n-p "Really quit emacs? ")) (save-buffers-kill-terminal)))
 (global-set-key (kbd "C-x C-c") #'cp/confirm-before-quit)
 
 ; misc settings
