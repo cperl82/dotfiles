@@ -481,6 +481,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	  (backward-kill-word 1))
         (insert username)))))
 
+(defun cp/advice/org-next-link (&optional search-backward)
+  (cp/org-echo-link-at-point))
+
+(defun cp/advice/org-previous-link ()
+  (cp/org-echo-link-at-point))
+
 (use-package org
   :config
   (progn
@@ -594,6 +600,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (evil-define-key 'insert org-mode-map        (kbd "M-v")     #'cp/org-surround-equal)
     (evil-define-key 'insert org-mode-map        (kbd "M-b")     #'cp/org-surround-star)
     (evil-define-key 'insert org-mode-map        (kbd "M-u")     #'cp/org-helm-complete-user-name-at-point)
+    (advice-add 'org-next-link     :after #'cp/advice/org-next-link)
+    (advice-add 'org-previous-link :after #'cp/advice/org-previous-link)
     (add-hook
      'org-mode-hook
      (lambda ()
