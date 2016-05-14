@@ -591,6 +591,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (evil-define-key 'emacs  org-agenda-mode-map (kbd " ")       #'org-agenda-cycle-show)
     (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-c a")   #'org-agenda)
     (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-c c")   #'org-capture)
+    (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-j")     #'evil-window-down)
+    (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-k")     #'evil-window-up)
     (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-h")     #'evil-window-left)
     (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-l")     #'evil-window-right)
     (evil-define-key 'insert org-mode-map        (kbd "M-.")     #'cp/org-surround-tilda)
