@@ -809,8 +809,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       (setq helm-projectile-fuzzy-match nil)
       :config
       (progn
-        (setq projectile-switch-project-action #'helm-projectile)
-        (helm-projectile-on)))))
+        (helm-projectile-on)
+        (setq projectile-switch-project-action #'helm-projectile)))))
 
 
 ;; elisp-slime-nav
