@@ -488,28 +488,35 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :config
   (progn
     ; http://emacs.stackexchange.com/questions/9585/org-how-to-sort-headings-by-todo-and-then-by-priority
-    (require 'cl)
     (require 'dash)
 
-    (defun cp/todo-to-int (todo n-finished-states)
-      (first (-non-nil
-              (mapcar (lambda (keywords)
-                        (let* ((todo-seq-orig
-                                (-map (lambda (x) (first (split-string x "(")))
-                                      (rest keywords)))
-                               (todo-seq-mod (-rotate n-finished-states todo-seq-orig)))
-                          (cl-position-if (lambda (x) (string= x todo)) todo-seq-mod)))
-                      org-todo-keywords))))
+    (defun cp/todo-to-int (todo)
+      (car
+       (-non-nil
+        (mapcar
+         (lambda (keywords)
+           (let* ((finished-states
+                   (cdr (-drop-while (lambda (x) (not (string= x "|"))) keywords)))
+                  (n-finished-states (length finished-states))
+                  (n-finished-states (if (eq n-finished-states 0) 1 n-finished-states))
+                  (todo-seq-orig
+                   (-map (lambda (x) (car (split-string x "(")))
+                         (cdr keywords)))
+                  (todo-seq-mod (-rotate n-finished-states todo-seq-orig)))
+             (-find-index (lambda (x) (string= x todo)) todo-seq-mod)))
+         org-todo-keywords))))
 
     (defun cp/non-todo-to-int (max todo)
       (let ((item (replace-regexp-in-string "^\\** *" "" todo)))
-        (if (string= item "Notes") -1 max)))
+        (if (string-match "\\bNotes\\b" item) -1 max)))
 
     (defun cp/org-sort-key ()
       (let* ((todo-max (apply #'max (mapcar #'length org-todo-keywords)))
              (todo (org-entry-get (point) "TODO"))
              (todo-int
-              (if todo (cp/todo-to-int todo 2) (cp/non-todo-to-int todo-max (org-entry-get (point) "ITEM"))))
+              (if todo
+                  (cp/todo-to-int todo)
+                (cp/non-todo-to-int todo-max (org-entry-get (point) "ITEM"))))
              (priority (org-entry-get (point) "PRIORITY"))
              (priority-int (if priority (string-to-char priority) org-default-priority)))
         (format "%03d %03d" todo-int priority-int)))
