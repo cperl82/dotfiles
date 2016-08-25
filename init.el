@@ -125,6 +125,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 
 (require 'use-package)
 (require 'diminish)
+(require 'dash)
 
 ; http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp
 (defmacro define-and-bind-text-object (key start-regex end-regex)
@@ -488,8 +489,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :config
   (progn
     ; http://emacs.stackexchange.com/questions/9585/org-how-to-sort-headings-by-todo-and-then-by-priority
-    (require 'dash)
-
     (defun cp/todo-to-int (todo)
       (car
        (-non-nil
@@ -781,9 +780,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (defun cp/projectile-projects-cache-by-time-sync (data)
   (let* ((projectile-keys (projectile-hash-keys data))
-	 (time-keys (projectile-hash-keys cp/projectile-projects-cache-by-time))
-	 (keys-to-add (set-difference projectile-keys time-keys))
-	 (keys-to-delete (set-difference time-keys projectile-keys)))
+	 (time-keys       (projectile-hash-keys cp/projectile-projects-cache-by-time))
+	 (keys-to-add     (-difference projectile-keys time-keys))
+	 (keys-to-delete  (-difference time-keys projectile-keys)))
     (progn
       (dolist (project keys-to-add)
         (puthash project (current-time) cp/projectile-projects-cache-by-time)
