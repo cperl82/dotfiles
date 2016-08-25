@@ -2,5 +2,5 @@
        :description "Project navigation and management library for Emacs."
        :type github
        :pkgname "bbatsov/projectile"
-       :checkout "bd68bf45bad027d2f1c32ca88da9e7a01b67664a"
+       :checkout "60b696ae99ac9099e0a415ffe3a3724da9ab55b6"
        :depends (dash pkg-info))
