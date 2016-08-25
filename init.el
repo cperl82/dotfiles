@@ -907,7 +907,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq cp/tuareg-mode-hs-start-regexp
       (mapconcat
        'identity
-       '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
+       '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+"
          "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
          "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
          "\\<end\\>\\s-+=\\s-+\\<struct\\>"
