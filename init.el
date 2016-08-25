@@ -798,7 +798,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (defun cp/advice/projectile-unserialize (orig-fun filename)
   (cond ((eq filename projectile-cache-file) nil)
-        ((eq filename projectile-known-projects-file) (projectile-hash-keys cp/projectile-projects-cache-by-time))
+        ((eq filename projectile-known-projects-file)
+         (-map
+          #'abbreviate-file-name
+          (projectile-hash-keys cp/projectile-projects-cache-by-time)))
         (t (apply orig-fun filename ()))))
 
 (defun cp/advice/projectile-maybe-invalidate-cache (orig-fun force)
