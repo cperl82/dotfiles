@@ -1052,7 +1052,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (add-hook 'emacs-lisp-mode-hook #'cp/enable-evil-smartparens))
   :config
   (progn
-    (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)))
+    (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
+    (sp-local-pair 'emacs-lisp-mode "`" nil :actions nil)))
 
 
 ;; Random other things
