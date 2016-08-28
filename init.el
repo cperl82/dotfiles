@@ -1101,7 +1101,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
    (quote
     ("06b2849748590f7f991bf0aaaea96611bb3a6982cad8b1e3fc707055b96d64ca" default))))
 
-; 2014-12-06 override zenburn's default isearch highlighting
+; zenburn theme overrides
 (zenburn-with-color-variables
   (custom-theme-set-faces
    `zenburn
@@ -1109,8 +1109,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
    `(lazy-highlight           ((t (:foreground ,zenburn-bg-05 :weight bold :background ,zenburn-orange))))
    `(diff-added               ((t (:foreground ,zenburn-green :weight bold))))
    `(diff-removed             ((t (:foreground ,zenburn-red))))
-   '(dired-perm-write         ((t nil)))
    `(flx-highlight-face       ((t (:foreground ,zenburn-red :weight normal))))
+   `(linum                    ((t (:foreground ,zenburn-green+1 :background ,zenburn-bg))))
+   '(dired-perm-write         ((t nil)))
    '(helm-buffer-directory    ((t (:foreground "color-247"))))
    '(helm-ff-dotted-directory ((t (:foreground "color-247"))))
    '(helm-match               ((t (:foreground "gold1" :weight normal))))))
