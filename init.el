@@ -1064,13 +1064,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :config
   (progn
     (zenburn-with-color-variables
-      ;; todo: these colors need tweaking, they are too hard to see on
-      ;; my default zenburn color theme in a terminal
       (setq hl-paren-colors
-            `(,zenburn-fg
-              ,zenburn-green+4
+            `(,zenburn-red-4
+              ,zenburn-green
               ,zenburn-yellow-2
-              ,zenburn-cyan)))))
+              ,zenburn-blue+1)))))
 
 
 ;; Random other things
@@ -1104,17 +1102,18 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     ("06b2849748590f7f991bf0aaaea96611bb3a6982cad8b1e3fc707055b96d64ca" default))))
 
 ; 2014-12-06 override zenburn's default isearch highlighting
-(custom-theme-set-faces
- `zenburn
- `(isearch                  ((t (:foreground, "#383838" :weight bold :background ,"#DFAF8F"))))
- `(lazy-highlight           ((t (:foreground, "#383838" :weight bold :background ,"#DFAF8F"))))
- `(diff-added               ((t (:foreground, "#7F9F7F" :weight bold))))
- `(diff-removed             ((t (:foreground, "#CC9393"))))
- '(dired-perm-write         ((t nil)))
- '(flx-highlight-face       ((t (:foreground "#CC9393" :weight normal))))
- '(helm-buffer-directory    ((t (:foreground "color-247"))))
- '(helm-ff-dotted-directory ((t (:foreground "color-247"))))
- '(helm-match               ((t (:foreground "gold1" :weight normal)))))
+(zenburn-with-color-variables
+  (custom-theme-set-faces
+   `zenburn
+   `(isearch                  ((t (:foreground ,zenburn-bg-05 :weight bold :background ,zenburn-orange))))
+   `(lazy-highlight           ((t (:foreground ,zenburn-bg-05 :weight bold :background ,zenburn-orange))))
+   `(diff-added               ((t (:foreground ,zenburn-green :weight bold))))
+   `(diff-removed             ((t (:foreground ,zenburn-red))))
+   '(dired-perm-write         ((t nil)))
+   `(flx-highlight-face       ((t (:foreground ,zenburn-red :weight normal))))
+   '(helm-buffer-directory    ((t (:foreground "color-247"))))
+   '(helm-ff-dotted-directory ((t (:foreground "color-247"))))
+   '(helm-match               ((t (:foreground "gold1" :weight normal))))))
 
 
 ; 2014-04-08: local emacs overrides
