@@ -1041,6 +1041,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 
 ;; smartparens/evil-smartparens
+; consider stealing some keybindings from https://github.com/expez/evil-smartparens/issues/19
 (defun cp/enable-evil-smartparens ()
   (progn
     (smartparens-strict-mode)
