@@ -1,0 +1,6 @@
+(:name rainbow-delimiters
+       :website "https://github.com/Fanael/rainbow-delimiters#readme"
+       :description "Color nested parentheses, brackets, and braces according to their depth."
+       :type github
+       :checkout "93cd2dc873e7fedca7abc599cd97d46db4376ac7"
+       :pkgname "Fanael/rainbow-delimiters")

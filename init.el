@@ -23,12 +23,14 @@
    helm
    helm-org-rifle
    helm-projectile
+   highlight-parentheses
    ido-vertical-mode
    lua-mode
    neotree
    org-mode
    projectile
    rainbow-mode
+   rainbow-delimiters
    s
    smartparens
    systemtap-mode
@@ -1054,6 +1056,21 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (progn
     (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
     (sp-local-pair 'emacs-lisp-mode "`" nil :actions nil)))
+
+
+;; highlight-parentheses
+(use-package highlight-parentheses
+  :defer t
+  :config
+  (progn
+    (zenburn-with-color-variables
+      ;; todo: these colors need tweaking, they are too hard to see on
+      ;; my default zenburn color theme in a terminal
+      (setq hl-paren-colors
+            `(,zenburn-fg
+              ,zenburn-green+4
+              ,zenburn-yellow-2
+              ,zenburn-cyan)))))
 
 
 ;; Random other things
