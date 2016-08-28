@@ -15,6 +15,7 @@
    elisp-slime-nav
    evil
    evil-leader
+   evil-smartparens
    evil-surround
    f
    flx
@@ -29,6 +30,7 @@
    projectile
    rainbow-mode
    s
+   smartparens
    systemtap-mode
    tuareg-mode
    undo-tree
@@ -1036,6 +1038,23 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        (font-lock-mode 1)))))
 
 
+;; smartparens/evil-smartparens
+(defun cp/enable-evil-smartparens ()
+  (progn
+    (smartparens-strict-mode)
+    (evil-smartparens-mode)))
+
+(use-package evil-smartparens
+  :defer t
+  :init
+  (progn
+    (add-hook 'lisp-mode-hook       #'cp/enable-evil-smartparens)
+    (add-hook 'emacs-lisp-mode-hook #'cp/enable-evil-smartparens))
+  :config
+  (progn
+    (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)))
+
+
 ;; Random other things
 
 ; 2014-04-04: Holy moly its effort to get line numbers like vim!
@@ -1064,7 +1083,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  '(custom-enabled-themes (quote (zenburn)))
  '(custom-safe-themes
    (quote
-    ("f34b107e8c8443fe22f189816c134a2cc3b1452c8874d2a4b2e7bb5fe681a10b" default))))
+    ("06b2849748590f7f991bf0aaaea96611bb3a6982cad8b1e3fc707055b96d64ca" default))))
 
 ; 2014-12-06 override zenburn's default isearch highlighting
 (custom-theme-set-faces
