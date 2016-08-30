@@ -216,7 +216,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   :init
   (progn
     (setq-default evil-symbol-word-search t)
-    (setq-default evil-flash-delay 5))
+    (setq-default evil-flash-delay 5)
+    (setq-default evil-move-beyond-eol t))
   :config
   (progn
     (define-key evil-normal-state-map [escape] 'keyboard-quit)
