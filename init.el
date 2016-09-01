@@ -1146,7 +1146,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
    `(diff-added               ((t (:foreground ,zenburn-green :weight bold))))
    `(diff-removed             ((t (:foreground ,zenburn-red))))
    `(flx-highlight-face       ((t (:foreground ,zenburn-red :weight normal))))
-   `(linum                    ((t (:foreground ,zenburn-green+1 :background "#353535"))))
+   `(linum                    ((t (:foreground ,zenburn-green-1 :background ,zenburn-bg))))
    '(dired-perm-write         ((t nil)))
    '(helm-buffer-directory    ((t (:foreground "color-247"))))
    '(helm-ff-dotted-directory ((t (:foreground "color-247"))))
