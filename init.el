@@ -29,8 +29,9 @@
    neotree
    org-mode
    projectile
-   rainbow-mode
    rainbow-delimiters
+   rainbow-mode
+   resize-window
    s
    smartparens
    systemtap-mode
@@ -1093,6 +1094,17 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
               ,zenburn-green
               ,zenburn-yellow-2
               ,zenburn-blue+1)))))
+
+
+;; resize window
+(use-package resize-window
+  :defer t
+  :config
+  (progn
+    (push '(?v ?p) resize-window-alias-list)
+    (push '(?V ?n) resize-window-alias-list)
+    (push '(?h ?b) resize-window-alias-list)
+    (push '(?H ?f) resize-window-alias-list)))
 
 
 ;; Random other things
