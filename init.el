@@ -1,3 +1,9 @@
+;; CR-cperl:
+;; 1. Install flymake / python stuff
+;; 2. Checkout dired-hacks
+
+
+; el-get
 (add-to-list 'load-path (concat user-emacs-directory "el-get/el-get"))
 (unless (require 'el-get nil 'noerror) (with-current-buffer
     (url-retrieve-synchronously
@@ -9,19 +15,18 @@
 
 (el-get
  'sync
- '(ace-jump-mode
+ '(avy
    color-theme-zenburn
    diminish
    elisp-slime-nav
    evil
-   evil-leader
    evil-smartparens
    evil-surround
    f
    flx
+   general
    haskell-mode
    helm
-   helm-org-rifle
    helm-projectile
    highlight-parentheses
    ido-vertical-mode
@@ -45,6 +50,8 @@
 ; 2014-04-26: Loading other stuff
 (add-to-list 'load-path (concat user-emacs-directory "lisp"))
 
+
+; Misc
 (defun cp/confirm-before-quit (force)
   "Ask for confirmation before quiting emacs.  If a prefix argument is
 given, it skips the confirmation"
@@ -52,17 +59,19 @@ given, it skips the confirmation"
   (when (or force (y-or-n-p "Really quit emacs? ")) (save-buffers-kill-terminal)))
 (global-set-key (kbd "C-x C-c") #'cp/confirm-before-quit)
 
-; misc settings
-(setq
- inhibit-startup-message t
- column-number-mode      t
- split-height-threshold  nil
- make-backup-files       nil
- c-default-style         "linux"
- ad-redefinition-action  'accept)
+(setq inhibit-startup-message t
+      column-number-mode      t
+      split-height-threshold  nil
+      split-width-threshhold  999
+      make-backup-files       nil
+      c-default-style         "linux"
+      ad-redefinition-action  'accept)
 
-(if (fboundp 'menu-bar-mode)   (menu-bar-mode -1))
-(if (fboundp 'tool-bar-mode)   (tool-bar-mode -1))
+; 2015-09-11 Enable narrowing command which are disabled by default
+(put 'narrow-to-region 'disabled nil)
+
+(if (fboundp 'menu-bar-mode)   (menu-bar-mode   -1))
+(if (fboundp 'tool-bar-mode)   (tool-bar-mode   -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 (defun cp/format-default-dir-for-mode-line (d max-length)
@@ -106,12 +115,6 @@ given, it skips the confirmation"
 		mode-line-misc-info
 		mode-line-end-spaces))
 
-; 2015-09-11 Enable narrowing command which are disabled by default
-(put 'narrow-to-region 'disabled nil)
-
-; Remove the binding to compose mail, I don't use it
-(global-set-key (kbd "C-x m")   nil)
-
 ; 2014-05-07: function to revert all buffers
 (defun revert-buffer-all ()
   "Revert all buffers.  This reverts buffers that are visiting a file, kills
@@ -128,38 +131,126 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 	      (kill-buffer b)))
 	   ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
 
+; 2016-09-10 better alignment of property lists
+; http://emacs.stackexchange.com/questions/10230/how-to-indent-keywords-aligned
+(defun cp/lisp-indent-function (indent-point state)
+       "This function is the normal value of the variable `lisp-indent-function'.
+The function `calculate-lisp-indent' calls this to determine
+if the arguments of a Lisp function call should be indented specially.
+INDENT-POINT is the position at which the line being indented begins.
+Point is located at the point to indent under (for default indentation);
+STATE is the `parse-partial-sexp' state for that position.
+If the current line is in a call to a Lisp function that has a non-nil
+property `lisp-indent-function' (or the deprecated `lisp-indent-hook'),
+it specifies how to indent.  The property value can be:
+* `defun', meaning indent `defun'-style
+  \(this is also the case if there is no property and the function
+  has a name that begins with \"def\", and three or more arguments);
+* an integer N, meaning indent the first N arguments specially
+  (like ordinary function arguments), and then indent any further
+  arguments like a body;
+* a function to call that returns the indentation (or nil).
+  `lisp-indent-function' calls this function with the same two arguments
+  that it itself received.
+This function returns either the indentation to use, or nil if the
+Lisp function does not specify a special indentation."
+       (let ((normal-indent (current-column))
+             (orig-point (point)))
+         (goto-char (1+ (elt state 1)))
+         (parse-partial-sexp (point) calculate-lisp-indent-last-sexp 0 t)
+         (cond
+          ;; car of form doesn't seem to be a symbol, or is a keyword
+          ((and (elt state 2)
+                (or (not (looking-at "\\sw\\|\\s_"))
+                    (looking-at ":")))
+           (if (not (> (save-excursion (forward-line 1) (point))
+                       calculate-lisp-indent-last-sexp))
+               (progn (goto-char calculate-lisp-indent-last-sexp)
+                      (beginning-of-line)
+                      (parse-partial-sexp (point)
+                                          calculate-lisp-indent-last-sexp 0 t)))
+           ;; Indent under the list or under the first sexp on the same
+           ;; line as calculate-lisp-indent-last-sexp.  Note that first
+           ;; thing on that line has to be complete sexp since we are
+           ;; inside the innermost containing sexp.
+           (backward-prefix-chars)
+           (current-column))
+          ((and (save-excursion
+                  (goto-char indent-point)
+                  (skip-syntax-forward " ")
+                  (not (looking-at ":")))
+                (save-excursion
+                  (goto-char orig-point)
+                  (looking-at ":")))
+           (save-excursion
+             (goto-char (+ 2 (elt state 1)))
+             (current-column)))
+          (t
+           (let ((function (buffer-substring (point)
+                                             (progn (forward-sexp 1) (point))))
+                 method)
+             (setq method (or (function-get (intern-soft function)
+                                            'lisp-indent-function)
+                              (get (intern-soft function) 'lisp-indent-hook)))
+             (cond ((or (eq method 'defun)
+                        (and (null method)
+                             (> (length function) 3)
+                             (string-match "\\`def" function)))
+                    (lisp-indent-defform state indent-point))
+                   ((integerp method)
+                    (lisp-indent-specform method state
+                                          indent-point normal-indent))
+                   (method
+                                      (funcall method indent-point state))))))))
+
+
+; Base packages
+(require 'general)
 (require 'use-package)
 (require 'diminish)
 (require 'dash)
 
-; http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp
-(defmacro define-and-bind-text-object (key start-regex end-regex)
-  (let ((inner-name (make-symbol "inner-name"))
-	(outer-name (make-symbol "outer-name")))
-    `(progn
-       (evil-define-text-object ,inner-name (count &optional beg end type)
-	 (evil-select-paren ,start-regex ,end-regex beg end type count nil))
-       (evil-define-text-object ,outer-name (count &optional beg end type)
-	 (evil-select-paren ,start-regex ,end-regex beg end type count t))
-       (define-key evil-inner-text-objects-map ,key (quote ,inner-name))
-       (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
+(setq cp/normal-prefix "SPC")
+(setq cp/non-normal-prefix "M-SPC")
 
-
-;; paren
-(use-package paren
-  :init
-  (progn
-    (setq show-paren-delay 0))
-  :config
-  (progn
-    (show-paren-mode)))
+; general default prefix key bindings
+(general-define-key
+ :keymaps '(normal visual insert emacs)
+ :prefix cp/normal-prefix
+ :non-normal-prefix cp/non-normal-prefix
+  "a" '(:ignore t :which-key "applications")
+  "b" '(:ignore t :which-key "buffers")
+  "f" '(:ignore t :which-key "files")
+  "w" '(:ignore t :which-key "windows")
+  "f f" #'find-file
+  "f j" #'dired-jump
+  "b b" #'switch-to-buffer
+  "b k" #'kill-buffer
+  "b K" #'kill-buffer-and-window
+  "b r" #'revert-buffer
+  "b R" #'revert-buffer-all
+  "b f" #'(lambda () (interactive) (message (buffer-file-name)))
+  "w s" #'split-window-vertically
+  "w v" #'split-window-horizontally
+  "w K" #'kill-buffer-and-window
+  "w o" #'delete-other-windows
+  "w x" #'delete-window
+  "h"   #'help-command
+  )
 
-
-;; uniquify
-(use-package uniquify
-  :config
-  (progn
-    (setq uniquify-buffer-name-style 'forward)))
+; general command prefix keybindings, normal state only
+(general-define-key
+ :keymaps '(normal)
+ :prefix ","
+  "h" #'cp/evil-highlight-symbol
+  "x" #'delete-window
+  "o" #'delete-other-windows
+  "s" #'split-window-vertically
+  "v" #'split-window-horizontally
+  "j" #'dired-jump
+  "f" #'find-file
+  "e" #'cp/escreen-get-active-screen-names-with-emphasis)
+
 
 
 ;; which-key
@@ -169,19 +260,9 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   (progn
     (which-key-mode)))
 
+
 
 ; evil
-; 2014-04-01: http://stackoverflow.com/questions/8483182/emacs-evil-mode-best-practice
-(defun minibuffer-keyboard-quit ()
-  "Abort recursive edit.
-In Delete Selection mode, if the mark is active, just deactivate it;
-then it takes a second \\[keyboard-quit] to abort the minibuffer."
-  (interactive)
-  (if (and delete-selection-mode transient-mark-mode mark-active)
-      (setq deactivate-mark  t)
-    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
-    (abort-recursive-edit)))
-
 ; 2014-03-28: Functions to support selecting something in Visual mode
 ; and then automatically start searching for it by pressing "/" or "?"
 (defun cp/evil-highlight-symbol ()
@@ -213,60 +294,71 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (cp/evil-search beg end nil))
 
 (use-package evil
-  :diminish (undo-tree-mode . "UT")
+  :diminish undo-tree-mode
+  :general
+  (:keymaps '(normal visual insert emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "w h" #'evil-window-left
+   "w j" #'evil-window-down
+   "w k" #'evil-window-up
+   "w l" #'evil-window-right)
+  (:keymaps '(normal)
+   "C-h" #'evil-window-left
+   "C-j" #'evil-window-down
+   "C-k" #'evil-window-up
+   "C-l" #'evil-window-right)
+  (:keymaps '(visual)
+   "/" #'cp/evil-search-forward
+   "?" #'cp/evil-search-backward)
   :init
   (progn
     (setq-default evil-symbol-word-search t)
     (setq-default evil-flash-delay 5)
     (setq-default evil-move-beyond-eol t))
   :config
-  (progn
-    (define-key evil-normal-state-map [escape] 'keyboard-quit)
-    (define-key evil-visual-state-map [escape] 'keyboard-quit)
-    (define-key minibuffer-local-map  [escape] 'minibuffer-keyboard-quit)
-    (define-key minibuffer-local-ns-map         [escape] 'minibuffer-keyboard-quit)
-    (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-    (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-    (define-key minibuffer-local-isearch-map    [escape] 'minibuffer-keyboard-quit)
-    (define-key evil-normal-state-map (kbd "C-j") #'evil-window-down)
-    (define-key evil-normal-state-map (kbd "C-k") #'evil-window-up)
-    (define-key evil-normal-state-map (kbd "C-h") #'evil-window-left)
-    (define-key evil-normal-state-map (kbd "C-l") #'evil-window-right)
-    (define-key evil-motion-state-map (kbd "C-j") #'evil-window-down)
-    (define-key evil-motion-state-map (kbd "C-k") #'evil-window-up)
-    (define-key evil-motion-state-map (kbd "C-h") #'evil-window-left)
-    (define-key evil-motion-state-map (kbd "C-l") #'evil-window-right)
-    (define-key evil-visual-state-map (kbd "/")   #'cp/evil-search-forward)
-    (define-key evil-visual-state-map (kbd "?")   #'cp/evil-search-backward)
-    (evil-mode 1)))
+  (progn (evil-mode 1)))
 
-
-; evil-leader
-(use-package evil-leader
-  :config
-  (progn
-    (global-evil-leader-mode)
-    (evil-leader/set-leader ",")
-    (evil-leader/set-key
-      "f" #'find-file
-      "b" #'switch-to-buffer
-      "s" #'split-window-vertically
-      "v" #'split-window-horizontally
-      "k" #'kill-buffer
-      "K" #'kill-buffer-and-window
-      "o" #'delete-other-windows
-      "x" #'delete-window
-      "e" #'cp/escreen-get-active-screen-names-with-emphasis
-      "H" #'help-command
-      "h" #'cp/evil-highlight-symbol
-      "R" #'revert-buffer-all
-      "j" #'dired-jump
-      "E" #'(lambda () (interactive) (message (buffer-file-name))))))
 
 
 ;; evil-surround
-(use-package evil-surround
-  :defer t)
+;; CR-soon cperl: This can probably be replaced with smartparens
+(use-package evil-surround :defer t)
+
+
+
+;; avy
+(use-package avy
+  :defer t
+  :general
+  (:keymaps '(normal)
+   :prefix cp/normal-prefix
+   "a a"   '(:ignore t :which-key "avy")
+   "a a c" #'avy-goto-char
+   "a a C" #'avy-goto-char-2
+   "a a w" #'avy-goto-word-1)
+  :config
+  (progn
+    (setq avy-background t)))
+
+
+;; paren
+(use-package paren
+  :init
+  (progn
+    (setq show-paren-delay 0))
+  :config
+  (progn
+    (show-paren-mode)))
+
+
+
+;; uniquify
+(use-package uniquify
+  :config
+  (progn
+    (setq uniquify-buffer-name-style 'forward)))
+
 
 
 ; ido / ido-vertical-mode / flx
@@ -280,15 +372,368 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (setq ido-auto-merge-work-directories-length -1)
     (setq ido-enter-matching-directory 'first)
     (ido-mode t)
-    (ido-everywhere t)
-    (use-package ido-vertical-mode
-      :config
-      (progn
-	(setq-default ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
-	(ido-vertical-mode 1)))
-    (use-package flx-ido
-      :config
-      (flx-ido-mode t))))
+    (ido-everywhere t))
+  
+(use-package ido-vertical-mode
+  :config
+  (progn
+    (setq-default ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
+    (ido-vertical-mode 1)))
+
+(use-package flx-ido
+  :config
+  (flx-ido-mode t)))
+
+
+
+;; buffer-move
+(use-package buffer-move
+  :defer t
+  :commands (buf-move-down buf-move-up buf-move-left buf-move-right)
+  :init
+  :general
+  (:keymaps '(normal visual insert emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "w H" #'buf-move-left
+   "w J" #'buf-move-down
+   "w K" #'buf-move-up
+   "w L" #'buf-move-right)
+  (:keymaps '(normal)
+   :prefix nil
+   "C-M-h" #'buf-move-left
+   "C-M-j" #'buf-move-down
+   "C-M-k" #'buf-move-up
+   "C-M-l" #'buf-move-right))
+
+
+
+;; dired
+(use-package dired
+  :defer t
+  :general
+  (:keymaps 'dired-mode-map
+   :states '(normal)
+   "h"   #'dired-up-directory
+   "j"   #'dired-next-line
+   "k"   #'dired-previous-line
+   "l"   #'dired-find-alternate-file
+   "n"   #'evil-search-next
+   "N"   #'evil-search-previous
+   "?"   #'evil-search-backward
+   "G"   #'evil-goto-line
+   "gg"  #'evil-goto-first-line
+   "M-k" #'dired-kill-subdir
+   "M-n" #'dired-next-subdir
+   "M-p" #'dired-prev-subdir
+   "TAB" #'dired-hide-subdir
+   "c"   #'dired-create-directory
+   "q"   #'kill-this-buffer
+   "r"   #'revert-buffer)
+  :config
+  (progn
+    (put 'dired-find-alternate-file 'disabled nil)
+    (define-key dired-mode-map (kbd "SPC") nil)
+    (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))))
+
+(use-package dired-x)
+
+
+
+;; xcscope
+(use-package xcscope
+  :defer t
+  :general
+  (:keymaps '(normal visual insert emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "a c" '(:keymap cscope-command-map
+           :which-key "cscope"))
+  (:keymaps 'cscope-list-entry-keymap
+   :states '(normal)
+   "RET" #'cscope-select-entry-inplace
+   "TAB" #'cscope-select-entry-other-window)
+  :config
+  (progn
+    (setq cscope-option-use-inverted-index t)
+    (setq cscope-edit-single-match nil)
+    (setq cscope-option-kernel-mode t)
+    (add-hook
+     'cscope-list-entry-hook
+     (lambda ()
+       (setq-local
+        face-remapping-alist
+        '((cscope-separator-face   font-lock-string-face)
+          (cscope-line-number-face font-lock-string-face)
+          (cscope-file-face        font-lock-doc-face)
+          (cscope-function-face    font-lock-function-name-face)))))))
+
+
+
+;; lisp-mode
+(use-package lisp-mode
+  :defer t
+  :config
+  (add-hook
+   'emacs-lisp-mode-hook
+   (lambda ()
+     (setq lisp-indent-function #'cp/lisp-indent-function)
+     (setq indent-tabs-mode nil)
+     (hs-minor-mode)
+     (hs-hide-all))))
+
+
+
+;; elisp-slime-nav
+(use-package elisp-slime-nav
+  :diminish elisp-slime-nav-mode
+  :init
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-elisp-slime-nav-mode)
+  :general
+  (:keymaps `(normal)
+   "C-c &"   #'pop-tag-mark
+   "C-c ;"   #'elisp-slime-nav-find-elisp-thing-at-point
+   "C-c C-t" #'elisp-slime-nav-describe-elisp-thing-at-point))
+
+
+
+;; tuareg-mode 
+(defun cp/tuareg-mode-hs-forward-sexp-fun (arg)
+  (let* ((c (current-column))
+         (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
+    (forward-line 1)
+    (re-search-forward re)
+    (beginning-of-line)
+    (back-to-indentation)
+    (if (not
+         (or
+          (looking-at "in")
+          (looking-at "end")
+          (looking-at ";;")
+          (looking-at "with")))
+        (progn
+          (forward-line -1)
+          (move-end-of-line nil)))))
+
+;; 2016-03-21: Alternative implementation that deals with functions without ;; better
+(defun cp/tuareg-mode-hs-forward-sexp-fun-alt (arg)
+  (let* ((c (current-column))
+         (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
+    (forward-line 1)
+    (re-search-forward re)
+    (beginning-of-line)
+    (back-to-indentation)
+    (if (not
+         (or
+          (looking-at "in")
+          (looking-at "end")
+          (looking-at ";;")
+          (looking-at "with")
+       (eq (point) (buffer-size))))
+        (progn
+          (re-search-backward "^[:space:]*[^:space:].")
+          (move-end-of-line nil)))))
+
+(setq cp/tuareg-mode-hs-start-regexp
+      (mapconcat
+       'identity
+       '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+"
+         "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
+         "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
+         "\\<end\\>\\s-+=\\s-+\\<struct\\>"
+         "\\<let\\>\\s-+"
+         "\\<and\\>\\s-+"
+         "\\<let%\\S-+\\>\\s-+"
+         "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
+         "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
+         "\\<TEST_UNIT\\>\\s-+="
+         )
+       "\\|"))
+
+(use-package tuareg
+  :defer t
+  :config
+  (progn
+    (add-to-list
+     'hs-special-modes-alist
+     `(tuareg-mode ,cp/tuareg-mode-hs-start-regexp nil nil  cp/tuareg-mode-hs-forward-sexp-fun))
+    (add-hook 'tuareg-mode-hook (lambda () (hs-minor-mode)))))
+
+
+
+;; hideshow
+(use-package hideshow
+  :defer t
+  :general
+  (:keymaps 'hs-minor-mode-map
+   :states  '(normal)
+   "TAB" #'hs-toggle-hiding))
+
+
+
+;; sh-script
+; 2014-12-07 Trying to make sh-mode indentation better
+(defun cp/sh-switch-to-indentation (n)
+  (interactive "p")
+  (progn
+    (setq sh-basic-offset n)
+    (setq sh-indentation n)))
+
+(use-package sh-script
+  :defer t
+  :config
+  (progn
+    (add-hook
+     'sh-mode-hook
+     (lambda ()
+       (cp/sh-switch-to-indentation 8)
+       (electric-indent-mode nil)))))
+
+
+
+;; grep
+(use-package grep
+  :defer t
+  :general
+  (:keymaps 'grep-mode-map
+   :states '(normal)
+   "M-n" #'compilation-next-error)
+  (:keymaps 'grep-mode-map
+   "SPC" nil)
+  :config
+  (progn
+    (setq grep-find-use-xargs 'gnu)
+    (add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
+    (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))))
+
+
+
+;; man
+(defun cp/man-forward-sexp-fun (arg)
+    (let ((p (point)))
+      (forward-line 1)
+      (re-search-forward
+       (concat Man-heading-regexp "\\|" "\\'" "\\|" "^[^[:space:]]"))
+      (beginning-of-line)
+      (forward-line -1)
+      (if (equal p (point)) (end-of-line))))
+
+(use-package man
+  :defer t
+  :general
+  (:keymaps 'Man-mode-map
+   :states  '(motion)
+   "TAB" #'hs-toggle-hiding)
+  :config
+  (progn
+    (add-to-list
+     'hs-special-modes-alist
+     `(Man-mode ,Man-heading-regexp nil nil cp/man-forward-sexp-fun))
+    (add-hook
+     'Man-mode-hook
+     (lambda ()
+       (setq-local comment-start "$^")
+       (setq-local comment-end   "$^")
+       (hs-minor-mode 1)
+       (hs-hide-all)
+       (goto-char (point-min))
+       (re-search-forward "NAME" nil t)
+       (hs-show-block)
+       (re-search-forward "SYNOPSIS" nil t)
+       (hs-show-block)
+       (re-search-forward "DESCRIPTION" nil t)
+       (hs-show-block)
+       (font-lock-add-keywords
+	nil	     ; Copied from /usr/share/vim/vim74/syntax/man.vim
+	`((,Man-heading-regexp          . font-lock-comment-face)
+	  ("^\\s-*[+-][a-zA-Z0-9]\\S-*" . font-lock-function-name-face)
+	  ("^\\s-*--[a-zA-Z0-9-]\\S-*"  . font-lock-function-name-face))
+	'set)
+       (font-lock-mode 1)))))
+
+
+
+;; smartparens/evil-smartparens
+; consider stealing some keybindings from https://github.com/expez/evil-smartparens/issues/19
+(defun cp/enable-evil-smartparens ()
+  (progn
+    (smartparens-strict-mode)
+    (evil-smartparens-mode)
+    (define-key evil-normal-state-local-map
+      (kbd "(")
+      (lambda (&optional arg)
+        (interactive "P") (sp-wrap-with-pair "(")))
+    (define-key evil-normal-state-local-map (kbd "C-t") #'sp-transpose-sexp)
+    (define-key evil-normal-state-local-map (kbd "H")   #'sp-backward-up-sexp)
+    (define-key evil-normal-state-local-map (kbd "L")   #'sp-up-sexp)
+    (define-key evil-normal-state-local-map (kbd "M-7") #'sp-backward-barf-sexp)
+    (define-key evil-normal-state-local-map (kbd "M-8") #'sp-forward-barf-sexp)
+    (define-key evil-normal-state-local-map (kbd "M-9") #'sp-backward-slurp-sexp)
+    (define-key evil-normal-state-local-map (kbd "M-0") #'sp-forward-slurp-sexp)
+    (define-key evil-normal-state-local-map (kbd "M-s") #'sp-splice-sexp)
+    (define-key evil-normal-state-local-map (kbd "M-S") #'sp-split-sexp)
+    (define-key evil-normal-state-local-map (kbd "M-j") #'sp-join-sexp)
+    (define-key evil-normal-state-local-map (kbd "M-n") #'sp-next-sexp)
+    (define-key evil-normal-state-local-map (kbd "M-p") #'sp-previous-sexp)
+    (define-key evil-normal-state-local-map (kbd "M-o") #'sp-down-sexp)
+    (define-key evil-normal-state-local-map (kbd "M-u") #'sp-backward-down-sexp)
+    (define-key evil-normal-state-local-map (kbd "M-l") #'sp-forward-sexp)
+    (define-key evil-normal-state-local-map (kbd "M-h") #'sp-backward-sexp)
+    (define-key evil-normal-state-local-map (kbd "M-k") #'sp-splice-sexp-killing-backward-or-around)
+    (define-key evil-normal-state-local-map (kbd "M-K") #'sp-splice-sexp-killing-forward)))
+
+(use-package evil-smartparens
+  :defer t
+  :init
+  (progn
+    (add-hook 'lisp-mode-hook       #'cp/enable-evil-smartparens)
+    (add-hook 'emacs-lisp-mode-hook #'cp/enable-evil-smartparens))
+  :config
+  (progn
+    (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
+    (sp-local-pair 'emacs-lisp-mode "`" nil :actions nil)))
+
+
+
+;; highlight-parentheses
+(use-package highlight-parentheses
+  :defer t
+  :config
+  (progn
+    (zenburn-with-color-variables
+      (setq hl-paren-colors `(,zenburn-red-4 ,zenburn-green ,zenburn-yellow-2 ,zenburn-blue+1)))))
+
+
+
+;; resize window
+(use-package resize-window
+  :defer t
+  :general
+  (:keymaps '(normal insert visual emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "w r" #'resize-window)
+  :config
+  (progn
+    (push '(?v ?p) resize-window-alias-list)
+    (push '(?V ?n) resize-window-alias-list)
+    (push '(?h ?b) resize-window-alias-list)
+    (push '(?H ?f) resize-window-alias-list)))
+
+
+
+;; winner
+(use-package winner
+  :defer t
+  :general
+  (:keymaps '(normal insert visual emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "w u" #'winner-undo
+   "w U" #'winner-redo)
+  :init
+  (winner-mode))
+
 
 
 ;; escreen
@@ -385,20 +830,38 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (use-package escreen
   :defer t
   :commands (escreen-get-active-screen-numbers)
-  :bind-keymap ("C-\\" . escreen-map)
+  :general
+  (:keymaps '(normal)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "a e" '(:keymap escreen-map :which-key "escreen"))
+  (:keymaps 'escreen-map
+   "E" #'cp/escreen-get-active-screen-names-with-emphasis
+   "r" #'cp/escreen-rename-screen
+   "l" #'escreen-goto-next-screen
+   "h" #'escreen-goto-prev-screen)
   :config
   (progn
     (advice-add 'escreen-goto-screen   :after #'cp/advice/escreen-goto-screen)
     (advice-add 'escreen-kill-screen   :after #'cp/advice/escreen-kill-screen)
     (advice-add 'escreen-create-screen :after #'cp/advice/escreen-create-screen)
     (advice-add 'escreen-install       :after #'cp/advice/escreen-install)
-    (escreen-install)
-    (define-key escreen-map (kbd "r") #'cp/escreen-rename-screen)
-    (define-key escreen-map (kbd "l") #'escreen-goto-next-screen)
-    (define-key escreen-map (kbd "h") #'escreen-goto-prev-screen)))
+    (escreen-install)))
 
 
 ;; org
+; http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp
+(defmacro define-and-bind-text-object (key start-regex end-regex)
+  (let ((inner-name (make-symbol "inner-name"))
+	(outer-name (make-symbol "outer-name")))
+    `(progn
+       (evil-define-text-object ,inner-name (count &optional beg end type)
+	 (evil-select-paren ,start-regex ,end-regex beg end type count nil))
+       (evil-define-text-object ,outer-name (count &optional beg end type)
+	 (evil-select-paren ,start-regex ,end-regex beg end type count t))
+       (define-key evil-inner-text-objects-map ,key (quote ,inner-name))
+       (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
+
 (defun cp/org-echo-link-at-point ()
   (let* ((el (org-element-context))
          (raw-link (plist-get (cadr el) :raw-link)))
@@ -665,76 +1128,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
        (setq electric-indent-mode nil)))))
 
 
-;; buffer-move
-(use-package buffer-move
-  :commands (buf-move-down buf-move-up buf-move-left buf-move-right)
-  :init
-  (progn
-    (define-key evil-normal-state-map (kbd "C-M-j") 'buf-move-down)
-    (define-key evil-normal-state-map (kbd "C-M-k") 'buf-move-up)
-    (define-key evil-normal-state-map (kbd "C-M-h") 'buf-move-left)
-    (define-key evil-normal-state-map (kbd "C-M-l") 'buf-move-right)
-    (define-key evil-motion-state-map (kbd "C-M-j") 'buf-move-down)
-    (define-key evil-motion-state-map (kbd "C-M-k") 'buf-move-up)
-    (define-key evil-motion-state-map (kbd "C-M-h") 'buf-move-left)
-    (define-key evil-motion-state-map (kbd "C-M-l") 'buf-move-right)))
-
-
-;; dired
-(use-package dired
-  :defer t
-  :config
-  (progn
-    (use-package dired-x)
-    (put 'dired-find-alternate-file 'disabled nil)
-    (evil-define-key 'normal dired-mode-map (kbd "n")   #'evil-search-next)
-    (evil-define-key 'normal dired-mode-map (kbd "N")   #'evil-search-previous)
-    (evil-define-key 'normal dired-mode-map (kbd "?")   #'evil-search-backward)
-    (evil-define-key 'normal dired-mode-map (kbd "G")   #'evil-goto-line)
-    (evil-define-key 'normal dired-mode-map (kbd "gg")  #'evil-goto-first-line)
-    (evil-define-key 'normal dired-mode-map (kbd "M-k") #'dired-kill-subdir)
-    (evil-define-key 'normal dired-mode-map (kbd "j")   #'dired-next-line)
-    (evil-define-key 'normal dired-mode-map (kbd "k")   #'dired-previous-line)
-    (evil-define-key 'normal dired-mode-map (kbd "h")   #'dired-up-directory)
-    (evil-define-key 'normal dired-mode-map (kbd "l")   #'dired-find-alternate-file)
-    (evil-define-key 'normal dired-mode-map (kbd "J")   #'dired-next-subdir)
-    (evil-define-key 'normal dired-mode-map (kbd "K")   #'dired-prev-subdir)
-    (evil-define-key 'normal dired-mode-map (kbd "SPC") #'dired-display-file)
-    (evil-define-key 'normal dired-mode-map (kbd "TAB") #'dired-hide-subdir)
-    (evil-define-key 'normal dired-mode-map (kbd "o")   #'dired-find-file-other-window)
-    (evil-define-key 'normal dired-mode-map (kbd "v")   #'dired-toggle-marks)
-    (evil-define-key 'normal dired-mode-map (kbd "m")   #'dired-mark)
-    (evil-define-key 'normal dired-mode-map (kbd "u")   #'dired-unmark)
-    (evil-define-key 'normal dired-mode-map (kbd "U")   #'dired-unmark-all-marks)
-    (evil-define-key 'normal dired-mode-map (kbd "c")   #'dired-create-directory)
-    (evil-define-key 'normal dired-mode-map (kbd "q")   #'kill-this-buffer)
-    (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))))
-
-
-;; xcscope
-(use-package xcscope
-  :defer t
-  :config
-  (progn
-    (setq cscope-option-use-inverted-index t)
-    (setq cscope-edit-single-match nil)
-    (setq cscope-option-kernel-mode t)
-    (add-hook
-     'cscope-list-entry-hook
-     (lambda ()
-       (setq-local face-remapping-alist
-		   '((cscope-separator-face   font-lock-string-face)
-		     (cscope-line-number-face font-lock-string-face)
-		     (cscope-file-face        font-lock-doc-face)
-		     (cscope-function-face    font-lock-function-name-face)))
-       (define-key evil-normal-state-local-map (kbd "RET") #'cscope-select-entry-inplace)
-       (define-key evil-normal-state-local-map (kbd "SPC") #'cscope-show-entry-other-window)
-       (define-key evil-normal-state-local-map (kbd   "o") #'cscope-select-entry-other-window)
-       (define-key evil-normal-state-local-map (kbd   "q") #'cscope-bury-buffer)
-       (define-key evil-normal-state-local-map (kbd "M-n") #'cscope-history-forward-line)
-       (define-key evil-normal-state-local-map (kbd "M-p") #'cscope-history-backward-line)
-       (define-key evil-normal-state-local-map (kbd "M-k") #'cscope-history-kill-result)))))
-
+; helm
 ; 2015-09-11 Ripped wholesale from helm-buffers.el so I could control the formatting of dir
 (defun cp/advice/helm-buffer--show-details
     (orig-fun buf-name prefix help-echo size mode dir face1 face2 proc details type)
@@ -760,21 +1154,15 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (use-package helm
   :defer t
+  :general
+  (:keymaps 'helm-map
+   "TAB" #'helm-execute-persistent-action
+   "C-i" #'helm-execute-persistent-action
+   "C-z" #'helm-select-action)
   :config
   (progn
     (advice-add 'helm-buffer--show-details :around #'cp/advice/helm-buffer--show-details)
-    (setq helm-split-window-default-side 'right)
-    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-    (define-key helm-map (kbd "C-i")   'helm-execute-persistent-action)
-    (define-key helm-map (kbd "C-z")   'helm-select-action)))
-
-
-;; helm-org-rifle
-(use-package helm-org-rifle
-  :defer t
-  :config
-  (progn
-    (setq helm-org-rifle-show-path t)))
+    (setq helm-split-window-default-side 'right)))
 
 
 ;; projectile
@@ -837,7 +1225,15 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (use-package projectile
   :commands (projectile-project-p)
   :defer t
-  :bind-keymap ("C-c p" . projectile-mode-map)
+  :general
+  (:keymaps '(normal visual insert emacs)
+   :prefix nil
+   :non-normal-prefix nil
+   "C-c p" '(:keymap projectile-command-map :which-key "projectile"))
+  (:keymaps '(normal visual insert emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "a p"   '(:keymap projectile-command-map :which-key "projectile"))
   :init
   (progn
     (advice-add 'projectile-serialize              :around #'cp/advice/projectile-serialize)
@@ -856,255 +1252,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       (progn
         (helm-projectile-on)
         (setq projectile-switch-project-action #'helm-projectile)))))
-
-
-;; elisp-slime-nav
-(use-package elisp-slime-nav
-  :diminish (elisp-slime-nav-mode . "SN")
-  :init
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-elisp-slime-nav-mode)
-  :config
-  (progn
-    (evil-define-key 'normal elisp-slime-nav-mode-map
-      (kbd "C-c ;") 'elisp-slime-nav-find-elisp-thing-at-point)
-    (evil-define-key 'normal elisp-slime-nav-mode-map
-      (kbd "C-c &") 'pop-tag-mark)
-    (evil-define-key 'normal elisp-slime-nav-mode-map
-      (kbd "C-c C-t") 'elisp-slime-nav-describe-elisp-thing-at-point)))
-
-
-;; tuareg-mode 
-(defun cp/tuareg-mode-hs-forward-sexp-fun (arg)
-  (let* ((c (current-column))
-         (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
-    (forward-line 1)
-    (re-search-forward re)
-    (beginning-of-line)
-    (back-to-indentation)
-    (if (not
-         (or
-          (looking-at "in")
-          (looking-at "end")
-          (looking-at ";;")
-          (looking-at "with")))
-        (progn
-          (forward-line -1)
-          (move-end-of-line nil)))))
-
-;; 2016-03-21: Alternative implementation that deals with functions without ;; better
-(defun cp/tuareg-mode-hs-forward-sexp-fun-alt (arg)
-  (let* ((c (current-column))
-         (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
-    (forward-line 1)
-    (re-search-forward re)
-    (beginning-of-line)
-    (back-to-indentation)
-    (if (not
-         (or
-          (looking-at "in")
-          (looking-at "end")
-          (looking-at ";;")
-          (looking-at "with")
-       (eq (point) (buffer-size))))
-        (progn
-          (re-search-backward "^[:space:]*[^:space:].")
-          (move-end-of-line nil)))))
-
-(setq cp/tuareg-mode-hs-start-regexp
-      (mapconcat
-       'identity
-       '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+"
-         "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
-         "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
-         "\\<end\\>\\s-+=\\s-+\\<struct\\>"
-         "\\<let\\>\\s-+"
-         "\\<and\\>\\s-+"
-         "\\<let%\\S-+\\>\\s-+"
-         "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
-         "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
-         "\\<TEST_UNIT\\>\\s-+="
-         )
-       "\\|"))
-
-(use-package tuareg
-  :defer t
-  :config
-  (progn
-    (add-to-list
-     'hs-special-modes-alist
-     `(tuareg-mode ,cp/tuareg-mode-hs-start-regexp nil nil  cp/tuareg-mode-hs-forward-sexp-fun))
-    (add-hook 'tuareg-mode-hook (lambda () (hs-minor-mode)))))
-
-
-;; ace-jump
-(use-package ace-jump
-  :defer t
-  :init
-  (progn
-    (define-key evil-normal-state-map (kbd "<SPC>a") 'ace-jump-mode)))
-
-
-;; lisp-mode
-(use-package lisp-mode
-  :defer t
-  :config
-  (add-hook 'emacs-lisp-mode-hook
-            (lambda ()
-              (progn
-                (setq indent-tabs-mode nil)
-                (hs-minor-mode)
-                (hs-hide-all)))))
-
-
-;; hideshow
-(use-package hideshow
-  :defer t
-  :config
-  (progn
-    (add-hook 'hs-minor-mode-hook
-              (lambda ()
-                (evil-local-set-key 'normal (kbd "TAB") #'hs-toggle-hiding)))))
-
-
-;; sh-script
-; 2014-12-07 Trying to make sh-mode indentation better
-(defun cp/sh-switch-to-indentation (n)
-  (interactive "p")
-  (progn
-    (setq sh-basic-offset n)
-    (setq sh-indentation n)))
-
-(use-package sh-script
-  :defer t
-  :config
-  (progn
-    (add-hook 'sh-mode-hook
-              (lambda ()
-                (cp/sh-switch-to-indentation 8)
-                (electric-indent-mode nil)))))
-
-
-;; grep
-(use-package grep
-  :defer t
-  :config
-  (progn
-    (setq grep-find-use-xargs 'gnu)
-    (evil-define-key 'normal grep-mode-map (kbd "SPC") #'compilation-display-error)
-    (evil-define-key 'normal grep-mode-map (kbd   "j") #'compilation-next-error)
-    (evil-define-key 'normal grep-mode-map (kbd   "p") #'compilation-next-error)
-    (add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
-    (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))))
-
-
-;; man
-(defun cp/man-forward-sexp-fun (arg)
-    (let ((p (point)))
-      (forward-line 1)
-      (re-search-forward
-       (concat Man-heading-regexp "\\|" "\\'" "\\|" "^[^[:space:]]"))
-      (beginning-of-line)
-      (forward-line -1)
-      (if (equal p (point)) (end-of-line))))
-
-(use-package man
-  :defer t
-  :config
-  (progn
-    (evil-define-key 'motion Man-mode-map (kbd "TAB") #'hs-toggle-hiding)
-    (add-to-list
-     'hs-special-modes-alist
-     `(Man-mode
-       ,Man-heading-regexp
-       nil
-       nil
-       cp/man-forward-sexp-fun))
-    (add-hook
-     'Man-mode-hook
-     (lambda ()
-       (setq-local comment-start "$^")
-       (setq-local comment-end   "$^")
-       (hs-minor-mode 1)
-       (hs-hide-all)
-       (goto-char (point-min))
-       (re-search-forward "NAME" nil t)
-       (hs-show-block)
-       (re-search-forward "SYNOPSIS" nil t)
-       (hs-show-block)
-       (re-search-forward "DESCRIPTION" nil t)
-       (hs-show-block)
-       (font-lock-add-keywords
-	nil	     ; Copied from /usr/share/vim/vim74/syntax/man.vim
-	`((,Man-heading-regexp          . font-lock-comment-face)
-	  ("^\\s-*[+-][a-zA-Z0-9]\\S-*" . font-lock-function-name-face)
-	  ("^\\s-*--[a-zA-Z0-9-]\\S-*"  . font-lock-function-name-face))
-	'set)
-       (font-lock-mode 1)))))
-
-
-;; smartparens/evil-smartparens
-; consider stealing some keybindings from https://github.com/expez/evil-smartparens/issues/19
-(defun cp/enable-evil-smartparens ()
-  (progn
-    (smartparens-strict-mode)
-    (evil-smartparens-mode)
-    (define-key evil-normal-state-local-map
-      (kbd "(")
-      (lambda (&optional arg)
-        (interactive "P") (sp-wrap-with-pair "(")))
-    (define-key evil-normal-state-local-map (kbd "C-t") #'sp-transpose-sexp)
-    (define-key evil-normal-state-local-map (kbd "H")   #'sp-backward-up-sexp)
-    (define-key evil-normal-state-local-map (kbd "L")   #'sp-up-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-7") #'sp-backward-barf-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-8") #'sp-forward-barf-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-9") #'sp-backward-slurp-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-0") #'sp-forward-slurp-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-s") #'sp-splice-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-S") #'sp-split-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-j") #'sp-join-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-n") #'sp-next-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-p") #'sp-previous-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-o") #'sp-down-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-u") #'sp-backward-down-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-l") #'sp-forward-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-h") #'sp-backward-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-k") #'sp-splice-sexp-killing-backward-or-around)
-    (define-key evil-normal-state-local-map (kbd "M-K") #'sp-splice-sexp-killing-forward)))
-
-(use-package evil-smartparens
-  :defer t
-  :init
-  (progn
-    (add-hook 'lisp-mode-hook       #'cp/enable-evil-smartparens)
-    (add-hook 'emacs-lisp-mode-hook #'cp/enable-evil-smartparens))
-  :config
-  (progn
-    (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
-    (sp-local-pair 'emacs-lisp-mode "`" nil :actions nil)))
-
-
-;; highlight-parentheses
-(use-package highlight-parentheses
-  :defer t
-  :config
-  (progn
-    (zenburn-with-color-variables
-      (setq hl-paren-colors
-            `(,zenburn-red-4
-              ,zenburn-green
-              ,zenburn-yellow-2
-              ,zenburn-blue+1)))))
-
-
-;; resize window
-(use-package resize-window
-  :defer t
-  :config
-  (progn
-    (push '(?v ?p) resize-window-alias-list)
-    (push '(?V ?n) resize-window-alias-list)
-    (push '(?h ?b) resize-window-alias-list)
-    (push '(?H ?f) resize-window-alias-list)))
 
 
 ;; Random other things
