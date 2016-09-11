@@ -28,6 +28,7 @@
    haskell-mode
    helm
    helm-projectile
+   helm-swoop
    highlight-parentheses
    ido-vertical-mode
    lua-mode
@@ -215,7 +216,12 @@ Lisp function does not specify a special indentation."
 
 ; general default prefix key bindings
 (general-define-key
- :keymaps '(normal visual insert emacs)
+ :keymaps `(motion)
+  "SPC" nil
+  ","   nil)
+
+(general-define-key
+ :keymaps '(normal visual motion insert emacs)
  :prefix cp/normal-prefix
  :non-normal-prefix cp/non-normal-prefix
   "a" '(:ignore t :which-key "applications")
@@ -235,12 +241,11 @@ Lisp function does not specify a special indentation."
   "w K" #'kill-buffer-and-window
   "w o" #'delete-other-windows
   "w x" #'delete-window
-  "h"   #'help-command
-  )
+  "h"   #'help-command)
 
 ; general command prefix keybindings, normal state only
 (general-define-key
- :keymaps '(normal)
+ :keymaps '(normal motion)
  :prefix ","
   "h" #'cp/evil-highlight-symbol
   "x" #'delete-window
@@ -298,14 +303,14 @@ Lisp function does not specify a special indentation."
 (use-package evil
   :diminish undo-tree-mode
   :general
-  (:keymaps '(normal visual insert emacs)
+  (:keymaps '(normal visual motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w h" #'evil-window-left
    "w j" #'evil-window-down
    "w k" #'evil-window-up
    "w l" #'evil-window-right)
-  (:keymaps '(normal)
+  (:keymaps '(normal motion emacs)
    "C-h" #'evil-window-left
    "C-j" #'evil-window-down
    "C-k" #'evil-window-up
@@ -333,7 +338,7 @@ Lisp function does not specify a special indentation."
 (use-package avy
   :defer t
   :general
-  (:keymaps '(normal)
+  (:keymaps '(normal motion)
    :prefix cp/normal-prefix
    "a a"   '(:ignore t :which-key "avy")
    "a a c" #'avy-goto-char
@@ -394,14 +399,14 @@ Lisp function does not specify a special indentation."
   :commands (buf-move-down buf-move-up buf-move-left buf-move-right)
   :init
   :general
-  (:keymaps '(normal visual insert emacs)
+  (:keymaps '(normal visual motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w H" #'buf-move-left
    "w J" #'buf-move-down
    "w K" #'buf-move-up
    "w L" #'buf-move-right)
-  (:keymaps '(normal)
+  (:keymaps '(normal motion)
    :prefix nil
    "C-M-h" #'buf-move-left
    "C-M-j" #'buf-move-down
@@ -453,7 +458,7 @@ Lisp function does not specify a special indentation."
 (use-package xcscope
   :defer t
   :general
-  (:keymaps '(normal visual insert emacs)
+  (:keymaps '(normal visual motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a c" '(:keymap cscope-command-map
@@ -718,7 +723,7 @@ Lisp function does not specify a special indentation."
 (use-package resize-window
   :defer t
   :general
-  (:keymaps '(normal insert visual emacs)
+  (:keymaps '(normal insert motion visual emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w r" #'resize-window)
@@ -735,7 +740,7 @@ Lisp function does not specify a special indentation."
 (use-package winner
   :defer t
   :general
-  (:keymaps '(normal insert visual emacs)
+  (:keymaps '(normal insert motion visual emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w u" #'winner-undo
@@ -1235,11 +1240,11 @@ Lisp function does not specify a special indentation."
   :commands (projectile-project-p)
   :defer t
   :general
-  (:keymaps '(normal visual insert emacs)
+  (:keymaps '(normal visual motion insert emacs)
    :prefix nil
    :non-normal-prefix nil
    "C-c p" '(:keymap projectile-command-map :which-key "projectile"))
-  (:keymaps '(normal visual insert emacs)
+  (:keymaps '(normal visual motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a p"   '(:keymap projectile-command-map :which-key "projectile"))
@@ -1297,16 +1302,17 @@ Lisp function does not specify a special indentation."
 (zenburn-with-color-variables
   (custom-theme-set-faces
    `zenburn
-   `(isearch                  ((t (:foreground ,zenburn-bg-05 :weight bold :background ,zenburn-orange))))
-   `(lazy-highlight           ((t (:foreground ,zenburn-bg-05 :weight bold :background ,zenburn-orange))))
-   `(diff-added               ((t (:foreground ,zenburn-green :weight bold))))
-   `(diff-removed             ((t (:foreground ,zenburn-red))))
-   `(flx-highlight-face       ((t (:foreground ,zenburn-red :weight normal))))
-   `(linum                    ((t (:foreground ,zenburn-green-1 :background ,zenburn-bg))))
-   '(dired-perm-write         ((t nil)))
-   '(helm-buffer-directory    ((t (:foreground "color-247"))))
-   '(helm-ff-dotted-directory ((t (:foreground "color-247"))))
-   '(helm-match               ((t (:foreground "gold1" :weight normal))))))
+   `(isearch                     ((t (:foreground ,zenburn-bg-05 :weight bold :background ,zenburn-orange))))
+   `(lazy-highlight              ((t (:foreground ,zenburn-bg-05 :weight bold :background ,zenburn-orange))))
+   `(diff-added                  ((t (:foreground ,zenburn-green :weight bold))))
+   `(diff-removed                ((t (:foreground ,zenburn-red))))
+   `(flx-highlight-face          ((t (:foreground ,zenburn-red :weight normal))))
+   `(linum                       ((t (:foreground ,zenburn-green-1 :background ,zenburn-bg))))
+   '(dired-perm-write            ((t nil)))
+   '(helm-buffer-directory       ((t (:foreground "color-247"))))
+   '(helm-ff-dotted-directory    ((t (:foreground "color-247"))))
+   '(helm-match                  ((t (:foreground "gold1" :weight normal))))
+   '(helm-swoop-target-word-face ((t (:foreground "gold1" :weight normal))))))
 
 
 ; 2014-04-08: local emacs overrides
