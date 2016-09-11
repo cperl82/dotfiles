@@ -1,7 +1,3 @@
-;; CR-cperl:
-;; 1. Install flymake / python stuff
-;; 2. Checkout dired-hacks
-
 
 ; el-get
 (add-to-list 'load-path (concat user-emacs-directory "el-get/el-get"))
