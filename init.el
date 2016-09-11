@@ -499,7 +499,8 @@ Lisp function does not specify a special indentation."
   :init
   (add-hook 'emacs-lisp-mode-hook 'turn-on-elisp-slime-nav-mode)
   :general
-  (:keymaps `(normal)
+  (:keymaps '(elisp-slive-nav-mode)
+   :states  '(normal)
    "C-c &"   #'pop-tag-mark
    "C-c ;"   #'elisp-slime-nav-find-elisp-thing-at-point
    "C-c C-t" #'elisp-slime-nav-describe-elisp-thing-at-point))
@@ -998,7 +999,8 @@ Lisp function does not specify a special indentation."
 
 (defun cp/org-sort-entries ()
   (interactive)
-  (org-sort-entries nil ?f #'cp/org-sort-key))
+  (org-sort-entries nil ?f #'cp/org-sort-key)
+  (funcall (general-simulate-keys "TAB TAB")))
 
 (use-package org
   :defer t
@@ -1010,7 +1012,8 @@ Lisp function does not specify a special indentation."
    "o"   '(:ignore t :which-key "org")
    "o p" #'org-previous-link
    "o n" #'org-next-link
-   "o a" #'org-agenda)
+   "o a" #'org-agenda
+   "o s" #'cp/org-sort-entries)
   (:keymaps '(org-mode-map)
    :states  '(normal)
    "TAB"     #'org-cycle
