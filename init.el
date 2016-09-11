@@ -1185,6 +1185,16 @@ Lisp function does not specify a special indentation."
 (use-package helm
   :defer t
   :general
+  (:keymaps '(normal visual motion insert emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "a h"   '(:ignore t :which-key "helm")
+   "a h m" #'helm-mini
+   "a h f" #'helm-find-files
+   "a h F" #'helm-find
+   "a h o" #'helm-occur
+   "a h a" #'helm-apropos
+   "a h r" #'helm-resume)
   (:keymaps 'helm-map
    "TAB" #'helm-execute-persistent-action
    "C-i" #'helm-execute-persistent-action
@@ -1193,6 +1203,18 @@ Lisp function does not specify a special indentation."
   (progn
     (advice-add 'helm-buffer--show-details :around #'cp/advice/helm-buffer--show-details)
     (setq helm-split-window-default-side 'right)))
+
+
+
+; helm-swoop
+(use-package helm-swoop
+  :defer t
+  :general
+  (:keymaps '(normal visual motion insert emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "a h s" #'helm-swoop))
+
 
 
 ;; projectile
