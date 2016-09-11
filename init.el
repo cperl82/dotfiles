@@ -249,6 +249,8 @@ Lisp function does not specify a special indentation."
   "v" #'split-window-horizontally
   "j" #'dired-jump
   "f" #'find-file
+  "k" #'kill-buffer
+  "K" #'kill-buffer-and-window
   "e" #'cp/escreen-get-active-screen-names-with-emphasis)
 
 
@@ -409,6 +411,13 @@ Lisp function does not specify a special indentation."
 
 
 ;; dired
+(defun cp/dired-tab-dwim ()
+  (interactive)
+  (if (dired-get-subdir)
+      (dired-hide-subdir 1)
+    (ignore-errors
+      (dired-find-file-other-window))))
+
 (use-package dired
   :defer t
   :general
@@ -426,17 +435,17 @@ Lisp function does not specify a special indentation."
    "M-k" #'dired-kill-subdir
    "M-n" #'dired-next-subdir
    "M-p" #'dired-prev-subdir
-   "TAB" #'dired-hide-subdir
    "c"   #'dired-create-directory
    "q"   #'kill-this-buffer
+   "TAB" #'cp/dired-tab-dwim
    "r"   #'revert-buffer)
   :config
   (progn
+    (use-package dired-x)
     (put 'dired-find-alternate-file 'disabled nil)
     (define-key dired-mode-map (kbd "SPC") nil)
     (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))))
 
-(use-package dired-x)
 
 
 
