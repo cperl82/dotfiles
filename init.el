@@ -968,45 +968,89 @@ Lisp function does not specify a special indentation."
 (defun cp/advice/org-previous-link ()
   (cp/org-echo-link-at-point))
 
+; http://emacs.stackexchange.com/questions/9585/org-how-to-sort-headings-by-todo-and-then-by-priority
+(defun cp/todo-to-int (todo)
+  (car
+   (-non-nil
+    (mapcar
+     (lambda (keywords)
+       (let* ((finished-states
+               (cdr (-drop-while (lambda (x) (not (string= x "|"))) keywords)))
+              (n-finished-states (length finished-states))
+              (n-finished-states (if (eq n-finished-states 0) 1 n-finished-states))
+              (todo-seq-orig
+               (-map (lambda (x) (car (split-string x "(")))
+                     (cdr keywords)))
+              (todo-seq-mod (-rotate n-finished-states todo-seq-orig)))
+         (-find-index (lambda (x) (string= x todo)) todo-seq-mod)))
+     org-todo-keywords))))
+
+(defun cp/non-todo-to-int (max todo)
+  (let ((item (replace-regexp-in-string "^\\** *" "" todo)))
+    (if (string-match "\\bNotes\\b" item) -1 max)))
+
+(defun cp/org-sort-key ()
+  (let* ((todo-max (apply #'max (mapcar #'length org-todo-keywords)))
+         (todo (org-entry-get (point) "TODO"))
+         (todo-int
+          (if todo
+              (cp/todo-to-int todo)
+            (cp/non-todo-to-int todo-max (org-entry-get (point) "ITEM"))))
+         (priority (org-entry-get (point) "PRIORITY"))
+         (priority-int (if priority (string-to-char priority) org-default-priority)))
+    (format "%03d %03d" todo-int priority-int)))
+
+(defun cp/org-sort-entries ()
+  (interactive)
+  (org-sort-entries nil ?f #'cp/org-sort-key))
+
 (use-package org
+  :defer t
+  :general
+  (:keymaps '(org-mode-map)
+   :states  '(normal emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "o"   '(:ignore t :which-key "org")
+   "o p" #'org-previous-link
+   "o n" #'org-next-link
+   "o a" #'org-agenda)
+  (:keymaps '(org-mode-map)
+   :states  '(normal)
+   "TAB"     #'org-cycle
+   "M-h"     #'org-metaleft
+   "M-l"     #'org-metaright
+   "M-k"     #'org-metaup
+   "M-j"     #'org-metadown
+   "M-H"     #'org-shiftmetaleft
+   "M-L"     #'org-shiftmetaright
+   "M-K"     #'org-shiftmetaup
+   "M-J"     #'org-shiftmetadown
+   "C-c a"   #'org-agenda
+   "C-c c"   #'org-capture)
+  (:keymaps '(org-mode-map)
+   :states  '(insert)
+   "M-."     #'cp/org-surround-tilda
+   "M-v"     #'cp/org-surround-equal
+   "M-b"     #'cp/org-surround-star
+   "M-u"     #'cp/org-helm-complete-user-name-at-point)
+  (:keymaps '(org-agenda-mode-map)
+   :states  `(emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "o"   '(:ignore t :which-key "org")
+   "o a" #'org-agenda)
+  (:keymaps '(org-agenda-mode-map)
+   :states  '(emacs)
+   "j"       #'org-agenda-next-line
+   "k"       #'org-agenda-previous-line
+   "h"       #'left-char
+   "l"       #'right-char
+   " "       #'org-agenda-cycle-show
+   "C-c a"   #'org-agenda
+   "C-c c"   #'org-capture)
   :config
   (progn
-    ; http://emacs.stackexchange.com/questions/9585/org-how-to-sort-headings-by-todo-and-then-by-priority
-    (defun cp/todo-to-int (todo)
-      (car
-       (-non-nil
-        (mapcar
-         (lambda (keywords)
-           (let* ((finished-states
-                   (cdr (-drop-while (lambda (x) (not (string= x "|"))) keywords)))
-                  (n-finished-states (length finished-states))
-                  (n-finished-states (if (eq n-finished-states 0) 1 n-finished-states))
-                  (todo-seq-orig
-                   (-map (lambda (x) (car (split-string x "(")))
-                         (cdr keywords)))
-                  (todo-seq-mod (-rotate n-finished-states todo-seq-orig)))
-             (-find-index (lambda (x) (string= x todo)) todo-seq-mod)))
-         org-todo-keywords))))
-
-    (defun cp/non-todo-to-int (max todo)
-      (let ((item (replace-regexp-in-string "^\\** *" "" todo)))
-        (if (string-match "\\bNotes\\b" item) -1 max)))
-
-    (defun cp/org-sort-key ()
-      (let* ((todo-max (apply #'max (mapcar #'length org-todo-keywords)))
-             (todo (org-entry-get (point) "TODO"))
-             (todo-int
-              (if todo
-                  (cp/todo-to-int todo)
-                (cp/non-todo-to-int todo-max (org-entry-get (point) "ITEM"))))
-             (priority (org-entry-get (point) "PRIORITY"))
-             (priority-int (if priority (string-to-char priority) org-default-priority)))
-        (format "%03d %03d" todo-int priority-int)))
-
-    (defun cp/org-sort-entries ()
-      (interactive)
-      (org-sort-entries nil ?f #'cp/org-sort-key))
-
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-agenda-files '("~/org"))
     (setq org-capture-templates
@@ -1090,34 +1134,6 @@ Lisp function does not specify a special indentation."
     (setq org-hide-leading-stars t)
     (setq org-make-link-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
     (add-to-list 'org-open-at-point-functions #'cp/org-echo-link-at-point-if-not-darwin)
-    (evil-define-key 'normal org-mode-map        (kbd "TAB")     #'org-cycle)
-    (evil-define-key 'normal org-mode-map        (kbd "M-h")     #'org-metaleft)
-    (evil-define-key 'normal org-mode-map        (kbd "M-l")     #'org-metaright)
-    (evil-define-key 'normal org-mode-map        (kbd "M-k")     #'org-metaup)
-    (evil-define-key 'normal org-mode-map        (kbd "M-j")     #'org-metadown)
-    (evil-define-key 'normal org-mode-map        (kbd "M-H")     #'org-shiftmetaleft)
-    (evil-define-key 'normal org-mode-map        (kbd "M-L")     #'org-shiftmetaright)
-    (evil-define-key 'normal org-mode-map        (kbd "M-K")     #'org-shiftmetaup)
-    (evil-define-key 'normal org-mode-map        (kbd "M-J")     #'org-shiftmetadown)
-    (evil-define-key 'normal org-mode-map        (kbd "C-c a")   #'org-agenda)
-    (evil-define-key 'normal org-mode-map        (kbd "C-c c")   #'org-capture)
-    (evil-define-key 'normal org-mode-map        (kbd "<SPC>op") #'org-previous-link)
-    (evil-define-key 'normal org-mode-map        (kbd "<SPC>on") #'org-next-link)
-    (evil-define-key 'emacs  org-agenda-mode-map (kbd "j")       #'org-agenda-next-line)
-    (evil-define-key 'emacs  org-agenda-mode-map (kbd "k")       #'org-agenda-previous-line)
-    (evil-define-key 'emacs  org-agenda-mode-map (kbd "h")       #'left-char)
-    (evil-define-key 'emacs  org-agenda-mode-map (kbd "l")       #'right-char)
-    (evil-define-key 'emacs  org-agenda-mode-map (kbd " ")       #'org-agenda-cycle-show)
-    (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-c a")   #'org-agenda)
-    (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-c c")   #'org-capture)
-    (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-j")     #'evil-window-down)
-    (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-k")     #'evil-window-up)
-    (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-h")     #'evil-window-left)
-    (evil-define-key 'emacs  org-agenda-mode-map (kbd "C-l")     #'evil-window-right)
-    (evil-define-key 'insert org-mode-map        (kbd "M-.")     #'cp/org-surround-tilda)
-    (evil-define-key 'insert org-mode-map        (kbd "M-v")     #'cp/org-surround-equal)
-    (evil-define-key 'insert org-mode-map        (kbd "M-b")     #'cp/org-surround-star)
-    (evil-define-key 'insert org-mode-map        (kbd "M-u")     #'cp/org-helm-complete-user-name-at-point)
     (advice-add 'org-next-link     :after #'cp/advice/org-next-link)
     (advice-add 'org-previous-link :after #'cp/advice/org-previous-link)
     (add-hook
