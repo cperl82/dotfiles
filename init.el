@@ -24,6 +24,7 @@
    evil-surround
    f
    flx
+   flycheck
    general
    haskell-mode
    helm
@@ -32,7 +33,6 @@
    highlight-parentheses
    ido-vertical-mode
    lua-mode
-   neotree
    org-mode
    projectile
    rainbow-delimiters

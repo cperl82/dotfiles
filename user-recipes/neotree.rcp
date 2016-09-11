@@ -1,7 +1,0 @@
-(:name neotree
-       :website "https://github.com/jaypei/emacs-neotree"
-       :description "An Emacs tree plugin like NerdTree for Vim."
-       :type github
-       :branch "master"
-       :checkout "543b75943b573d9c8b3a22476bdabb331306fd68"
-       :pkgname "jaypei/emacs-neotree")
