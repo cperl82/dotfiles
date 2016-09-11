@@ -862,6 +862,7 @@ Lisp function does not specify a special indentation."
     (advice-add 'escreen-install       :after #'cp/advice/escreen-install)
     (escreen-install)))
 
+
 
 ;; org
 ; http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp
@@ -1157,6 +1158,7 @@ Lisp function does not specify a special indentation."
      (lambda ()
        (setq electric-indent-mode nil)))))
 
+
 
 ; helm
 ; 2015-09-11 Ripped wholesale from helm-buffers.el so I could control the formatting of dir
@@ -1305,9 +1307,9 @@ Lisp function does not specify a special indentation."
         (helm-projectile-on)
         (setq projectile-switch-project-action #'helm-projectile)))))
 
-
-;; Random other things
 
+
+; linum
 ; 2014-04-04: Holy moly its effort to get line numbers like vim!
 ; http://www.emacswiki.org/emacs/LineNumbers#toc6
 (unless window-system
@@ -1351,6 +1353,7 @@ Lisp function does not specify a special indentation."
    '(helm-ff-dotted-directory    ((t (:foreground "color-247"))))
    '(helm-match                  ((t (:foreground "gold1" :weight normal))))
    '(helm-swoop-target-word-face ((t (:foreground "gold1" :weight normal))))))
+
 
 
 ; 2014-04-08: local emacs overrides
