@@ -1,4 +1,3 @@
-
 ; el-get
 (add-to-list 'load-path (concat user-emacs-directory "el-get/el-get"))
 (unless (require 'el-get nil 'noerror) (with-current-buffer
