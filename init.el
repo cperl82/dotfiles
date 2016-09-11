@@ -965,7 +965,7 @@ Lisp function does not specify a special indentation."
 (defun cp/advice/org-previous-link ()
   (cp/org-echo-link-at-point))
 
-; http://emacs.stackexchange.com/questions/9585/org-how-to-sort-headings-by-todo-and-then-by-priority
+;; http://emacs.stackexchange.com/questions/9585/org-how-to-sort-headings-by-todo-and-then-by-priority
 (defun cp/todo-to-int (todo)
   (car
    (-non-nil
@@ -1000,6 +1000,7 @@ Lisp function does not specify a special indentation."
 (defun cp/org-sort-entries ()
   (interactive)
   (org-sort-entries nil ?f #'cp/org-sort-key)
+  ;; there may be a better way to do this, but for now its refolds things the way I want after sorting
   (funcall (general-simulate-keys "TAB TAB")))
 
 (use-package org
