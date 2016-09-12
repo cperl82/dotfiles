@@ -499,8 +499,10 @@ Lisp function does not specify a special indentation."
   :init
   (add-hook 'emacs-lisp-mode-hook 'turn-on-elisp-slime-nav-mode)
   :general
-  (:keymaps '(elisp-slive-nav-mode)
+  (:keymaps '(elisp-slime-nav-mode-map)
    :states  '(normal)
+   :prefix nil
+   :non-normal-prefix nil
    "C-c &"   #'pop-tag-mark
    "C-c ;"   #'elisp-slime-nav-find-elisp-thing-at-point
    "C-c C-t" #'elisp-slime-nav-describe-elisp-thing-at-point))
