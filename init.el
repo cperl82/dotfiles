@@ -362,7 +362,8 @@ Lisp function does not specify a special indentation."
 (use-package uniquify
   :config
   (progn
-    (setq uniquify-buffer-name-style 'forward)))
+    (setq uniquify-buffer-name-style 'forward)
+    (setq uniquify-strip-common-suffix nil)))
 
 
 
@@ -441,6 +442,7 @@ Lisp function does not specify a special indentation."
    "c"   #'dired-create-directory
    "q"   #'kill-this-buffer
    "TAB" #'cp/dired-tab-dwim
+   "o"   #'dired-find-file-other-window
    "r"   #'revert-buffer)
   :config
   (progn
