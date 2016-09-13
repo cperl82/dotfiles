@@ -19,7 +19,7 @@
    evil-surround
    f
    flx
-   flycheck
+   ;;flycheck
    general
    haskell-mode
    helm
@@ -319,7 +319,9 @@ Lisp function does not specify a special indentation."
     (setq-default evil-flash-delay 5)
     (setq-default evil-move-beyond-eol t))
   :config
-  (progn (evil-mode 1)))
+  (progn
+    (evil-mode 1)
+    (evil-select-search-module 'evil-search-module 'evil-search)))
 
 
 
@@ -461,7 +463,8 @@ Lisp function does not specify a special indentation."
   (:keymaps 'cscope-list-entry-keymap
    :states '(normal)
    "RET" #'cscope-select-entry-inplace
-   "TAB" #'cscope-select-entry-other-window)
+   "TAB" #'cscope-select-entry-other-window
+   "o"   #'cscope-select-entry-other-window)
   :config
   (progn
     (setq cscope-option-use-inverted-index t)
@@ -579,7 +582,9 @@ Lisp function does not specify a special indentation."
   :general
   (:keymaps 'hs-minor-mode-map
    :states  '(normal)
-   "TAB" #'hs-toggle-hiding))
+   "TAB" #'hs-toggle-hiding)
+  :config
+  (setq hs-isearch-open t))
 
 
 
