@@ -1,4 +1,4 @@
-; el-get
+;; el-get
 (add-to-list 'load-path (concat user-emacs-directory "el-get/el-get"))
 (unless (require 'el-get nil 'noerror) (with-current-buffer
     (url-retrieve-synchronously
@@ -43,11 +43,11 @@
    xcscope
    xoria256-emacs))
 
-; 2014-04-26: Loading other stuff
+;; 2014-04-26: Loading other stuff
 (add-to-list 'load-path (concat user-emacs-directory "lisp"))
 
 
-; Misc
+;; Misc
 (defun cp/confirm-before-quit (force)
   "Ask for confirmation before quiting emacs.  If a prefix argument is
 given, it skips the confirmation"
@@ -63,7 +63,7 @@ given, it skips the confirmation"
       c-default-style         "linux"
       ad-redefinition-action  'accept)
 
-; 2015-09-11 Enable narrowing command which are disabled by default
+;; 2015-09-11 Enable narrowing command which are disabled by default
 (put 'narrow-to-region 'disabled nil)
 
 (if (fboundp 'menu-bar-mode)   (menu-bar-mode   -1))
@@ -90,7 +90,7 @@ given, it skips the confirmation"
               (setq n (1+ n)))))
       reduced)))
 
-; 2014-04-22 mode-line-format
+;; 2014-04-22 mode-line-format
 (setq-default mode-line-format
 	      `("%e"
 		mode-line-front-space
@@ -111,7 +111,7 @@ given, it skips the confirmation"
 		mode-line-misc-info
 		mode-line-end-spaces))
 
-; 2014-05-07: function to revert all buffers
+;; 2014-05-07: function to revert all buffers
 (defun revert-buffer-all ()
   "Revert all buffers.  This reverts buffers that are visiting a file, kills
 buffers whose visited file has disappeared and refreshes dired buffers."
@@ -127,7 +127,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 	      (kill-buffer b)))
 	   ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
 
-; 2016-09-10 better alignment of property lists
+;; 2016-09-10 better alignment of property lists
 ; http://emacs.stackexchange.com/questions/10230/how-to-indent-keywords-aligned
 (defun cp/lisp-indent-function (indent-point state)
        "This function is the normal value of the variable `lisp-indent-function'.
@@ -200,7 +200,7 @@ Lisp function does not specify a special indentation."
                                       (funcall method indent-point state))))))))
 
 
-; Base packages
+;; Base packages
 (require 'general)
 (require 'use-package)
 (require 'diminish)
@@ -209,7 +209,7 @@ Lisp function does not specify a special indentation."
 (setq cp/normal-prefix "SPC")
 (setq cp/non-normal-prefix "M-SPC")
 
-; general default prefix key bindings
+;; general default prefix key bindings
 (general-define-key
  :keymaps `(motion)
   "SPC" nil
@@ -238,7 +238,7 @@ Lisp function does not specify a special indentation."
   "w x" #'delete-window
   "h"   #'help-command)
 
-; general command prefix keybindings, normal state only
+;; general command prefix keybindings, normal state only
 (general-define-key
  :keymaps '(normal motion)
  :prefix ","
@@ -264,9 +264,9 @@ Lisp function does not specify a special indentation."
 
 
 
-; evil
-; 2014-03-28: Functions to support selecting something in Visual mode
-; and then automatically start searching for it by pressing "/" or "?"
+;; evil
+;; 2014-03-28: Functions to support selecting something in Visual mode
+;; and then automatically start searching for it by pressing "/" or "?"
 (defun cp/evil-highlight-symbol ()
   "Do everything that `*' would do, but don't actually jump to the next match"
   (interactive)
@@ -312,7 +312,8 @@ Lisp function does not specify a special indentation."
    "C-l" #'evil-window-right)
   (:keymaps '(visual)
    "/" #'cp/evil-search-forward
-   "?" #'cp/evil-search-backward)
+   "?" #'cp/evil-search-backward
+   "i" #'indent-region)
   :init
   (progn
     (setq-default evil-symbol-word-search t)
@@ -321,7 +322,7 @@ Lisp function does not specify a special indentation."
   :config
   (progn
     (evil-mode 1)
-    (evil-select-search-module 'evil-search-module 'evil-search)))
+    (evil-select-search-module 'evil-search-module 'isearch)))
 
 
 
