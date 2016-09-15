@@ -1,47 +1,60 @@
 ;; el-get
 (add-to-list 'load-path (concat user-emacs-directory "el-get/el-get"))
-(unless (require 'el-get nil 'noerror) (with-current-buffer
-    (url-retrieve-synchronously
-    "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
     (goto-char (point-max)) (eval-print-last-sexp)))
 
 (setq el-get-verbose t)
 (add-to-list 'el-get-recipe-path (concat user-emacs-directory "user-recipes"))
 
-(el-get
- 'sync
- '(avy
-   color-theme-zenburn
-   diminish
-   elisp-slime-nav
-   evil
-   evil-smartparens
-   evil-surround
-   f
-   flx
-   ;;flycheck
-   general
-   haskell-mode
-   helm
-   helm-projectile
-   helm-swoop
-   highlight-parentheses
-   ido-vertical-mode
-   lua-mode
-   org-mode
-   projectile
-   rainbow-delimiters
-   rainbow-mode
-   resize-window
-   s
-   smartparens
-   systemtap-mode
-   tuareg-mode
-   undo-tree
-   use-package
-   which-key
-   xcscope
-   xoria256-emacs))
+;; 2016-09-14: Testing having recipes directly inline rather that in the above directory
+(add-to-list
+ 'el-get-sources
+ '(:name ace-window
+   :description "Quickly switch windows using `avy'"
+   :type github
+   :pkgname "abo-abo/ace-window"
+   :checkout "77cc05f7284577ed396f292de0e7bb8ec561ea81"
+   :depends (avy)))
+
+(let* ((sources (map 'list (lambda (plist) (plist-get plist :name)) el-get-sources))
+       (packages
+        '(avy
+          color-theme-zenburn
+          dash
+          diminish
+          elisp-slime-nav
+          evil
+          evil-smartparens
+          evil-surround
+          f
+          flx
+          ;;flycheck
+          general
+          haskell-mode
+          helm
+          helm-projectile
+          helm-swoop
+          highlight-parentheses
+          ido-vertical-mode
+          lua-mode
+          org-mode
+          projectile
+          rainbow-delimiters
+          rainbow-mode
+          resize-window
+          s
+          smartparens
+          systemtap-mode
+          tuareg-mode
+          undo-tree
+          use-package
+          which-key
+          xcscope
+          xoria256-emacs))
+       (sources (append sources packages)))
+  (el-get 'sync sources))
 
 ;; 2014-04-26: Loading other stuff
 (add-to-list 'load-path (concat user-emacs-directory "lisp"))
@@ -238,7 +251,7 @@ Lisp function does not specify a special indentation."
   "w x" #'delete-window
   "h"   #'help-command)
 
-;; general command prefix keybindings, normal state only
+;; general command prefix keybindings, normal and motion state only
 (general-define-key
  :keymaps '(normal motion)
  :prefix ","
@@ -464,7 +477,6 @@ Lisp function does not specify a special indentation."
    "a c" '(:keymap cscope-command-map
            :which-key "cscope"))
   (:keymaps 'cscope-list-entry-keymap
-   :states '(normal)
    "RET" #'cscope-select-entry-inplace
    "TAB" #'cscope-select-entry-other-window
    "o"   #'cscope-select-entry-other-window)
@@ -476,6 +488,13 @@ Lisp function does not specify a special indentation."
     (add-hook
      'cscope-list-entry-hook
      (lambda ()
+       ;; This should be able to be specified via `evil-set-initial-state', but that
+       ;; doesn't seem to work for the cscope buffer as it seems to be in fundamental-mode
+       ;; when evil loads for the first time.  I'm not entirely sure what is going on, but
+       ;; this works as workaround for now.
+       (evil-make-overriding-map cscope-list-entry-keymap)
+       (evil-add-hjkl-bindings   cscope-list-entry-keymap 'motion)
+       (evil-motion-state)
        (setq-local
         face-remapping-alist
         '((cscope-separator-face   font-lock-string-face)
@@ -582,12 +601,10 @@ Lisp function does not specify a special indentation."
 ;; hideshow
 (use-package hideshow
   :defer t
-  :general
-  (:keymaps 'hs-minor-mode-map
-   :states  '(normal)
-   "TAB" #'hs-toggle-hiding)
   :config
-  (setq hs-isearch-open t))
+  (setq hs-isearch-open t)
+  (evil-define-minor-mode-key 'normal 'hs-minor-mode
+    (kbd "TAB") #'hs-toggle-hiding))
 
 
 
