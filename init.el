@@ -249,6 +249,7 @@ Lisp function does not specify a special indentation."
   "w K" #'kill-buffer-and-window
   "w o" #'delete-other-windows
   "w x" #'delete-window
+  "w =" #'balance-windows
   "h"   #'help-command)
 
 ;; general command prefix keybindings, normal and motion state only
@@ -354,10 +355,19 @@ Lisp function does not specify a special indentation."
    "a a"   '(:ignore t :which-key "avy")
    "a a c" #'avy-goto-char
    "a a C" #'avy-goto-char-2
-   "a a w" #'avy-goto-word-1)
+   "a a W" #'avy-goto-word-1)
   :config
   (progn
     (setq avy-background t)))
+
+;; ace-window
+(use-package ace-window
+  :defer t
+  :general
+  (:keymaps '(normal motion)
+   :prefix cp/normal-prefix
+   "a a w" #'ace-window))
+
 
 
 ;; paren
@@ -1220,6 +1230,7 @@ Lisp function does not specify a special indentation."
    "a h m" #'helm-mini
    "a h f" #'helm-find-files
    "a h F" #'helm-find
+   "a h b" #'helm-buffers-list
    "a h o" #'helm-occur
    "a h a" #'helm-apropos
    "a h r" #'helm-resume)
