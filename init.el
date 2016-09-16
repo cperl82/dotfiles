@@ -484,12 +484,23 @@ Lisp function does not specify a special indentation."
   (:keymaps '(normal visual motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
-   "a c" '(:keymap cscope-command-map
-           :which-key "cscope"))
-  (:keymaps 'cscope-list-entry-keymap
+   "a c" '(:keymap cscope-command-map :which-key "cscope"))
+  (:keymaps '(cscope-list-entry-keymap)
+   :states  '(motion)
    "RET" #'cscope-select-entry-inplace
    "TAB" #'cscope-select-entry-other-window
-   "o"   #'cscope-select-entry-other-window)
+   "o"   #'cscope-select-entry-other-window
+   "M-k" #'cscope-history-kill-file
+   "M-K" #'cscope-history-kill-result
+   "q"   #'bury-buffer
+   "Q"   #'cscope-quit
+   "d"   #'cscope-dired-directory
+   "U"   #'cscope-unset-initial-directory
+   "T"   #'cscope-tell-user-about-directory
+   "M-n" #'cscope-history-forward-file
+   "M-p" #'cscope-history-backward-file
+   "M-N" #'cscope-history-forward-result
+   "M-P" #'cscope-history-backward-result)
   :config
   (progn
     (setq cscope-option-use-inverted-index t)
@@ -502,8 +513,6 @@ Lisp function does not specify a special indentation."
        ;; doesn't seem to work for the cscope buffer as it seems to be in fundamental-mode
        ;; when evil loads for the first time.  I'm not entirely sure what is going on, but
        ;; this works as workaround for now.
-       (evil-make-overriding-map cscope-list-entry-keymap)
-       (evil-add-hjkl-bindings   cscope-list-entry-keymap 'motion)
        (evil-motion-state)
        (setq-local
         face-remapping-alist
@@ -612,9 +621,10 @@ Lisp function does not specify a special indentation."
 (use-package hideshow
   :defer t
   :config
-  (setq hs-isearch-open t)
-  (evil-define-minor-mode-key 'normal 'hs-minor-mode
-    (kbd "TAB") #'hs-toggle-hiding))
+  (progn
+    (setq hs-isearch-open t)
+    (evil-define-minor-mode-key 'normal 'hs-minor-mode
+      (kbd "TAB") #'hs-toggle-hiding)))
 
 
 
