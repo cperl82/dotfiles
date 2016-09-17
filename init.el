@@ -1093,7 +1093,6 @@ Lisp function does not specify a special indentation."
    "C-c c"   #'org-capture)
   :config
   (progn
-    (put 'org-tag 'face-alias 'org-archived)
     (setq org-tags-column -90)
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-todo-keywords
