@@ -1148,10 +1148,6 @@ Lisp function does not specify a special indentation."
              ((tags-todo "-DEADLINE={.+}/WAIT"
                          ((org-agenda-overriding-header "WAIT for, no deadline")
                           (org-agenda-sorting-strategy '(tsia-up))))))
-            ("t" "By tag                      "
-             ((tags-todo ""
-                         ((org-agenda-overriding-header "By tag")
-                          (org-agenda-sorting-strategy '(todo-state-down tsia-up))))))
             ("u" "Untagged next actions       "
              ((tags-todo "-{.*}"
                          ((org-agenda-overriding-header "NEXT ACTIONS, no context")
