@@ -1093,6 +1093,8 @@ Lisp function does not specify a special indentation."
    "C-c c"   #'org-capture)
   :config
   (progn
+    (put 'org-tag 'face-alias 'org-archived)
+    (setq org-tags-column -90)
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-todo-keywords
           '((sequence "DFER(r)" "DPND(x)" "WAIT(w)" "NEXT(n)" "|" "DONE(d)" "CNCL(c)")))
@@ -1103,6 +1105,58 @@ Lisp function does not specify a special indentation."
             ("CNCL" . "#FFFFFF")
             ("DONE" . "#FFFFFF")))
     (setq org-agenda-files '("~/org"))
+    (setq org-agenda-tags-column -90)
+    (setq org-agenda-custom-commands
+          `(("r" "Read/Review                 "
+             ((tags-todo "read/NEXT"
+                         ((org-agenda-overriding-header "NEXT ACTIONS, Read/Review")
+                          (org-agenda-sorting-strategy '(tsia-up))))))
+            ("d" "Deferred (with reminder)    "
+             ((tags-todo "DEADLINE={.+}/DFER"
+                         ((org-agenda-overriding-header "DEFERRED, with reminder")
+                          (org-agenda-sorting-strategy '(tsia-up))))))
+            ("D" "Deferred (without reminder) "
+             ((tags-todo "-DEADLINE={.+}/DFER"
+                         ((org-agenda-overriding-header "DEFERRED, without reminder")
+                          (org-agenda-sorting-strategy '(tsia-up))))))
+            ("n" . "Next actions")
+            ("na" "NEXT action (all)          "
+             ((tags-todo "/NEXT"
+                         ((org-agenda-overriding-header "NEXT ACTIONS, ALL")
+                          (org-agenda-sorting-strategy '(tsia-up))))))
+            ("nt" "NEXT action by tag         "
+             ((tags-todo ""
+                         ((org-agenda-overriding-header "NEXT ACTIONS")
+                          (org-agenda-sorting-strategy '(tsia-up))
+                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
+            ("w" . "Waiting for")
+            ("wa" "WAIT for (all)             "
+             ((tags-todo "/WAIT"
+                         ((org-agenda-overriding-header "WAITING FOR (all))")
+                          (org-agenda-sorting-strategy '(tsia-up))))))
+            ("wt" "WAIT for by tag            "
+             ((tags-todo ""
+                         ((org-agenda-overriding-header "WAITING FOR by tag")
+                          (org-agenda-sorting-strategy '(tsia-up))
+                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("WAIT")))))))
+            ("x" . "Stuck")
+            ("xn" "NEXT action, no deadline   "
+             ((tags-todo "-DEADLINE={.+}/NEXT"
+                         ((org-agenda-overriding-header "NEXT action, no deadline")
+                          (org-agenda-sorting-strategy '(tsia-up))))))
+            ("xw" "WAIT for, no deadline      "
+             ((tags-todo "-DEADLINE={.+}/WAIT"
+                         ((org-agenda-overriding-header "WAIT for, no deadline")
+                          (org-agenda-sorting-strategy '(tsia-up))))))
+            ("t" "By tag                      "
+             ((tags-todo ""
+                         ((org-agenda-overriding-header "By tag")
+                          (org-agenda-sorting-strategy '(todo-state-down tsia-up))))))
+            ("u" "Untagged next actions       "
+             ((tags-todo "-{.*}"
+                         ((org-agenda-overriding-header "NEXT ACTIONS, no context")
+                          (org-agenda-sorting-strategy '(tsia-up))
+                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))))
     (setq org-capture-templates
           '(("n" "Next Action" entry
              (file "~/org/capture.org") "* NEXT %?\n  captured: %U"
@@ -1111,59 +1165,6 @@ Lisp function does not specify a special indentation."
              (file "~/org/capture.org") "* NEXT %?\n  captured: %U\n  [[gmail:%^{gmail id}][%\\1]]"
              :empty-lines 1)))
     (setq org-link-abbrev-alist '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
-    (setq org-agenda-custom-commands
-          `(("r" "Read/Review                 "
-             ((tags-todo "read/NEXT"
-                         ((org-agenda-overriding-header "NEXT ACTIONS, Read/Review")
-                          (org-agenda-sorting-strategy '(priority-down))))))
-            ("d" "Deferred (with reminder)    "
-             ((tags-todo "DEADLINE={.+}/DFER"
-                         ((org-agenda-overriding-header "DEFERRED, with reminder")
-                          (org-agenda-sorting-strategy '(priority-down))))))
-            ("D" "Deferred (without reminder) "
-             ((tags-todo "-DEADLINE={.+}/DFER"
-                         ((org-agenda-overriding-header "DEFERRED, without reminder")
-                          (org-agenda-sorting-strategy '(priority-down))))))
-            ("n" . "Next actions")
-            ("na" "NEXT action (all)          "
-             ((tags-todo "/NEXT"
-                         ((org-agenda-overriding-header "NEXT ACTIONS, ALL")
-                          (org-agenda-sorting-strategy '(priority-down))))))
-            ("nt" "NEXT action by tag         "
-             ((tags-todo ""
-                         ((org-agenda-overriding-header "NEXT ACTIONS")
-                          (org-agenda-sorting-strategy '(priority-down))
-                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
-            ("w" . "Waiting for")
-            ("wa" "WAIT for (all)             "
-             ((tags-todo "/WAIT"
-                         ((org-agenda-overriding-header "WAITING FOR (all))")
-                          (org-agenda-sorting-strategy '(priority-down))))))
-            ("wt" "WAIT for by tag            "
-             ((tags-todo ""
-                         ((org-agenda-overriding-header "WAITING FOR by tag")
-                          (org-agenda-sorting-strategy '(priority-down))
-                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("WAIT")))))))
-            ("x" . "Stuck")
-            ("xn" "NEXT action, no deadline   "
-             ((tags-todo "-DEADLINE={.+}/NEXT"
-                         ((org-agenda-overriding-header "NEXT action, no deadline")
-                          (org-agenda-sorting-strategy '(priority-down))))))
-            ("xw" "WAIT for, no deadline      "
-             ((tags-todo "-DEADLINE={.+}/WAIT"
-                         ((org-agenda-overriding-header "WAIT for, no deadline")
-                          (org-agenda-sorting-strategy '(priority-down))))))
-            ("t" "By tag                      "
-             ((tags-todo ""
-                         ((org-agenda-overriding-header "By tag")
-                          (org-agenda-sorting-strategy '(todo-state-down))))))
-            ("u" "Untagged                    "
-             ((tags-todo "-{.*}"
-                         ((org-agenda-overriding-header "NEXT ACTIONS, no context")
-                          (org-agenda-sorting-strategy '(priority-down))
-                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))))
-    (setq org-tags-column -90)
-    (setq org-agenda-tags-column -90)
     (setq org-refile-use-outline-path 'file)
     (setq org-hide-block-startup t)
     (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
