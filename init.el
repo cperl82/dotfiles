@@ -105,24 +105,24 @@ given, it skips the confirmation"
 
 ;; 2014-04-22 mode-line-format
 (setq-default mode-line-format
-	      `("%e"
-		mode-line-front-space
-		mode-line-mule-info
-		mode-line-client
-		mode-line-modified
-		mode-line-remote
-		mode-line-frame-identification
-		mode-line-buffer-identification
-		" "
-		(:eval (cp/format-default-dir-for-mode-line default-directory 40))
-		" "
-		mode-line-position
-		evil-mode-line-tag
-		(vc-mode vc-mode)
-		" "
-		mode-line-modes
-		mode-line-misc-info
-		mode-line-end-spaces))
+              `("%e"
+                mode-line-front-space
+                mode-line-mule-info
+                mode-line-client
+                mode-line-modified
+                mode-line-remote
+                mode-line-frame-identification
+                mode-line-buffer-identification
+                " "
+                (:eval (cp/format-default-dir-for-mode-line default-directory 40))
+                " "
+                mode-line-position
+                evil-mode-line-tag
+                (vc-mode vc-mode)
+                " "
+                mode-line-modes
+                mode-line-misc-info
+                mode-line-end-spaces))
 
 ;; 2014-05-07: function to revert all buffers
 (defun revert-buffer-all ()
@@ -131,14 +131,14 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   (interactive)
   (if (y-or-n-p "Revert ALL buffers? ")
       (save-excursion
-	(dolist (b (buffer-list))
-	  (set-buffer b)
-	  (cond
-	   (buffer-file-name
-	    (if (file-exists-p buffer-file-name)
-		(revert-buffer t t t)
-	      (kill-buffer b)))
-	   ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
+        (dolist (b (buffer-list))
+          (set-buffer b)
+          (cond
+           (buffer-file-name
+            (if (file-exists-p buffer-file-name)
+                (revert-buffer t t t)
+              (kill-buffer b)))
+           ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
 
 ;; 2016-09-10 better alignment of property lists
 ; http://emacs.stackexchange.com/questions/10230/how-to-indent-keywords-aligned
@@ -285,10 +285,10 @@ Lisp function does not specify a special indentation."
   "Do everything that `*' would do, but don't actually jump to the next match"
   (interactive)
   (let* ((string (evil-find-symbol t))
-	 (case-fold-search
-	  (unless (and search-upper-case
-		       (not (isearch-no-upper-case-p string nil)))
-	    case-fold-search)))
+         (case-fold-search
+          (unless (and search-upper-case
+                       (not (isearch-no-upper-case-p string nil)))
+            case-fold-search)))
     (setq isearch-regexp t)
     (setq isearch-forward t)
     (setq string (format "\\_<%s\\_>" (regexp-quote string)))
@@ -299,7 +299,7 @@ Lisp function does not specify a special indentation."
 
 (evil-define-operator cp/evil-search (beg end forward)
   (let* ((search-string (buffer-substring-no-properties beg end))
-	 (quoted-string (regexp-quote search-string)))
+         (quoted-string (regexp-quote search-string)))
     (setq isearch-forward forward)
     (evil-search quoted-string forward t)))
 
@@ -402,7 +402,7 @@ Lisp function does not specify a special indentation."
     (setq ido-enter-matching-directory 'first)
     (ido-mode t)
     (ido-everywhere t))
-  
+
 (use-package ido-vertical-mode
   :config
   (progn
@@ -553,7 +553,7 @@ Lisp function does not specify a special indentation."
 
 
 
-;; tuareg-mode 
+;; tuareg-mode
 (defun cp/tuareg-mode-hs-forward-sexp-fun (arg)
   (let* ((c (current-column))
          (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
@@ -701,11 +701,11 @@ Lisp function does not specify a special indentation."
        (re-search-forward "DESCRIPTION" nil t)
        (hs-show-block)
        (font-lock-add-keywords
-	nil	     ; Copied from /usr/share/vim/vim74/syntax/man.vim
-	`((,Man-heading-regexp          . font-lock-comment-face)
-	  ("^\\s-*[+-][a-zA-Z0-9]\\S-*" . font-lock-function-name-face)
-	  ("^\\s-*--[a-zA-Z0-9-]\\S-*"  . font-lock-function-name-face))
-	'set)
+        nil          ; Copied from /usr/share/vim/vim74/syntax/man.vim
+        `((,Man-heading-regexp          . font-lock-comment-face)
+          ("^\\s-*[+-][a-zA-Z0-9]\\S-*" . font-lock-function-name-face)
+          ("^\\s-*--[a-zA-Z0-9-]\\S-*"  . font-lock-function-name-face))
+        'set)
        (font-lock-mode 1)))))
 
 
@@ -799,41 +799,41 @@ Lisp function does not specify a special indentation."
        (numberp other-screen-number)
        (not (eq other-screen-number escreen-current-screen-number)))
       (let ((screen-data-current (escreen-configuration-escreen escreen-current-screen-number))
-	    (screen-data-other   (escreen-configuration-escreen other-screen-number)))
-	(cond ((and screen-data-current screen-data-other)
-	       ; The other screen does exist
-	       (progn
-		 (setcar screen-data-current other-screen-number)
-		 (setcar screen-data-other   escreen-current-screen-number)
-		 (setq escreen-current-screen-number other-screen-number)))
-	      ((and screen-data-current (not screen-data-other))
-	       ; The other screen doesn't exist
-	       (progn
-		 (setcar screen-data-current other-screen-number)
-		 (setq escreen-current-screen-number other-screen-number)))))))
+            (screen-data-other   (escreen-configuration-escreen other-screen-number)))
+        (cond ((and screen-data-current screen-data-other)
+               ; The other screen does exist
+               (progn
+                 (setcar screen-data-current other-screen-number)
+                 (setcar screen-data-other   escreen-current-screen-number)
+                 (setq escreen-current-screen-number other-screen-number)))
+              ((and screen-data-current (not screen-data-other))
+               ; The other screen doesn't exist
+               (progn
+                 (setcar screen-data-current other-screen-number)
+                 (setq escreen-current-screen-number other-screen-number)))))))
 
 (defun cp/escreen-move-screen (direction)
   (let ((other-screen-number
-	 (cond ((eq direction 'left)  (1- escreen-current-screen-number))
-	       ((eq direction 'right) (1+ escreen-current-screen-number)))))
+         (cond ((eq direction 'left)  (1- escreen-current-screen-number))
+               ((eq direction 'right) (1+ escreen-current-screen-number)))))
     (cond ((and
-	    (>= other-screen-number 0)
-	    (<= other-screen-number escreen-highest-screen-number-used))
-	   (cp/escreen-swap-screen other-screen-number))
-	  ; These are the cases where we're moving right off the right
-	  ; end or left off the left end
-	  ; TODO: some of the below can probably be factored out
-	  ((< other-screen-number 0)
-	   (let ((n 1)
-		 (end escreen-highest-screen-number-used))
-	    (while (<= n end)
-	      (cp/escreen-swap-screen n)
-	      (setq n (1+ n)))))
-	  ((> other-screen-number escreen-highest-screen-number-used)
-	   (let ((n (1- escreen-highest-screen-number-used)))
-	     (while (>= n 0)
-	       (cp/escreen-swap-screen n)
-	       (setq n (1- n)))))))
+            (>= other-screen-number 0)
+            (<= other-screen-number escreen-highest-screen-number-used))
+           (cp/escreen-swap-screen other-screen-number))
+          ; These are the cases where we're moving right off the right
+          ; end or left off the left end
+          ; TODO: some of the below can probably be factored out
+          ((< other-screen-number 0)
+           (let ((n 1)
+                 (end escreen-highest-screen-number-used))
+            (while (<= n end)
+              (cp/escreen-swap-screen n)
+              (setq n (1+ n)))))
+          ((> other-screen-number escreen-highest-screen-number-used)
+           (let ((n (1- escreen-highest-screen-number-used)))
+             (while (>= n 0)
+               (cp/escreen-swap-screen n)
+               (setq n (1- n)))))))
   (cp/escreen-get-active-screen-names-with-emphasis))
 
 (defun cp/escreen-move-screen-left ()
@@ -847,9 +847,9 @@ Lisp function does not specify a special indentation."
 (defun cp/escreen-rename-screen (&optional name number suppress-message)
   (interactive "sNew screen name: ")
   (let ((screen-data (escreen-configuration-escreen (or number escreen-current-screen-number)))
-	(new-name (cond ((equal name "") nil)
-			((stringp name) name)
-			(t "default"))))
+        (new-name (cond ((equal name "") nil)
+                        ((stringp name) name)
+                        (t "default"))))
     (setcar (cdr screen-data) new-name)
     (when (not suppress-message)
       (cp/escreen-get-active-screen-names-with-emphasis))))
@@ -859,16 +859,16 @@ Lisp function does not specify a special indentation."
   (let ((output ""))
     (dolist (n (escreen-get-active-screen-numbers))
       (let* ((data (escreen-configuration-escreen n))
-	     (screen-name (nth 1 data))
-	     (star (propertize "*" 'face 'font-lock-string-face)))
-	(setq output
-	      (format "%s  %s" output
-		      (cond ((and
-			      (eq escreen-current-screen-number n) screen-name)
-			     (format "%d%s %s" n star screen-name))
-			    ((eq escreen-current-screen-number n) (format "%d%s" n star))
-			    (screen-name (format "%d- %s" n screen-name))
-			    (t (format "%d-" n))))))
+             (screen-name (nth 1 data))
+             (star (propertize "*" 'face 'font-lock-string-face)))
+        (setq output
+              (format "%s  %s" output
+                      (cond ((and
+                              (eq escreen-current-screen-number n) screen-name)
+                             (format "%d%s %s" n star screen-name))
+                            ((eq escreen-current-screen-number n) (format "%d%s" n star))
+                            (screen-name (format "%d- %s" n screen-name))
+                            (t (format "%d-" n))))))
       (message "escreen: active screens: %s" output))))
 
 (defun cp/advice/escreen-goto-screen (n &optional dont-update-current)
@@ -911,12 +911,12 @@ Lisp function does not specify a special indentation."
 ; http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp
 (defmacro define-and-bind-text-object (key start-regex end-regex)
   (let ((inner-name (make-symbol "inner-name"))
-	(outer-name (make-symbol "outer-name")))
+        (outer-name (make-symbol "outer-name")))
     `(progn
        (evil-define-text-object ,inner-name (count &optional beg end type)
-	 (evil-select-paren ,start-regex ,end-regex beg end type count nil))
+         (evil-select-paren ,start-regex ,end-regex beg end type count nil))
        (evil-define-text-object ,outer-name (count &optional beg end type)
-	 (evil-select-paren ,start-regex ,end-regex beg end type count t))
+         (evil-select-paren ,start-regex ,end-regex beg end type count t))
        (define-key evil-inner-text-objects-map ,key (quote ,inner-name))
        (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
 
@@ -931,13 +931,13 @@ Lisp function does not specify a special indentation."
 
 (defun cp/org-link-auto-desc-from-abbrev-tags (link desc)
   (let ((abbrevs
-	 (append (mapcar 'car org-link-abbrev-alist-local)
-		 (mapcar 'car org-link-abbrev-alist))))
+         (append (mapcar 'car org-link-abbrev-alist-local)
+                 (mapcar 'car org-link-abbrev-alist))))
     (catch 'found
       (dolist (abbrev abbrevs)
-	(let ((s (format "^%s:\\(.+\\)" abbrev)))
-	  (when (string-match s link)
-	    (throw 'found (match-string 1 link)))))
+        (let ((s (format "^%s:\\(.+\\)" abbrev)))
+          (when (string-match s link)
+            (throw 'found (match-string 1 link)))))
       desc)))
 
 (defun cp/org-surround (c)
@@ -990,8 +990,8 @@ Lisp function does not specify a special indentation."
 
 (defun cp/org-helm-usernames (username)
   (helm :input username
-	:candidate-number-limit nil
-	:fuzzy-match t
+        :candidate-number-limit nil
+        :fuzzy-match t
         :sources
         (helm-build-sync-source "usernames" :candidates (cp/org-list-all-usernames))
         :buffer "*helm usernames*"))
@@ -1002,8 +1002,8 @@ Lisp function does not specify a special indentation."
          (username (cp/org-helm-usernames partial)))
     (when username
       (progn
-	(when partial
-	  (backward-kill-word 1))
+        (when partial
+          (backward-kill-word 1))
         (insert username)))))
 
 (defun cp/advice/org-next-link (&optional search-backward)
@@ -1061,6 +1061,8 @@ Lisp function does not specify a special indentation."
    "o p" #'org-previous-link
    "o n" #'org-next-link
    "o a" #'org-agenda
+   "o t" #'org-set-tags
+   "o p" #'org-set-property
    "o s" #'cp/org-sort-entries)
   (:keymaps '(org-mode-map)
    :states  '(normal)
@@ -1093,86 +1095,73 @@ Lisp function does not specify a special indentation."
   (progn
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-todo-keywords
-	  '((sequence "DFER(r)" "DPND(x)" "WAIT(w)" "NEXT(n)" "|" "DONE(d)" "CNCL(c)")))
+          '((sequence "DFER(r)" "DPND(x)" "WAIT(w)" "NEXT(n)" "|" "DONE(d)" "CNCL(c)")))
     (setq org-todo-keyword-faces
-	  '(("DFER" . "#767676")
-	    ("DPND" . "#767676")
-	    ("WAIT" . "#8C5353")
-	    ("CNCL" . "#FFFFFF")
-	    ("DONE" . "#FFFFFF")))
+          '(("DFER" . "#767676")
+            ("DPND" . "#767676")
+            ("WAIT" . "#8C5353")
+            ("CNCL" . "#FFFFFF")
+            ("DONE" . "#FFFFFF")))
     (setq org-agenda-files '("~/org"))
     (setq org-capture-templates
-	  '(("n" "Next Action" entry
-	     (file "~/org/capture.org") "* NEXT %?\n  captured: %U"
-	     :empty-lines 1)
-	    ("N" "Next Action with Gmail Id" entry
-	     (file "~/org/capture.org") "* NEXT %?\n  captured: %U\n  [[gmail:%^{gmail id}][%\\1]]"
-	     :empty-lines 1)))
+          '(("n" "Next Action" entry
+             (file "~/org/capture.org") "* NEXT %?\n  captured: %U"
+             :empty-lines 1)
+            ("N" "Next Action with Gmail Id" entry
+             (file "~/org/capture.org") "* NEXT %?\n  captured: %U\n  [[gmail:%^{gmail id}][%\\1]]"
+             :empty-lines 1)))
     (setq org-link-abbrev-alist '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
     (setq org-agenda-custom-commands
-	  `(("d" "Deferred (with reminder)    "
-	     ((agenda "" ((org-agenda-span 1)
-			  (org-deadline-warning-days 1)))
-	      (tags-todo "DEADLINE={.+}+TODO=\"DFER\""
-			 ((org-agenda-overriding-header "DEFERRED, with reminder")
-			  (org-agenda-sorting-strategy '(priority-down))))))
-	    ("D" "Deferred (without reminder ) "
-	     ((agenda "" ((org-agenda-span 1)
-			  (org-deadline-warning-days 1)))
-	      (tags-todo "-DEADLINE={.+}+TODO=\"DFER\""
-			 ((org-agenda-overriding-header "DEFERRED, without reminder")
-			  (org-agenda-sorting-strategy '(priority-down))))))
-	    ("r" "Read/Review                "
-	     ((agenda "" ((org-agenda-span 1)
-			  (org-deadline-warning-days 1)))
-	      (tags-todo "read+TODO=\"NEXT\""
-			 ((org-agenda-overriding-header "NEXT ACTIONS, Read/Review")
-			  (org-agenda-sorting-strategy '(priority-down))))))
-	    ("na" "NEXT action (all)         "
-	     ((agenda "" ((org-agenda-span 1)
-			  (org-deadline-warning-days 1)))
-	      (tags-todo "TODO=\"NEXT\""
-			 ((org-agenda-overriding-header "NEXT ACTIONS, ALL")
-			  (org-agenda-sorting-strategy '(priority-down))))))
-	    ("nt" "NEXT action by ta         "
-	     ((agenda "" ((org-agenda-span 1)
-			  (org-deadline-warning-days 1)))
-	      (tags-todo ""
-			 ((org-agenda-overriding-header "NEXT ACTIONS")
-			  (org-agenda-sorting-strategy '(priority-down))
-			  (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
-	    ("wa" "WAIT for (all)            "
-	     ((agenda "" ((org-agenda-span 1)
-			  (org-deadline-warning-days 1)))
-	      (tags-todo "TODO=\"WAIT\""
-			 ((org-agenda-overriding-header "WAITING FOR (all))")
-			  (org-agenda-sorting-strategy '(priority-down))))))
-	    ("wt" "WAIT for by tag           "
-	     ((agenda "" ((org-agenda-span 1)
-			  (org-deadline-warning-days 1)))
-	      (tags-todo ""
-			 ((org-agenda-overriding-header "WAITING FOR by tag")
-			  (org-agenda-sorting-strategy '(priority-down))
-			  (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("WAIT")))))))
-	    ("sn" "NEXT action, no deadline  "
-	     ((agenda "" ((org-agenda-span 1)
-			  (org-deadline-warning-days 1)))
-	      (tags-todo "-DEADLINE={.+}+TODO=\"NEXT\""
-			 ((org-agenda-overriding-header "NEXT action, no deadline")
-			  (org-agenda-sorting-strategy '(priority-down))))))
-	    ("sw" "WAIT for, no deadline     "
-	     ((agenda "" ((org-agenda-span 1)
-			  (org-deadline-warning-days 1)))
-	      (tags-todo "-DEADLINE={.+}+TODO=\"WAIT\""
-			 ((org-agenda-overriding-header "WAIT for, no deadline")
-			  (org-agenda-sorting-strategy '(priority-down))))))
-	    ("u" "Untagged                   "
-	     ((agenda "" ((org-agenda-span 1)
-			  (org-deadline-warning-days 1)))
-	      (tags-todo "-{.*}"
-			 ((org-agenda-overriding-header "NEXT ACTIONS, no context")
-			  (org-agenda-sorting-strategy '(priority-down))
-			  (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))))
+          `(("r" "Read/Review                 "
+             ((tags-todo "read/NEXT"
+                         ((org-agenda-overriding-header "NEXT ACTIONS, Read/Review")
+                          (org-agenda-sorting-strategy '(priority-down))))))
+            ("d" "Deferred (with reminder)    "
+             ((tags-todo "DEADLINE={.+}/DFER"
+                         ((org-agenda-overriding-header "DEFERRED, with reminder")
+                          (org-agenda-sorting-strategy '(priority-down))))))
+            ("D" "Deferred (without reminder) "
+             ((tags-todo "-DEADLINE={.+}/DFER"
+                         ((org-agenda-overriding-header "DEFERRED, without reminder")
+                          (org-agenda-sorting-strategy '(priority-down))))))
+            ("n" . "Next actions")
+            ("na" "NEXT action (all)          "
+             ((tags-todo "/NEXT"
+                         ((org-agenda-overriding-header "NEXT ACTIONS, ALL")
+                          (org-agenda-sorting-strategy '(priority-down))))))
+            ("nt" "NEXT action by tag         "
+             ((tags-todo ""
+                         ((org-agenda-overriding-header "NEXT ACTIONS")
+                          (org-agenda-sorting-strategy '(priority-down))
+                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
+            ("w" . "Waiting for")
+            ("wa" "WAIT for (all)             "
+             ((tags-todo "/WAIT"
+                         ((org-agenda-overriding-header "WAITING FOR (all))")
+                          (org-agenda-sorting-strategy '(priority-down))))))
+            ("wt" "WAIT for by tag            "
+             ((tags-todo ""
+                         ((org-agenda-overriding-header "WAITING FOR by tag")
+                          (org-agenda-sorting-strategy '(priority-down))
+                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("WAIT")))))))
+            ("x" . "Stuck")
+            ("xn" "NEXT action, no deadline   "
+             ((tags-todo "-DEADLINE={.+}/NEXT"
+                         ((org-agenda-overriding-header "NEXT action, no deadline")
+                          (org-agenda-sorting-strategy '(priority-down))))))
+            ("xw" "WAIT for, no deadline      "
+             ((tags-todo "-DEADLINE={.+}/WAIT"
+                         ((org-agenda-overriding-header "WAIT for, no deadline")
+                          (org-agenda-sorting-strategy '(priority-down))))))
+            ("t" "By tag                      "
+             ((tags-todo ""
+                         ((org-agenda-overriding-header "By tag")
+                          (org-agenda-sorting-strategy '(todo-state-down))))))
+            ("u" "Untagged                    "
+             ((tags-todo "-{.*}"
+                         ((org-agenda-overriding-header "NEXT ACTIONS, no context")
+                          (org-agenda-sorting-strategy '(priority-down))
+                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))))
     (setq org-tags-column -90)
     (setq org-agenda-tags-column -90)
     (setq org-refile-use-outline-path 'file)
@@ -1192,14 +1181,14 @@ Lisp function does not specify a special indentation."
      'org-mode-hook
      (lambda ()
        (progn
-	 (auto-fill-mode)
-	 (setq fill-column 90)
-	 (setq indent-tabs-mode nil)
-	 (define-and-bind-text-object "~" "\\~" "\\~")
-	 (define-and-bind-text-object "*" "\\*" "\\*")
-	 (define-and-bind-text-object "=" "\\=" "\\=")
-	 (turn-on-evil-surround-mode)
-	 (add-hook 'write-contents-functions (lambda () (save-excursion (delete-trailing-whitespace)))))))
+         (auto-fill-mode)
+         (setq fill-column 90)
+         (setq indent-tabs-mode nil)
+         (define-and-bind-text-object "~" "\\~" "\\~")
+         (define-and-bind-text-object "*" "\\*" "\\*")
+         (define-and-bind-text-object "=" "\\=" "\\=")
+         (turn-on-evil-surround-mode)
+         (add-hook 'write-contents-functions (lambda () (save-excursion (delete-trailing-whitespace)))))))
     (add-hook 'org-src-mode-hook (lambda () (setq electric-indent-mode nil)))))
 
 
@@ -1210,22 +1199,22 @@ Lisp function does not specify a special indentation."
     (orig-fun buf-name prefix help-echo size mode dir face1 face2 proc details type)
   (if (projectile-project-p)
       (let* ((regex (format "^.*\\(%s.*\\)$" (projectile-project-name)))
-	     (dir (replace-regexp-in-string regex "\\1" dir)))
-	(append
-	 (list
-	  (concat prefix
-		  (propertize buf-name 'face face1
-			      'help-echo help-echo
-			      'type type)))
-	 (and details
-	      (list size mode
-		    (propertize
-		     (if proc
-			 (format "(%s %s in `%s')"
-				 (process-name proc)
-				 (process-status proc) dir)
-		       (format "%s" dir))
-		     'face face2)))))
+             (dir (replace-regexp-in-string regex "\\1" dir)))
+        (append
+         (list
+          (concat prefix
+                  (propertize buf-name 'face face1
+                              'help-echo help-echo
+                              'type type)))
+         (and details
+              (list size mode
+                    (propertize
+                     (if proc
+                         (format "(%s %s in `%s')"
+                                 (process-name proc)
+                                 (process-status proc) dir)
+                       (format "%s" dir))
+                     'face face2)))))
     (apply orig-fun buf-name prefix help-echo size mode dir face1 face2 proc details type ())))
 
 (use-package helm
@@ -1273,9 +1262,9 @@ Lisp function does not specify a special indentation."
 
 (defun cp/projectile-projects-cache-by-time-sync (data)
   (let* ((projectile-keys (projectile-hash-keys data))
-	 (time-keys       (projectile-hash-keys cp/projectile-projects-cache-by-time))
-	 (keys-to-add     (-difference projectile-keys time-keys))
-	 (keys-to-delete  (-difference time-keys projectile-keys)))
+         (time-keys       (projectile-hash-keys cp/projectile-projects-cache-by-time))
+         (keys-to-add     (-difference projectile-keys time-keys))
+         (keys-to-delete  (-difference time-keys projectile-keys)))
     (progn
       (dolist (project keys-to-add)
         (puthash project (current-time) cp/projectile-projects-cache-by-time)
