@@ -1053,7 +1053,7 @@ Lisp function does not specify a special indentation."
 (use-package org
   :defer t
   :general
-  (:keymaps '(org-mode-map)
+  (:keymaps '(org-mode-map org-agenda-mode-map)
    :states  '(normal emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
@@ -1082,31 +1082,16 @@ Lisp function does not specify a special indentation."
    "M-b"     #'cp/org-surround-star
    "M-u"     #'cp/org-helm-complete-user-name-at-point)
   (:keymaps '(org-agenda-mode-map)
-   :states  `(emacs)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "o"   '(:ignore t :which-key "org")
-   "o a" #'org-agenda)
-  (:keymaps '(org-agenda-mode-map)
    :states  '(emacs)
    "j"       #'org-agenda-next-line
    "k"       #'org-agenda-previous-line
    "h"       #'left-char
    "l"       #'right-char
-   " "       #'org-agenda-cycle-show
    "C-c a"   #'org-agenda
    "C-c c"   #'org-capture)
   :config
   (progn
     (setq org-agenda-restore-windows-after-quit t)
-    (setq org-agenda-files '("~/org"))
-    (setq org-capture-templates
-	  '(("n" "Next Action" entry
-	     (file "~/org/capture.org") "* NEXT  %?\n  captured: %U"
-	     :empty-lines 1)
-	    ("N" "Next Action with Gmail Id" entry
-	     (file "~/org/capture.org") "* NEXT  %?\n  captured: %U\n  [[gmail:%^{gmail id}][%\\1]]"
-	     :empty-lines 1)))
     (setq org-todo-keywords
 	  '((sequence "DFER(r)" "DPND(x)" "WAIT(w)" "NEXT(n)" "|" "DONE(d)" "CNCL(c)")))
     (setq org-todo-keyword-faces
@@ -1115,19 +1100,27 @@ Lisp function does not specify a special indentation."
 	    ("WAIT" . "#8C5353")
 	    ("CNCL" . "#FFFFFF")
 	    ("DONE" . "#FFFFFF")))
+    (setq org-agenda-files '("~/org"))
+    (setq org-capture-templates
+	  '(("n" "Next Action" entry
+	     (file "~/org/capture.org") "* NEXT %?\n  captured: %U"
+	     :empty-lines 1)
+	    ("N" "Next Action with Gmail Id" entry
+	     (file "~/org/capture.org") "* NEXT %?\n  captured: %U\n  [[gmail:%^{gmail id}][%\\1]]"
+	     :empty-lines 1)))
     (setq org-link-abbrev-alist '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
     (setq org-agenda-custom-commands
-	  `(("d" "Deferred (with tickler)    "
+	  `(("d" "Deferred (with reminder)    "
 	     ((agenda "" ((org-agenda-span 1)
 			  (org-deadline-warning-days 1)))
 	      (tags-todo "DEADLINE={.+}+TODO=\"DFER\""
-			 ((org-agenda-overriding-header "DEFERRED, with tickler")
+			 ((org-agenda-overriding-header "DEFERRED, with reminder")
 			  (org-agenda-sorting-strategy '(priority-down))))))
-	    ("D" "Deferred (without tickler) "
+	    ("D" "Deferred (without reminder ) "
 	     ((agenda "" ((org-agenda-span 1)
 			  (org-deadline-warning-days 1)))
 	      (tags-todo "-DEADLINE={.+}+TODO=\"DFER\""
-			 ((org-agenda-overriding-header "DEFERRED, without tickler")
+			 ((org-agenda-overriding-header "DEFERRED, without reminder")
 			  (org-agenda-sorting-strategy '(priority-down))))))
 	    ("r" "Read/Review                "
 	     ((agenda "" ((org-agenda-span 1)
@@ -1135,32 +1128,44 @@ Lisp function does not specify a special indentation."
 	      (tags-todo "read+TODO=\"NEXT\""
 			 ((org-agenda-overriding-header "NEXT ACTIONS, Read/Review")
 			  (org-agenda-sorting-strategy '(priority-down))))))
-	    ("N" "NEXT ACTION (all)          "
+	    ("na" "NEXT action (all)         "
 	     ((agenda "" ((org-agenda-span 1)
 			  (org-deadline-warning-days 1)))
 	      (tags-todo "TODO=\"NEXT\""
 			 ((org-agenda-overriding-header "NEXT ACTIONS, ALL")
 			  (org-agenda-sorting-strategy '(priority-down))))))
-	    ("n" "NEXT ACTION by tag         "
+	    ("nt" "NEXT action by ta         "
 	     ((agenda "" ((org-agenda-span 1)
 			  (org-deadline-warning-days 1)))
 	      (tags-todo ""
 			 ((org-agenda-overriding-header "NEXT ACTIONS")
 			  (org-agenda-sorting-strategy '(priority-down))
 			  (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
-	    ("W" "WAITING FOR (all)          "
+	    ("wa" "WAIT for (all)            "
 	     ((agenda "" ((org-agenda-span 1)
 			  (org-deadline-warning-days 1)))
 	      (tags-todo "TODO=\"WAIT\""
-			 ((org-agenda-overriding-header "WAITING FOR")
+			 ((org-agenda-overriding-header "WAITING FOR (all))")
 			  (org-agenda-sorting-strategy '(priority-down))))))
-	    ("w" "WAITING FOR by tag         "
+	    ("wt" "WAIT for by tag           "
 	     ((agenda "" ((org-agenda-span 1)
 			  (org-deadline-warning-days 1)))
 	      (tags-todo ""
-			 ((org-agenda-overriding-header "WAITING FOR")
+			 ((org-agenda-overriding-header "WAITING FOR by tag")
 			  (org-agenda-sorting-strategy '(priority-down))
 			  (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("WAIT")))))))
+	    ("sn" "NEXT action, no deadline  "
+	     ((agenda "" ((org-agenda-span 1)
+			  (org-deadline-warning-days 1)))
+	      (tags-todo "-DEADLINE={.+}+TODO=\"NEXT\""
+			 ((org-agenda-overriding-header "NEXT action, no deadline")
+			  (org-agenda-sorting-strategy '(priority-down))))))
+	    ("sw" "WAIT for, no deadline     "
+	     ((agenda "" ((org-agenda-span 1)
+			  (org-deadline-warning-days 1)))
+	      (tags-todo "-DEADLINE={.+}+TODO=\"WAIT\""
+			 ((org-agenda-overriding-header "WAIT for, no deadline")
+			  (org-agenda-sorting-strategy '(priority-down))))))
 	    ("u" "Untagged                   "
 	     ((agenda "" ((org-agenda-span 1)
 			  (org-deadline-warning-days 1)))
@@ -1168,8 +1173,8 @@ Lisp function does not specify a special indentation."
 			 ((org-agenda-overriding-header "NEXT ACTIONS, no context")
 			  (org-agenda-sorting-strategy '(priority-down))
 			  (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))))
-    (setq org-tags-column -120)
-    (setq org-agenda-tags-column -120)
+    (setq org-tags-column -90)
+    (setq org-agenda-tags-column -90)
     (setq org-refile-use-outline-path 'file)
     (setq org-hide-block-startup t)
     (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
@@ -1181,8 +1186,8 @@ Lisp function does not specify a special indentation."
     (setq org-hide-leading-stars t)
     (setq org-make-link-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
     (add-to-list 'org-open-at-point-functions #'cp/org-echo-link-at-point-if-not-darwin)
-    (advice-add 'org-next-link     :after #'cp/advice/org-next-link)
-    (advice-add 'org-previous-link :after #'cp/advice/org-previous-link)
+    (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
+    (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
     (add-hook
      'org-mode-hook
      (lambda ()
@@ -1194,15 +1199,8 @@ Lisp function does not specify a special indentation."
 	 (define-and-bind-text-object "*" "\\*" "\\*")
 	 (define-and-bind-text-object "=" "\\=" "\\=")
 	 (turn-on-evil-surround-mode)
-	 (add-hook
-	  'write-contents-functions
-	  (lambda ()
-	    (save-excursion
-	      (delete-trailing-whitespace)))))))
-    (add-hook
-     'org-src-mode-hook
-     (lambda ()
-       (setq electric-indent-mode nil)))))
+	 (add-hook 'write-contents-functions (lambda () (save-excursion (delete-trailing-whitespace)))))))
+    (add-hook 'org-src-mode-hook (lambda () (setq electric-indent-mode nil)))))
 
 
 
