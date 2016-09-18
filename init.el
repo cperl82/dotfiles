@@ -9,14 +9,23 @@
 (add-to-list 'el-get-recipe-path (concat user-emacs-directory "user-recipes"))
 
 ;; 2016-09-14: Testing having recipes directly inline rather that in the above directory
-(add-to-list
- 'el-get-sources
- '(:name ace-window
-   :description "Quickly switch windows using `avy'"
-   :type github
-   :pkgname "abo-abo/ace-window"
-   :checkout "77cc05f7284577ed396f292de0e7bb8ec561ea81"
-   :depends (avy)))
+(setq
+ el-get-sources
+ (nconc
+  el-get-sources
+  '((:name ace-window
+     :description "Quickly switch windows using `avy'"
+     :type github
+     :pkgname "abo-abo/ace-window"
+     :checkout "77cc05f7284577ed396f292de0e7bb8ec561ea81"
+     :depends (avy))
+
+    (:name company-mode
+     :website "http://company-mode.github.io/"
+     :description "Modular in-buffer completion framework for Emacs"
+     :type github
+     :pkgname "company-mode/company-mode"
+     :checkout "f2327bc7f303fcf83c3d8f9c76f61deaa110ebb5"))))
 
 (let* ((sources (map 'list (lambda (plist) (plist-get plist :name)) el-get-sources))
        (packages
@@ -346,6 +355,17 @@ Lisp function does not specify a special indentation."
 
 
 
+(use-package company-mode
+  :defer t
+  :general
+  (:keymaps '(company-active-map)
+   "M-n" nil
+   "M-p" nil
+   "C-n" #'company-select-next
+   "C-p" #'company-select-previous))
+
+
+
 ;; avy
 (use-package avy
   :defer t
@@ -473,7 +493,6 @@ Lisp function does not specify a special indentation."
     (put 'dired-find-alternate-file 'disabled nil)
     (define-key dired-mode-map (kbd "SPC") nil)
     (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))))
-
 
 
 
