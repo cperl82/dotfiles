@@ -566,7 +566,7 @@ Lisp function does not specify a special indentation."
    :states  '(normal)
    :prefix nil
    :non-normal-prefix nil
-   "C-c &"   #'pop-tag-mark
+   "C-c &"   #'evil-jump-backward
    "C-c ;"   #'elisp-slime-nav-find-elisp-thing-at-point
    "C-c C-t" #'elisp-slime-nav-describe-elisp-thing-at-point))
 
