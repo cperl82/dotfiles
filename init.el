@@ -1172,8 +1172,7 @@ Lisp function does not specify a special indentation."
                          ((org-agenda-overriding-header "NEXT ACTIONS, no context")
                           (org-agenda-sorting-strategy '(tsia-up))
                           (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))))
-    (setq org-agenda-sorting-strategy
-          '(todo-state-up deadline-up tsia-up))
+    (setq org-agenda-sorting-strategy '(todo-state-up deadline-up tsia-up))
     (setq org-capture-templates
           '(("n" "Next Action" entry
              (file "~/org/capture.org") "* NEXT %?\n  captured: %U"
