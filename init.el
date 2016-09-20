@@ -1080,8 +1080,9 @@ Lisp function does not specify a special indentation."
    "o p" #'org-previous-link
    "o n" #'org-next-link
    "o a" #'org-agenda
-   "o t" #'org-set-tags
-   "o p" #'org-set-property
+   "o t" #'org-todo
+   "o T" #'org-set-tags
+   "o P" #'org-set-property
    "o s" #'cp/org-sort-entries)
   (:keymaps '(org-mode-map)
    :states  '(normal)
