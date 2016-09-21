@@ -39,7 +39,7 @@
           evil-surround
           f
           flx
-          ;;flycheck
+          flycheck
           general
           haskell-mode
           helm
