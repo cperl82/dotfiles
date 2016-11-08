@@ -490,7 +490,7 @@
 	<key>HideScrollbar</key>
 	<false/>
 	<key>HideTab</key>
-	<false/>
+	<true/>
 	<key>HighlightTabLabels</key>
 	<false/>
 	<key>HotKeyBookmark</key>
@@ -533,6 +533,8 @@
 	<string></string>
 	<key>NSScrollAnimationEnabled</key>
 	<false/>
+	<key>NSScrollViewShouldScrollUnderTitlebar</key>
+	<false/>
 	<key>NSTableView Columns KeyBingingTable</key>
 	<array>
 		<data>
@@ -544,7 +546,7 @@
 		BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU1N0cmluZwGEhAhOU09iamVjdACF
 		hAErATGG
 		</data>
-		<string>319</string>
+		<string>322</string>
 	</array>
 	<key>NSTableView Columns NSNavOutlineColumnSearchSettings</key>
 	<array>
@@ -706,36 +708,40 @@
 		</data>
 		<true/>
 	</array>
+	<key>NSWindow Frame NSFontPanel</key>
+	<string>329 446 445 419 0 0 2560 1417 </string>
 	<key>NSWindow Frame Preferences</key>
-	<string>737 300 605 485 0 0 2560 1417 </string>
+	<string>62 62 605 485 0 0 2560 1417 </string>
+	<key>NSWindow Frame SharedPreferences</key>
+	<string>269 214 770 381 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>1249 992 572 424 0 0 2560 1417 </string>
+	<string>742 196 1370 1153 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>2 43 1384 1369 0 0 2560 1417 </string>
+	<string>12 37 838 1369 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 10</key>
-	<string>957 645 1195 664 0 0 2560 1417 </string>
+	<string>593 33 1804 1054 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 11</key>
-	<string>660 109 1853 1054 0 0 2560 1417 </string>
+	<string>1129 274 1426 979 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 12</key>
-	<string>792 168 1762 1174 0 0 2560 1417 </string>
+	<string>602 506 1258 754 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 13</key>
-	<string>40 60 1048 424 0 0 2560 1417 </string>
+	<string>40 60 572 424 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>141 289 1706 1039 0 0 2560 1417 </string>
+	<string>1313 45 1244 1369 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
-	<string>331 228 2021 1189 0 0 2560 1417 </string>
+	<string>1981 25 572 424 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
-	<string>418 44 2049 1174 0 0 2560 1417 </string>
+	<string>22 388 1237 1009 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 5</key>
-	<string>181 64 1958 1324 0 0 2560 1417 </string>
+	<string>892 131 1370 979 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 6</key>
-	<string>287 204 2035 1174 0 0 2560 1417 </string>
+	<string>1125 608 1237 664 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 7</key>
-	<string>1366 726 1160 574 0 0 2560 1417 </string>
+	<string>5 268 1643 1144 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 8</key>
-	<string>621 465 1783 859 0 0 2560 1417 </string>
+	<string>875 313 1678 1084 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 9</key>
-	<string>32 45 1293 1174 0 0 2560 1417 </string>
+	<string>1984 1 572 424 0 0 2560 1417 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -1436,10 +1442,16 @@
 			<string>/Users/chris</string>
 		</dict>
 	</array>
+	<key>NoSyncHaveShownPromoWithId_4</key>
+	<true/>
+	<key>NoSyncInstallationId</key>
+	<string>92A5A71A-DF42-4DD8-AB1B-DC69E8A7C016</string>
+	<key>NoSyncTimeOfFirstLaunchOfVersionWithTip</key>
+	<real>495288932.395064</real>
 	<key>NoSyncTimeOfLastPromo</key>
-	<real>454158861.74150503</real>
+	<real>477975454.18448001</real>
 	<key>NoSyncTimeOfLastPromoDownload</key>
-	<real>466121035.99625802</real>
+	<real>495202923.58840901</real>
 	<key>OnlyWhenMoreTabs</key>
 	<false/>
 	<key>OpenArrangementAtStartup</key>
@@ -1501,12 +1513,14 @@
 	<integer>3</integer>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
+	<key>SUFeedAlternateAppNameKey</key>
+	<string>iTerm</string>
 	<key>SUFeedURL</key>
-	<string>http://iterm2.com/appcasts/testing.xml</string>
+	<string>https://iterm2.com/appcasts/testing.xml?shard=59</string>
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2015-10-10T14:02:04Z</date>
+	<date>2016-09-11T12:14:34Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
@@ -1521,6 +1535,8 @@
 	<integer>4</integer>
 	<key>SwitchWindowModifier</key>
 	<integer>6</integer>
+	<key>TabStyle</key>
+	<integer>0</integer>
 	<key>TabViewType</key>
 	<integer>0</integer>
 	<key>ThreeFingerEmulates</key>
@@ -1540,7 +1556,7 @@
 	<key>WebKitDefaultFontSize</key>
 	<integer>11</integer>
 	<key>WebKitStandardFont</key>
-	<string>.Helvetica Neue DeskInterface</string>
+	<string>.AppleSystemUIFont</string>
 	<key>WindowNumber</key>
 	<true/>
 	<key>WindowStyle</key>
@@ -1552,6 +1568,6 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>2.1.1</string>
+	<string>3.0.8</string>
 </dict>
 </plist>
