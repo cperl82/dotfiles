@@ -1,8 +1,0 @@
-changeset:   {rev}:{node|short}
-svnrev:      {svnrev}
-tag:         {tags}
-parent:      {parents}
-user:        {author|user}
-date:        {date|isodate} ({date|rfc822date})
-summary:     {desc|strip|firstline|fill76}
-
