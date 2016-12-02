@@ -1,3 +1,6 @@
+;; Required as of emacs 25
+(package-initialize)
+
 ;; el-get
 (add-to-list 'load-path (concat user-emacs-directory "el-get/el-get"))
 (unless (require 'el-get nil 'noerror)
@@ -80,7 +83,7 @@ given, it skips the confirmation"
 (setq inhibit-startup-message t
       column-number-mode      t
       split-height-threshold  nil
-      split-width-threshhold  999
+      split-width-threshold   1920
       make-backup-files       nil
       c-default-style         "linux"
       ad-redefinition-action  'accept)
