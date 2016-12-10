@@ -279,7 +279,7 @@ def main():
             action_func = goto_workspace
 
     lookup = lookup_func()
-    target = dmenu(lookup.keys(), args.dmenu)
+    target = dmenu(sorted(lookup.keys()), args.dmenu)
     id_ = lookup.get(target)
     success = action_func(lookup.get(target)) if id_ is not None else False
 

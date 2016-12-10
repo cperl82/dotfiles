@@ -15,4 +15,4 @@ fi
 #exec ck-launch-session awesome
 #exec gnome-session
 #dbus-launch --exit-with-session xmonad
-i3
+exec i3
