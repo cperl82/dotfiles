@@ -133,12 +133,13 @@ bindsym $mod+r mode "resize"
 bindsym $mod+i exec --no-startup-id                                                     \
         i3-input                                                                        \
         -F "exec --no-startup-id xdotool getactivewindow -- set_window --name '%s'"     \
-        -P "New name: "                                                                 \
+        -P "New window name: "                                                          \
         -f "-xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*"
 
 set $quickswitch ${HOME}/.config/i3/bin/quickswitch.py
 set $quickswitch_dmenu_cmd "dmenu -i -l 20 -b -fn terminus:style=normal:pixelsize=12"
 
+# 2016-12-11 cperl: Quickly throw windows I don't want to think about onto the scratchpad
 bindsym $mod+period move scratchpad
 
 # 2016-12-11 cperl: Use dmenu to find a window by name (in the scratchpad)
