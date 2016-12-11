@@ -17,7 +17,9 @@ order += "run_watch DHCP"
 order += "wireless _first_"
 order += "ethernet _first_"
 order += "battery 0"
-order += "tztime local"
+order += "tztime nyc"
+order += "tztime ldn"
+order += "tztime hkg"
 
 wireless _first_ {
     format_up = "W: (%essid %quality) %ip"
@@ -32,14 +34,26 @@ ethernet _first_ {
 
 battery 0 {
     format = "%status %percentage %remaining"
+    format_down = ""
 }
 
 run_watch DHCP {
     pidfile = "/var/run/dhclient*.pid"
+    format_down = ""
 }
 
-tztime local {
-    format = "%Y-%m-%d %H:%M:%S"
+tztime nyc {
+    format = "nyc %Y-%m-%d %H:%M:%S"
+}
+
+tztime ldn {
+    timezone="Europe/London"
+    format = "ldn %Y-%m-%d %H:%M:%S"
+}
+
+tztime hkg {
+    timezone="Hongkong"
+    format = "hkg %Y-%m-%d %H:%M:%S"
 }
 
 disk "/" {
