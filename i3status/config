@@ -20,6 +20,7 @@ order += "battery 0"
 order += "tztime nyc"
 order += "tztime ldn"
 order += "tztime hkg"
+order += "volume master"
 
 wireless _first_ {
     format_up = "W: (%essid %quality) %ip"
@@ -62,4 +63,11 @@ disk "/" {
 
 cpu_usage {
     format = "%usage"
+}
+
+volume master {
+    device = "pulse"
+    mixer = "master"
+    format = "VOL %volume"
+    format_muted = "MUT %volume"
 }
