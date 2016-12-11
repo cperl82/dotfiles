@@ -49,23 +49,11 @@ bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
 
-# alternatively, you can use the cursor keys:
-bindsym $mod+Left  focus left
-bindsym $mod+Down  focus down
-bindsym $mod+Up    focus up
-bindsym $mod+Right focus right
-
 # move focused window
 bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
-
-# alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
 bindsym $mod+shift+v split h
@@ -120,9 +108,9 @@ bindsym $mod+Shift+0 move container to workspace 10
 # reload the configuration file
 bindsym $mod+Shift+c reload
 
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+# restart i3 inplace, regenerating the config
 bindsym $mod+Shift+r exec --no-startup-id \
-	$HOME/.config/i3/bin/generate-config.sh, restart	
+        $HOME/.config/i3/bin/generate-config.sh, restart
 
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
@@ -142,8 +130,9 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Invoke i3-input to read user input for a window title, then use the response from that
-# to construct an i3 command for running xdotool to actually set the window title
+# 2016-12-11 cperl: Invoke i3-input to read user input for a window title, then use the
+# response from that to construct an i3 command for running xdotool to actually set the
+# window title
 bindsym $mod+i exec --no-startup-id                                                     \
         i3-input                                                                        \
         -F "exec --no-startup-id xdotool getactivewindow -- set_window --name '%s'"     \
@@ -155,35 +144,35 @@ set $quickswitch_dmenu_cmd "dmenu -i -l 20 -b -fn terminus:style=normal:pixelsiz
 
 bindsym $mod+period move scratchpad
 
-# Use dmenu to find a window by name (in the scratchpad)
+# 2016-12-11 cperl: Use dmenu to find a window by name (in the scratchpad)
 bindsym $mod+comma exec --no-startup-id         \
         $quickswitch                            \
         -s                                      \
         --dmenu $quickswitch_dmenu_cmd
 
-# Use dmenu to find a window by name (not in the scratchpad)
+# 2016-12-11 cperl: Use dmenu to find a window by name (not in the scratchpad)
 bindsym $mod+u exec --no-startup-id             \
         $quickswitch                            \
         --dmenu $quickswitch_dmenu_cmd
 
-# Use dmenu to find a workspace by name and jump to it
+# 2016-12-11 cperl: Use dmenu to find a workspace by name and jump to it
 bindsym $mod+y exec --no-startup-id             \
         $quickswitch                            \
         -w                                      \
         --dmenu $quickswitch_dmenu_cmd
 
-# Use dmenu to find a window by name (not in the scratchpad) and pull it to the current
-# workspace
+# 2016-12-11 cperl: Use dmenu to find a window by name (not in the scratchpad) and pull it
+# to the current workspace
 bindsym $mod+m exec --no-startup-id             \
         $quickswitch                            \
         -m                                      \
         --dmenu $quickswitch_dmenu_cmd
+
+# 2016-11-14 cperl: No borders for chrome
+for_window [class="Google-chrome" title="Google Chrome"] border pixel 3
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
         status_command i3status
 }
-
-# 2016-11-14 no borders for chrome
-for_window [class="Google-chrome" title="Google Chrome"] border pixel 3 
