@@ -141,6 +141,13 @@ bindsym $mod+i exec --no-startup-id                                             
         -P "New window name: "                                                          \
         -f "-xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*"
 
+# 2016-12-11 cperl: Playing with renaming workspaces
+# bindsym $mod+o exec --no-startup-id				\
+#         i3-input						\
+#         -F "rename workspace to %s"				\
+#         -P "New workspace name: "				\
+#         -f "-xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*"
+
 set $quickswitch ${HOME}/.config/i3/bin/quickswitch.py
 set $quickswitch_dmenu_cmd "dmenu -i -l 20 -b -fn terminus:style=normal:pixelsize=12"
 
