@@ -17,9 +17,9 @@ order += "run_watch DHCP"
 order += "wireless _first_"
 order += "ethernet _first_"
 order += "battery 0"
-order += "tztime nyc"
-order += "tztime ldn"
 order += "tztime hkg"
+order += "tztime ldn"
+order += "tztime nyc"
 order += "volume master"
 
 wireless _first_ {
