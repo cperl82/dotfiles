@@ -44,17 +44,17 @@ run_watch DHCP {
 }
 
 tztime nyc {
-    format = "nyc %Y-%m-%d %H:%M:%S"
+    format = "NYC %Y-%m-%d %H:%M:%S"
 }
 
 tztime ldn {
     timezone="Europe/London"
-    format = "ldn %Y-%m-%d %H:%M:%S"
+    format = "LDN  %Y-%m-%d %H:%M:%S"
 }
 
 tztime hkg {
     timezone="Hongkong"
-    format = "hkg %Y-%m-%d %H:%M:%S"
+    format = "HKG  %Y-%m-%d %H:%M:%S"
 }
 
 disk "/" {
