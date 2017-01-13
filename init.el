@@ -83,7 +83,7 @@ given, it skips the confirmation"
 (setq inhibit-startup-message t
       column-number-mode      t
       split-height-threshold  nil
-      split-width-threshold   1920
+      split-width-threshold   60
       make-backup-files       nil
       c-default-style         "linux"
       ad-redefinition-action  'accept)
@@ -223,6 +223,17 @@ Lisp function does not specify a special indentation."
                                           indent-point normal-indent))
                    (method
                                       (funcall method indent-point state))))))))
+
+;; 2017-01-12 function to help split windows the way I like it
+(defun cp/split-windows-sensibly (&rest r)
+  (when (eq (length (window-list)) 1)
+    (let* ((columns (window-size nil t))
+           (new (1+ (/ columns 2))))
+      (progn
+        (message "Setting split-width-threshold to %d" new)
+        (setq split-width-threshold new)))))
+
+(advice-add 'split-window-sensibly :before #'cp/split-windows-sensibly)
 
 
 ;; Base packages
