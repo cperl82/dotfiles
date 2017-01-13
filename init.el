@@ -355,7 +355,8 @@ Lisp function does not specify a special indentation."
   (progn
     (setq-default evil-symbol-word-search t)
     (setq-default evil-flash-delay 5)
-    (setq-default evil-move-beyond-eol t))
+    (setq-default evil-move-beyond-eol t)
+    (setq-default evil-want-C-i-jump nil))
   :config
   (progn
     (evil-mode 1)
