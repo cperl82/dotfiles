@@ -235,6 +235,7 @@ Lisp function does not specify a special indentation."
         (setq split-width-threshold new)))))
 
 (advice-add 'split-window-sensibly :before #'cp/split-windows-sensibly)
+(advice-add 'split-window-horizontally :before #'cp/split-windows-sensibly)
 
 
 ;; Base packages
