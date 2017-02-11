@@ -3,5 +3,5 @@
        :type github
        :pkgname "bbatsov/helm-projectile"
        :branch "master"
-       :checkout "fb2dd7fad405f650f95e0492d2a80e4b40ce434f"
+       :checkout "e16da3ec6d6c495ee8355e3c3729294bdee0a57b"
        :depends (projectile helm dash cl-lib))
