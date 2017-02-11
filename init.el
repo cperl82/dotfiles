@@ -62,6 +62,7 @@
           tuareg-mode
           undo-tree
           use-package
+          vagrant-tramp
           which-key
           xcscope
           xoria256-emacs))
