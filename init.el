@@ -28,7 +28,7 @@
      :description "Modular in-buffer completion framework for Emacs"
      :type github
      :pkgname "company-mode/company-mode"
-     :checkout "f2327bc7f303fcf83c3d8f9c76f61deaa110ebb5"))))
+     :checkout "c494fc65d35f7f00c2da17206e6550385ae9b300"))))
 
 (let* ((sources (map 'list (lambda (plist) (plist-get plist :name)) el-get-sources))
        (packages
