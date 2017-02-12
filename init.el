@@ -1116,6 +1116,7 @@ Lisp function does not specify a special indentation."
    "C-c c"   #'org-capture)
   (:keymaps '(org-mode-map)
    :states  '(insert)
+   "M-RET"   #'org-meta-return
    "M-."     #'cp/org-surround-tilda
    "M-v"     #'cp/org-surround-equal
    "M-b"     #'cp/org-surround-star
