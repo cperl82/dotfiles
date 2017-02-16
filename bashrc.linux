@@ -47,7 +47,7 @@ then
 fi
 
 # Set directory listing colors to those listed in ~/.dircolors
-if [ -r ~/.dircolors ]
+if [ -r ${HOME}/.dircolors ]
 then
 	alias ls='ls --color=auto'
 	eval "$(dircolors ~/.dircolors)"
@@ -270,24 +270,26 @@ function rpmenv () {
 	local base
 
 	usage () {
-		echo "rpmenv enter (directory | auto (--url URL | --file FILE) [--base BASE (defaults to RPMENV)])"
-		echo "rpmenv exit"
-	}
-
-	enter_env () {
-		d="${1}"
-		n="${2}"
-		test \! -d "${d}" && mkdir -p "${d}"
-		export _RPMENV_SAVED_PS1=${PS1}
-		export _RPMENV_SAVED_PWD=${PWD}
-		export PS1='[\u@\h [RPMENV:'${n}'] \w]\$ '
-		cd ${d}
-		alias rpmbuild="rpmbuild --define '_topdir ${d}'"
-		alias rpm="rpm --define '_topdir ${d}'"
+		echo "${FUNCNAME} enter (directory | auto (--url URL | --file FILE) [--base BASE (defaults to RPMENV)])"
+		echo "${FUNCNAME} prepare"
+		echo "${FUNCNAME} exit"
 	}
 
 	case "${1}" in
 	enter)
+		enter_env () {
+			d="${1}"
+			n="${2}"
+			test \! -d "${d}" && mkdir -p "${d}"
+			export _RPMENV_SAVED_PS1=${PS1}
+			export _RPMENV_SAVED_PWD=${PWD}
+			export _RPMENV_SAVED_DIR=${d}
+			export PS1='[\u@\h [RPMENV:'${n}'] \w]\$ '
+			cd ${d}
+			rpmbuild () { command rpmbuild --define "_topdir ${_RPMENV_SAVED_DIR}" "${@}"; }
+			rpm ()      { command rpm      --define "_topdir ${_RPMENV_SAVED_DIR}" "${@}"; }
+		}
+
 		shift
 		case "${1}" in
 		d|dir|directory)
@@ -352,7 +354,8 @@ function rpmenv () {
 			else
 				env="${BASE}/${name}"
 				enter_env "${env}" "${name}"
-				mv "${tmp}" "${env}/${srpm}"
+				mkdir -p "${env}/OTHER"
+				mv "${tmp}" "${env}/OTHER/${srpm}"
 			fi
 			;;
 		*)
@@ -360,15 +363,73 @@ function rpmenv () {
 			return
 		esac
 		;;
+
+	unpack|u)
+		one_dirent_matching () {
+			base="${1}"
+			pattern="${2}"
+
+			dirents=( $(ls -1 "${base}" | egrep "${pattern}") )
+
+			if [[ ${#dirents[@]} -ne 1 ]]
+			then
+				echo "0 or more than one dirent found in ${base} matching ${pattern}, aborting" 1>&2
+				return 1
+			fi
+			echo "${base}/${dirents[0]}"
+			return 0
+		}
+
+		if [[ -z "${_RPMENV_SAVED_DIR}" ]]
+		then
+			echo "It doesn't look like you're currently in an rpmenv, cannot unpack"
+			return 1
+		fi
+
+		if [[ -d "${_RPMENV_SAVED_DIR}/SPECS" ]]
+		then
+			echo "Looks like src rpm may have already been unpacked, doing nothing"
+			return 1
+		fi
+
+		srpm="${2}"
+		shift
+		shift
+
+		srpm_file=$(one_dirent_matching "${_RPMENV_SAVED_DIR}/OTHER" ".*\.src\.rpm")
+		[[ ${?} -ne 0 ]] && return 1
+		rpm -ivh "${srpm_file}"
+
+		spec_file=$(one_dirent_matching "${_RPMENV_SAVED_DIR}/SPECS" ".*\.spec")
+		[[ ${?} -ne 0 ]] && return 1
+		rpmbuild -bp --nodeps "${spec_file}"
+
+		build_dir=$(one_dirent_matching "${_RPMENV_SAVED_DIR}/BUILD" ".*")
+		[[ ${?} -ne 0 ]] && return 1
+
+		target_base=$(basename "${build_dir}")
+		target_full="${_RPMENV_SAVED_DIR}/OTHER/${target_base}"
+		cp -a "${build_dir}" "${target_full}"
+		if [[ "${target_base}" =~ kernel- ]]
+		then
+			# Go one level further down for kernel packages
+			target_full=$(one_dirent_matching "${target_full}" "linux-.*")
+			[[ ${?} -ne 0 ]] && return 1
+		fi
+		cd "${target_full}" && git init && git add . && git commit -m initial && cd -
+		;;
+
 	exit)
 		shift
 		cd ${_RPMENV_SAVED_PWD}
 		export PS1=${_RPMENV_SAVED_PS1}
 		unset _RPMENV_SAVED_PWD
 		unset _RPMENV_SAVED_PS1
-		unalias rpm
-		unalias rpmbuild
+		unset _RPMENV_SAVED_DIR
+		unset rpm
+		unset rpmbuild
 		;;
+
 	*)
 		usage
 		return

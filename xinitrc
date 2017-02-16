@@ -20,4 +20,4 @@ fi
 # exec gnome-session
 # dbus-launch --exit-with-session xmonad
 ${HOME}/.config/i3/bin/generate-config.sh
-exec i3
+dbus-launch --exit-with-session i3
