@@ -58,6 +58,8 @@
           resize-window
           s
           smartparens
+          smex
+          swiper
           systemtap-mode
           tuareg-mode
           undo-tree
@@ -428,27 +430,48 @@ Lisp function does not specify a special indentation."
 
 
 ; ido / ido-vertical-mode / flx
-(use-package ido
-  :config
-  (progn
-    (setq ido-enable-flex-matching t)
-    ;; disable ido faces to see flx highlights.
-    (setq ido-use-faces nil)
-    ;; 2015-09-20: I never want ido-find-files to auto-merge, drives me nuts
-    (setq ido-auto-merge-work-directories-length -1)
-    (setq ido-enter-matching-directory 'first)
-    (ido-mode t)
-    (ido-everywhere t))
+;; (use-package ido
+;;   :config
+;;   (progn
+;;     (setq ido-enable-flex-matching t)
+;;     ;; disable ido faces to see flx highlights.
+;;     (setq ido-use-faces nil)
+;;     ;; 2015-09-20: I never want ido-find-files to auto-merge, drives me nuts
+;;     (setq ido-auto-merge-work-directories-length -1)
+;;     (setq ido-enter-matching-directory 'first)
+;;     (ido-mode t)
+;;     (ido-everywhere t))
 
-(use-package ido-vertical-mode
-  :config
-  (progn
-    (setq-default ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
-    (ido-vertical-mode 1)))
+;; (use-package ido-vertical-mode
+;;   :config
+;;   (progn
+;;     (setq-default ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
+;;     (ido-vertical-mode 1)))
 
-(use-package flx-ido
-  :config
-  (flx-ido-mode t)))
+;; (use-package flx-ido
+;;   :config
+;;   (flx-ido-mode t)))
+
+
+;; swiper / ivy / counsel / smex
+(use-package ivy
+  :diminish ivy-mode
+  :init
+  (progn
+    (use-package smex)
+    (use-package ivy-buffer-extend
+      :config
+      (setq ivy-buffer-max-dir-display-length 50)
+      (setq ivy-buffer-max-buffer-display-length 50)
+      (setq ivy-buffer-format
+            '(buffer-name   "<col>"  "    "
+              mode process  "<col>"  "    "
+              dir file-name "<col>"  "    ")))
+    (setq ivy-height 30)
+    (ivy-mode 1))
+  :general
+  (:keymaps 'ivy-mode-map
+   "TAB" #'ivy-alt-done))
 
 
 
