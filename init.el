@@ -470,7 +470,7 @@ Lisp function does not specify a special indentation."
     (setq ivy-height 30)
     (ivy-mode 1))
   :general
-  (:keymaps 'ivy-mode-map
+  (:keymaps 'ivy-minibuffer-map
    "TAB" #'ivy-alt-done))
 
 
