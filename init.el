@@ -1223,6 +1223,7 @@ Lisp function does not specify a special indentation."
              :empty-lines 1)))
     (setq org-link-abbrev-alist '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
     (setq org-refile-use-outline-path 'file)
+    (setq org-outline-path-complete-in-steps nil)
     (setq org-hide-block-startup t)
     (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
     (setq org-agenda-skip-scheduled-if-done t)
