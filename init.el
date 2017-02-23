@@ -465,13 +465,14 @@ Lisp function does not specify a special indentation."
       (setq ivy-buffer-max-buffer-display-length 50)
       (setq ivy-buffer-format
             '(buffer-name   "<col>"  "    "
-              mode process  "<col>"  "    "
-              dir file-name "<col>"  "    ")))
-    (setq ivy-height 30)
-    (ivy-mode 1))
-  :general
-  (:keymaps 'ivy-minibuffer-map
-   "TAB" #'ivy-alt-done))
+                            mode process  "<col>"  "    "
+                            dir file-name "<col>"  "    ")))
+    (setq ivy-height 10)
+    (setq ivy-initial-inputs-alist nil)
+    (setq ivy-re-builders-alist
+          ;; allow input not in order
+          '((t   . ivy--regex-ignore-order)))
+    (ivy-mode 1)))
 
 
 
@@ -1445,7 +1446,11 @@ Lisp function does not specify a special indentation."
    '(helm-buffer-directory       ((t (:foreground "color-247"))))
    '(helm-ff-dotted-directory    ((t (:foreground "color-247"))))
    '(helm-match                  ((t (:foreground "gold1" :weight normal))))
-   '(helm-swoop-target-word-face ((t (:foreground "gold1" :weight normal))))))
+   '(helm-swoop-target-word-face ((t (:foreground "gold1" :weight normal))))
+   `(ivy-minibuffer-match-face-2 ((t (:foreground "white" :background ,zenburn-green-1))))
+   `(ivy-minibuffer-match-face-3 ((t (:foreground "white" :background ,zenburn-red-2))))
+   `(ivy-minibuffer-match-face-4 ((t (:foreground "white" :background ,zenburn-yellow-2))))
+   ))
 
 
 
