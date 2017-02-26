@@ -454,11 +454,14 @@ Lisp function does not specify a special indentation."
 
 
 ;; swiper / ivy / counsel / smex
+(use-package smex
+  :defer t)
+
 (use-package ivy
+  :defer t
   :diminish ivy-mode
   :init
   (progn
-    (use-package smex)
     (use-package ivy-buffer-extend
       :config
       (setq ivy-buffer-max-dir-display-length 50)
@@ -469,10 +472,22 @@ Lisp function does not specify a special indentation."
                             dir file-name "<col>"  "    ")))
     (setq ivy-height 10)
     (setq ivy-initial-inputs-alist nil)
-    (setq ivy-re-builders-alist
-          ;; allow input not in order
-          '((t   . ivy--regex-ignore-order)))
+    ;; 2017-02-24: This seems to cause issues with swiper being able
+    ;; to highlight the matches in the current buffer.  Disabling for
+    ;; now.
+
+    ;; (setq ivy-re-builders-alist
+    ;;       ;; allow input not in order
+    ;;       '((t   . ivy--regex-ignore-order)))
+    (setq ivy-format-function 'ivy-format-function-arrow)
     (ivy-mode 1)))
+
+(use-package counsel
+  :defer t
+  :diminish counsel-mode
+  :init
+  (progn
+    (counsel-mode 1)))
 
 
 
@@ -1447,9 +1462,16 @@ Lisp function does not specify a special indentation."
    '(helm-ff-dotted-directory    ((t (:foreground "color-247"))))
    '(helm-match                  ((t (:foreground "gold1" :weight normal))))
    '(helm-swoop-target-word-face ((t (:foreground "gold1" :weight normal))))
+   `(ivy-current-match           ((t (:foreground nil :background nil :underline nil))))
+   '(ivy-minibuffer-match-face-1 ((t (:foreground nil :background nil :underline nil))))
    `(ivy-minibuffer-match-face-2 ((t (:foreground "white" :background ,zenburn-green-1))))
    `(ivy-minibuffer-match-face-3 ((t (:foreground "white" :background ,zenburn-red-2))))
    `(ivy-minibuffer-match-face-4 ((t (:foreground "white" :background ,zenburn-yellow-2))))
+   '(swiper-line-face            ((t (:background "#4F4F4F"))))
+   '(swiper-match-face-1         ((t (:foreground nil :background nil :underline nil))))
+   `(swiper-match-face-2         ((t (:foreground "white" :background ,zenburn-green-1))))
+   `(swiper-match-face-3         ((t (:foreground "white" :background ,zenburn-red-2))))
+   `(swiper-match-face-4         ((t (:foreground "white" :background ,zenburn-yellow-2))))
    ))
 
 
