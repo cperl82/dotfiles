@@ -460,6 +460,10 @@ Lisp function does not specify a special indentation."
 (use-package ivy
   :defer t
   :diminish ivy-mode
+  :general
+  (:keymaps '(ivy-minibuffer-map)
+   "<up>"  #'ivy-previous-history-element
+   "<down" #'ivy-next-history-element)
   :init
   (progn
     (use-package ivy-buffer-extend
