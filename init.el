@@ -800,8 +800,6 @@ Lisp function does not specify a special indentation."
       (lambda (&optional arg)
         (interactive "P") (sp-wrap-with-pair "(")))
     (define-key evil-normal-state-local-map (kbd "C-t") #'sp-transpose-sexp)
-    (define-key evil-normal-state-local-map (kbd "H")   #'sp-backward-up-sexp)
-    (define-key evil-normal-state-local-map (kbd "L")   #'sp-up-sexp)
     (define-key evil-normal-state-local-map (kbd "M-7") #'sp-backward-barf-sexp)
     (define-key evil-normal-state-local-map (kbd "M-8") #'sp-forward-barf-sexp)
     (define-key evil-normal-state-local-map (kbd "M-9") #'sp-backward-slurp-sexp)
