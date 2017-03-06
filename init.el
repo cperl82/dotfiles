@@ -28,7 +28,15 @@
      :description "Modular in-buffer completion framework for Emacs"
      :type github
      :pkgname "company-mode/company-mode"
-     :checkout "c494fc65d35f7f00c2da17206e6550385ae9b300"))))
+     :checkout "c494fc65d35f7f00c2da17206e6550385ae9b300")
+
+    (:name origami.el
+     :website "https://github.com/gregsexton/origami.el"
+     :description "A text folding minor mode for Emacs"
+     :type github
+     :pkgname "gregsexton/origami.el"
+     :checkout "5630536d04613476e13b413fe05fd0bbff4107ca"
+     :depends (dash s)))))
 
 (let* ((sources (map 'list (lambda (plist) (plist-get plist :name)) el-get-sources))
        (packages
