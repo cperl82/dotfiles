@@ -7,20 +7,20 @@
     <string>local.helium.users.chris.org-auto-commit</string>
     <key>ProgramArguments</key>
     <array>
- <string>git</string>
- <string>-C</string>
- <string>/Users/chris/org</string>
- <string>commit</string>
- <string>-a</string>
- <string>-m</string>
- <string>auto commit</string>
+      <string>git</string>
+      <string>-C</string>
+      <string>/Users/chris/org</string>
+      <string>commit</string>
+      <string>-a</string>
+      <string>-m</string>
+      <string>auto commit</string>
     </array>
     <key>StartCalendarInterval</key>
     <dict>
- <key>Hour</key>
- <integer>*/4</integer>
- <key>Minute</key>
- <integer>0</integer>
+      <key>Hour</key>
+      <integer>*/4</integer>
+      <key>Minute</key>
+      <integer>0</integer>
     </dict>
   </dict>
 </plist>
