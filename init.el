@@ -1248,7 +1248,8 @@ Lisp function does not specify a special indentation."
             ("N" "Next Action with Gmail Id" entry
              (file "~/org/capture.org") "* NEXT %?\n  captured: %U\n  [[gmail:%^{gmail id}][%\\1]]"
              :empty-lines 1)))
-    (setq org-link-abbrev-alist '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
+    (setq org-link-abbrev-alist
+          '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
     (setq org-refile-use-outline-path 'file)
     (setq org-outline-path-complete-in-steps nil)
     (setq org-hide-block-startup t)
@@ -1274,7 +1275,8 @@ Lisp function does not specify a special indentation."
          (define-and-bind-text-object "*" "\\*" "\\*")
          (define-and-bind-text-object "=" "\\=" "\\=")
          (turn-on-evil-surround-mode)
-         (add-hook 'write-contents-functions (lambda () (save-excursion (delete-trailing-whitespace)))))))
+         (add-hook 'write-contents-functions
+                   (lambda () (save-excursion (delete-trailing-whitespace)))))))
     (add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode 1)))
     (add-hook 'org-src-mode-hook (lambda () (setq electric-indent-mode nil)))))
 
