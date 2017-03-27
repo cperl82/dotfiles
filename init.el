@@ -472,6 +472,7 @@ Lisp function does not specify a special indentation."
   (:keymaps '(ivy-minibuffer-map)
    "<up>"  #'ivy-previous-history-element
    "<down" #'ivy-next-history-element)
+  ("C-s" #'swiper)
   :init
   (progn
     (use-package ivy-buffer-extend
@@ -1274,6 +1275,7 @@ Lisp function does not specify a special indentation."
          (define-and-bind-text-object "=" "\\=" "\\=")
          (turn-on-evil-surround-mode)
          (add-hook 'write-contents-functions (lambda () (save-excursion (delete-trailing-whitespace)))))))
+    (add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode 1)))
     (add-hook 'org-src-mode-hook (lambda () (setq electric-indent-mode nil)))))
 
 
@@ -1482,6 +1484,7 @@ Lisp function does not specify a special indentation."
    `(swiper-match-face-2         ((t (:foreground "white" :background ,zenburn-red-2))))
    `(swiper-match-face-3         ((t (:foreground "white" :background ,zenburn-green-1))))
    `(swiper-match-face-4         ((t (:foreground "white" :background ,zenburn-yellow-2))))
+   '(hl-line                     ((t (:background "#4F4F4F"))))
    ))
 
 
