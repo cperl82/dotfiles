@@ -55,13 +55,11 @@
           haskell-mode
           helm
           helm-projectile
-          helm-swoop
           highlight-parentheses
           ido-vertical-mode
           lua-mode
           org-mode
           projectile
-          rainbow-delimiters
           rainbow-mode
           resize-window
           s
