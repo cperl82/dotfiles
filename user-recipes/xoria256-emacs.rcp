@@ -1,5 +1,0 @@
-(:name xoria256-emacs
-       :description "Xoria256 Color Theme for Emacs."
-       :type github
-       :pkgname "suxue/xoria256-emacs"
-       :post-init (add-to-list 'custom-theme-load-path default-directory))

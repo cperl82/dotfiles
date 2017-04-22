@@ -72,8 +72,7 @@
           use-package
           vagrant-tramp
           which-key
-          xcscope
-          xoria256-emacs))
+          xcscope))
        (sources (append sources packages)))
   (el-get 'sync sources))
 
