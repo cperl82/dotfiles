@@ -432,31 +432,6 @@ Lisp function does not specify a special indentation."
     (setq uniquify-buffer-name-style 'forward)
     (setq uniquify-strip-common-suffix nil)))
 
-
-
-; ido / ido-vertical-mode / flx
-;; (use-package ido
-;;   :config
-;;   (progn
-;;     (setq ido-enable-flex-matching t)
-;;     ;; disable ido faces to see flx highlights.
-;;     (setq ido-use-faces nil)
-;;     ;; 2015-09-20: I never want ido-find-files to auto-merge, drives me nuts
-;;     (setq ido-auto-merge-work-directories-length -1)
-;;     (setq ido-enter-matching-directory 'first)
-;;     (ido-mode t)
-;;     (ido-everywhere t))
-
-;; (use-package ido-vertical-mode
-;;   :config
-;;   (progn
-;;     (setq-default ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
-;;     (ido-vertical-mode 1)))
-
-;; (use-package flx-ido
-;;   :config
-;;   (flx-ido-mode t)))
-
 
 ;; swiper / ivy / counsel / smex
 (use-package smex
