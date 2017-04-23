@@ -2,5 +2,6 @@
        :website "https://github.com/sabof/es-windows"
        :description "Window-management utilities"
        :type github
+       :checkout "239e30408cb1adb4bc8bd63e2df34711fa910b4f"
        :features es-windows
        :pkgname "sabof/es-windows")

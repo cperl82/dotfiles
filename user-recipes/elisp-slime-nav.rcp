@@ -3,4 +3,4 @@
        :pkgname "purcell/elisp-slime-nav"
        :description "Slime-style navigation for Emacs Lisp"
        :branch "master"
-       :checkout "0e96d9f1f0d334f09414b509d44d5c000b51f432")
+       :checkout "8a1c2717a6fb50b654b8d1ffa12a40420ee32990")

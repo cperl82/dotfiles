@@ -3,5 +3,5 @@
        :description "Modern API for working with files and directories in Emacs"
        :depends (s dash)
        :type github
-       :checkout "4ef57d1539a964a0d02b23becbe9b5e49b805d66"
+       :checkout "fabdbd4a4a8caf8684f0fa656f457a03c5dfa4de"
        :pkgname "rejeep/f.el")

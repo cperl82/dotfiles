@@ -5,7 +5,7 @@
        for writing custom extensions."
        :type github
        :pkgname "emacs-evil/evil"
-       :checkout "c29c32be3327294036a8a56513836ee515091f16"
+       :checkout "f0684c1f6644a8c4e0e5fce50a1a04796555eaf1"
        :features evil
        :depends (undo-tree goto-chg)
        :build (("make" "info" "all"))
