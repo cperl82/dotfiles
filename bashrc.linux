@@ -270,9 +270,9 @@ function rpmenv () {
 	local base
 
 	usage () {
-		echo "${FUNCNAME} enter (directory | auto (--url URL | --file FILE) [--base BASE (defaults to RPMENV)])"
-		echo "${FUNCNAME} prepare"
-		echo "${FUNCNAME} exit"
+		echo "${FUNCNAME[0]} enter (directory | auto (--url URL | --file FILE) [--base BASE (defaults to RPMENV)])"
+		echo "${FUNCNAME[0]} prepare"
+		echo "${FUNCNAME[0]} exit"
 	}
 
 	case "${1}" in
@@ -298,6 +298,7 @@ function rpmenv () {
 			name=$(basename "${dir}")
 			enter_env "${dir}" "${name}"
 			;;
+
 		a|au|aut|auto)
 			shift
 			while [[ -n "${1}" ]]
@@ -354,8 +355,7 @@ function rpmenv () {
 			else
 				env="${BASE}/${name}"
 				enter_env "${env}" "${name}"
-				mkdir -p "${env}/OTHER"
-				mv "${tmp}" "${env}/OTHER/${srpm}"
+				mv "${tmp}" "${env}/${srpm}"
 			fi
 			;;
 		*)
