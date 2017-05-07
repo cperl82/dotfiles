@@ -457,14 +457,15 @@ Lisp function does not specify a special indentation."
                             dir file-name "<col>"  "    ")))
     (setq ivy-height 10)
     (setq ivy-initial-inputs-alist nil)
-    ;; 2017-02-24: This seems to cause issues with swiper being able
-    ;; to highlight the matches in the current buffer.  Disabling for
-    ;; now.
-
-    ;; (setq ivy-re-builders-alist
-    ;;       ;; allow input not in order
-    ;;       '((t   . ivy--regex-ignore-order)))
+    ;; 2017-05-06: `ivy--regex-ignore-order' doesn't seem to work well with swiper as the
+    ;; buffer highlights don't seem to be applied correctly.  However, its useful when
+    ;; using `counsel-M-x', so enable it for that (e.g. typing `dired find' to find
+    ;; `find-dired').
+    (setq ivy-re-builders-alist
+          '((counsel-M-x . ivy--regex-ignore-order)
+            (t . ivy--regex-plus)))
     (setq ivy-format-function 'ivy-format-function-arrow)
+    (setq ivy-count-format "%d/%d ")
     (ivy-mode 1)))
 
 (use-package counsel
@@ -1236,6 +1237,13 @@ Lisp function does not specify a special indentation."
     (add-to-list 'org-open-at-point-functions #'cp/org-echo-link-at-point-if-not-darwin)
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
     (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((shell  . true)
+       (python . true)
+       (awk    . true)
+       (sed    . true)
+       (R      . true)))
     (add-hook
      'org-mode-hook
      (lambda ()
