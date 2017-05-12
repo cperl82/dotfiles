@@ -2,6 +2,9 @@
 #define Foreground_Color   #c5c8c6
 #define Background_Color   #1d1f21
 #define Cursor_Color       #c5c8c6
+#define Bold_Color         #c5c8c6
+#define Italic_Color       #c5c8c6
+#define Underline_Color    #f0c674
 
 ! black
 #define Ansi_0_Color       #1d1f21
@@ -12,8 +15,8 @@
 #define Ansi_9_Color       #cc6666
 
 ! green
-#define Ansi_2_Color       #b5bd68
-#define Ansi_10_Color      #b5bd68
+#define Ansi_2_Color       #b5e668
+#define Ansi_10_Color      #b5e668
 
 ! yellow
 #define Ansi_3_Color       #f0c674
