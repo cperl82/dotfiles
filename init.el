@@ -1463,9 +1463,9 @@ Lisp function does not specify a special indentation."
    `(ivy-minibuffer-match-face-4 ((t (:foreground ,zenburn-yellow-2 :background nil))))
    '(swiper-line-face            ((t (:background "#4F4F4F"))))
    '(swiper-match-face-1         ((t (:foreground nil :background nil :underline nil))))
-   `(swiper-match-face-2         ((t (:foreground "white" :background ,zenburn-red-2))))
-   `(swiper-match-face-3         ((t (:foreground "white" :background ,zenburn-green-1))))
-   `(swiper-match-face-4         ((t (:foreground "white" :background ,zenburn-yellow-2))))
+   `(swiper-match-face-2         ((t (:foreground "white" :weight bold :background ,zenburn-red-2))))
+   `(swiper-match-face-3         ((t (:foreground "white" :weight bold :background ,zenburn-green-1))))
+   `(swiper-match-face-4         ((t (:foreground "white" :weight bold :background ,zenburn-yellow-2))))
    '(hl-line                     ((t (:background "#4F4F4F"))))
    ))
 
