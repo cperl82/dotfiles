@@ -1,0 +1,116 @@
+! idleToes from https://github.com/mbadolato/iTerm2-Color-Schemes/tree/master/xrdb
+#define Ansi_0_Color #323232
+#define Ansi_1_Color #d25252
+#define Ansi_10_Color #9dff91
+#define Ansi_11_Color #ffe48b
+#define Ansi_12_Color #5eb7f7
+#define Ansi_13_Color #ff9dff
+#define Ansi_14_Color #dcf4ff
+#define Ansi_15_Color #ffffff
+#define Ansi_2_Color #7fe173
+#define Ansi_3_Color #ffc66d
+#define Ansi_4_Color #4099ff
+#define Ansi_5_Color #f680ff
+#define Ansi_6_Color #bed6ff
+#define Ansi_7_Color #eeeeec
+#define Ansi_8_Color #535353
+#define Ansi_9_Color #f07070
+#define Background_Color #323232
+#define Bold_Color #ffffa9
+#define Cursor_Color #d6d6d6
+#define Cursor_Text_Color #000000
+#define Foreground_Color #ffffff
+#define Selected_Text_Color #000000
+#define Selection_Color #5b5b5b
+
+! ir_black from https://github.com/mbadolato/iTerm2-Color-Schemes/tree/master/xrdb
+! #define Ansi_0_Color #4f4f4f
+! #define Ansi_1_Color #fa6c60
+! #define Ansi_10_Color #cfffab
+! #define Ansi_11_Color #ffffcc
+! #define Ansi_12_Color #b5dcff
+! #define Ansi_13_Color #fb9cfe
+! #define Ansi_14_Color #e0e0fe
+! #define Ansi_15_Color #ffffff
+! #define Ansi_2_Color #a8ff60
+! #define Ansi_3_Color #fffeb7
+! #define Ansi_4_Color #96cafe
+! #define Ansi_5_Color #fa73fd
+! #define Ansi_6_Color #c6c5fe
+! #define Ansi_7_Color #efedef
+! #define Ansi_8_Color #7b7b7b
+! #define Ansi_9_Color #fcb6b0
+! #define Background_Color #000000
+! #define Bold_Color #ffffff
+! #define Cursor_Color #808080
+! #define Cursor_Text_Color #ffffff
+! #define Foreground_Color #f1f1f1
+! #define Selected_Text_Color #000000
+! #define Selection_Color #b5d5ff
+
+XTerm*font:            -xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*
+XTerm.termName:        xterm-256color
+XTerm.vt100.scrollBar: false
+XTerm*on2Clicks:       regex [-_.[:alpha:][:digit:]]+
+XTerm*on3Clicks:       regex [^ 	\n]+
+XTerm*on4Clicks:       line
+XTerm*fullscreen:      never
+XTerm*color0:          Ansi_0_Color
+XTerm*color1:          Ansi_1_Color
+XTerm*color2:          Ansi_2_Color
+XTerm*color3:          Ansi_3_Color
+XTerm*color4:          Ansi_4_Color
+XTerm*color5:          Ansi_5_Color
+XTerm*color6:          Ansi_6_Color
+XTerm*color7:          Ansi_7_Color
+XTerm*color8:          Ansi_8_Color
+XTerm*color9:          Ansi_9_Color
+XTerm*color10:         Ansi_10_Color
+XTerm*color11:         Ansi_11_Color
+XTerm*color12:         Ansi_12_Color
+XTerm*color13:         Ansi_13_Color
+XTerm*color14:         Ansi_14_Color
+XTerm*color15:         Ansi_15_Color
+XTerm*colorBD:         Bold_Color
+XTerm*colorIT:         Italic_Color
+XTerm*colorUL:         Underline_Color
+XTerm*foreground:      Foreground_Color
+XTerm*background:      Background_Color
+XTerm*cursorColor:     Cursor_Color
+
+URxvt.font:                -xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*, \
+                           xft:monaco:pixelsize=10, \
+                           xft:bitstream vera sans mono:pixelsize=10:antialias=true
+URxvt.scrollBar:           false
+URxvt.skipBuiltinGlyphs:   true
+URxvt.cursorUnderline:     false
+URxvt.keysym.C-Up:         \033[1;5A
+URxvt.keysym.C-Down:       \033[1;5B
+URxvt.keysym.C-Left:       \033[1;5D
+URxvt.keysym.C-Right:      \033[1;5C
+URxvt.perl-ext-common:     default,selection
+URxvt.selection.pattern-0: ([-_.[:alpha:][:digit:]]+)
+URxvt.selection.pattern-1: ([^ 	\n]+)
+URxvt.selection.pattern-2: (^.*$)
+Rxvt*color0:               Ansi_0_Color
+Rxvt*color1:               Ansi_1_Color
+Rxvt*color2:               Ansi_2_Color
+Rxvt*color3:               Ansi_3_Color
+Rxvt*color4:               Ansi_4_Color
+Rxvt*color5:               Ansi_5_Color
+Rxvt*color6:               Ansi_6_Color
+Rxvt*color7:               Ansi_7_Color
+Rxvt*color8:               Ansi_8_Color
+Rxvt*color9:               Ansi_9_Color
+Rxvt*color10:              Ansi_10_Color
+Rxvt*color11:              Ansi_11_Color
+Rxvt*color12:              Ansi_12_Color
+Rxvt*color13:              Ansi_13_Color
+Rxvt*color14:              Ansi_14_Color
+Rxvt*color15:              Ansi_15_Color
+Rxvt*colorBD:              Bold_Color
+Rxvt*colorIT:              Italic_Color
+Rxvt*colorUL:              Underline_Color
+Rxvt*foreground:           Foreground_Color
+Rxvt*background:           Background_Color
+Rxvt*cursorColor:          Cursor_Color

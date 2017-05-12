@@ -1,12 +1,15 @@
-# Variables {{{1
+# Variables
 export PS1='[\u@\h \w]\$ '
 export PAGER=less
 export MYSQL_PS1="\u@\h [\d]> "
 export HISTIGNORE=' *'
 
+# 2017-05-12: default terminal for i3-sensible-terminal
+export TERMINAL=urxvt256cc
+
 # Functions
 # tmpmkcd
-function tmpmkcd
+tmpmkcd ()
 {
 	today=$(date '+%Y-%m-%d')
 	pathname="${HOME}/tmp/${today}"
@@ -19,7 +22,7 @@ function tmpmkcd
 }
 
 # xt - xterm title setter
-function xt
+xt ()
 {
 	if [[ -z "${1}" ]]
 	then
@@ -31,7 +34,7 @@ function xt
 }
 
 # st - screen window title setter
-function st
+st ()
 {
 	if [[ -z "${1}" ]]
 	then
@@ -43,7 +46,7 @@ function st
 }
 
 # cl - reset all attributes
-function cl
+cl ()
 {
 	printf '\033[;0m'
 }
@@ -58,7 +61,8 @@ function cl
 # component, file or directory is a symlink
 
 # path-canonical-simple
-function path-canonical-simple() {
+path-canonical-simple ()
+{
 	local dst="${1}"
 	if [[ -z "${dst}" ]]; then
 		dst="${PWD}"
@@ -71,7 +75,8 @@ function path-canonical-simple() {
 
 # path-canonical
 # Resolves symlinks for all path components, including the final component
-function path-canonical() {
+path-canonical ()
+{
 	local dst="${1}"
 	if [[ -z "${dst}" ]]; then
 		dst="${PWD}"
@@ -110,7 +115,8 @@ function path-canonical() {
 # This is meant to be simplified interface to the aes-256-cbc encryption
 # available in openssl.  Note that output is always "ascii armored" as that just
 # makes life easier.
-aes-256-cbc() { 
+aes-256-cbc ()
+{ 
 	verb="${1}"
 	shift
 	case "${verb}" in
@@ -162,7 +168,8 @@ aes-256-cbc() {
 
 # NFSv3 Capture Filter
 # Generate tcpdump capture filter for host running nfsv3
-nfs3-capture-filter-for-host () {
+nfs3-capture-filter-for-host ()
+{
 	local host="${1}"
 	if [[ -z "${host}" ]]
 	then
@@ -189,7 +196,8 @@ nfs3-capture-filter-for-host () {
 	IFS="${OFS}"
 }
 
-nfs3-capture-filter-for-hosts () {
+nfs3-capture-filter-for-hosts ()
+{
 	hosts="${@}"
 	result=""
 	for host in ${hosts}
@@ -207,7 +215,7 @@ nfs3-capture-filter-for-hosts () {
 
 # Misc Stuff
 
-# vim - function wrapper for use with screen {{{2
+# vim - function wrapper for use with screen
 # A conditional function definition to work around the fact that when screen
 # switches to the alternate screen ("\E[?1049h" and "\E[?1049l") and back, it
 # maintains the background color that was set.  This means that after running
@@ -227,12 +235,9 @@ fi
 # lack - function wrapper for use with ack (http://www.betterthangrep.com/)
 # to output to less -R.  I don't always want this, but want it easily available
 # when I do.
-function lack
-{
-	ack --pager='less -R' "$@"
-}
+lack () { ack --pager='less -R' "$@"; }
 
-# PYTHONSTARTUP Environment variable {{{2
+# PYTHONSTARTUP Environment variable
 # if the ${HOME}/.python_startup.py file exists, set PYTHONSTARTUP to point to
 # it such that its contents are executed for interactive python sessions
 if [[ -f "${HOME}/.python_startup.py" ]];
@@ -240,14 +245,14 @@ then
 	export PYTHONSTARTUP="${HOME}/.python_startup.py"
 fi
 
-function vman
+vman ()
 {
 	vim -c ":Man $*" -c ":only"
 }
 
 # add-path
 # function to add something to PATH, skipping duplicates
-function add-path
+add-path ()
 {
 	d="${1}"
 	if [[ -d "${d}" ]]
