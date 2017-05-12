@@ -36,22 +36,7 @@ set splitright
 " Use the man.vim plugin if its available
 runtime! ftplugin/man.vim
 
-if (&term == "rxvt-unicode") || ($COLORTERM =~ 'rxvt.*')
-	" the first check catches normal urxvt, the second catches screen
-	" inside urxvt
-	set bg=dark
-	colorscheme solarized
-elseif	&term =~ "xterm-256color"
-	colorscheme xoria256
-elseif  &term =~ "screen-256color"
-	colorscheme xoria256
-	set <xUp>=[1;*A
-	set <xDown>=[1;*B
-	set <xLeft>=[1;*D
-	set <xRight>=[1;*C
-else
-	colorscheme ir_black
-endif
+colorscheme xoria256 
 
 " 2011-04-14
 " Use the fancy arrows for the NERDtree interface and turn off the AutoCenter
