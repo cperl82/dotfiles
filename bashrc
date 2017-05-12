@@ -4,9 +4,6 @@ export PAGER=less
 export MYSQL_PS1="\u@\h [\d]> "
 export HISTIGNORE=' *'
 
-# 2017-05-12: default terminal for i3-sensible-terminal
-export TERMINAL=urxvt256cc
-
 # Functions
 # tmpmkcd
 tmpmkcd ()
@@ -294,6 +291,9 @@ then
 else
 	echo "Unknown Operating System"
 fi
+
+# 2017-05-12: default terminal for i3-sensible-terminal
+export TERMINAL="${ENV_ROOT}/bin/urxvt256cc"
 
 # Local bashrc file inclustion
 # Allows inclusion of initialization stuff that I don't want to keep in my
