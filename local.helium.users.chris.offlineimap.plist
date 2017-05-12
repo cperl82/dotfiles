@@ -3,10 +3,10 @@
 <plist version="1.0">
     <dict>
         <key>Label</key>
-        <string>org.fppe.offlineimap</string>
+        <string>local.helium.users.chris.offlineimap</string>
         <key>ProgramArguments</key>
         <array>
-            <string>/opt/local/bin/offlineimap</string>
+            <string>/usr/local/bin/offlineimap</string>
             <string>-u</string>
             <string>quiet</string>
         </array>
