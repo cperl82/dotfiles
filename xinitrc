@@ -1,17 +1,18 @@
 #!/bin/bash
 
 xset -b
-xrdb -merge "${HOME}/.dotfiles/Xresources.urxvt"
-xrdb -merge "${HOME}/.dotfiles/Xresources.xterm"
 xsetroot -solid darkslategrey
 xsetroot -cursor_name left_ptr
 
-misc_xsettings
+if [[ -e ${HOME}/.Xresources ]]
+then
+	xrdb -merge ${HOME}/.Xresources
+fi
 
 # local overrides
-if [[ -e ~/.xinitrc.local ]]
+if [[ -e ${HOME}/.xinitrc.local ]]
 then
-	source ~/.xinitrc.local
+	source ${HOME}/.xinitrc.local
 fi
 
 # exec ck-launch-session fvwm
