@@ -1444,7 +1444,7 @@ Lisp function does not specify a special indentation."
  '(custom-enabled-themes (quote (zenburn)))
  '(custom-safe-themes
    (quote
-    ("1373e3623ed5d758ef06dd19f2c8a736a69a15496c745a113d42230ab71d6b58" default))))
+    ("4528fb576178303ee89888e8126449341d463001cb38abe0015541eb798d8a23" default))))
 
 ; zenburn theme overrides
 (zenburn-with-color-variables
