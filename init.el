@@ -56,8 +56,13 @@
           helm
           helm-projectile
           highlight-parentheses
+          hydra
           ido-vertical-mode
+          json-mode
+          json-reformat
+          json-snatcher
           lua-mode
+          markdown-mode
           org-mode
           projectile
           rainbow-mode
