@@ -1,6 +1,0 @@
-(:name flx
-       :description "Fuzzy matching with good sorting in ido"
-       :branch "master"
-       :checkout "ae0981b253b17b52dec666e2f739f889e7952291"
-       :type github
-       :pkgname "lewang/flx")

@@ -49,7 +49,6 @@
           evil-smartparens
           evil-surround
           f
-          flx
           flycheck
           general
           haskell-mode
@@ -57,7 +56,6 @@
           helm-projectile
           highlight-parentheses
           hydra
-          ido-vertical-mode
           json-mode
           json-reformat
           json-snatcher
@@ -76,8 +74,10 @@
           undo-tree
           use-package
           vagrant-tramp
+          wgrep
           which-key
-          xcscope))
+          xcscope
+          ))
        (sources (append sources packages)))
   (el-get 'sync sources))
 
@@ -1454,7 +1454,6 @@ Lisp function does not specify a special indentation."
    `(lazy-highlight              ((t (:foreground ,zenburn-bg-05 :weight bold :background ,zenburn-orange))))
    `(diff-added                  ((t (:foreground ,zenburn-green :weight bold))))
    `(diff-removed                ((t (:foreground ,zenburn-red))))
-   `(flx-highlight-face          ((t (:foreground ,zenburn-red :weight normal))))
    `(linum                       ((t (:foreground ,zenburn-green-1 :background ,zenburn-bg))))
    '(dired-perm-write            ((t nil)))
    '(helm-buffer-directory       ((t (:foreground "color-247"))))
