@@ -11,7 +11,7 @@
 (setq el-get-verbose t)
 (add-to-list 'el-get-recipe-path (concat user-emacs-directory "user-recipes"))
 
-;; 2016-09-14: Testing having recipes directly inline rather that in the above directory
+;; 2016-09-14: Testing having recipes directly inline rather than in the above directory
 (setq
  el-get-sources
  (nconc
@@ -86,20 +86,14 @@
 
 
 ;; Misc
-(defun cp/confirm-before-quit (force)
-  "Ask for confirmation before quiting emacs.  If a prefix argument is
-given, it skips the confirmation"
-  (interactive "P")
-  (when (or force (y-or-n-p "Really quit emacs? ")) (save-buffers-kill-terminal)))
-(global-set-key (kbd "C-x C-c") #'cp/confirm-before-quit)
-
-(setq inhibit-startup-message t
+(setq ad-redefinition-action  'accept
+      c-default-style         "linux"
       column-number-mode      t
+      confirm-kill-emacs      'y-or-n-p
+      make-backup-files       nil
       split-height-threshold  nil
       split-width-threshold   60
-      make-backup-files       nil
-      c-default-style         "linux"
-      ad-redefinition-action  'accept)
+      inhibit-startup-message t)
 
 ;; 2015-09-11 Enable narrowing command which are disabled by default
 (put 'narrow-to-region 'disabled nil)
