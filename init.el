@@ -433,6 +433,10 @@ Lisp function does not specify a special indentation."
 
 
 ;; swiper / ivy / counsel / smex
+(defun cp/swiper-thing-at-point ()
+  (interactive)
+  (swiper (thing-at-point 'symbol)))
+
 (use-package smex
   :defer t)
 
@@ -443,7 +447,7 @@ Lisp function does not specify a special indentation."
   (:keymaps '(ivy-minibuffer-map)
    "<up>"  #'ivy-previous-history-element
    "<down" #'ivy-next-history-element)
-  ("C-s" #'swiper)
+  ("C-s"   #'counsel-grep-or-swiper)
   :init
   (progn
     (use-package ivy-buffer-extend
