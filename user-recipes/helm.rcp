@@ -5,8 +5,11 @@
        :branch "master"
        :checkout "df78b390a7c7a0212a145fca4beb2fbba28bfb64"
        :autoloads "helm-autoloads"
-       :build (("make"))
-       :build/darwin `(("make" ,(format "EMACS_COMMAND=%s" el-get-emacs)))
+       :depends (emacs-async)
+       :build
+       `(("make"
+          ,(format "EMACS_COMMAND=%s" el-get-emacs)
+          ,(format "LOADPATH=-L %s -L ." (el-get-package-directory 'emacs-async))))
        ;; Windows probably doesn't have make available so we fake it.
        :build/windows-nt
        (let ((generated-autoload-file (expand-file-name "helm-autoloads.el")) \
