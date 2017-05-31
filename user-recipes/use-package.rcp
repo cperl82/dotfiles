@@ -1,6 +1,6 @@
 (:name use-package
        :type github
        :branch "master"
-       :checkout "38034854ac21bd5ddc1a1129fd6c8ff86d939f8a"
+       :checkout "726eea13a3a4d75d630aac29d6b71d74d9dc69e3"
        :description "A use-package declaration for simplifying your .emacs"
        :pkgname "jwiegley/use-package")
