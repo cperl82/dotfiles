@@ -90,10 +90,11 @@
       c-default-style         "linux"
       column-number-mode      t
       confirm-kill-emacs      'y-or-n-p
+      gc-cons-threshold       100000000
+      inhibit-startup-message t
       make-backup-files       nil
       split-height-threshold  nil
-      split-width-threshold   60
-      inhibit-startup-message t)
+      split-width-threshold   60)
 
 ;; 2015-09-11 Enable narrowing command which are disabled by default
 (put 'narrow-to-region 'disabled nil)
