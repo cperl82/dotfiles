@@ -1315,17 +1315,6 @@ Lisp function does not specify a special indentation."
 
 
 
-; helm-swoop
-(use-package helm-swoop
-  :defer t
-  :general
-  (:keymaps '(normal visual motion insert emacs)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "a h s" #'helm-swoop))
-
-
-
 ;; projectile
 ; 2016-04-25: Advice for the low level projectile functions that manage the cache so I can
 ; track (roughly) when a project was cached and invalidate the cache if I determine there
@@ -1465,7 +1454,6 @@ Lisp function does not specify a special indentation."
    '(helm-buffer-directory       ((t (:foreground "color-247"))))
    '(helm-ff-dotted-directory    ((t (:foreground "color-247"))))
    `(helm-match                  ((t (:foreground ,zenburn-red-2 :weight normal))))
-   `(helm-swoop-target-word-face ((t (:foreground ,zenburn-red-2 :weight normal))))
    `(ivy-current-match           ((t (:foreground nil :background nil :underline nil))))
    '(ivy-minibuffer-match-face-1 ((t (:foreground nil :background nil :underline nil))))
    `(ivy-minibuffer-match-face-2 ((t (:foreground ,zenburn-red-2    :background nil))))
