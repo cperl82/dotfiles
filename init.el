@@ -1445,6 +1445,13 @@ Lisp function does not specify a special indentation."
    (quote
     ("4528fb576178303ee89888e8126449341d463001cb38abe0015541eb798d8a23" default))))
 
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
 ; zenburn theme overrides
 (zenburn-with-color-variables
   (custom-theme-set-faces
@@ -1457,8 +1464,8 @@ Lisp function does not specify a special indentation."
    '(dired-perm-write            ((t nil)))
    '(helm-buffer-directory       ((t (:foreground "color-247"))))
    '(helm-ff-dotted-directory    ((t (:foreground "color-247"))))
-   '(helm-match                  ((t (:foreground "gold1" :weight normal))))
-   '(helm-swoop-target-word-face ((t (:foreground "gold1" :weight normal))))
+   `(helm-match                  ((t (:foreground ,zenburn-red-2 :weight normal))))
+   `(helm-swoop-target-word-face ((t (:foreground ,zenburn-red-2 :weight normal))))
    `(ivy-current-match           ((t (:foreground nil :background nil :underline nil))))
    '(ivy-minibuffer-match-face-1 ((t (:foreground nil :background nil :underline nil))))
    `(ivy-minibuffer-match-face-2 ((t (:foreground ,zenburn-red-2    :background nil))))
@@ -1477,9 +1484,3 @@ Lisp function does not specify a special indentation."
 ; 2014-04-08: local emacs overrides
 (let ((local "~/.emacs.local"))
   (when (file-exists-p local) (load-file local)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
