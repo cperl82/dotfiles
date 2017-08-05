@@ -1,12 +1,33 @@
-# Variables
 export PS1='[\u@\h \w]\$ '
 export PAGER=less
 export MYSQL_PS1="\u@\h [\d]> "
 export HISTIGNORE=' *'
 
-# Functions
 # tmpmkcd
-tmpmkcd ()
+function add-path
+{
+	d="${1}"
+	if [[ -d "${d}" ]]
+	then
+		components=( $(echo ${PATH} | tr ':' ' ') )
+		found=0
+		for p in "${components[@]}"
+		do
+			if [[ "${p}" == "${d}" ]]
+			then
+				found=1
+				break
+			fi
+		done
+
+		if [[ ${found} -eq 0 ]]
+		then
+			export PATH=${PATH}:${d}
+		fi
+	fi
+}
+
+function tmpmkcd
 {
 	today=$(date '+%Y-%m-%d')
 	pathname="${HOME}/tmp/${today}"
@@ -19,7 +40,7 @@ tmpmkcd ()
 }
 
 # xt - xterm title setter
-xt ()
+function xt
 {
 	if [[ -z "${1}" ]]
 	then
@@ -31,7 +52,7 @@ xt ()
 }
 
 # st - screen window title setter
-st ()
+function st
 {
 	if [[ -z "${1}" ]]
 	then
@@ -43,11 +64,10 @@ st ()
 }
 
 # cl - reset all attributes
-cl ()
+function cl
 {
 	printf '\033[;0m'
 }
-
 
 # Bash path canonicalization
 # Copied from comment at
@@ -58,7 +78,7 @@ cl ()
 # component, file or directory is a symlink
 
 # path-canonical-simple
-path-canonical-simple ()
+function path-canonical-simple
 {
 	local dst="${1}"
 	if [[ -z "${dst}" ]]; then
@@ -72,7 +92,7 @@ path-canonical-simple ()
 
 # path-canonical
 # Resolves symlinks for all path components, including the final component
-path-canonical ()
+function path-canonical
 {
 	local dst="${1}"
 	if [[ -z "${dst}" ]]; then
@@ -112,7 +132,7 @@ path-canonical ()
 # This is meant to be simplified interface to the aes-256-cbc encryption
 # available in openssl.  Note that output is always "ascii armored" as that just
 # makes life easier.
-aes-256-cbc ()
+function aes-256-cbc
 { 
 	verb="${1}"
 	shift
@@ -165,7 +185,7 @@ aes-256-cbc ()
 
 # NFSv3 Capture Filter
 # Generate tcpdump capture filter for host running nfsv3
-nfs3-capture-filter-for-host ()
+function nfs3-capture-filter-for-host
 {
 	local host="${1}"
 	if [[ -z "${host}" ]]
@@ -193,7 +213,7 @@ nfs3-capture-filter-for-host ()
 	IFS="${OFS}"
 }
 
-nfs3-capture-filter-for-hosts ()
+function nfs3-capture-filter-for-hosts
 {
 	hosts="${@}"
 	result=""
@@ -208,6 +228,11 @@ nfs3-capture-filter-for-hosts ()
 		fi
 	done
 	printf "${result}\n"
+}
+
+function lack
+{
+	ack --pager='less -R' "$@"
 }
 
 # Misc Stuff
@@ -229,11 +254,6 @@ if test "${TERM}" = "screen" -o \
 	}
 fi
 
-# lack - function wrapper for use with ack (http://www.betterthangrep.com/)
-# to output to less -R.  I don't always want this, but want it easily available
-# when I do.
-lack () { ack --pager='less -R' "$@"; }
-
 # PYTHONSTARTUP Environment variable
 # if the ${HOME}/.python_startup.py file exists, set PYTHONSTARTUP to point to
 # it such that its contents are executed for interactive python sessions
@@ -242,35 +262,6 @@ then
 	export PYTHONSTARTUP="${HOME}/.python_startup.py"
 fi
 
-vman ()
-{
-	vim -c ":Man $*" -c ":only"
-}
-
-# add-path
-# function to add something to PATH, skipping duplicates
-add-path ()
-{
-	d="${1}"
-	if [[ -d "${d}" ]]
-	then
-		components=( $(echo ${PATH} | tr ':' ' ') )
-		found=0
-		for p in "${components[@]}"
-		do
-			if [[ "${p}" == "${d}" ]]
-			then
-				found=1
-				break
-			fi
-		done
-
-		if [[ ${found} -eq 0 ]]
-		then
-			export PATH=${PATH}:${d}
-		fi
-	fi
-}
 
 # Important variable setting
 ENV_ROOT="$(dirname "$(dirname "$(path-canonical ${BASH_ARGV[0]})")")"
@@ -283,11 +274,11 @@ add-path ${ENV_ROOT}/bin
 add-path ${HOME}/bin
 
 # OS Specific bashrc file inclusion
-OSNAME=$(uname -s | tr '[A-Z]' '[a-z]')
-OSFILE="${DOTFILES_ROOT}/bashrc.${OSNAME}"
-if [[ -f "${OSFILE}" ]]
+osname=$(uname -s | tr '[A-Z]' '[a-z]')
+osfile="${DOTFILES_ROOT}/bashrc.${osname}"
+if [[ -f "${osfile}" ]]
 then
-	source "${OSFILE}"
+	source "${osfile}"
 else
 	echo "Unknown Operating System"
 fi
@@ -298,8 +289,8 @@ export TERMINAL="${ENV_ROOT}/bin/urxvt256cc"
 # Local bashrc file inclustion
 # Allows inclusion of initialization stuff that I don't want to keep in my
 # dotfiles repo
-LOCALRC="${HOME}/.bashrc.local"
-if [[ -f "${LOCALRC}" ]]
+localrc="${HOME}/.bashrc.local"
+if [[ -f "${localrc}" ]]
 then
-	source "${LOCALRC}"
+	source "${localrc}"
 fi

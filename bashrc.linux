@@ -1,131 +1,4 @@
-# mapping names to color escape sequences, taken from
-# http://wiki.archlinux.org/index.php/Color_Bash_Prompt
-txtblk='\e[0;30m' # Black - Regular
-txtred='\e[0;31m' # Red
-txtgrn='\e[0;32m' # Green
-txtylw='\e[0;33m' # Yellow
-txtblu='\e[0;34m' # Blue
-txtpur='\e[0;35m' # Purple
-txtcyn='\e[0;36m' # Cyan
-txtwht='\e[0;37m' # White
-bldblk='\e[1;30m' # Black - Bold
-bldred='\e[1;31m' # Red
-bldgrn='\e[1;32m' # Green
-bldylw='\e[1;33m' # Yellow
-bldblu='\e[1;34m' # Blue
-bldpur='\e[1;35m' # Purple
-bldcyn='\e[1;36m' # Cyan
-bldwht='\e[1;37m' # White
-unkblk='\e[4;30m' # Black - Underline
-undred='\e[4;31m' # Red
-undgrn='\e[4;32m' # Green
-undylw='\e[4;33m' # Yellow
-undblu='\e[4;34m' # Blue
-undpur='\e[4;35m' # Purple
-undcyn='\e[4;36m' # Cyan
-undwht='\e[4;37m' # White
-bakblk='\e[40m'   # Black - Background
-bakred='\e[41m'   # Red
-badgrn='\e[42m'   # Green
-bakylw='\e[43m'   # Yellow
-bakblu='\e[44m'   # Blue
-bakpur='\e[45m'   # Purple
-bakcyn='\e[46m'   # Cyan
-bakwht='\e[47m'   # White
-txtrst='\e[0m'    # Text Reset
-
-# All non-printing characters are enclosed in \[ and \] to make sure long lines don't
-# wrap all weird and on the same line.  See link immediately below
-# http://tldp.org/HOWTO/Bash-Prompt-HOWTO/nonprintingchars.html
-#export PS1="\[${txtred}\][\[${bldwht}\]\u@\h \[${bldblk}\]\w\[${txtred}\]]\[${txtrst}\]\$ "
-export PS1='[\u@\h \w]\$ '
-
-# Hack to work around the fact that gnome-terminal always sets TERM=xterm
-if [[ "${TERM}" == "xterm" && "${COLORTERM}" == "gnome-terminal" ]]
-then
-	export TERM=xterm-256color
-fi
-
-# Set directory listing colors to those listed in ~/.dircolors
-if [ -r ${HOME}/.dircolors ]
-then
-	alias ls='ls --color=auto'
-	eval "$(dircolors ~/.dircolors)"
-fi
-
-# URxvt specific setting of font size.  See urxvt(1)
-if [[ "${TERM}" =~ rxvt-unicode.* ]]
-then
-	function fnsz {
-		printf '\e]710;xft:Monaco:pixelsize=%s\007' ${1}
-	}
-fi
-
-if [[ "${TERM}" =~ xterm.* ]]
-then
-	function xterm-colorscheme {
-		# The idea of this function is to take a .Xresouces or .Xdefaults file as input and
-		# look through it for resources that would affect the way XTerm looks.  Then, when
-		# we find them, emit the XTerm escape sequences to set those things dynamically.
-		#
-		# I'm sure I'm missing some things, but this seems to work relatively well in giving
-		# me a way to dynamically change the XTerm colorscheme.
-		local filename="${1}"
-		declare -A defines
-
-		# Escape sequences are documented in xterm source in `ctlseqs.ms' (or after
-		# processing with nroff in `ctlseqs.txt').
-		# Also available here: http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
-		cat "${filename}" | while read line
-		do
-			if [[ "${line}" =~ ^#define ]]
-			then
-				read _ key value <<< "${line}"
-				defines[${key}]=${value}
-				continue
-			elif [[ "${line}" =~ ^(XTerm|\*) ]]
-			then
-				additional=""
-				read key value <<< "${line}"
-				if   [[ "${key}" =~ foreground:$ ]]
-				then
-					op="10"
-					# Additional is to set the highlight background color to the
-					# current foreground color (i.e. reverse video)
-					additional="printf \"\033]17;%s\007\" \"\${what}\""
-				elif [[ "${key}" =~ background:$ ]]
-				then
-					op="11"
-					# Additional is to set the highlight foreground color to the
-					# current background color (i.e. reverse video)
-					additional="printf \"\033]19;%s\007\" \"\${what}\""
-				elif [[ "${key}" =~ color[0-9]+:$ ]]
-				then
-					color=$(echo "${key}" | sed -e 's/^.*color\([0-9][0-9]*\).*$/\1/')
-					op="4;${color}"
-				else
-					continue
-				fi
-
-				if [[ -n "${defines[${value}]}" ]]
-				then
-					what="${defines[$value]}"
-				else
-					what="${value}"
-				fi
-
-				printf "\033]%s;%s\007" "${op}" "${what}"
-				[[ -n "${additional}" ]] && eval ${additional}
-
-			else
-				continue
-			fi
-		done
-	}
-fi
-
-# 2016-02-07: updates to ps functions
-function _ps () {
+function _ps {
 	local pre="user:15,pid,ppid,tid,nlwp,class,rtprio:3=RTP,ni,pri"
 	local post="vsz:9,rss:9,psr,pcpu,stat,wchan:25,tty"
 
@@ -154,27 +27,27 @@ function _ps () {
 	eval "${cmd}"
 }
 
-function pse () {
+function pse {
 	_ps 1 "bsdstart" "${@}"
 }
 
-function psel () {
+function psel {
 	_ps 1 "bsdstart" "${@}" -L
 }
 
-function psef () {
+function psef {
 	_ps 0 "bsdstart" "${@}" --forest
 }
 
-function pss () {
+function pss {
 	_ps 1 "lstart"   "${@}"
 }
 
-function pssl () {
+function pssl {
 	_ps 1 "lstart"   "${@}" -L
 }
 
-function pssf () {
+function pssf {
 	_ps 0 "lstart"   "${@}" --forest
 }
 
@@ -264,12 +137,12 @@ function nfsiostat-formatted () {
 }
 
 # 2013-05-08: rpmenv function
-function rpmenv () {
+function rpmenv {
 	local fetch_uri
 	local fetch_fmt
 	local base
 
-	usage () {
+	function usage {
 		echo "${FUNCNAME[0]} enter (directory | auto (--url URL | --file FILE) [--base BASE (defaults to RPMENV)])"
 		echo "${FUNCNAME[0]} prepare"
 		echo "${FUNCNAME[0]} exit"
@@ -365,7 +238,7 @@ function rpmenv () {
 		;;
 
 	unpack|u)
-		one_dirent_matching () {
+		function one_dirent_matching {
 			base="${1}"
 			pattern="${2}"
 
@@ -438,7 +311,7 @@ function rpmenv () {
 }
 
 # 2016-04-16: more rpm related helpers, for when I don't want the full thing above
-function _with_topdir {
+function rpm_cmd_with_topdir {
 	cmd="${1}"
 	dir="${2}"
 	shift
@@ -448,57 +321,17 @@ function _with_topdir {
 }
 
 function rpm-with-topdir {
-	cmd=$(_with_topdir rpm "${@}")
+	cmd=$(rpm_cmd_with_topdir rpm "${@}")
 	eval "${cmd}"
 }
 
 function rpmbuild-with-topdir {
-	cmd=$(_with_topdir rpmbuild "${@}")
+	cmd=$(rpm_cmd_with_topdir rpmbuild "${@}")
 	eval "${cmd}"
 }
 
 # 2014-03-21 formatted printing of /proc/mounts
-function proc-mounts {
-	fstype="${1}"
-
-	if [[ -z ${fstype} ]]
-	then
-		fstype=".*"
-	fi
-
-	awk '
-	{
-		if ($3 ~ /'"${fstype}"'/) {
-			field1_len = length($1);
-			field2_len = length($2);
-			field3_len = length($3);
-			field4_len = length($4);
-			field5_len = length($5);
-			field6_len = length($6);
-
-			field1_max = field1_len > field1_max ? field1_len : field1_max;
-			field2_max = field2_len > field2_max ? field2_len : field2_max;
-			field3_max = field3_len > field3_max ? field3_len : field3_max;
-			field4_max = field4_len > field4_max ? field4_len : field4_max;
-			field5_max = field5_len > field5_max ? field5_len : field5_max;
-			field6_max = field6_len > field6_max ? field6_len : field6_max;
-			lines[NR] = $0;
-		}
-	}
-
-	END {
-		for (i in lines) {
-			split(lines[i], a);
-			printf("%-*s  %-*s  %-*s  %*s  %*s  %*s\n",
-				field1_max, a[1],
-				field2_max, a[2],
-				field3_max, a[3],
-				field4_max, a[4],
-				field5_max, a[5],
-				field6_max, a[6]);
-		}
-	}' /proc/mounts | sort -k 3,2
-}
+function proc-mounts { cat /proc/mounts | column -t | sort -k 3,2; }
 
 # 2014-07-01 mapping of NFS mount points to sockets
 function nfs-sockets {
@@ -626,3 +459,152 @@ function ephemeral-port-netstat-ipv4-unique-by-type {
 		}
 	}' | sort
 }
+
+function maybe-add-fzf-to-path {
+	local fzf_home="${HOME}/.fzf"
+	local fzf_path=""
+
+	if [[ -e "${fzf_home}/bin/fzf" ]]
+	then
+		add-path "${HOME}/.fzf/bin"
+	fi
+}
+maybe-add-fzf-to-path
+
+function with-fzf {
+	local fzf=""
+	local input_cmd=""
+	local action_cmd=""
+	local fzf_options=""
+
+	fzf=$(which fzf 2>/dev/null)
+	if [[ -z "${fzf}" ]]
+	then
+		echo 1>&2 "Unable to find fzf, please make sure it is installed"
+		return 1
+	fi
+
+	while [[ "${#}" -gt 0 ]]
+	do
+		case "${1}" in
+			-i|-in|-input|--input)
+				input_cmd="${2}"
+				shift
+				shift
+			;;
+
+			-a|-act|-action|--action)
+				action_cmd="${2}"
+				shift
+				shift
+			;;
+
+			-f|-fzf|--fzf-options)
+				fzf_options="${2}"
+				shift
+				shift
+			;;
+
+			*)
+				cat 1>&2 <<-EOF
+				 Usage: ${FUNCNAME[0]} --input INPUTGENCMD --action ACTION --fzf-options OPTIONS
+				EOF
+				return 1
+			;;
+		esac
+	done
+
+	selected_input=$(eval "${input_cmd}" 2>/dev/null | eval "${fzf}" "${fzf_options}")
+	rc="${?}"
+	if [[ "${rc}" -eq 0 ]]
+	then
+		${action_cmd} "${selected_input}"
+	else
+		return "${rc}"
+	fi
+}
+
+export PS1='[\u@\h \w]\$ '
+
+# Hack to work around the fact that gnome-terminal always sets TERM=xterm
+if [[ "${TERM}" == "xterm" && "${COLORTERM}" == "gnome-terminal" ]]
+then
+	export TERM=xterm-256color
+fi
+
+# Set directory listing colors to those listed in ~/.dircolors
+if [ -r ${HOME}/.dircolors ]
+then
+	alias ls='ls --color=auto'
+	eval "$(dircolors ~/.dircolors)"
+fi
+
+# URxvt specific setting of font size.  See urxvt(1)
+if [[ "${TERM}" =~ rxvt-unicode.* ]]
+then
+	function fnsz { printf '\e]710;xft:Monaco:pixelsize=%s\007' ${1}; }
+fi
+
+if [[ "${TERM}" =~ xterm.* ]]
+then
+	function xterm-colorscheme {
+		# The idea of this function is to take a .Xresouces or .Xdefaults file as input and
+		# look through it for resources that would affect the way XTerm looks.  Then, when
+		# we find them, emit the XTerm escape sequences to set those things dynamically.
+		#
+		# I'm sure I'm missing some things, but this seems to work relatively well in giving
+		# me a way to dynamically change the XTerm colorscheme.
+		local filename="${1}"
+		declare -A defines
+
+		# Escape sequences are documented in xterm source in `ctlseqs.ms' (or after
+		# processing with nroff in `ctlseqs.txt').
+		# Also available here: http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
+		cat "${filename}" | while read line
+		do
+			if [[ "${line}" =~ ^#define ]]
+			then
+				read _ key value <<< "${line}"
+				defines[${key}]=${value}
+				continue
+			elif [[ "${line}" =~ ^(XTerm|\*) ]]
+			then
+				additional=""
+				read key value <<< "${line}"
+				if   [[ "${key}" =~ foreground:$ ]]
+				then
+					op="10"
+					# Additional is to set the highlight background color to the
+					# current foreground color (i.e. reverse video)
+					additional="printf \"\033]17;%s\007\" \"\${what}\""
+				elif [[ "${key}" =~ background:$ ]]
+				then
+					op="11"
+					# Additional is to set the highlight foreground color to the
+					# current background color (i.e. reverse video)
+					additional="printf \"\033]19;%s\007\" \"\${what}\""
+				elif [[ "${key}" =~ color[0-9]+:$ ]]
+				then
+					color=$(echo "${key}" | sed -e 's/^.*color\([0-9][0-9]*\).*$/\1/')
+					op="4;${color}"
+				else
+					continue
+				fi
+
+				if [[ -n "${defines[${value}]}" ]]
+				then
+					what="${defines[$value]}"
+				else
+					what="${value}"
+				fi
+
+				printf "\033]%s;%s\007" "${op}" "${what}"
+				[[ -n "${additional}" ]] && eval ${additional}
+
+			else
+				continue
+			fi
+		done
+	}
+fi
+
