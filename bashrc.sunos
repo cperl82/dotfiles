@@ -1,22 +1,7 @@
-export PATH=/opt/csw/bin:/var/ant/bin:/var/maven/bin:$PATH:/usr/sbin:/bin:/usr/ccs/bin
 export TERMINFO=${HOME}/.terminfo
-export JAVA_HOME=/usr/jdk/jdk1.6.0_20
-
-if test "${TERM}" = "xterm" -o \
-	"${TERM}" = "xterm-256color"; then
-	# xt defined in top level bashrc
-	export PROMPT_COMMAND=xt
-fi
-
-if test "${TERM}" = "screen" -o \
-	"${TERM}" = "screen-256color"; then
-	# st defined in top level bashrc
-	export PROMPT_COMMAND=st
-fi
 
 # make a function for ps -ef output but prefixed with full zone name and formatted nicely
-function psz()
-{
+function psz {
 	FORMAT="%15s %4s %10s %8s %8s %4s %10s %12s %10s %s\n"
 	printf "${FORMAT}" "ZONE" "UID" "USER" "PID" "PPID" "C" "STIME" "TT" "TIME" "COMMAND"
 	ps -eo zone,uid,user,pid,ppid,c,stime,tty,time,args | tail +2 | sort | while read zone uid user pid ppid c stime tty time args

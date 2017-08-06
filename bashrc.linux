@@ -138,17 +138,17 @@ function rpmenv {
 
 	case "${1}" in
 	enter)
-		enter_env () {
-			d="${1}"
-			n="${2}"
+		function enter_env {
+			local d="${1}"
+			local n="${2}"
 			test \! -d "${d}" && mkdir -p "${d}"
 			export _RPMENV_SAVED_PS1=${PS1}
 			export _RPMENV_SAVED_PWD=${PWD}
 			export _RPMENV_SAVED_DIR=${d}
 			export PS1='[\u@\h [RPMENV:'${n}'] \w]\$ '
 			cd ${d}
-			rpmbuild () { command rpmbuild --define "_topdir ${_RPMENV_SAVED_DIR}" "${@}"; }
-			rpm ()      { command rpm      --define "_topdir ${_RPMENV_SAVED_DIR}" "${@}"; }
+			function rpmbuild { command rpmbuild --define "_topdir ${_RPMENV_SAVED_DIR}" "${@}"; }
+			function rpm      { command rpm      --define "_topdir ${_RPMENV_SAVED_DIR}" "${@}"; }
 		}
 
 		shift
@@ -193,8 +193,8 @@ function rpmenv {
 
 			if [[ -z "${base}" && -z "${RPMENV}" ]]
 			then
-				echo "You have no RPMENV variable defined and did not specify --base, cannot continue"
-				return
+				echo 1>&2 "You have no RPMENV variable defined and did not specify --base, cannot continue"
+				return 1
 			fi
 
 			if [[ -n "${base}" ]]
@@ -209,9 +209,9 @@ function rpmenv {
 			tmp=$(mktemp -t "${name}.XXXXXX")
 			cmd=$(printf "${fetch_fmt}" "${fetch_uri}" "${tmp}")
 			eval "${cmd}"
-			if [[ ${?} -ne 0 ]]
+			if [[ "${?}" -ne 0 ]]
 			then
-				echo "Unable to fetch ${fetch_uri}"
+				echo 1>&2 "Unable to fetch ${fetch_uri}"
 				return
 			else
 				env="${BASE}/${name}"
@@ -234,7 +234,7 @@ function rpmenv {
 
 			if [[ ${#dirents[@]} -ne 1 ]]
 			then
-				echo "0 or more than one dirent found in ${base} matching ${pattern}, aborting" 1>&2
+				echo 1>&2 "0 or more than one dirent found in ${base} matching ${pattern}, aborting"
 				return 1
 			fi
 			echo "${base}/${dirents[0]}"
@@ -243,7 +243,7 @@ function rpmenv {
 
 		if [[ -z "${_RPMENV_SAVED_DIR}" ]]
 		then
-			echo "It doesn't look like you're currently in an rpmenv, cannot unpack"
+			echo 1>&2 "It doesn't look like you're currently in an rpmenv, cannot unpack"
 			return 1
 		fi
 
@@ -258,15 +258,15 @@ function rpmenv {
 		shift
 
 		srpm_file=$(one_dirent_matching "${_RPMENV_SAVED_DIR}/OTHER" ".*\.src\.rpm")
-		[[ ${?} -ne 0 ]] && return 1
+		[[ "${?}" -ne 0 ]] && return 1
 		rpm -ivh "${srpm_file}"
 
 		spec_file=$(one_dirent_matching "${_RPMENV_SAVED_DIR}/SPECS" ".*\.spec")
-		[[ ${?} -ne 0 ]] && return 1
+		[[ "${?}" -ne 0 ]] && return 1
 		rpmbuild -bp --nodeps "${spec_file}"
 
 		build_dir=$(one_dirent_matching "${_RPMENV_SAVED_DIR}/BUILD" ".*")
-		[[ ${?} -ne 0 ]] && return 1
+		[[ "${?}" -ne 0 ]] && return 1
 
 		target_base=$(basename "${build_dir}")
 		target_full="${_RPMENV_SAVED_DIR}/OTHER/${target_base}"
@@ -275,7 +275,7 @@ function rpmenv {
 		then
 			# Go one level further down for kernel packages
 			target_full=$(one_dirent_matching "${target_full}" "linux-.*")
-			[[ ${?} -ne 0 ]] && return 1
+			[[ "${?}" -ne 0 ]] && return 1
 		fi
 		cd "${target_full}" && git init && git add . && git commit -m initial && cd -
 		;;
@@ -463,7 +463,7 @@ function with-fzf {
 	local fzf=""
 	local input_cmd=""
 	local action_cmd=""
-	local action_once=0
+	local action_single=0
 	local fzf_options=""
 
 	fzf=$(which fzf 2>/dev/null)
@@ -494,14 +494,14 @@ function with-fzf {
 				shift
 			;;
 
-			-o|-once|--once)
-				action_once=1
+			-s|-single|--single-action-invocation)
+				action_single=1
 				shift
 			;;
 
 			*)
 				echo 1>&2 \
-				    "Usage: ${FUNCNAME[0]} --input INPUTGENCMD --action ACTION --fzf-options OPTIONS [--once]"
+				    "Usage: ${FUNCNAME[0]} --input INPUTGENCMD --action ACTION [--fzf-options OPTIONS] [--single-action-invocation]"
 				return 1
 			;;
 		esac
@@ -511,7 +511,7 @@ function with-fzf {
 	rc="${?}"
 	if [[ "${rc}" -eq 0 ]]
 	then
-		if (( "${action_once}" ))
+		if (( "${action_single}" ))
 		then
 			${action_cmd} "${selected_input[@]}"
 		else
