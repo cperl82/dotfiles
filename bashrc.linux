@@ -27,29 +27,17 @@ function _ps {
 	eval "${cmd}"
 }
 
-function pse {
-	_ps 1 "bsdstart" "${@}"
-}
+function pse  { _ps 1 "bsdstart" "${@}"; }
 
-function psel {
-	_ps 1 "bsdstart" "${@}" -L
-}
+function psel { _ps 1 "bsdstart" "${@}" -L; }
 
-function psef {
-	_ps 0 "bsdstart" "${@}" --forest
-}
+function psef { _ps 0 "bsdstart" "${@}" --forest; }
 
-function pss {
-	_ps 1 "lstart"   "${@}"
-}
+function pss  { _ps 1 "lstart"   "${@}"; } 
 
-function pssl {
-	_ps 1 "lstart"   "${@}" -L
-}
+function pssl { _ps 1 "lstart"   "${@}" -L; }
 
-function pssf {
-	_ps 0 "lstart"   "${@}" --forest
-}
+function pssf { _ps 0 "lstart"   "${@}" --forest; }
 
 # 2013-04-16: wrapper for nfsiostat to make it easier to read
 # TODO: Remove the ability to pass flags that break parsing, i.e. `-h'.
@@ -475,6 +463,7 @@ function with-fzf {
 	local fzf=""
 	local input_cmd=""
 	local action_cmd=""
+	local action_once=0
 	local fzf_options=""
 
 	fzf=$(which fzf 2>/dev/null)
@@ -505,106 +494,134 @@ function with-fzf {
 				shift
 			;;
 
+			-o|-once|--once)
+				action_once=1
+				shift
+			;;
+
 			*)
-				cat 1>&2 <<-EOF
-				 Usage: ${FUNCNAME[0]} --input INPUTGENCMD --action ACTION --fzf-options OPTIONS
-				EOF
+				echo 1>&2 \
+				    "Usage: ${FUNCNAME[0]} --input INPUTGENCMD --action ACTION --fzf-options OPTIONS [--once]"
 				return 1
 			;;
 		esac
 	done
 
-	selected_input=$(eval "${input_cmd}" 2>/dev/null | eval "${fzf}" "${fzf_options}")
+	selected_input=( $(eval "${input_cmd}" 2>/dev/null | eval "${fzf}" "${fzf_options}") )
 	rc="${?}"
 	if [[ "${rc}" -eq 0 ]]
 	then
-		${action_cmd} "${selected_input}"
+		if (( "${action_once}" ))
+		then
+			${action_cmd} "${selected_input[@]}"
+		else
+			for input in "${selected_input[@]}"
+			do
+				${action_cmd} "${input}"
+			done
+		fi
 	else
 		return "${rc}"
 	fi
 }
 
-export PS1='[\u@\h \w]\$ '
+function battery {
+	upower -e | awk '$1 ~ /battery_BAT[0-9]$/ {print}' | xargs -n1 -t upower -i
+}
 
-# Hack to work around the fact that gnome-terminal always sets TERM=xterm
-if [[ "${TERM}" == "xterm" && "${COLORTERM}" == "gnome-terminal" ]]
-then
-	export TERM=xterm-256color
-fi
+function setup-tty-aliases {
+	if tty >/dev/null 2>&1
+	then
+		# Set directory listing colors to those listed in ~/.dircolors
+		if [ -r "${HOME}/.dircolors" ]
+		then
+			alias ls='ls --color=auto'
+			eval "$(dircolors ~/.dircolors)"
+		fi
 
-# Set directory listing colors to those listed in ~/.dircolors
-if [ -r ${HOME}/.dircolors ]
-then
-	alias ls='ls --color=auto'
-	eval "$(dircolors ~/.dircolors)"
-fi
+		alias grep='grep --color=auto'
+	fi
+}
+setup-tty-aliases
 
-# URxvt specific setting of font size.  See urxvt(1)
-if [[ "${TERM}" =~ rxvt-unicode.* ]]
-then
-	function fnsz { printf '\e]710;xft:Monaco:pixelsize=%s\007' ${1}; }
-fi
+function setup-misc {
+    export PS1='[\u@\h \w]\$ '
 
-if [[ "${TERM}" =~ xterm.* ]]
-then
-	function xterm-colorscheme {
-		# The idea of this function is to take a .Xresouces or .Xdefaults file as input and
-		# look through it for resources that would affect the way XTerm looks.  Then, when
-		# we find them, emit the XTerm escape sequences to set those things dynamically.
-		#
-		# I'm sure I'm missing some things, but this seems to work relatively well in giving
-		# me a way to dynamically change the XTerm colorscheme.
-		local filename="${1}"
-		declare -A defines
+    # Hack to work around the fact that gnome-terminal always sets TERM=xterm
+    if [[ "${TERM}" == "xterm" && "${COLORTERM}" == "gnome-terminal" ]]
+    then
+	    export TERM=xterm-256color
+    fi
 
-		# Escape sequences are documented in xterm source in `ctlseqs.ms' (or after
-		# processing with nroff in `ctlseqs.txt').
-		# Also available here: http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
-		cat "${filename}" | while read line
-		do
-			if [[ "${line}" =~ ^#define ]]
-			then
-				read _ key value <<< "${line}"
-				defines[${key}]=${value}
-				continue
-			elif [[ "${line}" =~ ^(XTerm|\*) ]]
-			then
-				additional=""
-				read key value <<< "${line}"
-				if   [[ "${key}" =~ foreground:$ ]]
-				then
-					op="10"
-					# Additional is to set the highlight background color to the
-					# current foreground color (i.e. reverse video)
-					additional="printf \"\033]17;%s\007\" \"\${what}\""
-				elif [[ "${key}" =~ background:$ ]]
-				then
-					op="11"
-					# Additional is to set the highlight foreground color to the
-					# current background color (i.e. reverse video)
-					additional="printf \"\033]19;%s\007\" \"\${what}\""
-				elif [[ "${key}" =~ color[0-9]+:$ ]]
-				then
-					color=$(echo "${key}" | sed -e 's/^.*color\([0-9][0-9]*\).*$/\1/')
-					op="4;${color}"
-				else
-					continue
-				fi
 
-				if [[ -n "${defines[${value}]}" ]]
-				then
-					what="${defines[$value]}"
-				else
-					what="${value}"
-				fi
+    # URxvt specific setting of font size.  See urxvt(1)
+    if [[ "${TERM}" =~ rxvt-unicode.* ]]
+    then
+	    function fnsz { printf '\e]710;xft:Monaco:pixelsize=%s\007' ${1}; }
+    fi
 
-				printf "\033]%s;%s\007" "${op}" "${what}"
-				[[ -n "${additional}" ]] && eval ${additional}
+    if [[ "${TERM}" =~ xterm.* ]]
+    then
+	    function xterm-colorscheme {
+		    # The idea of this function is to take a .Xresouces or .Xdefaults file as input and
+		    # look through it for resources that would affect the way XTerm looks.  Then, when
+		    # we find them, emit the XTerm escape sequences to set those things dynamically.
+		    #
+		    # I'm sure I'm missing some things, but this seems to work relatively well in giving
+		    # me a way to dynamically change the XTerm colorscheme.
+		    local filename="${1}"
+		    declare -A defines
 
-			else
-				continue
-			fi
-		done
-	}
-fi
+		    # Escape sequences are documented in xterm source in `ctlseqs.ms' (or after
+		    # processing with nroff in `ctlseqs.txt').
+		    # Also available here: http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
+		    cat "${filename}" | while read line
+		    do
+			    if [[ "${line}" =~ ^#define ]]
+			    then
+				    read _ key value <<< "${line}"
+				    defines[${key}]=${value}
+				    continue
+			    elif [[ "${line}" =~ ^(XTerm|\*) ]]
+			    then
+				    additional=""
+				    read key value <<< "${line}"
+				    if   [[ "${key}" =~ foreground:$ ]]
+				    then
+					    op="10"
+					    # Additional is to set the highlight background color to the
+					    # current foreground color (i.e. reverse video)
+					    additional="printf \"\033]17;%s\007\" \"\${what}\""
+				    elif [[ "${key}" =~ background:$ ]]
+				    then
+					    op="11"
+					    # Additional is to set the highlight foreground color to the
+					    # current background color (i.e. reverse video)
+					    additional="printf \"\033]19;%s\007\" \"\${what}\""
+				    elif [[ "${key}" =~ color[0-9]+:$ ]]
+				    then
+					    color=$(echo "${key}" | sed -e 's/^.*color\([0-9][0-9]*\).*$/\1/')
+					    op="4;${color}"
+				    else
+					    continue
+				    fi
+
+				    if [[ -n "${defines[${value}]}" ]]
+				    then
+					    what="${defines[$value]}"
+				    else
+					    what="${value}"
+				    fi
+
+				    printf "\033]%s;%s\007" "${op}" "${what}"
+				    [[ -n "${additional}" ]] && eval ${additional}
+
+			    else
+				    continue
+			    fi
+		    done
+	    }
+    fi
+}
+setup-misc
 
