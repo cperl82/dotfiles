@@ -250,6 +250,7 @@ Lisp function does not specify a special indentation."
 (require 'use-package)
 (require 'diminish)
 (require 'dash)
+(require 's)
 
 (setq cp/normal-prefix "SPC")
 (setq cp/non-normal-prefix "M-SPC")
@@ -511,6 +512,16 @@ Lisp function does not specify a special indentation."
     (ignore-errors
       (dired-find-file-other-window))))
 
+(defun cp/dired-toggle-hiding-dotfiles ()
+  (interactive)
+    (let ((regex "^\\..*$")
+          (elements (s-split "\\\\|" dired-omit-files)))
+      (if (-contains? elements regex)
+          (setq dired-omit-files (s-join "\\|" (-remove-item regex elements)))
+        (setq dired-omit-files (s-join "\\|" (-insert-at 0 regex elements))))
+      (revert-buffer)
+      (message "dired-omit-files is now: %S" dired-omit-files)))
+
 (use-package dired
   :defer t
   :general
@@ -532,12 +543,13 @@ Lisp function does not specify a special indentation."
    "q"   #'kill-this-buffer
    "TAB" #'cp/dired-tab-dwim
    "o"   #'dired-find-file-other-window
-   "r"   #'revert-buffer)
+   "r"   #'revert-buffer
+   "."   #'cp/dired-toggle-hiding-dotfiles
+   "SPC" nil)
   :config
   (progn
     (use-package dired-x)
     (put 'dired-find-alternate-file 'disabled nil)
-    (define-key dired-mode-map (kbd "SPC") nil)
     (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))))
 
 
@@ -984,13 +996,17 @@ Lisp function does not specify a special indentation."
        (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
 
 (defun cp/org-echo-link-at-point ()
-  (let* ((el (org-element-context))
-         (raw-link (plist-get (cadr el) :raw-link)))
+  (let ((raw-link (org-element-property :raw-link (org-element-context))))
     (message "%s" raw-link)))
 
 (defun cp/org-echo-link-at-point-if-not-darwin ()
   (when (not (equal system-type 'darwin))
     (cp/org-echo-link-at-point)))
+
+(defun cp/org-open-gmail-link-at-point ()
+    (let ((raw-link (org-element-property :raw-link (org-element-context))))
+      (when (s-matches? "^https://mail.google.com/" raw-link)
+        (cp/org-echo-link-at-point-if-not-darwin))))
 
 (defun cp/org-link-auto-desc-from-abbrev-tags (link desc)
   (let ((abbrevs
@@ -1042,7 +1058,10 @@ Lisp function does not specify a special indentation."
          (let ((cmd (cdr cmd)))
            (if (or (not usernames) (> (time-to-seconds diff) expire))
                (progn
-                 (message "Org Helm username cache older than %ds, cached at %s, expiring" expire (current-time-string cached-at))
+                 (message
+                  "Org Helm username cache older than %ds, cached at %s, expiring"
+                  expire
+                  (current-time-string cached-at))
                  (let ((result (split-string (shell-command-to-string cmd))))
                    (setq cache `(,now . ,result))
                    result))
@@ -1158,6 +1177,11 @@ Lisp function does not specify a special indentation."
    "C-c c"   #'org-capture)
   :config
   (progn
+    (use-package org-id
+      :config
+      (progn
+        (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)))
+    (use-package org-depend)
     (setq org-tags-column -90)
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-todo-keywords
@@ -1238,7 +1262,7 @@ Lisp function does not specify a special indentation."
     (setq org-cycle-include-plain-lists 'integrate)
     (setq org-hide-leading-stars t)
     (setq org-make-link-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
-    (add-to-list 'org-open-at-point-functions #'cp/org-echo-link-at-point-if-not-darwin)
+    (add-to-list 'org-open-at-point-functions #'cp/org-open-gmail-link-at-point)
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
     (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
     (org-babel-do-load-languages
@@ -1259,10 +1283,9 @@ Lisp function does not specify a special indentation."
          (define-and-bind-text-object "*" "\\*" "\\*")
          (define-and-bind-text-object "=" "\\=" "\\=")
          (turn-on-evil-surround-mode)
-         (add-hook 'write-contents-functions
-                   (lambda () (save-excursion (delete-trailing-whitespace)))))))
+         (add-hook 'write-contents-functions (lambda () (save-excursion (delete-trailing-whitespace)))))))
     (add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode 1)))
-    (add-hook 'org-src-mode-hook (lambda () (setq electric-indent-mode nil)))))
+    (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))))
 
 
 
