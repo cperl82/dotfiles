@@ -1329,7 +1329,6 @@ Lisp function does not specify a special indentation."
    "a h r" #'helm-resume)
   (:keymaps 'helm-map
    "TAB" #'helm-execute-persistent-action
-   "C-i" #'helm-execute-persistent-action
    "C-z" #'helm-select-action)
   :config
   (progn
