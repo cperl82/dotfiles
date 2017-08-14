@@ -999,14 +999,10 @@ Lisp function does not specify a special indentation."
   (let ((raw-link (org-element-property :raw-link (org-element-context))))
     (message "%s" raw-link)))
 
-(defun cp/org-echo-link-at-point-if-not-darwin ()
-  (when (not (equal system-type 'darwin))
-    (cp/org-echo-link-at-point)))
-
-(defun cp/org-open-gmail-link-at-point ()
+(defun cp/org-echo-link-matching (regex)
     (let ((raw-link (org-element-property :raw-link (org-element-context))))
-      (when (s-matches? "^https://mail.google.com/" raw-link)
-        (cp/org-echo-link-at-point-if-not-darwin))))
+      (when (s-matches? regex raw-link)
+        (cp/org-echo-link-at-point))))
 
 (defun cp/org-link-auto-desc-from-abbrev-tags (link desc)
   (let ((abbrevs
@@ -1262,7 +1258,6 @@ Lisp function does not specify a special indentation."
     (setq org-cycle-include-plain-lists 'integrate)
     (setq org-hide-leading-stars t)
     (setq org-make-link-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
-    (add-to-list 'org-open-at-point-functions #'cp/org-open-gmail-link-at-point)
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
     (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
     (org-babel-do-load-languages
