@@ -1,11 +1,12 @@
+# -*- mode: Shell-script; -*-
+
 export PS1='[\u@\h \w]\$ '
 export PAGER=less
 export MYSQL_PS1="\u@\h [\d]> "
 export HISTIGNORE=' *'
 
 # tmpmkcd
-function add-path
-{
+function add-path {
 	d="${1}"
 	if [[ -d "${d}" ]]
 	then
@@ -27,8 +28,7 @@ function add-path
 	fi
 }
 
-function tmpmkcd
-{
+function tmpmkcd {
 	today=$(date '+%Y-%m-%d')
 	pathname="${HOME}/tmp/${today}"
 	if [[ ! -d "${pathname}" ]]
@@ -40,8 +40,7 @@ function tmpmkcd
 }
 
 # xt - xterm title setter
-function xt
-{
+function xt {
 	if [[ -z "${1}" ]]
 	then
 		NAME=${HOSTNAME}
@@ -52,8 +51,7 @@ function xt
 }
 
 # st - screen window title setter
-function st
-{
+function st {
 	if [[ -z "${1}" ]]
 	then
 		NAME=${HOSTNAME}
@@ -64,8 +62,7 @@ function st
 }
 
 # cl - reset all attributes
-function cl
-{
+function cl {
 	printf '\033[;0m'
 }
 
@@ -78,8 +75,7 @@ function cl
 # component, file or directory is a symlink
 
 # path-canonical-simple
-function path-canonical-simple
-{
+function path-canonical-simple {
 	local dst="${1}"
 	if [[ -z "${dst}" ]]; then
 		dst="${PWD}"
@@ -92,8 +88,7 @@ function path-canonical-simple
 
 # path-canonical
 # Resolves symlinks for all path components, including the final component
-function path-canonical
-{
+function path-canonical {
 	local dst="${1}"
 	if [[ -z "${dst}" ]]; then
 		dst="${PWD}"
@@ -132,8 +127,7 @@ function path-canonical
 # This is meant to be simplified interface to the aes-256-cbc encryption
 # available in openssl.  Note that output is always "ascii armored" as that just
 # makes life easier.
-function aes-256-cbc
-{ 
+function aes-256-cbc { 
 	verb="${1}"
 	shift
 	case "${verb}" in
@@ -185,8 +179,7 @@ function aes-256-cbc
 
 # NFSv3 Capture Filter
 # Generate tcpdump capture filter for host running nfsv3
-function nfs3-capture-filter-for-host
-{
+function nfs3-capture-filter-for-host {
 	local host="${1}"
 	if [[ -z "${host}" ]]
 	then
@@ -213,8 +206,7 @@ function nfs3-capture-filter-for-host
 	IFS="${OFS}"
 }
 
-function nfs3-capture-filter-for-hosts
-{
+function nfs3-capture-filter-for-hosts {
 	hosts="${@}"
 	result=""
 	for host in ${hosts}
@@ -230,8 +222,7 @@ function nfs3-capture-filter-for-hosts
 	printf "${result}\n"
 }
 
-function lack
-{
+function lack {
 	ack --pager='less -R' "$@"
 }
 
@@ -248,63 +239,102 @@ maybe-add-fzf-to-path
 
 function with-fzf {
 	local fzf=""
-	local input_cmd=""
-	local action_cmd=""
+	local input_cmd=()
+	local action_cmd=()
+	local fzf_options=()
 	local action_single=0
-	local fzf_options=""
+	local parsing_input=0
+	local parsing_action=0
+	local parsing_fzf_options=0
+
+	function usage {
+		echo "Usage: ${FUNCNAME[0]} --input INPUTGENCMD --action ACTION [--fzf-options OPTIONS] [--single]" 1>&2 
+	}
 
 	fzf=$(which fzf 2>/dev/null)
 	if [[ -z "${fzf}" ]]
 	then
-		echo 1>&2 "Unable to find fzf, please make sure it is installed"
+		echo "Unable to find fzf, please make sure it is installed" 1>&2 
 		return 1
 	fi
 
 	while [[ "${#}" -gt 0 ]]
 	do
 		case "${1}" in
-			-i|-in|-input|--input)
-				input_cmd="${2}"
+			-input|--input)
+				input_cmd+=("${2}")
 				shift
 				shift
+				parsing_input=1
+				parsing_action=0
+				parsing_fzf_options=0
 			;;
 
-			-a|-act|-action|--action)
-				action_cmd="${2}"
+			-action|--action)
+				action_cmd+=("${2}")
 				shift
 				shift
+				parsing_input=0
+				parsing_action=1
+				parsing_fzf_options=0
 			;;
 
-			-f|-fzf|--fzf-options)
-				fzf_options="${2}"
+			-fzf-options|--fzf-options)
+				fzf_options+=("${2}")
 				shift
 				shift
+				parsing_input=0
+				parsing_action=0
+				parsing_fzf_options=1
 			;;
 
-			-s|-single|--single-action-invocation)
+			-single|--single)
 				action_single=1
 				shift
+				parsing_input=0
+				parsing_action=0
+				parsing_fzf_options=0
 			;;
 
 			*)
-				echo 1>&2 \
-				    "Usage: ${FUNCNAME[0]} --input INPUTGENCMD --action ACTION [--fzf-options OPTIONS] [--single-action-invocation]"
-				return 1
+				if (( "${parsing_input}" ))
+				then
+					input_cmd+=("${1}")
+					shift
+				elif (( "${parsing_action}" ))
+				then
+					action_cmd+=("${1}")
+					shift
+				elif (( "${parsing_fzf_options}" ))
+				then
+					fzf_options+=("${1}")
+					shift
+				else
+					usage
+					return 1
+				fi
+
 			;;
 		esac
 	done
 
-	selected_input=( $(eval "${input_cmd}" 2>/dev/null | eval "${fzf}" "${fzf_options}") )
+	if [[ "${#input_cmd[@]}" -eq 0 ]] || [[ "${#action_cmd[@]}" -eq 0 ]]
+	then
+		usage
+		return 1
+	fi
+
+	selected_input=( $(eval "${input_cmd[@]}" 2>/dev/null | eval "${fzf}" "${fzf_options[@]}") )
 	rc="${?}"
 	if [[ "${rc}" -eq 0 ]]
 	then
 		if (( "${action_single}" ))
 		then
-			${action_cmd} "${selected_input[@]}"
+			${action_cmd[@]} "${selected_input[@]}"
 		else
 			for input in "${selected_input[@]}"
 			do
-				${action_cmd} "${input}"
+				${action_cmd[@]} "${input}"
 			done
 		fi
 	else
