@@ -235,6 +235,84 @@ function lack
 	ack --pager='less -R' "$@"
 }
 
+function maybe-add-fzf-to-path {
+	local fzf_home="${HOME}/.fzf"
+	local fzf_path=""
+
+	if [[ -e "${fzf_home}/bin/fzf" ]]
+	then
+		add-path "${HOME}/.fzf/bin"
+	fi
+}
+maybe-add-fzf-to-path
+
+function with-fzf {
+	local fzf=""
+	local input_cmd=""
+	local action_cmd=""
+	local action_single=0
+	local fzf_options=""
+
+	fzf=$(which fzf 2>/dev/null)
+	if [[ -z "${fzf}" ]]
+	then
+		echo 1>&2 "Unable to find fzf, please make sure it is installed"
+		return 1
+	fi
+
+	while [[ "${#}" -gt 0 ]]
+	do
+		case "${1}" in
+			-i|-in|-input|--input)
+				input_cmd="${2}"
+				shift
+				shift
+			;;
+
+			-a|-act|-action|--action)
+				action_cmd="${2}"
+				shift
+				shift
+			;;
+
+			-f|-fzf|--fzf-options)
+				fzf_options="${2}"
+				shift
+				shift
+			;;
+
+			-s|-single|--single-action-invocation)
+				action_single=1
+				shift
+			;;
+
+			*)
+				echo 1>&2 \
+				    "Usage: ${FUNCNAME[0]} --input INPUTGENCMD --action ACTION [--fzf-options OPTIONS] [--single-action-invocation]"
+				return 1
+			;;
+		esac
+	done
+
+	selected_input=( $(eval "${input_cmd}" 2>/dev/null | eval "${fzf}" "${fzf_options}") )
+	rc="${?}"
+	if [[ "${rc}" -eq 0 ]]
+	then
+		if (( "${action_single}" ))
+		then
+			${action_cmd} "${selected_input[@]}"
+		else
+			for input in "${selected_input[@]}"
+			do
+				${action_cmd} "${input}"
+			done
+		fi
+	else
+		return "${rc}"
+	fi
+}
+
+
 # Misc Stuff
 
 # vim - function wrapper for use with screen
