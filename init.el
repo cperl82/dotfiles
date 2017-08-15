@@ -822,8 +822,8 @@ Lisp function does not specify a special indentation."
     (add-hook 'emacs-lisp-mode-hook #'cp/enable-evil-smartparens))
   :config
   (progn
-    (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
-    (sp-local-pair 'emacs-lisp-mode "`" nil :actions nil)))
+    (sp-local-pair '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
+    (sp-local-pair '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil)))
 
 
 
