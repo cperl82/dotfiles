@@ -144,7 +144,7 @@
                 mode-line-misc-info
                 mode-line-end-spaces))
 
-;; 2014-05-07: function to revert all buffers
+;; 2014-05-07 cperl: function to revert all buffers
 (defun revert-buffer-all ()
   "Revert all buffers.  This reverts buffers that are visiting a file, kills
 buffers whose visited file has disappeared and refreshes dired buffers."
@@ -160,7 +160,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
               (kill-buffer b)))
            ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
 
-;; 2016-09-10 better alignment of property lists
+;; 2016-09-10 cperl: better alignment of property lists
 ; http://emacs.stackexchange.com/questions/10230/how-to-indent-keywords-aligned
 (defun cp/lisp-indent-function (indent-point state)
        "This function is the normal value of the variable `lisp-indent-function'.
@@ -232,7 +232,7 @@ Lisp function does not specify a special indentation."
                    (method
                                       (funcall method indent-point state))))))))
 
-;; 2017-01-12 function to help split windows the way I like it
+;; 2017-01-12 cperl: function to help split windows the way I like it
 (defun cp/split-windows-sensibly (&rest r)
   (when (eq (length (window-list)) 1)
     (let* ((columns (window-size nil t))
@@ -243,6 +243,12 @@ Lisp function does not specify a special indentation."
 
 (advice-add 'split-window-sensibly :before #'cp/split-windows-sensibly)
 (advice-add 'split-window-horizontally :before #'cp/split-windows-sensibly)
+
+;; 2017-08-17 cperl: misc stuff
+(defun cp/c-mode-hook-setup ()
+  (hs-minor-mode)
+  (which-function-mode))
+(add-hook 'c-mode-hook #'cp/c-mode-hook-setup)
 
 
 ;; Base packages
@@ -1178,6 +1184,7 @@ Lisp function does not specify a special indentation."
       (progn
         (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)))
     (use-package org-depend)
+    (use-package org-man)
     (setq org-tags-column -90)
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-todo-keywords
