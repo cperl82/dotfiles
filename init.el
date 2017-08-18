@@ -77,6 +77,7 @@
           wgrep
           which-key
           xcscope
+          yaml-mode
           ))
        (sources (append sources packages)))
   (el-get 'sync sources))
@@ -1456,7 +1457,8 @@ Lisp function does not specify a special indentation."
  '(custom-enabled-themes (quote (zenburn)))
  '(custom-safe-themes
    (quote
-    ("4528fb576178303ee89888e8126449341d463001cb38abe0015541eb798d8a23" default))))
+    ("4528fb576178303ee89888e8126449341d463001cb38abe0015541eb798d8a23" default)))
+ '(package-selected-packages (quote (rainbow-mode let-alist))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

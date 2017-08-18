@@ -1,5 +1,5 @@
 (:name epl
        :description "EPL provides a convenient high-level API for various package.el versions, and aims to overcome its most striking idiocies."
        :type github
-       :checkout "a5ad061d0a5eb42f66c384e55d102da7d52c96b0"
+       :checkout "83797835f729f39b80acba4c7e83d73a2e410e26"
        :pkgname "cask/epl")
