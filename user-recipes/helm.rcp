@@ -3,7 +3,7 @@
        :type github
        :pkgname "emacs-helm/helm"
        :branch "master"
-       :checkout "df78b390a7c7a0212a145fca4beb2fbba28bfb64"
+       :checkout "77ce15abdcaa85372e4f3dd874d3edfc93742ea3"
        :autoloads "helm-autoloads"
        :depends (emacs-async)
        :build
