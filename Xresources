@@ -30,39 +30,65 @@ XTerm*foreground:      Foreground_Color
 XTerm*background:      Background_Color
 XTerm*cursorColor:     Cursor_Color
 
-URxvt.font:                -xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*, \
-                           xft:monaco:pixelsize=10, \
-                           xft:bitstream vera sans mono:pixelsize=10:antialias=true
-URxvt.scrollBar:           false
-URxvt.skipBuiltinGlyphs:   true
-URxvt.cursorUnderline:     false
-URxvt.keysym.C-Up:         \033[1;5A
-URxvt.keysym.C-Down:       \033[1;5B
-URxvt.keysym.C-Left:       \033[1;5D
-URxvt.keysym.C-Right:      \033[1;5C
-URxvt.perl-ext-common:     default,selection,confirm-paste
-URxvt.selection.pattern-0: ([-_.[:alpha:][:digit:]]+)
-URxvt.selection.pattern-1: ([^ 	\n]+)
-URxvt.selection.pattern-2: (^.*$)
-Rxvt*color0:               Ansi_0_Color
-Rxvt*color1:               Ansi_1_Color
-Rxvt*color2:               Ansi_2_Color
-Rxvt*color3:               Ansi_3_Color
-Rxvt*color4:               Ansi_4_Color
-Rxvt*color5:               Ansi_5_Color
-Rxvt*color6:               Ansi_6_Color
-Rxvt*color7:               Ansi_7_Color
-Rxvt*color8:               Ansi_8_Color
-Rxvt*color9:               Ansi_9_Color
-Rxvt*color10:              Ansi_10_Color
-Rxvt*color11:              Ansi_11_Color
-Rxvt*color12:              Ansi_12_Color
-Rxvt*color13:              Ansi_13_Color
-Rxvt*color14:              Ansi_14_Color
-Rxvt*color15:              Ansi_15_Color
-Rxvt*colorBD:              Bold_Color
-Rxvt*colorIT:              Italic_Color
-Rxvt*colorUL:              Underline_Color
-Rxvt*foreground:           Foreground_Color
-Rxvt*background:           Background_Color
-Rxvt*cursorColor:          Cursor_Color
+URxvt.font:                 -xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*, \
+                            xft:monaco:pixelsize=10, \
+                            xft:bitstream vera sans mono:pixelsize=10:antialias=true
+URxvt.perl-lib:             /home/cperl/.dotfiles/urxvt-perl-lib/
+URxvt.scrollBar:            false
+URxvt.skipBuiltinGlyphs:    true
+URxvt.cursorUnderline:      false
+URxvt.perl-ext-common:      default,selection,confirm-paste,matcher,keyboard-select
+URxvt.url-launcher:         /usr/bin/xdg-open
+URxvt.Keysym.M-o:           matcher:last
+URxvt.Keysym.M-Escape:      keyboard-select:activate
+URxvt.selection.pattern-0:  ([-_[:alpha:][:digit:]]+)
+URxvt.selection.pattern-1:  ([-_[:alpha:][:digit:]./\:]+)
+URxvt.selection.pattern-2:  ([^ \n]+)
+URxvt.selection.pattern-3:  (^.*$)
+URxvt*color0:               Ansi_0_Color
+URxvt*color1:               Ansi_1_Color
+URxvt*color2:               Ansi_2_Color
+URxvt*color3:               Ansi_3_Color
+URxvt*color4:               Ansi_4_Color
+URxvt*color5:               Ansi_5_Color
+URxvt*color6:               Ansi_6_Color
+URxvt*color7:               Ansi_7_Color
+URxvt*color8:               Ansi_8_Color
+URxvt*color9:               Ansi_9_Color
+URxvt*color10:              Ansi_10_Color
+URxvt*color11:              Ansi_11_Color
+URxvt*color12:              Ansi_12_Color
+URxvt*color13:              Ansi_13_Color
+URxvt*color14:              Ansi_14_Color
+URxvt*color15:              Ansi_15_Color
+URxvt*colorBD:              Bold_Color
+URxvt*foreground:           Foreground_Color
+URxvt*background:           Background_Color
+URxvt*cursorColor:          Cursor_Color
+
+! Escape sequences compatible with http://www.leonerd.org.uk/hacks/fixterms/
+URxvt.keysym.C-i:           \033[105;5u
+URxvt.keysym.C-I:           \033[73;5u
+URxvt.keysym.C-m:           \033[109;5u
+URxvt.keysym.C-M:           \033[77;5u
+URxvt.keysym.S-Return:      \033[13;2u
+URxvt.keysym.C-Return:      \033[13;5u
+URxvt.keysym.C-S-Return:    \033[13;6u
+URxvt.keysym.S-Escape:      \033[27;2u
+URxvt.keysym.C-Escape:      \033[27;5u
+URxvt.keysym.C-S-Escape:    \033[27;6u
+URxvt.keysym.S-BackSpace:   \033[127;2u
+URxvt.keysym.C-BackSpace:   \033[127;5u
+URxvt.keysym.C-S-BackSpace: \033[127;6u
+URxvt.keysym.S-Up:          \033[1;1A
+URxvt.keysym.C-Up:          \033[1;5A
+URxvt.keysym.C-S-Up:        \033[1;6A
+URxvt.keysym.S-Down:        \033[1;1B
+URxvt.keysym.C-Down:        \033[1;5B
+URxvt.keysym.C-S-Down:      \033[1;6B
+URxvt.keysym.S-Left:        \033[1;1D
+URxvt.keysym.C-Left:        \033[1;5D
+URxvt.keysym.C-S-Left:      \033[1;6D
+URxvt.keysym.S-Right:       \033[1;1C
+URxvt.keysym.C-Right:       \033[1;5C
+URxvt.keysym.C-S-Right:     \033[1;6C
