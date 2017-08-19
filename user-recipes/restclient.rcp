@@ -1,0 +1,5 @@
+(:name restclient
+       :description "HTTP REST client tool for emacs"
+       :type github
+       :checkout "ef6d756e2013843f7afcbea42b69ad54aa5de518"
+       :pkgname "pashky/restclient.el")
