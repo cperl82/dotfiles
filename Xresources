@@ -67,28 +67,63 @@ URxvt*background:           Background_Color
 URxvt*cursorColor:          Cursor_Color
 
 ! Escape sequences compatible with http://www.leonerd.org.uk/hacks/fixterms/
-URxvt.keysym.C-i:           \033[105;5u
-URxvt.keysym.C-I:           \033[73;5u
-URxvt.keysym.C-m:           \033[109;5u
-URxvt.keysym.C-M:           \033[77;5u
-URxvt.keysym.S-Return:      \033[13;2u
-URxvt.keysym.C-Return:      \033[13;5u
-URxvt.keysym.C-S-Return:    \033[13;6u
-URxvt.keysym.S-Escape:      \033[27;2u
-URxvt.keysym.C-Escape:      \033[27;5u
-URxvt.keysym.C-S-Escape:    \033[27;6u
-URxvt.keysym.S-BackSpace:   \033[127;2u
-URxvt.keysym.C-BackSpace:   \033[127;5u
-URxvt.keysym.C-S-BackSpace: \033[127;6u
-URxvt.keysym.S-Up:          \033[1;1A
-URxvt.keysym.C-Up:          \033[1;5A
-URxvt.keysym.C-S-Up:        \033[1;6A
-URxvt.keysym.S-Down:        \033[1;1B
-URxvt.keysym.C-Down:        \033[1;5B
-URxvt.keysym.C-S-Down:      \033[1;6B
-URxvt.keysym.S-Left:        \033[1;1D
-URxvt.keysym.C-Left:        \033[1;5D
-URxvt.keysym.C-S-Left:      \033[1;6D
-URxvt.keysym.S-Right:       \033[1;1C
-URxvt.keysym.C-Right:       \033[1;5C
-URxvt.keysym.C-S-Right:     \033[1;6C
+URxvt.keysym.C-i:             \033[105;5u
+URxvt.keysym.C-I:             \033[73;5u
+URxvt.keysym.C-m:             \033[109;5u
+URxvt.keysym.C-M:             \033[77;5u
+
+URxvt.keysym.S-Return:        \033[13;2u
+URxvt.keysym.M-Return:        \033[13;3u
+URxvt.keysym.M-S-Return:      \033[13;4u
+URxvt.keysym.C-Return:        \033[13;5u
+URxvt.keysym.C-S-Return:      \033[13;6u
+URxvt.keysym.C-M-Return:      \033[13;7u
+URxvt.keysym.C-M-S-Return:    \033[13;8u
+
+URxvt.keysym.S-Escape:        \033[27;2u
+URxvt.keysym.M-Escape:        \033[27;3u
+URxvt.keysym.M-S-Escape:      \033[27;4u
+URxvt.keysym.C-Escape:        \033[27;5u
+URxvt.keysym.C-S-Escape:      \033[27;6u
+URxvt.keysym.C-M-Escape:      \033[27;7u
+URxvt.keysym.C-M-S-Escape:    \033[27;8u
+
+URxvt.keysym.S-BackSpace:     \033[127;2u
+URxvt.keysym.M-BackSpace:     \033[127;3u
+URxvt.keysym.M-S-BackSpace:   \033[127;4u
+URxvt.keysym.C-BackSpace:     \033[127;5u
+URxvt.keysym.C-S-BackSpace:   \033[127;6u
+URxvt.keysym.C-M-BackSpace:   \033[127;6u
+URxvt.keysym.C-M-S-BackSpace: \033[127;6u
+
+URxvt.keysym.S-Up:            \033[1;2A
+URxvt.keysym.M-Up:            \033[1;3A
+URxvt.keysym.M-S-Up:          \033[1;4A
+URxvt.keysym.C-Up:            \033[1;5A
+URxvt.keysym.C-S-Up:          \033[1;6A
+URxvt.keysym.C-M-Up:          \033[1;7A
+URxvt.keysym.C-M-S-Up:        \033[1;8A
+
+URxvt.keysym.S-Down:          \033[1;2B
+URxvt.keysym.M-Down:          \033[1;3B
+URxvt.keysym.M-S-Down:        \033[1;4B
+URxvt.keysym.C-Down:          \033[1;5B
+URxvt.keysym.C-S-Down:        \033[1;6B
+URxvt.keysym.C-M-Down:        \033[1;7B
+URxvt.keysym.C-M-S-Down:      \033[1;8B
+
+URxvt.keysym.S-Left:          \033[1;2D
+URxvt.keysym.M-Left:          \033[1;3D
+URxvt.keysym.M-S-Left:        \033[1;4D
+URxvt.keysym.C-Left:          \033[1;5D
+URxvt.keysym.C-S-Left:        \033[1;6D
+URxvt.keysym.C-M-Left:        \033[1;7D
+URxvt.keysym.C-M-S-Left:      \033[1;8D
+
+URxvt.keysym.S-Right:         \033[1;2C
+URxvt.keysym.M-Right:         \033[1;3C
+URxvt.keysym.M-S-Right:       \033[1;4C
+URxvt.keysym.C-Right:         \033[1;5C
+URxvt.keysym.C-S-Right:       \033[1;6C
+URxvt.keysym.C-M-Right:       \033[1;7C
+URxvt.keysym.C-M-S-Right:     \033[1;8C
