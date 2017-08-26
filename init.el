@@ -305,8 +305,7 @@ Lisp function does not specify a special indentation."
   "j" #'dired-jump
   "f" #'find-file
   "k" #'kill-buffer
-  "K" #'kill-buffer-and-window
-  "e" #'cp/escreen-get-active-screen-names-with-emphasis)
+  "K" #'kill-buffer-and-window)
 
 
 
@@ -366,9 +365,9 @@ Lisp function does not specify a special indentation."
    "C-k" #'evil-window-up
    "C-l" #'evil-window-right)
   (:keymaps '(visual)
-   "/" #'cp/evil-search-forward
-   "?" #'cp/evil-search-backward
-   "i" #'indent-region)
+   "/"   #'cp/evil-search-forward
+   "?"   #'cp/evil-search-backward
+   "TAB" #'indent-region)
   :init
   (progn
     (setq-default evil-symbol-word-search t)
@@ -728,8 +727,9 @@ Lisp function does not specify a special indentation."
     (add-hook
      'sh-mode-hook
      (lambda ()
-       (cp/sh-switch-to-indentation 8)
-       (electric-indent-mode nil)))))
+       (sh-set-shell "bash")
+       (flycheck-mode)
+       (flycheck-select-checker 'sh-shellcheck)))))
 
 
 
@@ -877,55 +877,50 @@ Lisp function does not specify a special indentation."
 
 
 ;; escreen
-(defun cp/escreen-swap-screen (other-screen-number)
-  (if (and
-       (numberp other-screen-number)
-       (not (eq other-screen-number escreen-current-screen-number)))
-      (let ((screen-data-current (escreen-configuration-escreen escreen-current-screen-number))
-            (screen-data-other   (escreen-configuration-escreen other-screen-number)))
-        (cond ((and screen-data-current screen-data-other)
-               ; The other screen does exist
-               (progn
-                 (setcar screen-data-current other-screen-number)
-                 (setcar screen-data-other   escreen-current-screen-number)
-                 (setq escreen-current-screen-number other-screen-number)))
-              ((and screen-data-current (not screen-data-other))
-               ; The other screen doesn't exist
-               (progn
-                 (setcar screen-data-current other-screen-number)
-                 (setq escreen-current-screen-number other-screen-number)))))))
+(defun cp/escreen-swap-screen (a &optional b)
+  (when (and (numberp a) (numberp b))
+    (let* ((current-screen-number (escreen-get-current-screen-number))
+           (b (or b current-screen-number))
+           (screen-data-a (escreen-configuration-escreen a))
+           (screen-data-b (escreen-configuration-escreen b)))
+      (when (not (equal a b))
+        (cond ((and screen-data-a screen-data-b)
+               ;; Both screens exist
+               (setcar screen-data-a b)
+               (setcar screen-data-b a))
+              ((and screen-data-a (not screen-data-b))
+               ;; The other screen doesn't exist
+               (setcar screen-data-a b)))
+        (cond ((equal current-screen-number a) (escreen-goto-screen a)
+               (equal current-screen-number b) (escreen-goto-screen b)))))))
 
-(defun cp/escreen-move-screen (direction)
-  (let ((other-screen-number
-         (cond ((eq direction 'left)  (1- escreen-current-screen-number))
-               ((eq direction 'right) (1+ escreen-current-screen-number)))))
+(defun cp/escreen-move-screen (direction screen-number n)
+  (let* ((screen-to-move (or screen-number (escreen-get-current-screen-number)))
+         (amount-to-move (or n 1))
+         (other-screen-number
+          (cond ((eq direction 'left)  (- screen-to-move amount-to-move))
+                ((eq direction 'right) (+ screen-to-move amount-to-move)))))
     (cond ((and
             (>= other-screen-number 0)
             (<= other-screen-number escreen-highest-screen-number-used))
-           (cp/escreen-swap-screen other-screen-number))
-          ; These are the cases where we're moving right off the right
-          ; end or left off the left end
-          ; TODO: some of the below can probably be factored out
+           (cp/escreen-swap-screen screen-to-move other-screen-number))
+          ;; These are the cases where we're moving right off the
+          ;; right end or left off the left end
           ((< other-screen-number 0)
-           (let ((n 1)
-                 (end escreen-highest-screen-number-used))
-            (while (<= n end)
-              (cp/escreen-swap-screen n)
-              (setq n (1+ n)))))
+           (let ((other-screen-number (+ escreen-highest-screen-number-used other-screen-number)))
+             (cp/escreen-swap-screen screen-to-move other-screen-number)))
           ((> other-screen-number escreen-highest-screen-number-used)
-           (let ((n (1- escreen-highest-screen-number-used)))
-             (while (>= n 0)
-               (cp/escreen-swap-screen n)
-               (setq n (1- n)))))))
+           (let ((other-screen-number (- other-screen-number (1+ escreen-highest-screen-number-used))))
+             (cp/escreen-swap-screen screen-to-move other-screen-number)))))
   (cp/escreen-get-active-screen-names-with-emphasis))
 
-(defun cp/escreen-move-screen-left ()
+(defun cp/escreen-move-screen-left (&optional screen-number n)
   (interactive)
-  (cp/escreen-move-screen 'left))
+  (cp/escreen-move-screen 'left screen-number n))
 
-(defun cp/escreen-move-screen-right ()
+(defun cp/escreen-move-screen-right (&optional screen-number n)
   (interactive)
-  (cp/escreen-move-screen 'right))
+  (cp/escreen-move-screen 'right screen-number n))
 
 (defun cp/escreen-rename-screen (&optional name number suppress-message)
   (interactive "sNew screen name: ")
@@ -954,6 +949,57 @@ Lisp function does not specify a special indentation."
                             (t (format "%d-" n))))))
       (message "escreen: active screens: %s" output))))
 
+(defun cp/escreen-ivy-screen-number-to-string (propertized with-window-count n)
+  (let* ((screen-data (escreen-configuration-escreen n))
+         (name (escreen-configuration-screen-name screen-data))
+         (n-windows (length (escreen-configuration-data-map screen-data)))
+         (s
+          (if with-window-count
+              (format "%d:%s  (%s)" n name
+                      (->>
+                       screen-data
+                       (nth 3)
+                       (-map (lambda (d) (nth 0 d)))
+                       (-map (lambda (d) (nth 1 d)))
+                       (s-join " ")))
+            (format "%d:%s" n name))))
+    (if propertized (propertize s 'screen-number n) s)))
+
+(defun cp/escreen-ivy-collection ()
+  (let ((current (escreen-get-current-screen-number)))
+    (-map
+     (-partial #'cp/escreen-ivy-screen-number-to-string t t)
+     (-filter
+      (lambda (n) (not (equal current n)))
+      (escreen-configuration-screen-numbers)))))
+
+(defun cp/escreen-ivy-action (selected)
+  (let ((screen-number (get-text-property 0 'screen-number selected)))
+   (escreen-goto-screen screen-number)
+    (cp/escreen-get-active-screen-names-with-emphasis)))
+
+(defun cp/escreen-switch-to-screen-with-ivy-completion ()
+  (interactive)
+  (let ((collection (cp/escreen-ivy-collection)))
+    (if (> (length collection) 0)
+        (let* ((current (cp/escreen-ivy-screen-number-to-string nil nil (escreen-get-current-screen-number)))
+               (prompt (format "switch to escreen [%s]:" current)))
+          (ivy-read prompt collection
+                    :require-match t
+                    :action #'cp/escreen-ivy-action))
+      (cp/escreen-get-active-screen-names-with-emphasis))))
+
+(defun cp/escreen-compress ()
+  "Compress all screen numbers to remove gaps"
+  (-each-indexed
+      (-sort '< (escreen-configuration-screen-numbers))
+    (lambda (idx screen-number)
+      (let ((shift (- screen-number idx)))
+        (progn
+          (message "cp/escreen-compress shifting screen %d left by %d" screen-number shift)
+          (cp/escreen-move-screen-left screen-number shift)))))
+  (cp/escreen-get-active-screen-names-with-emphasis))
+
 (defun cp/advice/escreen-goto-screen (n &optional dont-update-current)
   (cp/escreen-get-active-screen-names-with-emphasis))
 
@@ -972,14 +1018,17 @@ Lisp function does not specify a special indentation."
   :commands (escreen-get-active-screen-numbers)
   :general
   (:keymaps '(normal)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "a e" '(:keymap escreen-map :which-key "escreen"))
+   ", e"   '(:keymap escreen-map :which-key "escreen"))
   (:keymaps 'escreen-map
-   "E" #'cp/escreen-get-active-screen-names-with-emphasis
+   "e" #'cp/escreen-get-active-screen-names-with-emphasis
    "r" #'cp/escreen-rename-screen
+   "s" #'cp/escreen-switch-to-screen-with-ivy-completion
+   "H" #'cp/escreen-move-screen-left
+   "L" #'cp/escreen-move-screen-right
+   "k" #'escreen-kill-screen
    "l" #'escreen-goto-next-screen
-   "h" #'escreen-goto-prev-screen)
+   "h" #'escreen-goto-prev-screen
+   "^" #'escreen-goto-last-screen)
   :config
   (progn
     (advice-add 'escreen-goto-screen   :after #'cp/advice/escreen-goto-screen)
