@@ -270,7 +270,7 @@ Lisp function does not specify a special indentation."
   ","   nil)
 
 (general-define-key
- :keymaps '(normal visual motion insert emacs)
+ :keymaps '(motion insert emacs)
  :prefix cp/normal-prefix
  :non-normal-prefix cp/non-normal-prefix
   "a" '(:ignore t :which-key "applications")
@@ -278,6 +278,7 @@ Lisp function does not specify a special indentation."
   "f" '(:ignore t :which-key "files")
   "w" '(:ignore t :which-key "windows")
   "f f" #'find-file
+  "f r" #'find-file-read-only
   "f j" #'dired-jump
   "b b" #'switch-to-buffer
   "b k" #'kill-buffer
@@ -295,7 +296,7 @@ Lisp function does not specify a special indentation."
 
 ;; general command prefix keybindings, normal and motion state only
 (general-define-key
- :keymaps '(normal motion)
+ :keymaps '(motion)
  :prefix ","
   "h" #'cp/evil-highlight-symbol
   "x" #'delete-window
@@ -304,6 +305,7 @@ Lisp function does not specify a special indentation."
   "v" #'split-window-horizontally
   "j" #'dired-jump
   "f" #'find-file
+  "r" #'find-file-read-only
   "k" #'kill-buffer
   "K" #'kill-buffer-and-window)
 
@@ -883,7 +885,11 @@ Lisp function does not specify a special indentation."
            (b (or b current-screen-number))
            (screen-data-a (escreen-configuration-escreen a))
            (screen-data-b (escreen-configuration-escreen b)))
-      (when (not (equal a b))
+      (when
+          (and
+           (not (equal a b))
+           (>= a 0) (<= a escreen-highest-screen-number-used)
+           (>= b 0) (<= b escreen-highest-screen-number-used))
         (cond ((and screen-data-a screen-data-b)
                ;; Both screens exist
                (setcar screen-data-a b)
@@ -891,8 +897,9 @@ Lisp function does not specify a special indentation."
               ((and screen-data-a (not screen-data-b))
                ;; The other screen doesn't exist
                (setcar screen-data-a b)))
-        (cond ((equal current-screen-number a) (escreen-goto-screen a)
-               (equal current-screen-number b) (escreen-goto-screen b)))))))
+        (cond ((equal current-screen-number a) (setq escreen-current-screen-number b))
+              ((equal current-screen-number b) (setq escreen-current-screen-number a))
+              (t t))))))
 
 (defun cp/escreen-move-screen (direction screen-number n)
   (let* ((screen-to-move (or screen-number (escreen-get-current-screen-number)))
@@ -949,19 +956,18 @@ Lisp function does not specify a special indentation."
                             (t (format "%d-" n))))))
       (message "escreen: active screens: %s" output))))
 
-(defun cp/escreen-ivy-screen-number-to-string (propertized with-window-count n)
+(defun cp/escreen-ivy-screen-number-to-string (propertized with-buffer-names n)
   (let* ((screen-data (escreen-configuration-escreen n))
          (name (escreen-configuration-screen-name screen-data))
          (n-windows (length (escreen-configuration-data-map screen-data)))
          (s
-          (if with-window-count
+          (if with-buffer-names
               (format "%d:%s  (%s)" n name
-                      (->>
-                       screen-data
-                       (nth 3)
-                       (-map (lambda (d) (nth 0 d)))
-                       (-map (lambda (d) (nth 1 d)))
-                       (s-join " ")))
+                      (->> screen-data
+                           (nth 3)
+                           (--map (nth 0 it))
+                           (--map (nth 1 it))
+                           (s-join " ")))
             (format "%d:%s" n name))))
     (if propertized (propertize s 'screen-number n) s)))
 
@@ -991,6 +997,7 @@ Lisp function does not specify a special indentation."
 
 (defun cp/escreen-compress ()
   "Compress all screen numbers to remove gaps"
+  (interactive)
   (-each-indexed
       (-sort '< (escreen-configuration-screen-numbers))
     (lambda (idx screen-number)
