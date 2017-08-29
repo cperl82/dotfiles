@@ -265,7 +265,7 @@ Lisp function does not specify a special indentation."
 
 ;; general default prefix key bindings
 (general-define-key
- :keymaps `(motion)
+ :keymaps '(motion)
   "SPC" nil
   ","   nil)
 
@@ -296,7 +296,7 @@ Lisp function does not specify a special indentation."
 
 ;; general command prefix keybindings, normal and motion state only
 (general-define-key
- :keymaps '(motion)
+ :keymaps '(motion emacs)
  :prefix ","
   "h" #'cp/evil-highlight-symbol
   "x" #'delete-window
@@ -1022,11 +1022,14 @@ Lisp function does not specify a special indentation."
 
 (use-package escreen
   :defer t
-  :commands (escreen-get-active-screen-numbers)
   :general
-  (:keymaps '(normal)
-   ", e"   '(:keymap escreen-map :which-key "escreen"))
-  (:keymaps 'escreen-map
+  (:keymaps '(motion emacs)
+   ", e" '(:keymap escreen-map :which-key "escreen"))
+  (:keymaps '(motion emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "a e" '(:keymap escreen-map :which-key "escreen"))
+  (:keymaps '(escreen-map)
    "e" #'cp/escreen-get-active-screen-names-with-emphasis
    "r" #'cp/escreen-rename-screen
    "s" #'cp/escreen-switch-to-screen-with-ivy-completion
