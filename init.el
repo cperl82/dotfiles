@@ -1025,7 +1025,7 @@ Lisp function does not specify a special indentation."
   :general
   (:keymaps '(motion emacs)
    ", e" '(:keymap escreen-map :which-key "escreen"))
-  (:keymaps '(motion emacs)
+  (:keymaps '(motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a e" '(:keymap escreen-map :which-key "escreen"))
