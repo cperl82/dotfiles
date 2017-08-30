@@ -1157,7 +1157,7 @@ Lisp function does not specify a special indentation."
 (defun cp/advice/org-previous-link ()
   (cp/org-echo-link-at-point))
 
-(defun cp/org-sorting-org-todo-keywords-to-alist ()
+(defun cp/org-sort-org-todo-keywords-to-alist ()
   "Take `org-todo-keywords' and turn it into an association list.
 The key is the todo keyword and the value is its relative position in the list."
   (let* ((todo-keywords-split-by-finished
@@ -1181,30 +1181,30 @@ The key is the todo keyword and the value is its relative position in the list."
          `(,todo . ,idx)))
      rotated)))
 
-(defun cp/org-sorting-org-todo-keywords-max ()
+(defun cp/org-sort-org-todo-keywords-max ()
   "Determine the largest index in org-todo-keywords"
   (->>
-   (cp/org-sorting-org-todo-keywords-to-alist)
+   (cp/org-sort-org-todo-keywords-to-alist)
    (-map    #'cdr)
    (-reduce #'max)))
 
-(defun cp/org-sorting-todo-to-int ()
+(defun cp/org-sort-todo-to-int ()
   (-some->
    (org-entry-get (point) "TODO")
-   (assoc (cp/org-sorting-org-todo-keywords-to-alist))
+   (assoc (cp/org-sort-org-todo-keywords-to-alist))
    (cdr)))
 
-(defun cp/org-sorting-item-to-int ()
+(defun cp/org-sort-item-to-int ()
   (let* ((item (org-entry-get (point) "ITEM"))
          (item (replace-regexp-in-string "^\\** *" "" item)))
     ;; Make headings with "Notes" sort before everything else
     (if (string-match "\\bNotes\\b" item)
         -1
-      (1+ (cp/org-sorting-org-todo-keywords-max)))))
+      (1+ (cp/org-sort-org-todo-keywords-max)))))
 
 (defun cp/org-sort-key ()
-  (let* ((todo (cp/org-sorting-todo-to-int))
-         (todo-int (or todo (cp/org-sorting-item-to-int)))
+  (let* ((todo (cp/org-sort-todo-to-int))
+         (todo-int (or todo (cp/org-sort-item-to-int)))
          (priority (org-entry-get (point) "PRIORITY"))
          (priority-int (string-to-char priority)))
     (format "%03d %03d" todo-int priority-int)))
