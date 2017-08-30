@@ -1171,8 +1171,8 @@ The key is the todo keyword and the value is its relative position in the list."
                 (equal elem 'sequence)
                 (equal elem 'type)))))
            (-split-on "|")))
-         (not-finished (car todo-keywords-split-by-finished))
-         (finished (cadr todo-keywords-split-by-finished))
+         (not-finished (nth 0 todo-keywords-split-by-finished))
+         (finished (nth 1 todo-keywords-split-by-finished))
          (n-finished-states (length finished))
          (rotated (-rotate n-finished-states (-concat not-finished finished))))
     (-map-indexed
