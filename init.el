@@ -1157,36 +1157,56 @@ Lisp function does not specify a special indentation."
 (defun cp/advice/org-previous-link ()
   (cp/org-echo-link-at-point))
 
-;; http://emacs.stackexchange.com/questions/9585/org-how-to-sort-headings-by-todo-and-then-by-priority
-(defun cp/todo-to-int (todo)
-  (car
-   (-non-nil
-    (mapcar
-     (lambda (keywords)
-       (let* ((finished-states
-               (cdr (-drop-while (lambda (x) (not (string= x "|"))) keywords)))
-              (n-finished-states (length finished-states))
-              (n-finished-states (if (eq n-finished-states 0) 1 n-finished-states))
-              (todo-seq-orig
-               (-map (lambda (x) (car (split-string x "(")))
-                     (cdr keywords)))
-              (todo-seq-mod (-rotate n-finished-states todo-seq-orig)))
-         (-find-index (lambda (x) (string= x todo)) todo-seq-mod)))
-     org-todo-keywords))))
+(defun cp/org-sorting-org-todo-keywords-to-alist ()
+  "Take `org-todo-keywords' and turn it into an association list.
+The key is the todo keyword and the value is its relative position in the list."
+  (let* ((todo-keywords-split-by-finished
+          (->>
+           org-todo-keywords
+           (nth 0)
+           (-filter
+            (lambda (elem)
+              (not
+               (or
+                (equal elem 'sequence)
+                (equal elem 'type)))))
+           (-split-on "|")))
+         (not-finished (car todo-keywords-split-by-finished))
+         (finished (cadr todo-keywords-split-by-finished))
+         (n-finished-states (length finished))
+         (rotated (-rotate n-finished-states (-concat not-finished finished))))
+    (-map-indexed
+     (lambda (idx elem)
+       (let ((todo (replace-regexp-in-string "(.*)$" "" elem)))
+         `(,todo . ,idx)))
+     rotated)))
 
-(defun cp/non-todo-to-int (max todo)
-  (let ((item (replace-regexp-in-string "^\\** *" "" todo)))
-    (if (string-match "\\bNotes\\b" item) -1 max)))
+(defun cp/org-sorting-org-todo-keywords-max ()
+  "Determine the largest index in org-todo-keywords"
+  (->>
+   (cp/org-sorting-org-todo-keywords-to-alist)
+   (-map    #'cdr)
+   (-reduce #'max)))
+
+(defun cp/org-sorting-todo-to-int ()
+  (-some->
+   (org-entry-get (point) "TODO")
+   (assoc (cp/org-sorting-org-todo-keywords-to-alist))
+   (cdr)))
+
+(defun cp/org-sorting-item-to-int ()
+  (let* ((item (org-entry-get (point) "ITEM"))
+         (item (replace-regexp-in-string "^\\** *" "" item)))
+    ;; Make headings with "Notes" sort before everything else
+    (if (string-match "\\bNotes\\b" item)
+        -1
+      (1+ (cp/org-sorting-org-todo-keywords-max)))))
 
 (defun cp/org-sort-key ()
-  (let* ((todo-max (apply #'max (mapcar #'length org-todo-keywords)))
-         (todo (org-entry-get (point) "TODO"))
-         (todo-int
-          (if todo
-              (cp/todo-to-int todo)
-            (cp/non-todo-to-int todo-max (org-entry-get (point) "ITEM"))))
+  (let* ((todo (cp/org-sorting-todo-to-int))
+         (todo-int (or todo (cp/org-sorting-item-to-int)))
          (priority (org-entry-get (point) "PRIORITY"))
-         (priority-int (if priority (string-to-char priority) org-default-priority)))
+         (priority-int (string-to-char priority)))
     (format "%03d %03d" todo-int priority-int)))
 
 (defun cp/org-sort-entries ()
