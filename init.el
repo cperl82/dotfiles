@@ -65,7 +65,6 @@
           projectile
           rainbow-mode
           resize-window
-          restclient
           s
           smartparens
           smex
