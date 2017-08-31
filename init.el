@@ -354,22 +354,22 @@ Lisp function does not specify a special indentation."
 (use-package evil
   :diminish undo-tree-mode
   :general
-  (:keymaps '(normal visual motion insert emacs)
+  (:states '(motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w h" #'evil-window-left
    "w j" #'evil-window-down
    "w k" #'evil-window-up
    "w l" #'evil-window-right)
-  (:keymaps '(normal motion emacs)
+  (:states '(visual)
+   "/"   #'cp/evil-search-forward
+   "?"   #'cp/evil-search-backward
+   "TAB" #'indent-region)
+  (:states '(motion emacs)
    "C-h" #'evil-window-left
    "C-j" #'evil-window-down
    "C-k" #'evil-window-up
    "C-l" #'evil-window-right)
-  (:keymaps '(visual)
-   "/"   #'cp/evil-search-forward
-   "?"   #'cp/evil-search-backward
-   "TAB" #'indent-region)
   :init
   (progn
     (setq-default evil-symbol-word-search t)
@@ -404,7 +404,7 @@ Lisp function does not specify a special indentation."
 (use-package avy
   :defer t
   :general
-  (:keymaps '(normal motion)
+  (:states '(motion)
    :prefix cp/normal-prefix
    "a a"   '(:ignore t :which-key "avy")
    "a a c" #'avy-goto-char
@@ -497,14 +497,14 @@ Lisp function does not specify a special indentation."
   :commands (buf-move-down buf-move-up buf-move-left buf-move-right)
   :init
   :general
-  (:keymaps '(normal visual motion insert emacs)
+  (:states '(motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w H" #'buf-move-left
    "w J" #'buf-move-down
    "w K" #'buf-move-up
    "w L" #'buf-move-right)
-  (:keymaps '(normal motion)
+  (:states '(motion)
    :prefix nil
    "C-M-h" #'buf-move-left
    "C-M-j" #'buf-move-down
@@ -567,7 +567,7 @@ Lisp function does not specify a special indentation."
 (use-package xcscope
   :defer t
   :general
-  (:keymaps '(normal visual motion insert emacs)
+  (:states '(normal visual motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a c" '(:keymap cscope-command-map :which-key "cscope"))
@@ -851,7 +851,7 @@ Lisp function does not specify a special indentation."
 (use-package resize-window
   :defer t
   :general
-  (:keymaps '(normal insert motion visual emacs)
+  (:states '(normal insert motion visual emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w r" #'resize-window)
@@ -1023,9 +1023,9 @@ Lisp function does not specify a special indentation."
 (use-package escreen
   :defer t
   :general
-  (:keymaps '(motion emacs)
+  (:states '(motion emacs)
    ", e" '(:keymap escreen-map :which-key "escreen"))
-  (:keymaps '(motion insert emacs)
+  (:states '(motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a e" '(:keymap escreen-map :which-key "escreen"))
@@ -1160,6 +1160,9 @@ Lisp function does not specify a special indentation."
 (defun cp/org-sort-org-todo-keywords-to-alist ()
   "Take `org-todo-keywords' and turn it into an association list.
 The key is the todo keyword and the value is its relative position in the list."
+  ;; CR-soon cperl: This isn't quite right as org-todo-keywords is
+  ;; actually a list of sequences and "|" is optional, if it is
+  ;; omitted, then the last keyword is the finished state
   (let* ((todo-keywords-split-by-finished
           (->>
            org-todo-keywords
@@ -1219,7 +1222,7 @@ The key is the todo keyword and the value is its relative position in the list."
   :defer t
   :general
   (:keymaps '(org-mode-map org-agenda-mode-map)
-   :states  '(normal emacs)
+   :states  '(motion emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "o"   '(:ignore t :which-key "org")
@@ -1231,7 +1234,7 @@ The key is the todo keyword and the value is its relative position in the list."
    "o P" #'org-set-property
    "o s" #'cp/org-sort-entries)
   (:keymaps '(org-mode-map)
-   :states  '(normal)
+   :states  '(motion)
    "TAB"     #'org-cycle
    "M-h"     #'org-metaleft
    "M-l"     #'org-metaright
@@ -1399,7 +1402,7 @@ The key is the todo keyword and the value is its relative position in the list."
 (use-package helm
   :defer t
   :general
-  (:keymaps '(normal visual motion insert emacs)
+  (:states '(motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a h"   '(:ignore t :which-key "helm")
@@ -1481,11 +1484,11 @@ The key is the todo keyword and the value is its relative position in the list."
   :commands (projectile-project-p)
   :defer t
   :general
-  (:keymaps '(normal visual motion insert emacs)
+  (:states '(motion insert emacs)
    :prefix nil
    :non-normal-prefix nil
    "C-c p" '(:keymap projectile-command-map :which-key "projectile"))
-  (:keymaps '(normal visual motion insert emacs)
+  (:states '(motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a p"   '(:keymap projectile-command-map :which-key "projectile"))
@@ -1498,7 +1501,6 @@ The key is the todo keyword and the value is its relative position in the list."
   (progn
     (setq projectile-enable-caching t)
     (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
-    (projectile-global-mode)
 
     (use-package helm-projectile
       :init
