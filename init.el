@@ -382,12 +382,6 @@ Lisp function does not specify a special indentation."
 
 
 
-;; evil-surround
-;; CR-soon cperl: This can probably be replaced with smartparens
-(use-package evil-surround :defer t)
-
-
-
 (use-package company-mode
   :defer t
   :general
@@ -801,27 +795,7 @@ Lisp function does not specify a special indentation."
 (defun cp/enable-evil-smartparens ()
   (progn
     (smartparens-strict-mode)
-    (evil-smartparens-mode)
-    (define-key evil-normal-state-local-map
-      (kbd "(")
-      (lambda (&optional arg)
-        (interactive "P") (sp-wrap-with-pair "(")))
-    (define-key evil-normal-state-local-map (kbd "C-t") #'sp-transpose-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-7") #'sp-backward-barf-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-8") #'sp-forward-barf-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-9") #'sp-backward-slurp-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-0") #'sp-forward-slurp-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-s") #'sp-splice-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-S") #'sp-split-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-j") #'sp-join-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-n") #'sp-next-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-p") #'sp-previous-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-o") #'sp-down-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-u") #'sp-backward-down-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-l") #'sp-forward-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-h") #'sp-backward-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-k") #'sp-splice-sexp-killing-backward-or-around)
-    (define-key evil-normal-state-local-map (kbd "M-K") #'sp-splice-sexp-killing-forward)))
+    (evil-smartparens-mode)))
 
 (use-package evil-smartparens
   :defer t
