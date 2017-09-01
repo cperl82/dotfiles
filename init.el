@@ -65,7 +65,6 @@
           projectile
           rainbow-mode
           resize-window
-          restclient
           s
           smartparens
           smex
@@ -391,15 +390,6 @@ Lisp function does not specify a special indentation."
   ;; it, the edebug map doesn't get its proper position as an "intercept" map,
   ;; which makes edebug really annoying to use
   (add-hook 'edebug-mode-hook #'evil-normalize-keymaps))
-
-
-
-;; evil-surround
-;; CR-soon cperl: This can probably be replaced with smartparens
-(use-package evil-surround :defer t)
-
-
-
 (use-package company-mode
   :defer t
   :general
