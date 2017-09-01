@@ -263,12 +263,28 @@ Lisp function does not specify a special indentation."
 (setq cp/normal-prefix "SPC")
 (setq cp/non-normal-prefix "M-SPC")
 
-;; general default prefix key bindings
+;; Unbind existing keybindings in evil-motion-state-map
 (general-define-key
  :keymaps '(motion)
   "SPC" nil
   ","   nil)
 
+;; Global keybinding that go into evil-motion-state-map and evil-emacs-state-map
+(general-define-key
+ :keymaps '(motion emacs)
+ :prefix ","
+  "h" #'cp/evil-highlight-symbol
+  "x" #'delete-window
+  "o" #'delete-other-windows
+  "s" #'split-window-vertically
+  "v" #'split-window-horizontally
+  "j" #'dired-jump
+  "f" #'find-file
+  "r" #'find-file-read-only
+  "k" #'kill-buffer
+  "K" #'kill-buffer-and-window)
+
+;; Global keybinding that go into evil-motion-state-map, evil-insert-state-map and evil-emacs-state-map
 (general-define-key
  :keymaps '(motion insert emacs)
  :prefix cp/normal-prefix
@@ -293,22 +309,6 @@ Lisp function does not specify a special indentation."
   "w x" #'delete-window
   "w =" #'balance-windows
   "h"   #'help-command)
-
-;; general command prefix keybindings, normal and motion state only
-(general-define-key
- :keymaps '(motion emacs)
- :prefix ","
-  "h" #'cp/evil-highlight-symbol
-  "x" #'delete-window
-  "o" #'delete-other-windows
-  "s" #'split-window-vertically
-  "v" #'split-window-horizontally
-  "j" #'dired-jump
-  "f" #'find-file
-  "r" #'find-file-read-only
-  "k" #'kill-buffer
-  "K" #'kill-buffer-and-window)
-
 
 
 ;; which-key
@@ -383,6 +383,17 @@ Lisp function does not specify a special indentation."
 
 
 
+;; edebug
+(use-package edebug
+  :defer t
+  :init
+  ;; CR-someday cperl: I'm not entirely sure why this is necessary, but without
+  ;; it, the edebug map doesn't get its proper position as an "intercept" map,
+  ;; which makes edebug really annoying to use
+  (add-hook 'edebug-mode-hook #'evil-normalize-keymaps))
+
+
+
 ;; evil-surround
 ;; CR-soon cperl: This can probably be replaced with smartparens
 (use-package evil-surround :defer t)
@@ -418,7 +429,7 @@ Lisp function does not specify a special indentation."
 (use-package ace-window
   :defer t
   :general
-  (:keymaps '(normal motion)
+  (:keymaps '(motion)
    :prefix cp/normal-prefix
    "a a w" #'ace-window))
 
@@ -534,8 +545,8 @@ Lisp function does not specify a special indentation."
 (use-package dired
   :defer t
   :general
-  (:keymaps 'dired-mode-map
-   :states '(normal)
+  (:keymaps '(dired-mode-map)
+   :states  '(motion)
    "h"   #'dired-up-directory
    "j"   #'dired-next-line
    "k"   #'dired-previous-line
@@ -567,7 +578,7 @@ Lisp function does not specify a special indentation."
 (use-package xcscope
   :defer t
   :general
-  (:states '(normal visual motion insert emacs)
+  (:keymaps '(normal visual motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a c" '(:keymap cscope-command-map :which-key "cscope"))
@@ -627,12 +638,10 @@ Lisp function does not specify a special indentation."
 (use-package elisp-slime-nav
   :diminish elisp-slime-nav-mode
   :init
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-elisp-slime-nav-mode)
+  (add-hook 'emacs-lisp-mode-hook #'turn-on-elisp-slime-nav-mode)
   :general
   (:keymaps '(elisp-slime-nav-mode-map)
-   :states  '(normal)
-   :prefix nil
-   :non-normal-prefix nil
+   :states  '(motion)
    "C-c &"   #'evil-jump-backward
    "C-c ;"   #'elisp-slime-nav-find-elisp-thing-at-point
    "C-c C-t" #'elisp-slime-nav-describe-elisp-thing-at-point))
@@ -739,10 +748,10 @@ Lisp function does not specify a special indentation."
 (use-package grep
   :defer t
   :general
-  (:keymaps 'grep-mode-map
-   :states '(normal)
+  (:keymaps '(grep-mode-map)
+   :states  '(normal)
    "M-n" #'compilation-next-error)
-  (:keymaps 'grep-mode-map
+  (:keymaps '(grep-mode-map)
    "SPC" nil)
   :config
   (progn
@@ -765,7 +774,7 @@ Lisp function does not specify a special indentation."
 (use-package man
   :defer t
   :general
-  (:keymaps 'Man-mode-map
+  (:keymaps '(Man-mode-map)
    :states  '(motion)
    "TAB" #'hs-toggle-hiding)
   :config
@@ -802,27 +811,7 @@ Lisp function does not specify a special indentation."
 (defun cp/enable-evil-smartparens ()
   (progn
     (smartparens-strict-mode)
-    (evil-smartparens-mode)
-    (define-key evil-normal-state-local-map
-      (kbd "(")
-      (lambda (&optional arg)
-        (interactive "P") (sp-wrap-with-pair "(")))
-    (define-key evil-normal-state-local-map (kbd "C-t") #'sp-transpose-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-7") #'sp-backward-barf-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-8") #'sp-forward-barf-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-9") #'sp-backward-slurp-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-0") #'sp-forward-slurp-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-s") #'sp-splice-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-S") #'sp-split-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-j") #'sp-join-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-n") #'sp-next-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-p") #'sp-previous-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-o") #'sp-down-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-u") #'sp-backward-down-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-l") #'sp-forward-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-h") #'sp-backward-sexp)
-    (define-key evil-normal-state-local-map (kbd "M-k") #'sp-splice-sexp-killing-backward-or-around)
-    (define-key evil-normal-state-local-map (kbd "M-K") #'sp-splice-sexp-killing-forward)))
+    (evil-smartparens-mode)))
 
 (use-package evil-smartparens
   :defer t
@@ -868,7 +857,7 @@ Lisp function does not specify a special indentation."
 (use-package winner
   :defer t
   :general
-  (:keymaps '(normal insert motion visual emacs)
+  (:keymaps '(motion visual emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w u" #'winner-undo
@@ -1225,14 +1214,14 @@ The key is the todo keyword and the value is its relative position in the list."
    :states  '(motion emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
-   "o"   '(:ignore t :which-key "org")
-   "o p" #'org-previous-link
-   "o n" #'org-next-link
-   "o a" #'org-agenda
-   "o t" #'org-todo
-   "o T" #'org-set-tags
-   "o P" #'org-set-property
-   "o s" #'cp/org-sort-entries)
+   "o"       '(:ignore t :which-key "org")
+   "o p"     #'org-previous-link
+   "o n"     #'org-next-link
+   "o a"     #'org-agenda
+   "o t"     #'org-todo
+   "o T"     #'org-set-tags
+   "o P"     #'org-set-property
+   "o s"     #'cp/org-sort-entries)
   (:keymaps '(org-mode-map)
    :states  '(motion)
    "TAB"     #'org-cycle
@@ -1413,7 +1402,7 @@ The key is the todo keyword and the value is its relative position in the list."
    "a h o" #'helm-occur
    "a h a" #'helm-apropos
    "a h r" #'helm-resume)
-  (:keymaps 'helm-map
+  (:keymaps '(helm-map)
    "TAB" #'helm-execute-persistent-action
    "C-z" #'helm-select-action)
   :config
