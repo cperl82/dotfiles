@@ -1,6 +1,6 @@
 (:name avy
-       :description "Jump to things in Emacs tree-style."
-       :type github
-       :checkout "0f5e99b5e9a0fe709e5bce8ea4462dc732b2a281"
-       :pkgname "abo-abo/avy"
-       :depends (cl-lib))
+ :description "Jump to things in Emacs tree-style."
+ :type github
+ :checkout "0f5e99b5e9a0fe709e5bce8ea4462dc732b2a281"
+ :pkgname "abo-abo/avy"
+ :depends (cl-lib))

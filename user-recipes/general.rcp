@@ -1,8 +1,8 @@
 (:name general
-       :website "https://github.com/noctuid/general.el"
-       :description "More convenient key definitions in emacs"
-       :depends (cl-lib)
-       :type github
-       :pkgname "noctuid/general.el"
-       :branch "master"
-       :checkout "a8470934373b2bdd67f38e46e1dd4fb963cee31b")
+ :website "https://github.com/noctuid/general.el"
+ :description "More convenient key definitions in emacs"
+ :depends (cl-lib)
+ :type github
+ :pkgname "noctuid/general.el"
+ :branch "master"
+ :checkout "a8470934373b2bdd67f38e46e1dd4fb963cee31b")

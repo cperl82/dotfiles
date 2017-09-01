@@ -9,81 +9,112 @@
     (goto-char (point-max)) (eval-print-last-sexp)))
 
 (setq el-get-verbose t)
-(add-to-list 'el-get-recipe-path (concat user-emacs-directory "user-recipes"))
+(setq cp/el-get-user-recipe-dir (concat user-emacs-directory "user-recipes"))
+(add-to-list 'el-get-recipe-path cp/el-get-user-recipe-dir)
+(el-get
+ 'sync
+ '(avy
+   ace-window
+   color-theme-zenburn
+   company-mode
+   dash
+   diminish
+   elisp-slime-nav
+   evil
+   evil-smartparens
+   evil-surround
+   f
+   flycheck
+   general
+   haskell-mode
+   helm
+   helm-projectile
+   highlight-parentheses
+   hydra
+   json-mode
+   json-reformat
+   json-snatcher
+   lua-mode
+   markdown-mode
+   org-mode
+   origami
+   projectile
+   rainbow-mode
+   resize-window
+   s
+   smartparens
+   smex
+   swiper
+   systemtap-mode
+   tuareg-mode
+   undo-tree
+   use-package
+   vagrant-tramp
+   wgrep
+   which-key
+   xcscope
+   yaml-mode))
 
-;; 2016-09-14: Testing having recipes directly inline rather than in the above directory
-(setq
- el-get-sources
- (nconc
-  el-get-sources
-  '((:name ace-window
-     :description "Quickly switch windows using `avy'"
-     :type github
-     :pkgname "abo-abo/ace-window"
-     :checkout "77cc05f7284577ed396f292de0e7bb8ec561ea81"
-     :depends (avy))
+
+;; Base packages
+(require 'general)
+(require 'use-package)
+(require 'diminish)
+(require 'dash)
+(require 's)
+(require 'f)
 
-    (:name company-mode
-     :website "http://company-mode.github.io/"
-     :description "Modular in-buffer completion framework for Emacs"
-     :type github
-     :pkgname "company-mode/company-mode"
-     :checkout "c494fc65d35f7f00c2da17206e6550385ae9b300")
+
+;; el-get helpers: these depend on packages that el-get installs,
+;; therefore they can't be used to help bootstrap el-get in any way
+(defun cp/el-get-list-recipes-without-version-lock ()
+  "Return a list of el-get recipes that do not have :checkout in their property list"
+  (->>
+   (el-get-package-status-recipes)
+   ;; filter out el-get, we don't want to version lock it
+   (-filter (lambda (r) (not (equal (plist-get r :name) "el-get"))))
+   (-filter (lambda (r) (not (plist-member r :checkout))))))
 
-    (:name origami.el
-     :website "https://github.com/gregsexton/origami.el"
-     :description "A text folding minor mode for Emacs"
-     :type github
-     :pkgname "gregsexton/origami.el"
-     :checkout "5630536d04613476e13b413fe05fd0bbff4107ca"
-     :depends (dash s)))))
+(defun cp/el-get-list-package-names-without-version-lock ()
+  "Retrun a list of el-get package names that do not have :checkout in their property list"
+  (->>
+   (cp/el-get-list-recipes-without-version-lock)
+   (-map (lambda (r) (plist-get r :name)))))
 
-(let* ((sources (map 'list (lambda (plist) (plist-get plist :name)) el-get-sources))
-       (packages
-        '(avy
-          color-theme-zenburn
-          dash
-          diminish
-          elisp-slime-nav
-          evil
-          evil-smartparens
-          evil-surround
-          f
-          flycheck
-          general
-          haskell-mode
-          helm
-          helm-projectile
-          highlight-parentheses
-          hydra
-          json-mode
-          json-reformat
-          json-snatcher
-          lua-mode
-          markdown-mode
-          org-mode
-          projectile
-          rainbow-mode
-          resize-window
-          s
-          smartparens
-          smex
-          swiper
-          systemtap-mode
-          tuareg-mode
-          undo-tree
-          use-package
-          vagrant-tramp
-          wgrep
-          which-key
-          xcscope
-          yaml-mode
-          ))
-       (sources (append sources packages)))
-  (el-get 'sync sources))
+;; CR cperl: I think you might want to make this generic and just
+;; return the path no matter where it is found in 'el-get-recipe-path.
+;; But, you should be sure there is no function for this already.
+(defun cp/el-get-intersect-packages-with-dir (package-names dir)
+  "Return PACKAGE-NAME . file for each PACKAGE-NAME that has a recipe in DIR"
+  (when (f-exists? dir) 
+        (-reduce-from
+         (lambda (acc f)
+           (let* ((on-disk-sexp (el-get-read-from-file f))
+                  (package-name (plist-get on-disk-sexp :name)))
+             (if (memq package-name package-names)
+                 (add-to-list 'acc `(,package-name . ,f) t)
+                 acc)))
+         '()
+         (f-files dir))))
 
+(defun cp/el-get-annotate-package-names-with-checksums (package-names)
+  "Return PACKAGE-NAME . checksum for each PACKAGE-NAME"
+  (-map
+   (lambda (package-name)
+     (let* ((type (el-get-package-type package-name))
+            (compute-checksum (el-get-method type :compute-checksum))
+            (checksum (funcall compute-checksum package-name)))
+       `(,package-name . ,checksum)))
+   package-names))
+
+(defun cp/el-get-update-recipes-on-disk ()
+  )
+
+
+
 ;; 2014-04-26: Loading other stuff
 (add-to-list 'load-path (concat user-emacs-directory "lisp"))
+
 
 
 ;; Misc
@@ -251,14 +282,6 @@ Lisp function does not specify a special indentation."
   (which-function-mode))
 (add-hook 'c-mode-hook #'cp/c-mode-hook-setup)
 
-
-;; Base packages
-(require 'general)
-(require 'use-package)
-(require 'diminish)
-(require 'dash)
-(require 's)
-
 (setq cp/normal-prefix "SPC")
 (setq cp/non-normal-prefix "M-SPC")
 
@@ -353,18 +376,18 @@ Lisp function does not specify a special indentation."
 (use-package evil
   :diminish undo-tree-mode
   :general
-  (:states '(motion insert emacs)
+  (:keymaps '(motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w h" #'evil-window-left
    "w j" #'evil-window-down
    "w k" #'evil-window-up
    "w l" #'evil-window-right)
-  (:states '(visual)
+  (:keymaps '(visual)
    "/"   #'cp/evil-search-forward
    "?"   #'cp/evil-search-backward
    "TAB" #'indent-region)
-  (:states '(motion emacs)
+  (:keymaps '(motion emacs)
    "C-h" #'evil-window-left
    "C-j" #'evil-window-down
    "C-k" #'evil-window-up

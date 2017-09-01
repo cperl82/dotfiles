@@ -1,0 +1,7 @@
+(:name origami
+ :website "https://github.com/gregsexton/origami.el"
+ :description "A text folding minor mode for Emacs"
+ :type github
+ :pkgname "gregsexton/origami.el"
+ :checkout "5630536d04613476e13b413fe05fd0bbff4107ca"
+ :depends (dash s))
