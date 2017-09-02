@@ -41,7 +41,6 @@
    org-mode
    origami
    projectile
-   rainbow-mode
    resize-window
    s
    smartparens
