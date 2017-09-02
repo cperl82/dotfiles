@@ -69,31 +69,36 @@
 
 ;; el-get helpers: these depend on packages that el-get installs,
 ;; therefore they can't be used to help bootstrap el-get in any way
-(defun cp/el-get-list-recipes-without-version-lock ()
+(defun cp/el-get-list-recipes-without-hash ()
   "Return a list of installed recipes that do not have :checkout in their recipe"
-  (->>
-   (el-get-package-status-recipes)
-   ;; filter out el-get, we don't want to version lock it
-   (-filter (lambda (r) (not (equal (plist-get r :name) 'el-get))))
-   (-filter (lambda (r) (not (plist-member r :checkout))))))
+  (thread-last (el-get-package-status-recipes)
+    ;; filter out el-get, we don't want to version lock it
+    (seq-filter (lambda (r) (not (equal (plist-get r :name) 'el-get))))
+    ;; filter out recipes that are builtin to this version of emacs
+    (seq-filter (lambda (r)
+                  (if-let (builtin (plist-get r :builtin))
+                      (not (version<= builtin emacs-version))
+                    t)))
+    (seq-filter (lambda (r)
+                  (not
+                   (or
+                    (plist-member r :checkout)
+                    (plist-member r :checksum)))))))
 
-(defun cp/el-get-list-package-names-without-version-lock ()
+(defun cp/el-get-list-package-names-without-hash ()
   "Return a list of el-get package names that do not have :checkout in their property list"
-  (->>
-   (cp/el-get-list-recipes-without-version-lock)
-   (-map (lambda (r) (plist-get r :name)))))
+  (thread-last (cp/el-get-list-recipes-without-hash)
+    (seq-map (lambda (r) (plist-get r :name)))))
 
 (defun cp/el-get-annotate-package-names (package-names)
   "Return (PACKAGE-NAME checksum filename) for each PACKAGE-NAME"
-  (-map
+  (seq-map
    (lambda (package-name)
      (let* ((type (el-get-package-type package-name))
             (compute-checksum (el-get-method type :compute-checksum))
             (checksum (and compute-checksum (funcall compute-checksum package-name))))
        `(,package-name ,checksum ,(el-get-recipe-filename package-name))))
    package-names))
-
-(defun cp/el-get-update-recipes-on-disk ())
 
 
 
