@@ -20,17 +20,19 @@
    dash
    diminish
    elisp-slime-nav
+   emacs-request
    evil
    evil-smartparens
-   evil-surround
    f
    flycheck
    general
+   go-mode
    haskell-mode
    helm
    helm-projectile
    highlight-parentheses
    hydra
+   ios-config-mode
    json-mode
    json-reformat
    json-snatcher
@@ -45,6 +47,7 @@
    smartparens
    smex
    swiper
+   systemd-mode
    systemtap-mode
    tuareg-mode
    undo-tree
@@ -68,47 +71,30 @@
 ;; el-get helpers: these depend on packages that el-get installs,
 ;; therefore they can't be used to help bootstrap el-get in any way
 (defun cp/el-get-list-recipes-without-version-lock ()
-  "Return a list of el-get recipes that do not have :checkout in their property list"
+  "Return a list of installed recipes that do not have :checkout in their recipe"
   (->>
    (el-get-package-status-recipes)
    ;; filter out el-get, we don't want to version lock it
-   (-filter (lambda (r) (not (equal (plist-get r :name) "el-get"))))
+   (-filter (lambda (r) (not (equal (plist-get r :name) 'el-get))))
    (-filter (lambda (r) (not (plist-member r :checkout))))))
 
 (defun cp/el-get-list-package-names-without-version-lock ()
-  "Retrun a list of el-get package names that do not have :checkout in their property list"
+  "Return a list of el-get package names that do not have :checkout in their property list"
   (->>
    (cp/el-get-list-recipes-without-version-lock)
    (-map (lambda (r) (plist-get r :name)))))
 
-;; CR cperl: I think you might want to make this generic and just
-;; return the path no matter where it is found in 'el-get-recipe-path.
-;; But, you should be sure there is no function for this already.
-(defun cp/el-get-intersect-packages-with-dir (package-names dir)
-  "Return PACKAGE-NAME . file for each PACKAGE-NAME that has a recipe in DIR"
-  (when (f-exists? dir) 
-        (-reduce-from
-         (lambda (acc f)
-           (let* ((on-disk-sexp (el-get-read-from-file f))
-                  (package-name (plist-get on-disk-sexp :name)))
-             (if (memq package-name package-names)
-                 (add-to-list 'acc `(,package-name . ,f) t)
-                 acc)))
-         '()
-         (f-files dir))))
-
-(defun cp/el-get-annotate-package-names-with-checksums (package-names)
-  "Return PACKAGE-NAME . checksum for each PACKAGE-NAME"
+(defun cp/el-get-annotate-package-names (package-names)
+  "Return (PACKAGE-NAME checksum filename) for each PACKAGE-NAME"
   (-map
    (lambda (package-name)
      (let* ((type (el-get-package-type package-name))
             (compute-checksum (el-get-method type :compute-checksum))
-            (checksum (funcall compute-checksum package-name)))
-       `(,package-name . ,checksum)))
+            (checksum (and compute-checksum (funcall compute-checksum package-name))))
+       `(,package-name ,checksum ,(el-get-recipe-filename package-name))))
    package-names))
 
-(defun cp/el-get-update-recipes-on-disk ()
-  )
+(defun cp/el-get-update-recipes-on-disk ())
 
 
 
@@ -559,7 +545,7 @@ Lisp function does not specify a special indentation."
   :defer t
   :general
   (:keymaps '(dired-mode-map)
-   :states  '(motion)
+   :states  '(normal)
    "h"   #'dired-up-directory
    "j"   #'dired-next-line
    "k"   #'dired-previous-line

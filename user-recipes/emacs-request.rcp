@@ -1,0 +1,5 @@
+(:name emacs-request
+       :description "Request.el is a HTTP request library with multiple backends"
+       :type github
+       :checkout "a3d080e57eb8be606fbf39d1baff94e1b16e1fb8"
+       :pkgname "tkf/emacs-request")
