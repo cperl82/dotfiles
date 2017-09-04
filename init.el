@@ -1523,6 +1523,18 @@ The key is the todo keyword and the value is its relative position in the list."
 (unless window-system
   (setq linum-format 'cp/linum-format))
 
+
+
+; ios-config-mode
+(use-package ios-config-mode
+  :defer t
+  :commands ios-config-mode
+  :config
+  (zenburn-with-color-variables
+    (setq ios-config-command-face  `((t . (:foreground ,zenburn-cyan))))
+    (setq ios-config-ipadd-face    `((t . (:foreground ,zenburn-red))))
+    (setq ios-config-toplevel-face `((t . (:foreground ,zenburn-yellow))))))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
