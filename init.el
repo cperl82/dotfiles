@@ -1368,27 +1368,28 @@ The key is the todo keyword and the value is its relative position in the list."
 
 
 ; helm
-; 2015-09-11 Ripped wholesale from helm-buffers.el so I could control the formatting of dir
+(defun cp/maybe-projectile-project-to-feature (project-path project-name)
+  (if (string-match "^\\+.*\\+$" project-name)
+      (let ((components ()))
+        (f-traverse-upwards
+         (lambda (path)
+           (prog1 (f-exists? (f-expand "+clone+" path))
+             (add-to-list 'components (f-filename path))))
+         (f-dirname project-path))
+        (s-join "/" components))
+    project-name))
+
 (defun cp/advice/helm-buffer--show-details
     (orig-fun buf-name prefix help-echo size mode dir face1 face2 proc details type)
-  (if (projectile-project-p)
-      (let* ((regex (format "^.*\\(%s.*\\)$" (projectile-project-name)))
-             (dir (replace-regexp-in-string regex "\\1" dir)))
-        (append
-         (list
-          (concat prefix
-                  (propertize buf-name 'face face1
-                              'help-echo help-echo
-                              'type type)))
-         (and details
-              (list size mode
-                    (propertize
-                     (if proc
-                         (format "(%s %s in `%s')"
-                                 (process-name proc)
-                                 (process-status proc) dir)
-                       (format "%s" dir))
-                     'face face2)))))
+  (let ((dir
+         (or
+          ;; CR cperl: this is broken when just running `helm-buffers-list', as that might
+          ;; show you buffers from multiple projects, and you're not taking that info
+          ;; account
+          (if-let ((project-path (projectile-project-p))
+                   (project-name (projectile-project-name)))
+              (cp/maybe-projectile-project-to-feature project-path project-name))
+          dir)))
     (apply orig-fun buf-name prefix help-echo size mode dir face1 face2 proc details type ())))
 
 (use-package helm
@@ -1411,7 +1412,8 @@ The key is the todo keyword and the value is its relative position in the list."
   :config
   (progn
     (advice-add 'helm-buffer--show-details :around #'cp/advice/helm-buffer--show-details)
-    (setq helm-split-window-default-side 'right)))
+    (setq helm-split-window-default-side 'right)
+    (setq helm-buffer-max-length 40)))
 
 
 
@@ -1493,6 +1495,7 @@ The key is the todo keyword and the value is its relative position in the list."
   (progn
     (setq projectile-enable-caching t)
     (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
+    (projectile-mode)
 
     (use-package helm-projectile
       :init
