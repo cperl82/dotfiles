@@ -23,6 +23,7 @@
    emacs-request
    evil
    evil-smartparens
+   evil-surround
    f
    flycheck
    general
@@ -392,6 +393,14 @@ Lisp function does not specify a special indentation."
   (progn
     (evil-mode 1)
     (evil-select-search-module 'evil-search-module 'isearch)))
+
+
+
+;; evil-surround
+(use-package evil-surround
+  :config
+  (progn
+    (global-evil-surround-mode 1)))
 
 
 
@@ -1360,7 +1369,6 @@ The key is the todo keyword and the value is its relative position in the list."
          (define-and-bind-text-object "~" "\\~" "\\~")
          (define-and-bind-text-object "*" "\\*" "\\*")
          (define-and-bind-text-object "=" "\\=" "\\=")
-         (turn-on-evil-surround-mode)
          (add-hook 'write-contents-functions (lambda () (save-excursion (delete-trailing-whitespace)))))))
     (add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode 1)))
     (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))))

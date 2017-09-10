@@ -1,0 +1,9 @@
+(:name evil-surround
+ :website "http://github.com/timcharper/evil-surround"
+ :description "Emulate Tim Pope's surround.vim in evil, the extensible vim emulation layer for emacs"
+ :type github
+ :pkgname "timcharper/evil-surround"
+ :features evil-surround
+ :checkout "4e739e8ec8dea55465c47d71c6504a0fd3e21013"
+ :post-init (global-evil-surround-mode 1)
+ :depends evil)
