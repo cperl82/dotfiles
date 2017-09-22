@@ -957,39 +957,43 @@ Lisp function does not specify a special indentation."
                             (t (format "%d-" n))))))
       (message "escreen: active screens: %s" output))))
 
-(defun cp/escreen-ivy-screen-number-to-string (propertized with-buffer-names n)
+(defun cp/escreen-configuration-screen-numbers-and-names ()
+  (-map
+   (lambda (entry) `(,(nth 0 entry) . ,(nth 1 entry)))
+   escreen-configuration-alist))
+
+(defun cp/escreen-ivy-screen-number-to-datum (width n)
+  ;; CR-soon cperl: This could use some cleaning and rethinking of the interface
   (let* ((screen-data (escreen-configuration-escreen n))
          (name (escreen-configuration-screen-name screen-data))
          (n-windows (length (escreen-configuration-data-map screen-data)))
          (s
-          (if with-buffer-names
-              (format "%d:%s  (%s)" n name
-                      (->> screen-data
-                           (nth 3)
-                           (--map (nth 0 it))
-                           (--map (nth 1 it))
-                           (s-join " ")))
+          (if width
+              (let* ((screen-name (propertize (format "screen %2d" n) 'font-lock-face 'font-lock-type-face))
+                     (fmt (format "%s: %%%ds (%%d buffers)" screen-name width))
+                     (n-buffers (->> screen-data (nth 3) (--map (nth 0 it)) (--map (nth 1 it)) (length))))
+                (format fmt name n-buffers))
             (format "%d:%s" n name))))
-    (if propertized (propertize s 'screen-number n) s)))
+    `(,s . ,n)))
 
 (defun cp/escreen-ivy-collection ()
-  (let ((current (escreen-get-current-screen-number)))
-    (-map
-     (-partial #'cp/escreen-ivy-screen-number-to-string t t)
-     (-filter
-      (lambda (n) (not (equal current n)))
-      (escreen-configuration-screen-numbers)))))
+  (let* ((current (escreen-get-current-screen-number))
+         (numbers-and-names (cp/escreen-configuration-screen-numbers-and-names))
+         (width (-reduce-from (lambda (a b) (max a (length (cdr b)))) 0 numbers-and-names)))
+    (->>
+     (-map 'car numbers-and-names)
+     (-filter (lambda (n) (not (equal n current))))
+     (-map (lambda (n) (cp/escreen-ivy-screen-number-to-datum width n))))))
 
 (defun cp/escreen-ivy-action (selected)
-  (let ((screen-number (get-text-property 0 'screen-number selected)))
-   (escreen-goto-screen screen-number)
-    (cp/escreen-get-active-screen-names-with-emphasis)))
+  (escreen-goto-screen (cdr selected))
+  (cp/escreen-get-active-screen-names-with-emphasis))
 
 (defun cp/escreen-switch-to-screen-with-ivy-completion ()
   (interactive)
   (let ((collection (cp/escreen-ivy-collection)))
     (if (> (length collection) 0)
-        (let* ((current (cp/escreen-ivy-screen-number-to-string nil nil (escreen-get-current-screen-number)))
+        (let* ((current (car (cp/escreen-ivy-screen-number-to-datum nil (escreen-get-current-screen-number))))
                (prompt (format "switch to escreen [%s]:" current)))
           (ivy-read prompt collection
                     :require-match t
@@ -1376,27 +1380,28 @@ The key is the todo keyword and the value is its relative position in the list."
 
 
 ; helm
-(defun cp/maybe-projectile-project-to-feature (project-path project-name)
-  (if (string-match "^\\+.*\\+$" project-name)
-      (let ((components ()))
-        (f-traverse-upwards
-         (lambda (path)
-           (prog1 (f-exists? (f-expand "+clone+" path))
-             (add-to-list 'components (f-filename path))))
-         (f-dirname project-path))
-        (s-join "/" components))
-    project-name))
+(defun cp/maybe-projectile-project-to-feature (dir project-path project-name)
+  (let ((name
+         (if (string-match "^\\+.*\\+$" project-name)
+             (let ((components ()))
+               (f-traverse-upwards
+                (lambda (path)
+                  (prog1 (f-exists? (f-expand "+clone+" path))
+                    (add-to-list 'components (f-filename path))))
+                project-path)
+               (s-join "/" components))
+           project-name))
+        (project-path (s-chop-suffix "/" project-path))
+        (expanded-dir (s-chop-suffix "/" (expand-file-name dir))))
+    (s-replace project-path name expanded-dir)))
 
 (defun cp/advice/helm-buffer--show-details
     (orig-fun buf-name prefix help-echo size mode dir face1 face2 proc details type)
   (let ((dir
          (or
-          ;; CR cperl: this is broken when just running `helm-buffers-list', as that might
-          ;; show you buffers from multiple projects, and you're not taking that info
-          ;; account
-          (if-let ((project-path (projectile-project-p))
+          (if-let ((project-path (projectile-root-bottom-up dir))
                    (project-name (projectile-project-name)))
-              (cp/maybe-projectile-project-to-feature project-path project-name))
+              (cp/maybe-projectile-project-to-feature dir project-path project-name))
           dir)))
     (apply orig-fun buf-name prefix help-echo size mode dir face1 face2 proc details type ())))
 
