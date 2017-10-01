@@ -412,6 +412,10 @@ Lisp function does not specify a special indentation."
   ;; it, the edebug map doesn't get its proper position as an "intercept" map,
   ;; which makes edebug really annoying to use
   (add-hook 'edebug-mode-hook #'evil-normalize-keymaps))
+
+
+
+;; company-mode
 (use-package company-mode
   :defer t
   :general
@@ -1219,6 +1223,69 @@ The key is the todo keyword and the value is its relative position in the list."
   ;; there may be a better way to do this, but for now its refolds things the way I want after sorting
   (funcall (general-simulate-keys "TAB TAB")))
 
+(defmacro cp/generate-username-tag-agenda-cmds (letter desc tags)
+  (let* ((tags-cmds
+          (-map
+           (lambda (tag)
+             `(tags-todo ,(format "+%s+TODO={.*}" tag)
+                    ((org-agenda-overriding-header ,tag)
+                     (org-agenda-sorting-strategy '(tsia-up)))))
+           tags))
+         (forms
+          `(,letter
+            ,desc
+            ,tags-cmds)))
+    `(quote ,forms)))
+
+(defmacro cp/generate-category-agenda-cmds (letter desc categories include days-out)
+  "Generate a set of commands for org-agenda-custom-commands.
+
+Generate a form that looks like (key desc (cmd1 cmd2 ...)
+general-settings-for-whole-set) where cmd1 is an agenda command, cmd2
+though cmd5 are tags-todo searches and all of them are restricted to
+just the categories that we've been passed.  Whether or not we're
+including those categories, or excluding those categories is
+controlled by `include'."
+  (let* ((include-exclude (if include "+" "-"))
+         (category-regex (s-join "\\|" categories))
+         (todo-keywords '("NEXT" "WAIT" "DPND" "DFER"))
+         (fmt1
+          (apply-partially
+           #'format
+           "%sCATEGORY={%s}-DEADLINE={.+}/%s" include-exclude category-regex))
+         (fmt2
+          (apply-partially
+           #'format
+           "%sCATEGORY={%s}+DEADLINE>\"<+%dd>\"/%s" include-exclude category-regex))
+         (tags-todo-cmds
+          (-map
+           (lambda (todo)
+             `((tags-todo
+                ,(funcall fmt1 todo)
+                ((org-agenda-overriding-header
+                  ,(format "%s No deadline" todo))))
+               (tags-todo
+                ,(funcall fmt2 days-out todo)
+                ((org-agenda-overriding-header
+                  ,(format
+                    "%s Deadline farther than %d days out"
+                    todo
+                    days-out))))))
+           todo-keywords))
+         (tags-todo-cmds (-flatten-n 1 tags-todo-cmds))
+         (preset
+          (-map
+           (lambda (category) (s-concat include-exclude category))
+           categories))
+         (forms
+          `(,letter
+            ,desc
+            ,(cons
+              `(agenda "" ((org-agenda-span ,days-out)))
+              tags-todo-cmds)
+            ((org-agenda-category-filter-preset (quote ,preset))))))
+    `(quote ,forms)))
+
 (use-package org
   :defer t
   :general
@@ -1283,52 +1350,13 @@ The key is the todo keyword and the value is its relative position in the list."
     (setq org-agenda-files '("~/org"))
     (setq org-agenda-tags-column -90)
     (setq org-agenda-custom-commands
-          `(("r" "Read/Review                 "
-             ((tags-todo "read/NEXT"
-                         ((org-agenda-overriding-header "NEXT ACTIONS, Read/Review")
-                          (org-agenda-sorting-strategy '(tsia-up))))))
-            ("d" "Deferred (with reminder)    "
-             ((tags-todo "DEADLINE={.+}/DFER"
-                         ((org-agenda-overriding-header "DEFERRED, with reminder")
-                          (org-agenda-sorting-strategy '(tsia-up))))))
-            ("D" "Deferred (without reminder) "
-             ((tags-todo "-DEADLINE={.+}/DFER"
-                         ((org-agenda-overriding-header "DEFERRED, without reminder")
-                          (org-agenda-sorting-strategy '(tsia-up))))))
-            ("n" . "Next actions")
-            ("na" "NEXT action (all)          "
-             ((tags-todo "/NEXT"
-                         ((org-agenda-overriding-header "NEXT ACTIONS, ALL")
-                          (org-agenda-sorting-strategy '(tsia-up))))))
-            ("nt" "NEXT action by tag         "
-             ((tags-todo ""
-                         ((org-agenda-overriding-header "NEXT ACTIONS")
-                          (org-agenda-sorting-strategy '(tsia-up))
-                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))
-            ("w" . "Waiting for")
-            ("wa" "WAIT for (all)             "
-             ((tags-todo "/WAIT"
-                         ((org-agenda-overriding-header "WAITING FOR (all))")
-                          (org-agenda-sorting-strategy '(tsia-up))))))
-            ("wt" "WAIT for by tag            "
-             ((tags-todo ""
-                         ((org-agenda-overriding-header "WAITING FOR by tag")
-                          (org-agenda-sorting-strategy '(tsia-up))
-                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("WAIT")))))))
-            ("x" . "Stuck")
-            ("xn" "NEXT action, no deadline   "
-             ((tags-todo "-DEADLINE={.+}/NEXT"
-                         ((org-agenda-overriding-header "NEXT action, no deadline")
-                          (org-agenda-sorting-strategy '(tsia-up))))))
-            ("xw" "WAIT for, no deadline      "
-             ((tags-todo "-DEADLINE={.+}/WAIT"
-                         ((org-agenda-overriding-header "WAIT for, no deadline")
-                          (org-agenda-sorting-strategy '(tsia-up))))))
-            ("u" "Untagged next actions       "
-             ((tags-todo "-{.*}"
-                         ((org-agenda-overriding-header "NEXT ACTIONS, no context")
-                          (org-agenda-sorting-strategy '(tsia-up))
-                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("NEXT")))))))))
+          `(,(cp/generate-category-agenda-cmds
+              "c" "Captured" ("capture") t 7)
+            ,(cp/generate-category-agenda-cmds
+              "h" "House" ("house") t 7)
+            ,(cp/generate-category-agenda-cmds
+              "e" "Everything else" ("capture" "house") nil 7)
+            ,(cp/generate-username-tag-agenda-cmds "p" "By person" ("@amy" "@avery"))))
     (setq org-agenda-sorting-strategy '(todo-state-up deadline-up tsia-up))
     (setq org-capture-templates
           '(("n" "Next Action" entry
