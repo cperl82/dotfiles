@@ -1256,27 +1256,20 @@ controlled by `include'."
          (fmt1
           (apply-partially
            #'format
-           "%sCATEGORY={%s}-DEADLINE={.+}/%s" include-exclude category-regex))
-         (fmt2
-          (apply-partially
-           #'format
-           "%sCATEGORY={%s}+DEADLINE>\"<+%dd>\"/%s" include-exclude category-regex))
+           "%sCATEGORY={%s}-DEADLINE={.+}|%sCATEGORY={%s}+DEADLINE>\"<+%dd>\"/%s"
+           include-exclude category-regex include-exclude category-regex))
          (tags-todo-cmds
           (-map
            (lambda (todo)
-             `((tags-todo
-                ,(funcall fmt1 todo)
-                ((org-agenda-overriding-header
-                  ,(format "%s No deadline" todo))))
-               (tags-todo
-                ,(funcall fmt2 days-out todo)
-                ((org-agenda-overriding-header
-                  ,(format
-                    "%s Deadline farther than %d days out"
-                    todo
-                    days-out))))))
+             `(tags-todo
+              ,(funcall fmt1 days-out todo)
+              ((org-agenda-overriding-header
+                ,(format
+                  "%s No deadline or deadline farther than %d days out"
+                  todo
+                  days-out))
+               (org-agenda-sorting-strategy '(deadline-down tsia-down)))))
            todo-keywords))
-         (tags-todo-cmds (-flatten-n 1 tags-todo-cmds))
          (preset
           (-map
            (lambda (category) (s-concat include-exclude category))
