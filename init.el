@@ -1251,7 +1251,7 @@ just the categories that we've been passed.  Whether or not we're
 including those categories, or excluding those categories is
 controlled by `include'."
   (let* ((include-exclude (if include "+" "-"))
-         (category-regex (s-join "\\|" categories))
+         (category-regex (s-join "\|" categories))
          (todo-keywords '("NEXT" "WAIT" "DPND" "DFER"))
          (fmt1
           (apply-partially
