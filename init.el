@@ -1227,21 +1227,29 @@ The key is the todo keyword and the value is its relative position in the list."
   ;; there may be a better way to do this, but for now its refolds things the way I want after sorting
   (funcall (general-simulate-keys "TAB TAB")))
 
-(defmacro cp/generate-username-tag-agenda-cmds (letter desc tags)
-  (let* ((tags-cmds
-          (-map
-           (lambda (tag)
-             `(tags-todo ,(format "+%s+TODO={.*}" tag)
-                    ((org-agenda-overriding-header ,tag)
-                     (org-agenda-sorting-strategy '(tsia-up)))))
-           tags))
+;; https://lists.gnu.org/archive/html/emacs-orgmode/2010-12/msg00410.html
+(defun cp/org-right-align-agenda-tags ()
+  "Put the agenda tags by the right border of the agenda window."
+  (setq org-agenda-tags-column (- 4 (window-width)))
+    (org-agenda-align-tags))
+
+(defmacro cp/generate-username-tag-agenda-cmds (letter desc tags &optional options)
+  (let* ((options (or options ()))
+         (search-string (s-join "|" (-map (lambda (tag) (format "+%s" tag) )tags) ))
+         (header (s-join " " tags))
+         (tags-cmd
+          `(tags-todo
+            ,search-string
+            ((org-agenda-overriding-header ,header)
+             (org-agenda-sorting-strategy '(tag-up tsia-up))
+             ,@options)))
          (forms
           `(,letter
             ,desc
-            ,tags-cmds)))
+            (,tags-cmd))))
     `(quote ,forms)))
 
-(defmacro cp/generate-category-agenda-cmds (letter desc categories include days-out)
+(defmacro cp/generate-category-agenda-cmds (letter desc categories include days-out &optional options)
   "Generate a set of commands for org-agenda-custom-commands.
 
 Generate a form that looks like (key desc (cmd1 cmd2 ...)
@@ -1250,7 +1258,8 @@ though cmd5 are tags-todo searches and all of them are restricted to
 just the categories that we've been passed.  Whether or not we're
 including those categories, or excluding those categories is
 controlled by `include'."
-  (let* ((include-exclude (if include "+" "-"))
+  (let* ((options (or options ()))
+         (include-exclude (if include "+" "-"))
          (category-regex (s-join "\|" categories))
          (todo-keywords '("NEXT" "WAIT" "DPND" "DFER"))
          (fmt1
@@ -1280,7 +1289,8 @@ controlled by `include'."
             ,(cons
               `(agenda "" ((org-agenda-span ,days-out)))
               tags-todo-cmds)
-            ((org-agenda-category-filter-preset (quote ,preset))))))
+            ((org-agenda-category-filter-preset (quote ,preset))
+             ,@options))))
     `(quote ,forms)))
 
 (use-package org
@@ -1395,6 +1405,7 @@ controlled by `include'."
          (define-and-bind-text-object "*" "\\*" "\\*")
          (define-and-bind-text-object "=" "\\=" "\\=")
          (add-hook 'write-contents-functions (lambda () (save-excursion (delete-trailing-whitespace)))))))
+    (add-hook 'org-finalize-agenda-hook #'cp/org-right-align-agenda-tags)
     (add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode 1)))
     (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))))
 
