@@ -1233,22 +1233,6 @@ The key is the todo keyword and the value is its relative position in the list."
   (setq org-agenda-tags-column (- 4 (window-width)))
     (org-agenda-align-tags))
 
-(defmacro cp/generate-username-tag-agenda-cmds (letter desc tags &optional options)
-  (let* ((options (or options ()))
-         (search-string (s-join "|" (-map (lambda (tag) (format "+%s" tag) )tags) ))
-         (header (s-join " " tags))
-         (tags-cmd
-          `(tags-todo
-            ,search-string
-            ((org-agenda-overriding-header ,header)
-             (org-agenda-sorting-strategy '(tag-up todo-state-up tsia-up))
-             ,@options)))
-         (forms
-          `(,letter
-            ,desc
-            (,tags-cmd))))
-    `(quote ,forms)))
-
 (defmacro cp/generate-category-agenda-cmds (letter desc categories include days-out &optional options)
   "Generate a set of commands for org-agenda-custom-commands.
 
@@ -1357,13 +1341,17 @@ controlled by `include'."
     (setq org-agenda-files '("~/org"))
     (setq org-agenda-tags-column -90)
     (setq org-agenda-custom-commands
-          `(,(cp/generate-category-agenda-cmds
-              "c" "Captured" ("capture") t 7)
-            ,(cp/generate-category-agenda-cmds
-              "h" "House" ("house") t 7)
-            ,(cp/generate-category-agenda-cmds
-              "e" "Everything else" ("capture" "house") nil 7)
-            ,(cp/generate-username-tag-agenda-cmds "p" "By person" ("@amy" "@avery"))))
+          `(,(cp/generate-category-agenda-cmds "c" "Captured" ("capture") t 7)
+
+            ,(cp/generate-category-agenda-cmds "h" "House" ("house") t 7)
+
+            ,(cp/generate-category-agenda-cmds "e" "Everything else" ("capture" "house") nil 7)
+
+            ("p" "By person"
+             ((tags-todo
+               "+{^@.*}"
+               ((org-agenda-overriding-header "All TODOs tagged with a person (Any tag starting with @)")
+                (org-agenda-sorting-strategy '(tag-up todo-state-up ts-up tsia-up))))))))
     (setq org-agenda-sorting-strategy '(todo-state-up deadline-up tsia-up))
     (setq org-capture-templates
           '(("n" "Next Action" entry
@@ -1592,6 +1580,7 @@ controlled by `include'."
  '(custom-safe-themes
    (quote
     ("4528fb576178303ee89888e8126449341d463001cb38abe0015541eb798d8a23" default)))
+ '(org-agenda-files (quote ("/tmp/bar.org" "/tmp/foo.org")))
  '(package-selected-packages (quote (rainbow-mode let-alist))))
 
 (custom-set-faces
