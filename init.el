@@ -1241,7 +1241,7 @@ The key is the todo keyword and the value is its relative position in the list."
           `(tags-todo
             ,search-string
             ((org-agenda-overriding-header ,header)
-             (org-agenda-sorting-strategy '(tag-up tsia-up))
+             (org-agenda-sorting-strategy '(tag-up todo-state-up tsia-up))
              ,@options)))
          (forms
           `(,letter
