@@ -1365,9 +1365,15 @@ controlled by `include'."
     (setq org-refile-use-outline-path 'file)
     (setq org-outline-path-complete-in-steps nil)
     (setq org-hide-block-startup t)
-    (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
+    (setq org-refile-targets '((org-agenda-files . (:maxlevel . 5))))
     (setq org-agenda-skip-scheduled-if-done t)
     (setq org-agenda-skip-deadline-if-done t)
+    (setq org-agenda-deadline-leaders
+          '("Deadline due:    "
+            "%4d d. from now:"
+            "%4d d. ago:     "))
+    (setq org-agenda-window-setup 'current-window)
+    (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-catch-invisible-edits 'error)
     (setq org-ctrl-k-protect-subtree t)
     (setq org-cycle-include-plain-lists 'integrate)
@@ -1580,7 +1586,7 @@ controlled by `include'."
  '(custom-safe-themes
    (quote
     ("4528fb576178303ee89888e8126449341d463001cb38abe0015541eb798d8a23" default)))
- '(org-agenda-files (quote ("/tmp/bar.org" "/tmp/foo.org")))
+ '(org-agenda-files (quote ("/tmp/a.org")))
  '(package-selected-packages (quote (rainbow-mode let-alist))))
 
 (custom-set-faces
