@@ -1249,19 +1249,20 @@ controlled by `include'."
          (fmt1
           (apply-partially
            #'format
-           "%sCATEGORY={%s}-DEADLINE={.+}|%sCATEGORY={%s}+DEADLINE>\"<+%dd>\"/%s"
-           include-exclude category-regex include-exclude category-regex))
+           "-DEADLINE={.+}&%sCATEGORY={%s}|+DEADLINE>\"<+%dd>\"&%sCATEGORY={%s}/%s"
+           include-exclude category-regex days-out include-exclude category-regex))
          (tags-todo-cmds
           (-map
            (lambda (todo)
              `(tags-todo
-              ,(funcall fmt1 days-out todo)
+              ,(funcall fmt1 todo)
               ((org-agenda-overriding-header
                 ,(format
                   "%s No deadline or deadline farther than %d days out"
                   todo
                   days-out))
-               (org-agenda-sorting-strategy '(deadline-down tsia-down)))))
+               (org-agenda-sorting-strategy '(deadline-down tsia-down))
+               (org-deadline-warning-days ,days-out))))
            todo-keywords))
          (preset
           (-map
