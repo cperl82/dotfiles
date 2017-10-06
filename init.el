@@ -269,8 +269,7 @@ Lisp function does not specify a special indentation."
 
 ;; 2017-08-17 cperl: misc stuff
 (defun cp/c-mode-hook-setup ()
-  (hs-minor-mode)
-  (which-function-mode))
+  (hs-minor-mode))
 (add-hook 'c-mode-hook #'cp/c-mode-hook-setup)
 
 (setq cp/normal-prefix "SPC")
@@ -1261,8 +1260,7 @@ controlled by `include'."
                   "%s No deadline or deadline farther than %d days out"
                   todo
                   days-out))
-               (org-agenda-sorting-strategy '(deadline-down tsia-down))
-               (org-deadline-warning-days ,days-out))))
+               (org-agenda-sorting-strategy '(deadline-up tsia-up)))))
            todo-keywords))
          (preset
           (-map
@@ -1272,7 +1270,10 @@ controlled by `include'."
           `(,letter
             ,desc
             ,(cons
-              `(agenda "" ((org-agenda-span ,days-out)))
+              `(agenda ""
+                       ((org-agenda-span ,days-out)
+                        (org-deadline-warning-days ,days-out)
+                        (org-agenda-sorting-strategy '(time-up deadline-up tsia-up))))
               tags-todo-cmds)
             ((org-agenda-category-filter-preset (quote ,preset))
              ,@options))))
@@ -1375,6 +1376,7 @@ controlled by `include'."
             "%4d d. ago:     "))
     (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-format-date "%a %Y-%m-%d")
+    (setq org-agenda-sticky t)
     (setq org-catch-invisible-edits 'error)
     (setq org-ctrl-k-protect-subtree t)
     (setq org-cycle-include-plain-lists 'integrate)
@@ -1402,7 +1404,8 @@ controlled by `include'."
          (add-hook 'write-contents-functions (lambda () (save-excursion (delete-trailing-whitespace)))))))
     (add-hook 'org-finalize-agenda-hook #'cp/org-right-align-agenda-tags)
     (add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode 1)))
-    (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))))
+    (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))
+    (remove-hook 'org-mode-hook 'org-eldoc-load)))
 
 
 
