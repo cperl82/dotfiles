@@ -986,6 +986,7 @@ Lisp function does not specify a special indentation."
     (->>
      (-map 'car numbers-and-names)
      (-filter (lambda (n) (not (equal n current))))
+     (-sort '<)
      (-map (lambda (n) (cp/escreen-ivy-screen-number-to-datum width n))))))
 
 (defun cp/escreen-ivy-action (selected)
