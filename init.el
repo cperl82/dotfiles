@@ -1378,6 +1378,7 @@ controlled by `include'."
     (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-agenda-sticky t)
+    (setq org-refile-use-cache t)
     (setq org-catch-invisible-edits 'error)
     (setq org-ctrl-k-protect-subtree t)
     (setq org-cycle-include-plain-lists 'integrate)
