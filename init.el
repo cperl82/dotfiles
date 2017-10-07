@@ -1321,6 +1321,8 @@ controlled by `include'."
    "k"       #'org-agenda-previous-line
    "h"       #'left-char
    "l"       #'right-char
+   "G"       #'evil-goto-line
+   "gg"      #'evil-goto-first-line
    "C-c a"   #'org-agenda
    "C-c c"   #'org-capture)
   :config
@@ -1592,7 +1594,6 @@ controlled by `include'."
  '(custom-safe-themes
    (quote
     ("4528fb576178303ee89888e8126449341d463001cb38abe0015541eb798d8a23" default)))
- '(org-agenda-files (quote ("/tmp/a.org")))
  '(package-selected-packages (quote (rainbow-mode let-alist))))
 
 (custom-set-faces
