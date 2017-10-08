@@ -1263,10 +1263,11 @@ controlled by `include'."
                   days-out))
                (org-agenda-sorting-strategy '(deadline-up tsia-up)))))
            todo-keywords))
-         (preset
+         (category-filter
           (-map
            (lambda (category) (s-concat include-exclude category))
            categories))
+         (agenda-header (format-time-string "Week-agenda (W%W) (generated %Y-%m-%d %H:%M:%S)"))
          (forms
           `(,letter
             ,desc
@@ -1274,9 +1275,10 @@ controlled by `include'."
               `(agenda ""
                        ((org-agenda-span ,days-out)
                         (org-deadline-warning-days ,days-out)
+                        (org-agenda-overriding-header ,agenda-header)
                         (org-agenda-sorting-strategy '(time-up deadline-up tsia-up))))
               tags-todo-cmds)
-            ((org-agenda-category-filter (quote ,preset))
+            ((org-agenda-category-filter (quote ,category-filter))
              ,@options))))
     `(quote ,forms)))
 
