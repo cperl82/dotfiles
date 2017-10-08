@@ -1267,7 +1267,9 @@ controlled by `include'."
           (-map
            (lambda (category) (s-concat include-exclude category))
            categories))
-         (agenda-header (format-time-string "Week-agenda (W%W) (generated %Y-%m-%d %H:%M:%S)"))
+         (agenda-header-fmt
+          (format "Agenda for the next %dd (W%%W) (generated %%Y-%%m-%%d %%H:%%M:%%S)" days-out))
+         (agenda-header (format-time-string agenda-header-fmt))
          (forms
           `(,letter
             ,desc
