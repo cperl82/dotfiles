@@ -1280,6 +1280,10 @@ controlled by `include'."
                         (org-agenda-overriding-header ,agenda-header)
                         (org-agenda-sorting-strategy '(time-up deadline-up tsia-up))))
               tags-todo-cmds)
+            ; CR-cperl: It would be nice to use org-agenda-category-filter-preset here,
+            ; but it has issues when using sticky agenda and generating multiple agendas
+            ; and the filter seems to be global and pressing "r" doesn't set it back to
+            ; this value
             ((org-agenda-category-filter (quote ,category-filter))
              ,@options))))
     `(quote ,forms)))
