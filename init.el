@@ -1276,7 +1276,7 @@ controlled by `include'."
                         (org-deadline-warning-days ,days-out)
                         (org-agenda-sorting-strategy '(time-up deadline-up tsia-up))))
               tags-todo-cmds)
-            ((org-agenda-category-filter-preset (quote ,preset))
+            ((org-agenda-category-filter (quote ,preset))
              ,@options))))
     `(quote ,forms)))
 
