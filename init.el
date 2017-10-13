@@ -1249,6 +1249,7 @@ controlled by `include'."
          (fmt1
           (apply-partially
            #'format
+           ;; CR cperl: Make this work for SCHEDULED stuff too
            "-DEADLINE={.+}&%sCATEGORY={%s}|+DEADLINE>\"<+%dd>\"&%sCATEGORY={%s}/%s"
            include-exclude category-regex days-out include-exclude category-regex))
          (tags-todo-cmds
@@ -1269,7 +1270,7 @@ controlled by `include'."
            categories))
          (agenda-header-fmt
           (format "Agenda for the next %dd (W%%W) (generated %%Y-%%m-%%d %%H:%%M:%%S)" days-out))
-         (agenda-header (format-time-string agenda-header-fmt))
+         (agenda-header `(format-time-string ,agenda-header-fmt))
          (forms
           `(,letter
             ,desc
@@ -1280,7 +1281,7 @@ controlled by `include'."
                         (org-agenda-overriding-header ,agenda-header)
                         (org-agenda-sorting-strategy '(time-up deadline-up tsia-up))))
               tags-todo-cmds)
-            ; CR-cperl: It would be nice to use org-agenda-category-filter-preset here,
+            ; CR cperl: It would be nice to use org-agenda-category-filter-preset here,
             ; but it has issues when using sticky agenda and generating multiple agendas
             ; and the filter seems to be global and pressing "r" doesn't set it back to
             ; this value
