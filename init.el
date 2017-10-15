@@ -1246,20 +1246,27 @@ controlled by `include'."
          (include-exclude (if include "+" "-"))
          (category-regex (s-join "\|" categories))
          (todo-keywords '("NEXT" "WAIT" "DPND" "DFER"))
-         (fmt1
+         (search-string-fmt
           (apply-partially
            #'format
-           ;; CR cperl: Make this work for SCHEDULED stuff too
-           "-DEADLINE={.+}&%sCATEGORY={%s}|+DEADLINE>\"<+%dd>\"&%sCATEGORY={%s}/%s"
-           include-exclude category-regex days-out include-exclude category-regex))
+           (s-concat
+            (s-join
+             "|"
+             '("-DEADLINE={.+}&-SCHEDULED={.+}&%sCATEGORY={%s}"
+               "+DEADLINE>\"<+%dd>\"&%sCATEGORY={%s}"
+               "+SCHEDULED>\"<+%dd>\"&%sCATEGORY={%s}"))
+            "/%s")
+           include-exclude category-regex
+           days-out include-exclude category-regex
+           days-out include-exclude category-regex))
          (tags-todo-cmds
           (-map
            (lambda (todo)
              `(tags-todo
-              ,(funcall fmt1 todo)
+              ,(funcall search-string-fmt todo)
               ((org-agenda-overriding-header
                 ,(format
-                  "%s No deadline or deadline farther than %d days out"
+                  "%s No deadline, not scheduled, or deadline/scheduled is farther than %d days out"
                   todo
                   days-out))
                (org-agenda-sorting-strategy '(deadline-up tsia-up)))))
