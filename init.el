@@ -1390,9 +1390,8 @@ controlled by `include'."
     (setq org-refile-targets '((org-agenda-files . (:maxlevel . 5))))
     (setq org-agenda-skip-scheduled-if-done t)
     (setq org-agenda-skip-deadline-if-done t)
-    (setq org-agenda-scheduled-leaders
-          '("   Scheduled:"
-            " Sched.%4dx:"))
+    (setq org-agenda-block-separator ?-)
+    (setq org-agenda-scheduled-leaders '("   Scheduled:" "  Sched %3dx:"))
     (setq org-agenda-deadline-leaders
           '("Deadline due:"
             "     In %3dd:"
