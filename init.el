@@ -1246,6 +1246,7 @@ controlled by `include'."
          (include-exclude (if include "+" "-"))
          (category-regex (s-join "\|" categories))
          (todo-keywords '("NEXT" "WAIT" "DPND" "DFER"))
+         (scheduled-or-deadline-days-out (1- days-out))
          (search-string-fmt
           (apply-partially
            #'format
@@ -1253,12 +1254,12 @@ controlled by `include'."
             (s-join
              "|"
              '("-DEADLINE={.+}&-SCHEDULED={.+}&%sCATEGORY={%s}"
-               "+DEADLINE>\"<+%dd>\"&%sCATEGORY={%s}"
-               "+SCHEDULED>\"<+%dd>\"&%sCATEGORY={%s}"))
+               "+DEADLINE>=\"<+%dd>\"&%sCATEGORY={%s}"
+               "+SCHEDULED>=\"<+%dd>\"&%sCATEGORY={%s}"))
             "/%s")
            include-exclude category-regex
-           days-out include-exclude category-regex
-           days-out include-exclude category-regex))
+           scheduled-or-deadline-days-out include-exclude category-regex
+           scheduled-or-deadline-days-out include-exclude category-regex))
          (tags-todo-cmds
           (-map
            (lambda (todo)
@@ -1266,7 +1267,7 @@ controlled by `include'."
               ,(funcall search-string-fmt todo)
               ((org-agenda-overriding-header
                 ,(format
-                  "%s No deadline, not scheduled, or deadline/scheduled is farther than %d days out"
+                  "%s No deadline, not scheduled, or deadline/scheduled is %d days out or more"
                   todo
                   days-out))
                (org-agenda-sorting-strategy '(deadline-up tsia-up)))))
@@ -1389,10 +1390,13 @@ controlled by `include'."
     (setq org-refile-targets '((org-agenda-files . (:maxlevel . 5))))
     (setq org-agenda-skip-scheduled-if-done t)
     (setq org-agenda-skip-deadline-if-done t)
+    (setq org-agenda-scheduled-leaders
+          '("   Scheduled:"
+            " Sched.%4dx:"))
     (setq org-agenda-deadline-leaders
-          '("Deadline due:    "
-            "%4d d. from now:"
-            "%4d d. ago:     "))
+          '("Deadline due:"
+            "     In %3dd:"
+            "   %4dd ago:"))
     (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-agenda-sticky t)
