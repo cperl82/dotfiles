@@ -1297,6 +1297,17 @@ controlled by `include'."
              ,@options))))
     `(quote ,forms)))
 
+(defun cp/org-agenda-to-appt ()
+  (interactive)
+  (setq appt-time-msg-list nil)
+  (org-agenda-to-appt))
+
+(defun cp/org-appt-disp-window (min-to-app new-time msg)
+  ;; Add code here to encode the logic of displaying the appt notification.
+  ;; You have to test whether `min-to-app' is a list or an atom, which can be done with `atom'
+  ;; You'll need to think about how you want to override behavior for your various use cases
+  t)
+
 (use-package org
   :defer t
   :general
@@ -1348,6 +1359,21 @@ controlled by `include'."
       :config
       (progn
         (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)))
+    (use-package org-habit
+      :config
+      (progn
+        (setq org-habit-today-glyph ?t)
+        (setq org-habit-completed-glyph ?d)))
+    (use-package appt
+      :config
+      (progn
+        (appt-activate t)
+        (setq appt-message-warning-time 15)
+        (setq appt-display-interval appt-message-warning-time)
+        (setq appt-display-mode-line nil)
+        ;; Add code here to automatically run `cp/org-agenda-to-appt' at certain times
+        (setq appt-disp-window-function #'cp/org-appt-disp-window)
+        (setq appt-delete-window-function (lambda () t))))
     (use-package org-depend)
     (use-package org-man)
     (setq org-tags-column -90)
@@ -1392,10 +1418,7 @@ controlled by `include'."
     (setq org-agenda-skip-deadline-if-done t)
     (setq org-agenda-block-separator ?-)
     (setq org-agenda-scheduled-leaders '("   Scheduled:" "  Sched %3dx:"))
-    (setq org-agenda-deadline-leaders
-          '("Deadline due:"
-            "     In %3dd:"
-            "   %4dd ago:"))
+    (setq org-agenda-deadline-leaders '("Deadline due:" "     In %3dd:" "   %4dd ago:"))
     (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-agenda-sticky t)
