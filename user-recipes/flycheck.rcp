@@ -1,7 +1,7 @@
 (:name flycheck
        :type github
        :pkgname "flycheck/flycheck"
-       :checkout "24534988d115754cda5f19943d2b4075e2b5c581"
+       :checkout "d2b3c321d49c887f23b2342766846aee3f073c49"
        :minimum-emacs-version "24.3"
        :description "On-the-fly syntax checking extension"
        :depends (dash pkg-info let-alist seq))

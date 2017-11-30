@@ -3,4 +3,4 @@
  :description "Modular in-buffer completion framework for Emacs"
  :type github
  :pkgname "company-mode/company-mode"
- :checkout "c494fc65d35f7f00c2da17206e6550385ae9b300")
+ :checkout "8dea61206c67951cc83e14d41cea33ba33aea173")

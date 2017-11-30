@@ -3,6 +3,6 @@
        :website "https://github.com/bbatsov/zenburn-emacs"
        :minimum-emacs-version "24"
        :type github
-       :checkout "2f31ef9a954ec08202668a8d1b004db5a05831a2"
+       :checkout "613f4c69513c7ffe7cb00a6c477cd5e8e6378d40"
        :pkgname "bbatsov/zenburn-emacs"
        :prepare (add-to-list 'custom-theme-load-path default-directory))

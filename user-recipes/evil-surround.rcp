@@ -4,6 +4,6 @@
  :type github
  :pkgname "timcharper/evil-surround"
  :features evil-surround
- :checkout "4e739e8ec8dea55465c47d71c6504a0fd3e21013"
+ :checkout "55c820083a5f28d5361baeb9cd7da92549e5b3f5"
  :post-init (global-evil-surround-mode 1)
  :depends evil)

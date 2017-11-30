@@ -2,5 +2,5 @@
        :description "Evil smartparens is a minor mode which makes evil play nice with smartparens."
        :type github
        :pkgname "expez/evil-smartparens"
-       :checkout "7cde5544934930819e9dcaa1e0db2e3c58f0cd6f"
+       :checkout "9fe4eed1c6327197afe6c13bb0771e18908aff00"
        :depends smartparens)
