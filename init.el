@@ -1297,6 +1297,25 @@ controlled by `include'."
              ,@options))))
     `(quote ,forms)))
 
+(defun cp/org-agenda-tagged-by-person (search-string)
+  ;; CR-someday cperl: Have to figure out how to make C-u r in the buffer work correctly.
+  ;; Right now it regenerated the buffer with a different tag, but winds up leaving it
+  ;; named incorrectly.  I was thinking one way around it might be to substitute in the
+  ;; proper to call to this function for `org-agenda-redo-command' and the `redo-cmd' text
+  ;; property, but I could quite get it working.
+  (let ((selected
+         (or search-string
+             (completing-read
+              "Agenda for: "
+              (-keep
+               (lambda (tag)
+                 (let ((tag (substring-no-properties (car tag))))
+                   (if (s-matches? "^@" tag) tag)))
+               (org-global-tags-completion-table))
+              #'identity
+              t))))
+    (org-tags-view '(4) selected)))
+
 (defun cp/org-agenda-to-appt ()
   (interactive)
   (setq appt-time-msg-list nil)
@@ -1379,7 +1398,7 @@ controlled by `include'."
     (setq org-tags-column -90)
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-todo-keywords
-          '((sequence "DFER(r)" "DPND(x)" "WAIT(w)" "NEXT(n)" "|" "DONE(d)" "CNCL(c)")))
+          '((sequence "DFER(r)" "DPND(x)" "WAIT(w)" "NEXT(n)" "|" "DONE(d!)" "CNCL(c@)")))
     (setq org-todo-keyword-faces
           '(("DFER" . "#767676")
             ("DPND" . "#767676")
@@ -1395,11 +1414,8 @@ controlled by `include'."
 
             ,(cp/generate-category-agenda-cmds "e" "Everything else" ("capture" "house") nil 7)
 
-            ("p" "By person"
-             ((tags-todo
-               "+{^@.*}"
-               ((org-agenda-overriding-header "All TODOs tagged with a person (Any tag starting with @)")
-                (org-agenda-sorting-strategy '(tag-up todo-state-up ts-up tsia-up))))))))
+            ("@" "Tagged By Person" cp/org-agenda-tagged-by-person nil
+             ((org-agenda-sorting-strategy '(tag-up todo-state-up ts-up tsia-up))))))
     (setq org-agenda-sorting-strategy '(todo-state-up deadline-up tsia-up))
     (setq org-capture-templates
           '(("n" "Next Action" entry
@@ -1422,6 +1438,7 @@ controlled by `include'."
     (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-agenda-sticky t)
+    (setq org-log-into-drawer t)
     (setq org-refile-use-cache t)
     (setq org-catch-invisible-edits 'error)
     (setq org-ctrl-k-protect-subtree t)
@@ -1635,7 +1652,7 @@ controlled by `include'."
  '(custom-enabled-themes (quote (zenburn)))
  '(custom-safe-themes
    (quote
-    ("4528fb576178303ee89888e8126449341d463001cb38abe0015541eb798d8a23" default)))
+    ("3b36631f95ebfd9ec35f382249ad861f3b3d51f8bed4882184ec8745deaada28" "4528fb576178303ee89888e8126449341d463001cb38abe0015541eb798d8a23" default)))
  '(package-selected-packages (quote (rainbow-mode let-alist))))
 
 (custom-set-faces
