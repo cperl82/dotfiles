@@ -1408,12 +1408,10 @@ controlled by `include'."
     (setq org-agenda-files '("~/org"))
     (setq org-agenda-tags-column -90)
     (setq org-agenda-custom-commands
-          `(,(cp/generate-category-agenda-cmds "c" "Captured" ("capture") t 7)
-
-            ,(cp/generate-category-agenda-cmds "h" "House" ("house") t 7)
-
-            ,(cp/generate-category-agenda-cmds "e" "Everything else" ("capture" "house") nil 7)
-
+          `(,(cp/generate-category-agenda-cmds "c" "Captured"        ("capture") t 7)
+            ,(cp/generate-category-agenda-cmds "h" "House"           ("house")   t 7)
+            ,(cp/generate-category-agenda-cmds "g" "General"         ("general") t 7)
+            ,(cp/generate-category-agenda-cmds "e" "Everything else" ("capture" "house" "general") nil 7)
             ("@" "Tagged By Person" cp/org-agenda-tagged-by-person nil
              ((org-agenda-sorting-strategy '(tag-up todo-state-up ts-up tsia-up))))))
     (setq org-agenda-sorting-strategy '(todo-state-up deadline-up tsia-up))
