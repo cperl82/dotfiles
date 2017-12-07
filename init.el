@@ -34,6 +34,7 @@
    highlight-parentheses
    hydra
    ios-config-mode
+   ivy-rich
    json-mode
    json-reformat
    json-snatcher
@@ -487,6 +488,12 @@ Lisp function does not specify a special indentation."
   ("C-s"   #'counsel-grep-or-swiper)
   :init
   (progn
+    ;; (use-package ivy-rich
+    ;;   :config
+    ;;   (setq ivy-rich-path-style 'abbrev)
+    ;;   (ivy-set-display-transformer
+    ;;    'ivy-switch-buffer
+    ;;    'ivy-rich-switch-buffer-transformer))
     (use-package ivy-buffer-extend
       :config
       (setq ivy-buffer-max-dir-display-length 50)
