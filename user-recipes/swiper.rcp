@@ -2,7 +2,7 @@
        :description "Gives you an overview as you search for a regex."
        :type github
        :pkgname "abo-abo/swiper"
-       :checkout "b960aa4fa52b19dba4d5994fb29f445164209f46"
+       :checkout "b2175ea5cdfb276fabdc738dcd100e8ed774570d"
        :build (("make" "compile")
                ("makeinfo" "-o" "doc/ivy.info" "doc/ivy.texi"))
        :info "doc/ivy.info")
