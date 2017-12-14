@@ -147,6 +147,28 @@
               (setq n (1+ n)))))
       reduced)))
 
+(defmacro cp/make-symbol-cachining-version-of (name f timeout)
+  `(progn
+     (fset
+      ,name
+      (lexical-let
+          ((expire ,timeout)
+           (cache (cons (current-time) nil)))
+        (lambda ()
+          (let* ((cached-at (car cache))
+                 (values    (cdr cache))
+                 (now       (current-time))
+                 (diff      (time-subtract now cached-at)))
+            (if (or current-prefix-arg (not values) (> (time-to-seconds diff) expire))
+                (progn
+                  (message "Regenerating cache for %S" ,name)
+                  (let ((result (funcall ,f)))
+                    (setq cache (cons now result))
+                    result)
+                  )
+              values)))))
+     ,name))
+
 ;; 2014-04-22 mode-line-format
 (setq-default mode-line-format
               `("%e"
@@ -1120,41 +1142,24 @@ Lisp function does not specify a special indentation."
   (interactive)
   (cp/org-surround ?*))
 
-(setq cp/org-helm-username-list-command-alist
+(setq cp/org-username-command-alist
       '((darwin     . "dscacheutil -q user | awk -F: '$1 ~ /name/ {print $2}'")
         (gnu/linux  . "getent passwd | cut -d: -f1")))
 
-(setq cp/org-list-all-usernames
- (lexical-let ((expire 86400)
-               (cache `(,(current-time) . nil)))
-   (lambda ()
-     (let* ((cmd (assq system-type cp/org-helm-username-list-command-alist))
-            (cached-at (car cache))
-            (usernames (cdr cache))
-            (now (current-time))
-            (diff (time-subtract now cached-at)))
-       (when cmd
-         (let ((cmd (cdr cmd)))
-           (if (or (not usernames) (> (time-to-seconds diff) expire))
-               (progn
-                 (message
-                  "Org Helm username cache older than %ds, cached at %s, expiring"
-                  expire
-                  (current-time-string cached-at))
-                 (let ((result (split-string (shell-command-to-string cmd))))
-                   (setq cache `(,now . ,result))
-                   result))
-             usernames)))))))
+(defun cp/org-username-run-cmd ()
+  (let* ((cmd (assq system-type cp/org-username-command-alist))
+         (cmd (cdr cmd)))
+    (when cmd
+      (split-string (shell-command-to-string cmd)))))
 
-(defun cp/org-list-all-usernames ()
-  (funcall cp/org-list-all-usernames))
+(cp/make-symbol-cachining-version-of #'cp/org-username-list-all #'cp/org-username-run-cmd 86400)
 
 (defun cp/org-helm-usernames (username)
   (helm :input username
         :candidate-number-limit nil
         :fuzzy-match t
         :sources
-        (helm-build-sync-source "usernames" :candidates (cp/org-list-all-usernames))
+        (helm-build-sync-source "usernames" :candidates (cp/org-username-list-all))
         :buffer "*helm usernames*"))
 
 (defun cp/org-helm-complete-user-name-at-point ()
