@@ -151,22 +151,21 @@
   `(progn
      (fset
       ,name
-      (lexical-let
+      (lexical-let*
           ((expire ,timeout)
-           (cache (cons (current-time) nil)))
-        (lambda ()
-          (let* ((cached-at (car cache))
-                 (values    (cdr cache))
-                 (now       (current-time))
-                 (diff      (time-subtract now cached-at)))
-            (if (or current-prefix-arg (not values) (> (time-to-seconds diff) expire))
+           (cache (make-hash-table :test 'equal)))
+        (lambda (&rest args)
+          (let* ((cache-entry (gethash args cache))
+                 (now         (current-time)))
+            (if (or current-prefix-arg
+                    (not cache-entry)
+                    (> (time-to-seconds (time-subtract now (car cache-entry))) expire))
                 (progn
-                  (message "Regenerating cache for %S" ,name)
-                  (let ((result (funcall ,f)))
-                    (setq cache (cons now result))
-                    result)
-                  )
-              values)))))
+                  (message "Regenerating cache for %S with args %S" ,name args)
+                  (let ((result (apply ,f args)))
+                    (puthash args (cons now result) cache)
+                    result))
+              (cdr cache-entry))))))
      ,name))
 
 ;; 2014-04-22 mode-line-format
@@ -510,20 +509,12 @@ Lisp function does not specify a special indentation."
   ("C-s"   #'counsel-grep-or-swiper)
   :init
   (progn
-    ;; (use-package ivy-rich
-    ;;   :config
-    ;;   (setq ivy-rich-path-style 'abbrev)
-    ;;   (ivy-set-display-transformer
-    ;;    'ivy-switch-buffer
-    ;;    'ivy-rich-switch-buffer-transformer))
-    (use-package ivy-buffer-extend
+    (use-package ivy-rich
       :config
-      (setq ivy-buffer-max-dir-display-length 50)
-      (setq ivy-buffer-max-buffer-display-length 50)
-      (setq ivy-buffer-format
-            '(buffer-name   "<col>"  "    "
-                            mode process  "<col>"  "    "
-                            dir file-name "<col>"  "    ")))
+      (setq ivy-rich-path-style 'abbrev)
+      (ivy-set-display-transformer
+       'ivy-switch-buffer
+       'ivy-rich-switch-buffer-transformer))
     (setq ivy-height 10)
     (setq ivy-initial-inputs-alist nil)
     ;; 2017-05-06: `ivy--regex-ignore-order' doesn't seem to work well with swiper as the
@@ -1146,20 +1137,19 @@ Lisp function does not specify a special indentation."
       '((darwin     . "dscacheutil -q user | awk -F: '$1 ~ /name/ {print $2}'")
         (gnu/linux  . "getent passwd | cut -d: -f1")))
 
-(defun cp/org-username-run-cmd ()
-  (let* ((cmd (assq system-type cp/org-username-command-alist))
-         (cmd (cdr cmd)))
+(defun cp/org-username-list-all ()
+  (let* ((cmd (alist-get system-type cp/org-username-command-alist)))
     (when cmd
       (split-string (shell-command-to-string cmd)))))
 
-(cp/make-symbol-cachining-version-of #'cp/org-username-list-all #'cp/org-username-run-cmd 86400)
+(cp/make-symbol-cachining-version-of #'cp/org-username-list-all-caching #'cp/org-username-list-all 86400)
 
 (defun cp/org-helm-usernames (username)
   (helm :input username
         :candidate-number-limit nil
         :fuzzy-match t
         :sources
-        (helm-build-sync-source "usernames" :candidates (cp/org-username-list-all))
+        (helm-build-sync-source "usernames" :candidates (cp/org-username-list-all-caching))
         :buffer "*helm usernames*"))
 
 (defun cp/org-helm-complete-user-name-at-point ()
@@ -1611,15 +1601,11 @@ controlled by `include'."
   (progn
     (setq projectile-enable-caching t)
     (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
-    (projectile-mode)
-
-    (use-package helm-projectile
-      :init
-      (setq helm-projectile-fuzzy-match nil)
-      :config
-      (progn
-        (helm-projectile-on)
-        (setq projectile-switch-project-action #'helm-projectile)))))
+    (setq projectile-completion-system 'ivy)
+    (ivy-set-display-transformer
+     'projectile-completing-read
+     'ivy-rich-switch-buffer-transformer)
+    (projectile-mode)))
 
 
 
