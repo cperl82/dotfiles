@@ -1,5 +1,5 @@
 (:name s
        :description "The long lost Emacs string manipulation library."
        :type github
-       :checkout "fc395c8d5e6c14d5e0920ab80d4d5df007eed14a"
+       :checkout "5e9a6857d42015c67681616aa3519f599f97b8d8"
        :pkgname "magnars/s.el")

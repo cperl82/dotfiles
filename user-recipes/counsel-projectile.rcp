@@ -1,0 +1,7 @@
+(:name counsel-projectile
+       :description "Ivy UI for Projectile."
+       :type github
+       :pkgname "ericdanan/counsel-projectile"
+       :depends (swiper projectile)
+       :checkout "162cdc2655c58a75bb51e939f3688b1a4dd7632a"
+       )
