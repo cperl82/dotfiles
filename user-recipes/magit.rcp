@@ -3,7 +3,7 @@
        :description "It's Magit! An Emacs mode for Git."
        :type github
        :pkgname "magit/magit"
-       :checkout "5c05bdb9de39872649821ea3c70f3489741bcc66"
+       :checkout "c7f6bfe7ef2ef70ad87beb39bd60531292eb425c"
        :minimum-emacs-version "24.4"
        :depends (dash with-editor emacs-async)
        :info "Documentation"

@@ -17,6 +17,7 @@
    ace-window
    color-theme-zenburn
    company-mode
+   counsel-projectile
    dash
    diminish
    elisp-slime-nav
