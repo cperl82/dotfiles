@@ -1603,9 +1603,6 @@ controlled by `include'."
     (setq projectile-enable-caching t)
     (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
     (setq projectile-completion-system 'ivy)
-    (ivy-set-display-transformer
-     'projectile-completing-read
-     'ivy-rich-switch-buffer-transformer)
     (projectile-mode)))
 
 
