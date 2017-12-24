@@ -516,6 +516,7 @@ Lisp function does not specify a special indentation."
       :config
       (progn
         (setq ivy-rich-path-style 'relative)
+        (setq ivy-rich-switch-buffer-name-max-length 40)
         (setq ivy-rich-switch-buffer-project-max-length 25)
         (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)))
     (setq ivy-height 10)
