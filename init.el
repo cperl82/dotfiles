@@ -598,7 +598,6 @@ Lisp function does not specify a special indentation."
    "M-k" #'dired-kill-subdir
    "M-n" #'dired-next-subdir
    "M-p" #'dired-prev-subdir
-   "c"   #'dired-create-directory
    "q"   #'bury-buffer
    "TAB" #'cp/dired-tab-dwim
    "o"   #'dired-find-file-other-window
