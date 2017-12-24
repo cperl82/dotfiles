@@ -34,6 +34,8 @@
    helm-projectile
    highlight-parentheses
    hydra
+   ibuffer-vc
+   ibuffer-projectile
    ios-config-mode
    ivy-rich
    json-mode
@@ -512,10 +514,10 @@ Lisp function does not specify a special indentation."
   (progn
     (use-package ivy-rich
       :config
-      (setq ivy-rich-path-style 'abbrev)
-      (ivy-set-display-transformer
-       'ivy-switch-buffer
-       'ivy-rich-switch-buffer-transformer))
+      (progn
+        (setq ivy-rich-path-style 'relative)
+        (setq ivy-rich-switch-buffer-project-max-length 25)
+        (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)))
     (setq ivy-height 10)
     (setq ivy-initial-inputs-alist nil)
     ;; 2017-05-06: `ivy--regex-ignore-order' doesn't seem to work well with swiper as the
@@ -582,11 +584,11 @@ Lisp function does not specify a special indentation."
   :defer t
   :general
   (:keymaps '(dired-mode-map)
-   :states  '(normal)
+   :states  '(emacs)
    "h"   #'dired-up-directory
    "j"   #'dired-next-line
    "k"   #'dired-previous-line
-   "l"   #'dired-find-alternate-file
+   "l"   #'dired-find-file
    "n"   #'evil-search-next
    "N"   #'evil-search-previous
    "?"   #'evil-search-backward
@@ -596,7 +598,7 @@ Lisp function does not specify a special indentation."
    "M-n" #'dired-next-subdir
    "M-p" #'dired-prev-subdir
    "c"   #'dired-create-directory
-   "q"   #'kill-this-buffer
+   "q"   #'bury-buffer
    "TAB" #'cp/dired-tab-dwim
    "o"   #'dired-find-file-other-window
    "r"   #'revert-buffer
@@ -604,9 +606,32 @@ Lisp function does not specify a special indentation."
    "SPC" nil)
   :config
   (progn
+    (evil-set-initial-state 'dired-mode 'emacs)
     (use-package dired-x)
     (put 'dired-find-alternate-file 'disabled nil)
     (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))))
+
+
+
+;; ibuffer-vc
+(use-package ibuffer-vc
+  :defer t
+  :general
+  (:keymaps '(ibuffer-mode-map)
+   :states  '(emacs)
+   "l" #'ibuffer-visit-buffer
+   "j" #'evil-next-line
+   "k" #'evil-previous-line
+   "r" #'ibuffer-update
+   )
+  :config
+  (progn
+    (add-hook
+     'ibuffer-hook
+     (lambda ()
+       (ibuffer-vc-set-filter-groups-by-vc-root)
+       (unless (eq ibuffer-sorting-mode 'alphbaetic)
+         (ibuffer-do-sort-by-alphabetic))))))
 
 
 
@@ -1604,6 +1629,17 @@ controlled by `include'."
     (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
     (setq projectile-completion-system 'ivy)
     (projectile-mode)))
+
+
+
+;; counsel-projectile
+(use-package counsel-projectile
+  :defer t
+  :config
+  (progn
+    (ivy-set-display-transformer
+     'counsel-projectile-switch-to-buffer
+     'ivy-rich-switch-buffer-transformer)))
 
 
 

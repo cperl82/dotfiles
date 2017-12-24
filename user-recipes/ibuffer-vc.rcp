@@ -1,0 +1,6 @@
+(:name ibuffer-vc
+       :description "Group ibuffer's list by VC project, or show VC status"
+       :type github
+       :pkgname "purcell/ibuffer-vc"
+       :checkout "83d60aefd21e2aa20c7217d224f38a40bb75e63b"
+       )
