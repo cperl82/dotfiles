@@ -1622,7 +1622,8 @@ controlled by `include'."
   (progn
     (advice-add 'projectile-serialize              :around #'cp/advice/projectile-serialize)
     (advice-add 'projectile-unserialize            :around #'cp/advice/projectile-unserialize)
-    (advice-add 'projectile-maybe-invalidate-cache :around #'cp/advice/projectile-maybe-invalidate-cache))
+    (advice-add 'projectile-maybe-invalidate-cache :around #'cp/advice/projectile-maybe-invalidate-cache)
+    (ivy-set-display-transformer 'projectile-completing-read 'ivy-rich-switch-buffer-transformer))
   :config
   (progn
     (setq projectile-enable-caching t)
@@ -1637,9 +1638,10 @@ controlled by `include'."
   :defer t
   :config
   (progn
-    (ivy-set-display-transformer
-     'counsel-projectile-switch-to-buffer
-     'ivy-rich-switch-buffer-transformer)))
+    (ivy-set-display-transformer 'counsel-projectile-switch-to-buffer #'ivy-rich-switch-buffer-transformer)
+    (ivy-set-display-transformer 'counsel-projectile-find-file        #'ivy-rich-switch-buffer-transformer)
+    (ivy-set-display-transformer 'counsel-projectile-find-dir         #'ivy-rich-switch-buffer-transformer)
+    (ivy-set-display-transformer 'counsel-projectile                  #'ivy-rich-switch-buffer-transformer)))
 
 
 
