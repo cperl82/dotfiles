@@ -985,22 +985,38 @@ Lisp function does not specify a special indentation."
     (when (not suppress-message)
       (cp/escreen-get-active-screen-names-with-emphasis))))
 
+(defun cp/escreen-propertize-screen-number (number)
+  (let ((star (propertize "*" 'face 'font-lock-string-face)))
+    (cond ((eq escreen-current-screen-number number) (format "%d%s" number star))
+          (t (format "%d-" number)))))
+
 (defun cp/escreen-get-active-screen-names-with-emphasis ()
   (interactive)
   (let ((output ""))
     (dolist (n (escreen-get-active-screen-numbers))
       (let* ((data (escreen-configuration-escreen n))
              (screen-name (nth 1 data))
-             (star (propertize "*" 'face 'font-lock-string-face)))
+             )
         (setq output
-              (format "%s  %s" output
-                      (cond ((and
-                              (eq escreen-current-screen-number n) screen-name)
-                             (format "%d%s %s" n star screen-name))
-                            ((eq escreen-current-screen-number n) (format "%d%s" n star))
-                            (screen-name (format "%d- %s" n screen-name))
-                            (t (format "%d-" n))))))
+              (format "%s  %s %s" output (cp/escreen-propertize-screen-number n) screen-name)))
       (message "escreen: active screens: %s" output))))
+
+(defun cp/escreen-get-active-screen-names-with-emphasis-vertical ()
+  (interactive)
+  (->>
+   (cp/escreen-configuration-screen-numbers-and-names)
+   (-sort (lambda (s1 s2) (< (car s1) (car s2))))
+   (-map
+    (lambda (screen)
+      (let ((number (car screen))
+            (name   (cdr screen)))
+        (format "%s %s" (cp/escreen-propertize-screen-number number) name))))
+   (s-join "\n")
+   (message "%s"))
+  nil)
+
+(defalias 'cp/escreen-get-active-screen-names-with-emphasis
+  'cp/escreen-get-active-screen-names-with-emphasis-vertical)
 
 (defun cp/escreen-configuration-screen-numbers-and-names ()
   (-map
@@ -1014,8 +1030,8 @@ Lisp function does not specify a special indentation."
          (n-windows (length (escreen-configuration-data-map screen-data)))
          (s
           (if width
-              (let* ((screen-name (propertize (format "screen %2d" n) 'font-lock-face 'font-lock-type-face))
-                     (fmt (format "%s: %%%ds (%%d buffers)" screen-name width))
+              (let* ((number (cp/escreen-propertize-screen-number n))
+                     (fmt (format "%s %%%ds (%%d buffers)" number width))
                      (n-buffers (->> screen-data (nth 3) (--map (nth 0 it)) (--map (nth 1 it)) (length))))
                 (format fmt name n-buffers))
             (format "%d:%s" n name))))
@@ -1024,10 +1040,10 @@ Lisp function does not specify a special indentation."
 (defun cp/escreen-ivy-collection ()
   (let* ((current (escreen-get-current-screen-number))
          (numbers-and-names (cp/escreen-configuration-screen-numbers-and-names))
-         (width (-reduce-from (lambda (a b) (max a (length (cdr b)))) 0 numbers-and-names)))
+         (all-but-current (-filter (lambda (x) (not (equal (car x) current))) numbers-and-names))
+         (width (-reduce-from (lambda (a b) (max a (length (cdr b)))) 0 all-but-current)))
     (->>
-     (-map 'car numbers-and-names)
-     (-filter (lambda (n) (not (equal n current))))
+     (-map 'car all-but-current)
      (-sort '<)
      (-map (lambda (n) (cp/escreen-ivy-screen-number-to-datum width n))))))
 
