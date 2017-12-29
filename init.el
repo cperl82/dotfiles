@@ -423,10 +423,6 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 
 
 ;; swiper / ivy / counsel / smex
-(defun cp/swiper-thing-at-point ()
-  (interactive)
-  (swiper (thing-at-point 'symbol)))
-
 (use-package smex
   :defer t)
 
@@ -435,9 +431,9 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   :diminish ivy-mode
   :general
   (:keymaps '(ivy-minibuffer-map)
-   "<up>"  #'ivy-previous-history-element
-   "<down" #'ivy-next-history-element)
-  ("C-s"   #'counsel-grep-or-swiper)
+   "<up>"   #'ivy-previous-history-element
+   "<down>" #'ivy-next-history-element)
+  ("C-s"    #'counsel-grep-or-swiper)
   :init
   (progn
     (use-package ivy-rich
@@ -531,7 +527,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
    "o"   #'dired-find-file-other-window
    "r"   #'revert-buffer
    "."   #'cp/dired-toggle-hiding-dotfiles
-   "SPC" nil)
+   "SPC" #'dired-omit-mode)
   :config
   (progn
     (evil-set-initial-state 'dired-mode 'emacs)
