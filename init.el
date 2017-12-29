@@ -1097,15 +1097,15 @@ Lisp function does not specify a special indentation."
    :non-normal-prefix cp/non-normal-prefix
    "a e" '(:keymap escreen-map :which-key "escreen"))
   (:keymaps '(escreen-map)
-   "e" #'cp/escreen-get-active-screen-names-with-emphasis
-   "r" #'cp/escreen-rename-screen
-   "s" #'cp/escreen-switch-to-screen-with-ivy-completion
-   "H" #'cp/escreen-move-screen-left
-   "L" #'cp/escreen-move-screen-right
-   "k" #'escreen-kill-screen
-   "l" #'escreen-goto-next-screen
-   "h" #'escreen-goto-prev-screen
-   "^" #'escreen-goto-last-screen)
+   "e"   #'cp/escreen-get-active-screen-names-with-emphasis
+   "r"   #'cp/escreen-rename-screen
+   "s"   #'cp/escreen-switch-to-screen-with-ivy-completion
+   "H"   #'cp/escreen-move-screen-left
+   "L"   #'cp/escreen-move-screen-right
+   "k"   #'escreen-kill-screen
+   "l"   #'escreen-goto-next-screen
+   "h"   #'escreen-goto-prev-screen
+   "SPC" #'escreen-goto-last-screen)
   :config
   (progn
     (advice-add 'escreen-goto-screen   :after #'cp/advice/escreen-goto-screen)
