@@ -1097,15 +1097,15 @@ Lisp function does not specify a special indentation."
    :non-normal-prefix cp/non-normal-prefix
    "a e" '(:keymap escreen-map :which-key "escreen"))
   (:keymaps '(escreen-map)
-   "e"   #'cp/escreen-get-active-screen-names-with-emphasis
-   "r"   #'cp/escreen-rename-screen
-   "s"   #'cp/escreen-switch-to-screen-with-ivy-completion
-   "H"   #'cp/escreen-move-screen-left
-   "L"   #'cp/escreen-move-screen-right
-   "k"   #'escreen-kill-screen
-   "l"   #'escreen-goto-next-screen
-   "h"   #'escreen-goto-prev-screen
-   "SPC" #'escreen-goto-last-screen)
+   "e" #'cp/escreen-get-active-screen-names-with-emphasis
+   "r" #'cp/escreen-rename-screen
+   "s" #'cp/escreen-switch-to-screen-with-ivy-completion
+   "H" #'cp/escreen-move-screen-left
+   "L" #'cp/escreen-move-screen-right
+   "k" #'escreen-kill-screen
+   "l" #'escreen-goto-next-screen
+   "h" #'escreen-goto-prev-screen
+   "," #'escreen-goto-last-screen)
   :config
   (progn
     (advice-add 'escreen-goto-screen   :after #'cp/advice/escreen-goto-screen)
@@ -1724,6 +1724,7 @@ controlled by `include'."
    `(ivy-minibuffer-match-face-2 ((t (:foreground ,zenburn-red-2    :background nil))))
    `(ivy-minibuffer-match-face-3 ((t (:foreground ,zenburn-green+1  :background nil))))
    `(ivy-minibuffer-match-face-4 ((t (:foreground ,zenburn-yellow-2 :background nil))))
+   `(ivy-virtual                 ((t (:inherit font-lock-type-face))))
    '(swiper-line-face            ((t (:background "#4F4F4F"))))
    '(swiper-match-face-1         ((t (:foreground nil :background nil :underline nil))))
    `(swiper-match-face-2         ((t (:foreground "white" :weight bold :background ,zenburn-red-2))))
