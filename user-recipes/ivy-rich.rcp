@@ -1,5 +1,5 @@
 (:name ivy-rich
  :description "A more friendly interfaces for ivy-switch-buffer"
  :type github
- :pkgname "Yevgnen/ivy-rich"
- :checkout "ba89b9682a22ae42640bfd326c9d9e83854da39e")
+ :pkgname "cperl82/ivy-rich"
+ :checkout "705ca2bf6ae8a7e91f1c2bc65b40da4006895950")
