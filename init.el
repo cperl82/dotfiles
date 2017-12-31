@@ -1696,7 +1696,7 @@ controlled by `include'."
  '(custom-enabled-themes (quote (zenburn)))
  '(custom-safe-themes
    (quote
-    ("3b36631f95ebfd9ec35f382249ad861f3b3d51f8bed4882184ec8745deaada28" "4528fb576178303ee89888e8126449341d463001cb38abe0015541eb798d8a23" default)))
+    ("65a2801c39211a69af6cc4c8441f3f51871404b9d12a6f2966a7bc33468995c7" "3b36631f95ebfd9ec35f382249ad861f3b3d51f8bed4882184ec8745deaada28" "4528fb576178303ee89888e8126449341d463001cb38abe0015541eb798d8a23" default)))
  '(package-selected-packages (quote (rainbow-mode let-alist))))
 
 (custom-set-faces
