@@ -5,5 +5,4 @@
  :pkgname "timcharper/evil-surround"
  :features evil-surround
  :checkout "55c820083a5f28d5361baeb9cd7da92549e5b3f5"
- :post-init (global-evil-surround-mode 1)
  :depends evil)
