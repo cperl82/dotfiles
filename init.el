@@ -527,7 +527,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
    "o"   #'dired-find-file-other-window
    "r"   #'revert-buffer
    "."   #'cp/dired-toggle-hiding-dotfiles
-   "SPC" #'dired-omit-mode)
+   "SPC" nil)
   :config
   (progn
     (evil-set-initial-state 'dired-mode 'emacs)
