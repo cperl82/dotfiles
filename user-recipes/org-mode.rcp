@@ -2,8 +2,8 @@
        :website "http://orgmode.org/"
        :description "Org-mode is for keeping notes, maintaining ToDo lists, doing project planning, and authoring with a fast and effective plain-text system."
        :type git
-       :url "ssh://git@repo.or.cz/org-mode.git"
-       :checkout "58c9bedfd55751fd529a7501008e12b73fee4cee"
+       :url "https://code.orgmode.org/bzg/org-mode.git"
+       :checkout "release_9.1.6"
        :info "doc"
        :build/berkeley-unix `,(mapcar
                                (lambda (target)
