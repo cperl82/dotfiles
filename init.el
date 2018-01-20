@@ -43,6 +43,7 @@
    json-snatcher
    lua-mode
    markdown-mode
+   nasm-mode
    org-mode
    origami
    projectile
