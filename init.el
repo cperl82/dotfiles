@@ -1266,7 +1266,7 @@ The key is the todo keyword and the value is its relative position in the list."
   (interactive)
   (org-sort-entries nil ?f #'cp/org-sort-key)
   ;; there may be a better way to do this, but for now its refolds things the way I want after sorting
-  (funcall (general-simulate-keys "TAB TAB")))
+  (funcall (general-simulate-key "TAB TAB")))
 
 ;; https://lists.gnu.org/archive/html/emacs-orgmode/2010-12/msg00410.html
 (defun cp/org-right-align-agenda-tags ()
