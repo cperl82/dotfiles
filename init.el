@@ -1016,9 +1016,6 @@ Lisp function does not specify a special indentation."
    (message "%s"))
   nil)
 
-(defalias 'cp/escreen-get-active-screen-names-with-emphasis
-  'cp/escreen-get-active-screen-names-with-emphasis-vertical)
-
 (defun cp/escreen-configuration-screen-numbers-and-names ()
   (-map
    (lambda (entry) `(,(nth 0 entry) . ,(nth 1 entry)))
@@ -1099,6 +1096,7 @@ Lisp function does not specify a special indentation."
    "a e" '(:keymap escreen-map :which-key "escreen"))
   (:keymaps '(escreen-map)
    "e" #'cp/escreen-get-active-screen-names-with-emphasis
+   "v" #'cp/escreen-get-active-screen-names-with-emphasis-vertical
    "r" #'cp/escreen-rename-screen
    "s" #'cp/escreen-switch-to-screen-with-ivy-completion
    "H" #'cp/escreen-move-screen-left
