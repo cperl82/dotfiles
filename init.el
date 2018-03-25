@@ -151,7 +151,7 @@
               (setq n (1+ n)))))
       reduced)))
 
-(defmacro cp/make-symbol-cachining-version-of (name f timeout)
+(defmacro cp/make-symbol-caching-version-of (name f timeout)
   `(progn
      (fset
       ,name
@@ -1181,7 +1181,7 @@ Lisp function does not specify a special indentation."
     (when cmd
       (split-string (shell-command-to-string cmd)))))
 
-(cp/make-symbol-cachining-version-of #'cp/org-username-list-all-caching #'cp/org-username-list-all 86400)
+(cp/make-symbol-caching-version-of #'cp/org-username-list-all-caching #'cp/org-username-list-all 86400)
 
 (defun cp/org-helm-usernames (username)
   (helm :input username
@@ -1697,7 +1697,7 @@ controlled by `include'."
  '(custom-enabled-themes (quote (zenburn)))
  '(custom-safe-themes
    (quote
-    ("a1e99cb36d6235abbe426a0a96fc26c006306f6b9d2a64c2435363350a987b4c" default)))
+    ("4555c851795f0e0fd572ba82208373b0c32aaffa78289e983d4b25cd1557f472" "a1e99cb36d6235abbe426a0a96fc26c006306f6b9d2a64c2435363350a987b4c" default)))
  '(package-selected-packages (quote (rainbow-mode let-alist))))
 
 (custom-set-faces
