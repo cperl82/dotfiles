@@ -30,7 +30,8 @@ function restore-from-scratchpad {
     tree=$(i3-msg -t get_tree)
     q=$(scratchpad-window-query)
     jq -r "${q}" <<< "${tree}"							\
-	| fzf --with-nth=2.. --border --multi					\
+	| sort -k 2								\
+	| fzf --with-nth=2.. --border --multi --no-sort				\
 	| awk -F, '{print $1}'							\
 	| xargs -n1 -t -I{} i3-msg -t command "[con_id={}] scratchpad show"
 }
