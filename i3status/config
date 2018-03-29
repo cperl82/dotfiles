@@ -11,25 +11,24 @@ general {
     interval = 5
 }
 
-order += "disk /"
-order += "cpu_usage"
+order += "load"
 order += "run_watch DHCP"
 order += "wireless _first_"
 order += "ethernet _first_"
 order += "battery 0"
-order += "tztime hkg"
+order += "tztime hkt"
 order += "tztime ldn"
 order += "tztime nyc"
 order += "volume master"
 
 wireless _first_ {
-    format_up = "W: (%essid %quality) %ip"
+    format_up = "W: %essid %quality %ip"
     format_down = ""
 }
 
 ethernet _first_ {
     # if you use %speed, i3status requires root privileges
-    format_up = "E: %ip (%speed)"
+    format_up = "E: %speed %ip"
     format_down = ""
 }
 
@@ -44,26 +43,25 @@ run_watch DHCP {
 }
 
 tztime nyc {
-    timezone="America/New_York"
-    format = "NYC  %Y-%m-%d %H:%M:%S"
+    format = " %Y-%m-%d %H:%M:%S NYC "
 }
 
 tztime ldn {
     timezone="Europe/London"
-    format = "LDN  %Y-%m-%d %H:%M:%S"
+    format = " %Y-%m-%d %H:%M:%S LDN "
 }
 
-tztime hkg {
-    timezone="Hongkong"
-    format = "HKG  %Y-%m-%d %H:%M:%S"
+tztime hkt {
+    timezone="Asia/Hong_Kong"
+    format = " %Y-%m-%d %H:%M:%S HKT "
 }
 
 disk "/" {
     format = "%avail"
 }
 
-cpu_usage {
-    format = "%usage"
+load {
+     format ="%1min %5min %15min"
 }
 
 volume master {

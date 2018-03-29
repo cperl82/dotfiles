@@ -4,7 +4,7 @@ set -o pipefail
 set -o errexit
 
 function usage {
-    echo "${0} restore-from-scratchpad|jump-to-window" 1>&2
+    echo "${0} restore-from-scratchpad|jump-to-window|jump-to-workspace" 1>&2
 }
 
 function scratchpad-window-query {
@@ -50,34 +50,70 @@ function non-scratchpad-window-query {
 	EOF
 }
 
-function jump-to-window {
-    local tree=""
-    local q=""
-    
+function workspace-query {
+    cat <<-'EOF'
+	[ .. | select(.type? == "workspace") ]
+	| map(select(.name != "__i3_scratch"))
+	| map({id: (.id | tostring), name: .name})
+	| map(join(", "))
+	| .[]
+	EOF
+}
+
+function restore-from-scratchpad-cmd {
+    local tree
+    local q
+
+    tree=$(i3-msg -t get_tree)
+    q=$(scratchpad-window-query)
+
+    jq -r "${q}" <<< "${tree}"							\
+	| fzf --with-nth=2.. --border --multi --no-sort				\
+	| sort -k 2								\
+	| awk -F, '{print $1}'							\
+	| xargs -n1 -I{} i3-msg -t command "[con_id={}] scratchpad show"
+}
+
+function jump-to-window-cmd {
+    local tree
+    local q
+
     tree=$(i3-msg -t get_tree)
     q=$(non-scratchpad-window-query)
-    jq -r "${q}" <<< "${tree}"							\
-	| fzf --with-nth=2.. --border						\
-	| awk -F, '{print $1}'							\
-	| xargs -n1 -t -I{} i3-msg -t command "[con_id={}] focus"
+
+    jq -r "${q}" <<< "${tree}"						\
+	| fzf --with-nth=2.. --border					\
+	| awk -F, '{print $1}'						\
+	| xargs -n1 -I{} i3-msg -t command "[con_id={}] focus"
+}
+
+function jump-to-workspace-cmd {
+    local tree
+    local q
+
+    tree=$(i3-msg -t get_tree)
+    q=$(workspace-query)
+
+    jq -r "${q}" <<< "${tree}"						\
+	| fzf --with-nth=2.. --border					\
+	| awk -F, '{print $1}'						\
+	| xargs -n1 -I{} i3-msg -t command "[con_id={}] focus"
+
 }
 
 function main {
-    # CR-someday cperl: You could proably figure out some fancy
-    # partial completion with compgen
-    case "${1}" in
-	restore-from-scratchpad)
-	    f=restore-from-scratchpad
-	    ;;
-	jump-to-window)
-	    f=jump-to-window
-	    ;;
-	*)
-	    usage
-	    exit 1
-    esac
+    local cmds
 
-    "${f}"
+    cmds=( $(compgen -A function -- "${1}" | grep -- "-cmd$") )
+    shift
+
+    if [[ ${#cmds[@]} -eq 1 ]]
+    then
+        ${cmds[0]} "$@"
+    else
+        usage
+        exit 1
+    fi
 }
 
 main "${@}"
