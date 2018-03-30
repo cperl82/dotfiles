@@ -18,22 +18,9 @@ function scratchpad-window-query {
 	  ]
 	| add
 	| map([(.id | tostring), (.windows | join(", "))])
-	| map(join(", "))
+	| map(join(" "))
 	| .[]
 	EOF
-}
-
-function restore-from-scratchpad {
-    local tree=""
-    local q=""
-    
-    tree=$(i3-msg -t get_tree)
-    q=$(scratchpad-window-query)
-    jq -r "${q}" <<< "${tree}"							\
-	| sort -k 2								\
-	| fzf --with-nth=2.. --border --multi --no-sort				\
-	| awk -F, '{print $1}'							\
-	| xargs -n1 -t -I{} i3-msg -t command "[con_id={}] scratchpad show"
 }
 
 function non-scratchpad-window-query {
@@ -45,7 +32,7 @@ function non-scratchpad-window-query {
 	| map(select(.type? != "dockarea"))
 	| [ .. | select(.nodes? == [] and .floating_nodes == []) ]
 	| map([(.id | tostring), .name])
-	| map(join(", "))
+	| map(join(" "))
 	| .[]
 	EOF
 }
@@ -55,7 +42,7 @@ function workspace-query {
 	[ .. | select(.type? == "workspace") ]
 	| map(select(.name != "__i3_scratch"))
 	| map({id: (.id | tostring), name: .name})
-	| map(join(", "))
+	| map(join(" "))
 	| .[]
 	EOF
 }
@@ -68,9 +55,9 @@ function restore-from-scratchpad-cmd {
     q=$(scratchpad-window-query)
 
     jq -r "${q}" <<< "${tree}"							\
-	| fzf --with-nth=2.. --border --multi --no-sort				\
 	| sort -k 2								\
-	| awk -F, '{print $1}'							\
+	| fzf --with-nth=2.. --border --multi --no-sort				\
+	| awk '{print $1}'							\
 	| xargs -n1 -I{} i3-msg -t command "[con_id={}] scratchpad show"
 }
 
@@ -83,7 +70,7 @@ function jump-to-window-cmd {
 
     jq -r "${q}" <<< "${tree}"						\
 	| fzf --with-nth=2.. --border					\
-	| awk -F, '{print $1}'						\
+	| awk '{print $1}'						\
 	| xargs -n1 -I{} i3-msg -t command "[con_id={}] focus"
 }
 
@@ -96,7 +83,7 @@ function jump-to-workspace-cmd {
 
     jq -r "${q}" <<< "${tree}"						\
 	| fzf --with-nth=2.. --border					\
-	| awk -F, '{print $1}'						\
+	| awk '{print $1}'						\
 	| xargs -n1 -I{} i3-msg -t command "[con_id={}] focus"
 
 }

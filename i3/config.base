@@ -154,7 +154,7 @@ for_window [title="^popup-terminal$"] floating enable border pixel 1 move down 7
 bindsym $mod+comma exec --no-startup-id		\
 	$terminal				\
 	"popup-terminal"			\
-	-geometry 200x30			\
+	-geometry 160x30			\
 	-e $quickswitch restore-from-scratchpad
 
 # 2016-11-14 cperl: No borders for chrome
