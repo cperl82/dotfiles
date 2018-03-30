@@ -30,7 +30,7 @@ function non-scratchpad-window-query {
 	| select(.name? != "__i3")
 	| .nodes
 	| map(select(.type? != "dockarea"))
-	| [ .. | select(.nodes? == [] and .floating_nodes == []) ]
+	| [ .. | select(.nodes? == [] and .floating_nodes == [] and .focused == false) ]
 	| map([(.id | tostring), .name])
 	| map(join(" "))
 	| .[]
@@ -90,6 +90,19 @@ function jump-to-workspace-cmd {
 
 function main {
     local cmds
+
+    while [[ ${#} -gt 0 ]]
+    do
+	case "${1}" in
+	    -*)
+		usage
+		exit 1
+		;;
+	    *)
+		break
+		;;
+	esac
+    done
 
     cmds=( $(compgen -A function -- "${1}" | grep -- "-cmd$") )
     shift

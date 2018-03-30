@@ -67,6 +67,6 @@ load {
 volume master {
     device = "pulse"
     mixer = "master"
-    format = "VOL %volume"
-    format_muted = "MUT %volume"
+    format = " VOL %volume "
+    format_muted = " MUT %volume "
 }
