@@ -111,7 +111,7 @@ function main {
     done
 
     completions=$(declare -F | awk '$2 ~ /^-f$/ {print $NF}' | sed -ne "s/^${subcmd_prefix}--//p")
-    subcmd=($(compgen -W "${completions}" -- "${1}"))
+    subcmd=($(compgen -W "${completions}" -- "${1}" || true))
 
     if [[ ${#subcmd[@]} -eq 1 ]]
     then
