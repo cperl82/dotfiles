@@ -1262,12 +1262,6 @@ The key is the todo keyword and the value is its relative position in the list."
   ;; there may be a better way to do this, but for now its refolds things the way I want after sorting
   (funcall (general-simulate-key "TAB TAB")))
 
-;; https://lists.gnu.org/archive/html/emacs-orgmode/2010-12/msg00410.html
-(defun cp/org-right-align-agenda-tags ()
-  "Put the agenda tags by the right border of the agenda window."
-  (setq org-agenda-tags-column (- 4 (window-width)))
-    (org-agenda-align-tags))
-
 (defmacro cp/generate-category-agenda-cmds (letter desc categories include days-out &optional options)
   "Generate a set of commands for org-agenda-custom-commands.
 
@@ -1498,7 +1492,6 @@ controlled by `include'."
          (define-and-bind-text-object "*" "\\*" "\\*")
          (define-and-bind-text-object "=" "\\=" "\\=")
          (add-hook 'write-contents-functions (lambda () (save-excursion (delete-trailing-whitespace)))))))
-    (add-hook 'org-finalize-agenda-hook #'cp/org-right-align-agenda-tags)
     (add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode 1)))
     (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))
     (remove-hook 'org-mode-hook 'org-eldoc-load)))
