@@ -460,6 +460,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   :diminish counsel-mode
   :init
   (progn
+    (setq counsel-git-cmd "rg --files")
     (counsel-mode 1)))
 
 
