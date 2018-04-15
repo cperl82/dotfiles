@@ -460,7 +460,11 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   :diminish counsel-mode
   :init
   (progn
+    ;; 2018-04-14 cperl: copying https://oremacs.com/2018/03/05/grep-exclude
     (setq counsel-git-cmd "rg --files")
+    (defalias #'cp/project-files #'counsel-git)
+    (setq counsel-rg-base-command
+          "rg -i -M 120 --no-heading --line-number --color never %s .")
     (counsel-mode 1)))
 
 
