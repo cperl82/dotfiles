@@ -30,8 +30,6 @@
    general
    go-mode
    haskell-mode
-   helm
-   helm-projectile
    highlight-parentheses
    hydra
    ibuffer-vc
@@ -1181,18 +1179,16 @@ Lisp function does not specify a special indentation."
 
 (cp/make-symbol-caching-version-of #'cp/org-username-list-all-caching #'cp/org-username-list-all 86400)
 
-(defun cp/org-helm-usernames (username)
-  (helm :input username
-        :candidate-number-limit nil
-        :fuzzy-match t
-        :sources
-        (helm-build-sync-source "usernames" :candidates (cp/org-username-list-all-caching))
-        :buffer "*helm usernames*"))
+(defun cp/org-ivy-usernames (username)
+  (ivy-read "username: "
+            (cp/org-username-list-all)
+            :require-match t
+            :initial-input username))
 
-(defun cp/org-helm-complete-user-name-at-point ()
+(defun cp/org-complete-user-name-at-point ()
   (interactive)
   (let* ((partial  (word-at-point))
-         (username (cp/org-helm-usernames partial)))
+         (username (cp/org-ivy-usernames partial)))
     (when username
       (progn
         (when partial
@@ -1400,7 +1396,7 @@ controlled by `include'."
    "M-."     #'cp/org-surround-tilda
    "M-v"     #'cp/org-surround-equal
    "M-b"     #'cp/org-surround-star
-   "M-u"     #'cp/org-helm-complete-user-name-at-point)
+   "M-u"     #'cp/org-complete-user-name-at-point)
   (:keymaps '(org-agenda-mode-map)
    :states  '(emacs)
    "j"       #'org-agenda-next-line
@@ -1506,57 +1502,6 @@ controlled by `include'."
     (add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode 1)))
     (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))
     (remove-hook 'org-mode-hook 'org-eldoc-load)))
-
-
-
-; helm
-(defun cp/maybe-projectile-project-to-feature (dir project-path project-name)
-  (let ((name
-         (if (string-match "^\\+.*\\+$" project-name)
-             (let ((components ()))
-               (f-traverse-upwards
-                (lambda (path)
-                  (prog1 (f-exists? (f-expand "+clone+" path))
-                    (add-to-list 'components (f-filename path))))
-                project-path)
-               (s-join "/" components))
-           project-name))
-        (project-path (s-chop-suffix "/" project-path))
-        (expanded-dir (s-chop-suffix "/" (expand-file-name dir))))
-    (s-replace project-path name expanded-dir)))
-
-(defun cp/advice/helm-buffer--show-details
-    (orig-fun buf-name prefix help-echo size mode dir face1 face2 proc details type)
-  (let ((dir
-         (or
-          (if-let ((project-path (projectile-root-bottom-up dir))
-                   (project-name (projectile-project-name)))
-              (cp/maybe-projectile-project-to-feature dir project-path project-name))
-          dir)))
-    (apply orig-fun buf-name prefix help-echo size mode dir face1 face2 proc details type ())))
-
-(use-package helm
-  :defer t
-  :general
-  (:states '(motion insert emacs)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "a h"   '(:ignore t :which-key "helm")
-   "a h m" #'helm-mini
-   "a h f" #'helm-find-files
-   "a h F" #'helm-find
-   "a h b" #'helm-buffers-list
-   "a h o" #'helm-occur
-   "a h a" #'helm-apropos
-   "a h r" #'helm-resume)
-  (:keymaps '(helm-map)
-   "TAB" #'helm-execute-persistent-action
-   "C-z" #'helm-select-action)
-  :config
-  (progn
-    (advice-add 'helm-buffer--show-details :around #'cp/advice/helm-buffer--show-details)
-    (setq helm-split-window-default-side 'right)
-    (setq helm-buffer-max-length 40)))
 
 
 
@@ -1715,9 +1660,6 @@ controlled by `include'."
    `(diff-removed                ((t (:foreground ,zenburn-red))))
    `(linum                       ((t (:foreground ,zenburn-green-1 :background ,zenburn-bg))))
    '(dired-perm-write            ((t nil)))
-   '(helm-buffer-directory       ((t (:foreground "color-247"))))
-   '(helm-ff-dotted-directory    ((t (:foreground "color-247"))))
-   `(helm-match                  ((t (:foreground ,zenburn-red-2 :weight normal))))
    `(ivy-current-match           ((t (:foreground nil :background nil :underline nil))))
    '(ivy-minibuffer-match-face-1 ((t (:foreground nil :background nil :underline nil))))
    `(ivy-minibuffer-match-face-2 ((t (:foreground ,zenburn-red-2    :background nil))))

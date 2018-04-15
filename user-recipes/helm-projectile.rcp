@@ -1,7 +1,0 @@
-(:name helm-projectile
-       :description "Helm integration for Projectile."
-       :type github
-       :pkgname "bbatsov/helm-projectile"
-       :branch "master"
-       :checkout "0e9ba276b3fbc420b8cbdc1b99262ccd5c750db7"
-       :depends (projectile helm dash cl-lib))
