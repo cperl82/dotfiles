@@ -224,8 +224,8 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   (hs-minor-mode))
 (add-hook 'c-mode-hook #'cp/c-mode-hook-setup)
 
-(setq cp/normal-prefix "SPC")
-(setq cp/non-normal-prefix "M-SPC")
+(setq cp/normal-prefix ",")
+(setq cp/non-normal-prefix "M-,")
 
 ;; Unbind existing keybindings in evil-motion-state-map
 (general-define-key
@@ -242,8 +242,8 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   "o" #'delete-other-windows
   "s" #'split-window-vertically
   "v" #'split-window-horizontally
-  "j" #'dired-jump
   "f" #'find-file
+  "j" #'dired-jump
   "r" #'find-file-read-only
   "k" #'kill-buffer
   "K" #'kill-buffer-and-window)
@@ -255,11 +255,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
  :non-normal-prefix cp/non-normal-prefix
   "a" '(:ignore t :which-key "applications")
   "b" '(:ignore t :which-key "buffers")
-  "f" '(:ignore t :which-key "files")
   "w" '(:ignore t :which-key "windows")
-  "f f" #'find-file
-  "f r" #'find-file-read-only
-  "f j" #'dired-jump
   "b b" #'switch-to-buffer
   "b k" #'kill-buffer
   "b K" #'kill-buffer-and-window
@@ -271,8 +267,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   "w K" #'kill-buffer-and-window
   "w o" #'delete-other-windows
   "w x" #'delete-window
-  "w =" #'balance-windows
-  "h"   #'help-command)
+  "w =" #'balance-windows)
 
 
 ;; which-key
@@ -347,6 +342,22 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   :config
   (progn
     (global-evil-surround-mode 1)))
+
+
+
+;; buffer-move
+(use-package buffer-move
+  :defer t
+  :commands (buf-move-down buf-move-up buf-move-left buf-move-right)
+  :init
+  :general
+  (:states '(motion insert emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "w H" #'buf-move-left
+   "w J" #'buf-move-down
+   "w K" #'buf-move-up
+   "w L" #'buf-move-right))
 
 
 
