@@ -329,11 +329,6 @@ buffers whose visited file has disappeared and refreshes dired buffers."
    "/"   #'cp/evil-search-forward
    "?"   #'cp/evil-search-backward
    "TAB" #'indent-region)
-  (:keymaps '(motion emacs)
-   "C-h" #'evil-window-left
-   "C-j" #'evil-window-down
-   "C-k" #'evil-window-up
-   "C-l" #'evil-window-right)
   :init
   (progn
     (setq-default evil-symbol-word-search t)
@@ -396,9 +391,11 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 (use-package ace-window
   :defer t
   :general
-  (:keymaps '(motion)
-   :prefix cp/normal-prefix
-   "a a w" #'ace-window))
+  (:keymaps '(normal insert motion emacs)
+   "M-o" #'ace-window)
+  :config
+  (progn
+    (setq aw-background nil)))
 
 
 
@@ -466,28 +463,6 @@ buffers whose visited file has disappeared and refreshes dired buffers."
     (setq counsel-rg-base-command
           "rg -i -M 120 --no-heading --line-number --color never %s .")
     (counsel-mode 1)))
-
-
-
-;; buffer-move
-(use-package buffer-move
-  :defer t
-  :commands (buf-move-down buf-move-up buf-move-left buf-move-right)
-  :init
-  :general
-  (:states '(motion insert emacs)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "w H" #'buf-move-left
-   "w J" #'buf-move-down
-   "w K" #'buf-move-up
-   "w L" #'buf-move-right)
-  (:states '(motion)
-   :prefix nil
-   "C-M-h" #'buf-move-left
-   "C-M-j" #'buf-move-down
-   "C-M-k" #'buf-move-up
-   "C-M-l" #'buf-move-right))
 
 
 
@@ -809,9 +784,6 @@ Lisp function does not specify a special indentation."
 (use-package grep
   :defer t
   :general
-  (:keymaps '(grep-mode-map)
-   :states  '(normal)
-   "M-n" #'compilation-next-error)
   (:keymaps '(grep-mode-map)
    "SPC" nil)
   :config
