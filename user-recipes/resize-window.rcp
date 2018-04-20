@@ -1,5 +1,0 @@
-(:name resize-window
-       :description "easily resize windows in emacs"
-       :type github
-       :pkgname "dpsutton/resize-window"
-       :checkout "dcbbd30f4f4435070a66a22c5a169b752ca9f904")

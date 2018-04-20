@@ -45,7 +45,6 @@
    org-mode
    origami
    projectile
-   resize-window
    s
    smartparens
    smex
@@ -58,6 +57,7 @@
    vagrant-tramp
    wgrep
    which-key
+   windsize
    xcscope
    yaml-mode))
 
@@ -224,8 +224,8 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   (hs-minor-mode))
 (add-hook 'c-mode-hook #'cp/c-mode-hook-setup)
 
-(setq cp/normal-prefix ",")
-(setq cp/non-normal-prefix "M-,")
+(setq cp/normal-prefix "SPC")
+(setq cp/non-normal-prefix "M-SPC")
 
 ;; Unbind existing keybindings in evil-motion-state-map
 (general-define-key
@@ -245,8 +245,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   "f" #'find-file
   "j" #'dired-jump
   "r" #'find-file-read-only
-  "k" #'kill-buffer
-  "K" #'kill-buffer-and-window)
+  "k" #'kill-buffer)
 
 ;; Global keybinding that go into evil-motion-state-map, evil-insert-state-map and evil-emacs-state-map
 (general-define-key
@@ -256,6 +255,10 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   "a" '(:ignore t :which-key "applications")
   "b" '(:ignore t :which-key "buffers")
   "w" '(:ignore t :which-key "windows")
+  "f" '(:ignore t :which-key "files")
+  "f f" #'find-file
+  "f r" #'find-file-read-only
+  "f j" #'dired-jump
   "b b" #'switch-to-buffer
   "b k" #'kill-buffer
   "b K" #'kill-buffer-and-window
@@ -268,6 +271,10 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   "w o" #'delete-other-windows
   "w x" #'delete-window
   "w =" #'balance-windows)
+
+(general-define-key
+ :keymaps '(motion insert emacs)
+  "M-o" #'other-window)
 
 
 ;; which-key
@@ -403,10 +410,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   :defer t
   :general
   (:keymaps '(normal insert motion emacs)
-   "M-o" #'ace-window)
-  :config
-  (progn
-    (setq aw-background nil)))
+   "M-O" #'ace-window))
 
 
 
@@ -880,20 +884,21 @@ Lisp function does not specify a special indentation."
 
 
 
-;; resize window
-(use-package resize-window
+;; windsize
+(defhydra cp/hydra-windsize (nil nil)
+  "resize"
+  ("h" windsize-left  "left")
+  ("j" windsize-down  "down")
+  ("k" windsize-up    "up")
+  ("l" windsize-right "right"))
+
+(use-package windsize
   :defer t
   :general
   (:states '(normal insert motion visual emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
-   "w r" #'resize-window)
-  :config
-  (progn
-    (push '(?v ?p) resize-window-alias-list)
-    (push '(?V ?n) resize-window-alias-list)
-    (push '(?h ?b) resize-window-alias-list)
-    (push '(?H ?f) resize-window-alias-list)))
+   "w r" #'cp/hydra-windsize/body))
 
 
 
