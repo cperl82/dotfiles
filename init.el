@@ -69,6 +69,7 @@
 (require 'dash)
 (require 's)
 (require 'f)
+(general-override-mode)
 
 
 ;; el-get helpers: these depend on packages that el-get installs,
@@ -238,10 +239,10 @@ buffers whose visited file has disappeared and refreshes dired buffers."
  :keymaps '(motion emacs)
  :prefix ","
   "h" #'cp/evil-highlight-symbol
-  "x" #'delete-window
-  "o" #'delete-other-windows
   "s" #'split-window-vertically
   "v" #'split-window-horizontally
+  "x" #'delete-window
+  "o" #'delete-other-windows
   "f" #'find-file
   "j" #'dired-jump
   "r" #'find-file-read-only
@@ -320,6 +321,11 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 (use-package evil
   :diminish undo-tree-mode
   :general
+  (:keymaps 'override
+   "M-h" #'evil-window-left
+   "M-j" #'evil-window-down
+   "M-k" #'evil-window-up
+   "M-l" #'evil-window-right)
   (:keymaps '(motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
@@ -503,7 +509,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   :defer t
   :general
   (:keymaps '(dired-mode-map)
-   :states  '(emacs)
+   :states  '(normal)
    "h"   #'dired-up-directory
    "j"   #'dired-next-line
    "k"   #'dired-previous-line
@@ -513,7 +519,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
    "?"   #'evil-search-backward
    "G"   #'evil-goto-line
    "gg"  #'evil-goto-first-line
-   "M-k" #'dired-kill-subdir
+   "M-q" #'dired-kill-subdir
    "M-n" #'dired-next-subdir
    "M-p" #'dired-prev-subdir
    "q"   #'bury-buffer
@@ -524,7 +530,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
    "SPC" nil)
   :config
   (progn
-    (evil-set-initial-state 'dired-mode 'emacs)
+    (evil-set-initial-state 'dired-mode 'normal)
     (use-package dired-x)
     (put 'dired-find-alternate-file 'disabled nil)
     (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))))
@@ -566,8 +572,8 @@ buffers whose visited file has disappeared and refreshes dired buffers."
    "RET" #'cscope-select-entry-inplace
    "TAB" #'cscope-select-entry-other-window
    "o"   #'cscope-select-entry-other-window
-   "M-k" #'cscope-history-kill-file
-   "M-K" #'cscope-history-kill-result
+   "C-k" #'cscope-history-kill-file
+   "M-q" #'cscope-history-kill-result
    "q"   #'bury-buffer
    "Q"   #'cscope-quit
    "d"   #'cscope-dired-directory
