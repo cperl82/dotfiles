@@ -401,8 +401,9 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 (use-package avy
   :defer t
   :general
-  (:states '(motion)
+  (:keymaps '(motion insert emacs)
    :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
    "a a"   '(:ignore t :which-key "avy")
    "a a c" #'avy-goto-char
    "a a C" #'avy-goto-char-2
@@ -416,7 +417,11 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   :defer t
   :general
   (:keymaps '(normal insert motion emacs)
-   "M-O" #'ace-window))
+   "M-O" #'ace-window)
+  (:keymaps '(motion insert emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "w a" #'ace-window))
 
 
 
