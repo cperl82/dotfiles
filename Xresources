@@ -39,7 +39,6 @@ URxvt.skipBuiltinGlyphs:    true
 URxvt.cursorUnderline:      false
 URxvt.perl-ext-common:      default,selection,confirm-paste,matcher,keyboard-select
 URxvt.url-launcher:         /usr/bin/xdg-open
-URxvt.Keysym.M-o:           matcher:last
 URxvt.Keysym.M-Escape:      keyboard-select:activate
 URxvt.selection.pattern-0:  ([-_[:alpha:][:digit:]]+)
 URxvt.selection.pattern-1:  ([-_[:alpha:][:digit:]./\:]+)
