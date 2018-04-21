@@ -228,6 +228,9 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 (setq cp/normal-prefix "SPC")
 (setq cp/non-normal-prefix "M-SPC")
 
+(global-unset-key (kbd "C-h"))
+(setq help-char nil)
+
 ;; Unbind existing keybindings in evil-motion-state-map
 (general-define-key
  :keymaps '(motion)
@@ -322,10 +325,10 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   :diminish undo-tree-mode
   :general
   (:keymaps 'override
-   "M-h" #'evil-window-left
-   "M-j" #'evil-window-down
-   "M-k" #'evil-window-up
-   "M-l" #'evil-window-right)
+   "C-h" #'evil-window-left
+   "C-j" #'evil-window-down
+   "C-k" #'evil-window-up
+   "C-l" #'evil-window-right)
   (:keymaps '(motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
@@ -927,6 +930,14 @@ Lisp function does not specify a special indentation."
 
 
 
+;; hippie-expand
+(use-package hippie-exp
+  :defer t
+  :init
+  (progn
+    (global-set-key [remap dabbrev-expand] 'hippie-expand)))
+
+
 ;; escreen
 (defun cp/escreen-swap-screen (a &optional b)
   (when (and (numberp a) (numberp b))
@@ -1371,21 +1382,20 @@ controlled by `include'."
    "o p"     #'org-previous-link
    "o n"     #'org-next-link
    "o a"     #'org-agenda
-   "o t"     #'org-todo
    "o T"     #'org-set-tags
    "o P"     #'org-set-property
-   "o s"     #'cp/org-sort-entries)
+   "o s"     #'cp/org-sort-entries
+   "o h"     #'org-metaleft
+   "o j"     #'org-metadown
+   "o k"     #'org-metaup
+   "o l"     #'org-metaright
+   "o H"     #'org-shiftmetaleft
+   "o J"     #'org-shiftmetadown
+   "o K"     #'org-shiftmetaup
+   "o L"     #'org-shiftmetaright)
   (:keymaps '(org-mode-map)
    :states  '(motion)
    "TAB"     #'org-cycle
-   "M-h"     #'org-metaleft
-   "M-l"     #'org-metaright
-   "M-k"     #'org-metaup
-   "M-j"     #'org-metadown
-   "M-H"     #'org-shiftmetaleft
-   "M-L"     #'org-shiftmetaright
-   "M-K"     #'org-shiftmetaup
-   "M-J"     #'org-shiftmetadown
    "C-c a"   #'org-agenda
    "C-c c"   #'org-capture)
   (:keymaps '(org-mode-map)
@@ -1393,7 +1403,6 @@ controlled by `include'."
    "M-RET"   #'org-meta-return
    "M-."     #'cp/org-surround-tilda
    "M-v"     #'cp/org-surround-equal
-   "M-b"     #'cp/org-surround-star
    "M-u"     #'cp/org-complete-user-name-at-point)
   (:keymaps '(org-agenda-mode-map)
    :states  '(emacs)
