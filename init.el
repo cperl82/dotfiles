@@ -70,6 +70,8 @@
 (require 's)
 (require 'f)
 
+(general-override-mode)
+
 
 ;; el-get helpers: these depend on packages that el-get installs,
 ;; therefore they can't be used to help bootstrap el-get in any way
@@ -226,7 +228,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 (setq cp/non-normal-prefix "M-SPC")
 
 (global-unset-key (kbd "C-h"))
-(setq help-char nil)
+(global-set-key (kbd "C-c h") 'help)
 
 ;; Unbind existing keybindings in evil-motion-state-map
 (general-define-key
@@ -283,6 +285,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   :diminish which-key-mode
   :config
   (progn
+    (setq which-key-idle-delay 2.0)
     (which-key-mode)))
 
 
@@ -803,6 +806,7 @@ Lisp function does not specify a special indentation."
 
 (use-package evil-smartparens
   :defer t
+  :diminish evil-smartparens-mode
   :init
   (progn
     (add-hook 'lisp-mode-hook       #'cp/enable-evil-smartparens)
@@ -1026,6 +1030,8 @@ Lisp function does not specify a special indentation."
 
 (use-package escreen
   :defer t
+  :bind-keymap
+  ("C-c e" . escreen-map)
   :general
   (:states '(motion emacs)
    ", e" '(:keymap escreen-map :which-key "escreen"))
@@ -1034,22 +1040,28 @@ Lisp function does not specify a special indentation."
    :non-normal-prefix cp/non-normal-prefix
    "a e" '(:keymap escreen-map :which-key "escreen"))
   (:keymaps '(escreen-map)
-   "e" #'cp/escreen-get-active-screen-names-with-emphasis
-   "v" #'cp/escreen-get-active-screen-names-with-emphasis-vertical
-   "r" #'cp/escreen-rename-screen
-   "s" #'cp/escreen-switch-to-screen-with-ivy-completion
-   "H" #'cp/escreen-move-screen-left
-   "L" #'cp/escreen-move-screen-right
-   "k" #'escreen-kill-screen
-   "l" #'escreen-goto-next-screen
-   "h" #'escreen-goto-prev-screen
-   "," #'escreen-goto-last-screen)
+   "C-b" nil
+   "d"   #'cp/escreen-get-active-screen-names-with-emphasis
+   "v"   #'cp/escreen-get-active-screen-names-with-emphasis-vertical
+   "r"   #'cp/escreen-rename-screen
+   "s"   #'cp/escreen-switch-to-screen-with-ivy-completion
+   "C"   #'cp/escreen-compress
+   "H"   #'cp/escreen-move-screen-left
+   "L"   #'cp/escreen-move-screen-right
+   "k"   #'escreen-kill-screen
+   "l"   #'escreen-goto-next-screen
+   "h"   #'escreen-goto-prev-screen
+   "e"   #'escreen-goto-last-screen)
+  :init
+  (progn
+    (setq escreen-prefix-char (kbd "C-c e")))
   :config
   (progn
     (advice-add 'escreen-goto-screen   :after #'cp/advice/escreen-goto-screen)
     (advice-add 'escreen-kill-screen   :after #'cp/advice/escreen-kill-screen)
     (advice-add 'escreen-create-screen :after #'cp/advice/escreen-create-screen)
     (advice-add 'escreen-install       :after #'cp/advice/escreen-install)
+    (setq escreen-max-screens 20)
     (escreen-install)))
 
 
@@ -1323,6 +1335,14 @@ controlled by `include'."
   (:keymaps '(org-mode-map)
    :states  '(motion)
    "TAB"     #'org-cycle
+   "M-h"     #'org-metaleft
+   "M-j"     #'org-metadown
+   "M-k"     #'org-metaup
+   "M-l"     #'org-metaright
+   "M-H"     #'org-shiftmetaleft
+   "M-J"     #'org-shiftmetadown
+   "M-K"     #'org-shiftmetaup
+   "M-L"     #'org-shiftmetaright
    "C-c a"   #'org-agenda
    "C-c c"   #'org-capture)
   (:keymaps '(org-mode-map)
@@ -1640,24 +1660,10 @@ controlled by `include'."
 (evil-define-operator cp/evil-search-backward (beg end type)
   (cp/evil-search beg end nil))
 
-(defun cp/propertized-state (state &optional properties)
-  (let ((s
-         (cond
-          ((eq state 'normal)   "NORMAL")
-          ((eq state 'emacs)    "EMACS ")
-          ((eq state 'insert)   "INSERT")
-          ((eq state 'motion)   "MOTION")
-          ((eq state 'visual)   "VISUAL")
-          ((eq state 'operator) "OPER  ")
-          (t                    "UNKNWN"))))
-    (if properties
-        (apply #'propertize s properties)
-      s)))
-
 (use-package evil
   :diminish undo-tree-mode
   :general
-  (:keymaps '(motion insert emacs)
+  (:keymaps '(override)
    "C-h" #'evil-window-left
    "C-j" #'evil-window-down
    "C-k" #'evil-window-up
@@ -1686,23 +1692,13 @@ controlled by `include'."
     (setq evil-mode-line-format nil)
     (zenburn-with-color-variables
       (setq
-       evil-normal-state-tag
-       (cp/propertized-state 'normal)
-
-       evil-insert-state-tag
-       (cp/propertized-state 'insert `(face (:foreground ,zenburn-red)))
-
-       evil-visual-state-tag
-       (cp/propertized-state 'visual `(face (:foreground ,zenburn-yellow)))
-
-       evil-motion-state-tag
-       (cp/propertized-state 'motion `(face (:foreground ,zenburn-cyan)))
-
-       evil-operator-state-tag
-       (cp/propertized-state 'operator `(face (:foreground ,zenburn-blue)))
-
-       evil-emacs-state-tag
-       (cp/propertized-state 'emacs `(face (:foreground ,zenburn-magenta)))))))
+       evil-normal-state-tag               "NORMAL "
+       evil-insert-state-tag   (propertize "INSERT " 'face `(:foreground ,zenburn-red))
+       evil-visual-state-tag   (propertize "VISUAL " 'face `(:foreground ,zenburn-yellow))
+       evil-replace-state-tag  (propertize "REPLACE" 'face `(:foreground ,zenburn-orange))
+       evil-motion-state-tag   (propertize "MOTION " 'face `(:foreground ,zenburn-cyan))
+       evil-operator-state-tag (propertize "OPERATR" 'face `(:foreground ,zenburn-blue))
+       evil-emacs-state-tag    (propertize "EMACS  " 'face `(:foreground ,zenburn-magenta))))))
 
 
 
