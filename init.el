@@ -9,8 +9,7 @@
     (goto-char (point-max)) (eval-print-last-sexp)))
 
 (setq el-get-verbose t)
-(setq cp/el-get-user-recipe-dir (concat user-emacs-directory "user-recipes"))
-(add-to-list 'el-get-recipe-path cp/el-get-user-recipe-dir)
+(add-to-list 'el-get-recipe-path (concat user-emacs-directory "user-recipes"))
 (el-get
  'sync
  '(avy
@@ -70,8 +69,6 @@
 (require 's)
 (require 'f)
 
-(general-override-mode)
-
 
 ;; el-get helpers: these depend on packages that el-get installs,
 ;; therefore they can't be used to help bootstrap el-get in any way
@@ -105,12 +102,6 @@
             (checksum (and compute-checksum (funcall compute-checksum package-name))))
        `(,package-name ,checksum ,(el-get-recipe-filename package-name))))
    package-names))
-
-
-
-;; 2014-04-26: Loading other stuff
-(add-to-list 'load-path (concat user-emacs-directory "lisp"))
-
 
 
 ;; Misc
@@ -192,7 +183,7 @@
                 mode-line-end-spaces))
 
 ;; 2014-05-07 cperl: function to revert all buffers
-(defun revert-buffer-all ()
+(defun cp/revert-buffer-all ()
   "Revert all buffers.  This reverts buffers that are visiting a file, kills
 buffers whose visited file has disappeared and refreshes dired buffers."
   (interactive)
@@ -216,7 +207,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
         (message "Setting split-width-threshold to %d" new)
         (setq split-width-threshold new)))))
 
-(advice-add 'split-window-sensibly :before #'cp/split-windows-sensibly)
+(advice-add 'split-window-sensibly     :before #'cp/split-windows-sensibly)
 (advice-add 'split-window-horizontally :before #'cp/split-windows-sensibly)
 
 ;; 2017-08-17 cperl: misc stuff
@@ -266,7 +257,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   "b k" #'kill-buffer
   "b K" #'kill-buffer-and-window
   "b r" #'revert-buffer
-  "b R" #'revert-buffer-all
+  "b R" #'cp/revert-buffer-all
   "b f" #'(lambda () (interactive) (message (buffer-file-name)))
   "w s" #'split-window-vertically
   "w v" #'split-window-horizontally
@@ -294,7 +285,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 (use-package buffer-move
   :defer t
   :commands (buf-move-down buf-move-up buf-move-left buf-move-right)
-  :init
+  :load-path "lisp"
   :general
   (:states '(motion insert emacs)
    :prefix cp/normal-prefix
@@ -468,10 +459,11 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   :config
   (progn
     (evil-set-initial-state 'dired-mode 'normal)
-    (use-package dired-x)
     (put 'dired-find-alternate-file 'disabled nil)
     (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))))
 
+(use-package dired-x
+  :after (dired))
 
 
 ;; ibuffer-vc
@@ -499,6 +491,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
 ;; xcscope
 (use-package xcscope
   :defer t
+  :load-path "lisp"
   :general
   (:keymaps '(normal visual motion insert emacs)
    :prefix cp/normal-prefix
@@ -809,12 +802,14 @@ Lisp function does not specify a special indentation."
   :diminish evil-smartparens-mode
   :init
   (progn
-    (add-hook 'lisp-mode-hook       #'cp/enable-evil-smartparens)
+    (add-hook       'lisp-mode-hook #'cp/enable-evil-smartparens)
     (add-hook 'emacs-lisp-mode-hook #'cp/enable-evil-smartparens))
   :config
   (progn
-    (sp-local-pair '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
-    (sp-local-pair '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil)))
+    (sp-local-pair
+     '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
+    (sp-local-pair
+     '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil)))
 
 
 
@@ -824,7 +819,8 @@ Lisp function does not specify a special indentation."
   :config
   (progn
     (zenburn-with-color-variables
-      (setq hl-paren-colors `(,zenburn-red-4 ,zenburn-green ,zenburn-yellow-2 ,zenburn-blue+1)))))
+      (setq hl-paren-colors
+            `(,zenburn-red-4 ,zenburn-green ,zenburn-yellow-2 ,zenburn-blue+1)))))
 
 
 
@@ -1030,8 +1026,8 @@ Lisp function does not specify a special indentation."
 
 (use-package escreen
   :defer t
-  :bind-keymap
-  ("C-c e" . escreen-map)
+  :load-path "lisp"
+  :bind-keymap ("C-\\" . escreen-map)
   :general
   (:states '(motion emacs)
    ", e" '(:keymap escreen-map :which-key "escreen"))
@@ -1041,7 +1037,8 @@ Lisp function does not specify a special indentation."
    "a e" '(:keymap escreen-map :which-key "escreen"))
   (:keymaps '(escreen-map)
    "C-b" nil
-   "d"   #'cp/escreen-get-active-screen-names-with-emphasis
+   "e"   #'escreen-goto-last-screen
+   "w"   #'cp/escreen-get-active-screen-names-with-emphasis
    "v"   #'cp/escreen-get-active-screen-names-with-emphasis-vertical
    "r"   #'cp/escreen-rename-screen
    "s"   #'cp/escreen-switch-to-screen-with-ivy-completion
@@ -1050,18 +1047,14 @@ Lisp function does not specify a special indentation."
    "L"   #'cp/escreen-move-screen-right
    "k"   #'escreen-kill-screen
    "l"   #'escreen-goto-next-screen
-   "h"   #'escreen-goto-prev-screen
-   "e"   #'escreen-goto-last-screen)
-  :init
-  (progn
-    (setq escreen-prefix-char (kbd "C-c e")))
+   "h"   #'escreen-goto-prev-screen)
   :config
   (progn
+    (setq escreen-max-screens 20)
     (advice-add 'escreen-goto-screen   :after #'cp/advice/escreen-goto-screen)
     (advice-add 'escreen-kill-screen   :after #'cp/advice/escreen-kill-screen)
     (advice-add 'escreen-create-screen :after #'cp/advice/escreen-create-screen)
     (advice-add 'escreen-install       :after #'cp/advice/escreen-install)
-    (setq escreen-max-screens 20)
     (escreen-install)))
 
 
@@ -1555,23 +1548,25 @@ controlled by `include'."
 
 
 ; linum
-; 2014-04-04: Holy moly its effort to get line numbers like vim!
+; 2014-04-04 cperl: Holy moly its effort to get line numbers like vim!
 ; http://www.emacswiki.org/emacs/LineNumbers#toc6
-(unless window-system
-  (add-hook 'linum-before-numbering-hook
-	    (lambda ()
-	      (setq-local linum-format-fmt
-			  (let ((w (length (number-to-string
-					    (count-lines (point-min) (point-max))))))
-			    (concat "%" (number-to-string w) "d"))))))
-
 (defun cp/linum-format (line)
   (concat
    (propertize (format linum-format-fmt line) 'face 'linum)
    (propertize " " 'face 'linum)))
 
-(unless window-system
-  (setq linum-format 'cp/linum-format))
+(use-package linum
+  :defer t
+  :config
+  (progn
+    (setq linum-format 'cp/linum-format)
+    (add-hook
+     'linum-before-numbering-hook
+     (lambda ()
+       (setq-local linum-format-fmt
+                   (let ((w (length (number-to-string
+                                     (count-lines (point-min) (point-max))))))
+                     (concat "%" (number-to-string w) "d")))))))
 
 
 
@@ -1663,7 +1658,7 @@ controlled by `include'."
 (use-package evil
   :diminish undo-tree-mode
   :general
-  (:keymaps '(override)
+  (:keymaps '(motion insert emacs)
    "C-h" #'evil-window-left
    "C-j" #'evil-window-down
    "C-k" #'evil-window-up
