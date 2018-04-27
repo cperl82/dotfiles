@@ -1383,6 +1383,29 @@ controlled by `include'."
 ; track (roughly) when a project was cached and invalidate the cache if I determine there
 ; is a good reason (e.g. ".hg/dirstate" is newer than the time the projects file were
 ; cached). In addition, don't serialize to disk, only keep the cache in memory.
+(defvar cp/projectile-project-full-feature t)
+
+(defun cp/projectile-project-name (project-root)
+  (let ((default (projectile-default-project-name project-root)))
+    (if (string= default "+share+")
+        (if cp/projectile-project-full-feature
+            (let ((prefix
+                   (thread-last (locate-dominating-file project-root "+clone+")
+                     (expand-file-name)
+                     (file-name-directory)
+                     (directory-file-name)
+                     (file-name-directory)))
+                  (d
+                   (thread-last (directory-file-name project-root)
+                     (file-name-directory)
+                     (directory-file-name))))
+              (replace-regexp-in-string (format "^%s" prefix) "" d))
+          (thread-last project-root
+            (file-name-directory)
+            (directory-file-name)
+            (file-name-nondirectory)))
+        default)))
+
 (setq cp/projectile-projects-cache-by-time (make-hash-table :test 'equal))
 
 (defun cp/projectile-projects-cache-by-time-sync (data)
@@ -1456,8 +1479,9 @@ controlled by `include'."
   :config
   (progn
     (setq projectile-enable-caching t)
-    (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
     (setq projectile-completion-system 'ivy)
+    (setq projectile-project-name-function #'cp/projectile-project-name)
+    (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
     (projectile-mode)))
 
 
