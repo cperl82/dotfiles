@@ -1383,12 +1383,12 @@ controlled by `include'."
 ; track (roughly) when a project was cached and invalidate the cache if I determine there
 ; is a good reason (e.g. ".hg/dirstate" is newer than the time the projects file were
 ; cached). In addition, don't serialize to disk, only keep the cache in memory.
-(defvar cp/projectile-project-full-feature t)
+(defvar cp/projectile-project-full-feature-name t)
 
 (defun cp/projectile-project-name (project-root)
   (let ((default (projectile-default-project-name project-root)))
     (if (string= default "+share+")
-        (if cp/projectile-project-full-feature
+        (if cp/projectile-project-full-feature-name
             (let ((prefix
                    (thread-last (locate-dominating-file project-root "+clone+")
                      (expand-file-name)
@@ -1400,7 +1400,7 @@ controlled by `include'."
                      (file-name-directory)
                      (directory-file-name))))
               (replace-regexp-in-string (format "^%s" prefix) "" d))
-          (thread-last project-root
+          (thread-last (directory-file-name project-root)
             (file-name-directory)
             (directory-file-name)
             (file-name-nondirectory)))
@@ -1472,13 +1472,11 @@ controlled by `include'."
    "a p"   '(:keymap projectile-command-map :which-key "projectile"))
   :init
   (progn
-    (advice-add 'projectile-serialize              :around #'cp/advice/projectile-serialize)
-    (advice-add 'projectile-unserialize            :around #'cp/advice/projectile-unserialize)
-    (advice-add 'projectile-maybe-invalidate-cache :around #'cp/advice/projectile-maybe-invalidate-cache)
     (ivy-set-display-transformer 'projectile-completing-read 'ivy-rich-switch-buffer-transformer))
   :config
   (progn
     (setq projectile-enable-caching t)
+    (setq projectile-cache-file (concat temporary-file-directory "projectile.cache"))
     (setq projectile-completion-system 'ivy)
     (setq projectile-project-name-function #'cp/projectile-project-name)
     (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
