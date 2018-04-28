@@ -437,6 +437,15 @@ space)"
       (revert-buffer)
       (message "dired-omit-files is now: %S" dired-omit-files)))
 
+(defun cp/dired-find-file-dwim ()
+  "A wrapper for `find-file' that will uses `dired-current-directory'
+instead of `default-directory'.  This is useful when a dired buffer
+has a subdirectory inserted, and you want to `find-file' from that
+subdirectory."
+  (interactive)
+  (let ((default-directory (dired-default-directory)))
+    (call-interactively #'find-file)))
+
 (use-package dired
   :defer t
   :general
@@ -459,6 +468,7 @@ space)"
    "o"   #'dired-find-file-other-window
    "r"   #'revert-buffer
    "."   #'cp/dired-toggle-hiding-dotfiles
+   ", f" #'cp/dired-find-file-dwim
    "SPC" nil)
   :config
   (progn
