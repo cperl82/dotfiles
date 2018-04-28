@@ -111,9 +111,7 @@
       confirm-kill-emacs      'y-or-n-p
       gc-cons-threshold       100000000
       inhibit-startup-message t
-      make-backup-files       nil
-      split-height-threshold  nil
-      split-width-threshold   60)
+      make-backup-files       nil)
 
 ;; 2015-09-11 Enable narrowing command which are disabled by default
 (put 'narrow-to-region 'disabled nil)
@@ -163,7 +161,6 @@
               (cdr cache-entry))))))
      ,name))
 
-;; 2014-04-22 mode-line-format
 (setq-default mode-line-format
               `("%e"
                 mode-line-front-space
@@ -182,7 +179,6 @@
                 mode-line-modes
                 mode-line-end-spaces))
 
-;; 2014-05-07 cperl: function to revert all buffers
 (defun cp/revert-buffer-all ()
   "Revert all buffers.  This reverts buffers that are visiting a file, kills
 buffers whose visited file has disappeared and refreshes dired buffers."
@@ -198,14 +194,20 @@ buffers whose visited file has disappeared and refreshes dired buffers."
               (kill-buffer b)))
            ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
 
-;; 2018-04-27 cperl: function to help split windows the way I like it
 (defun cp/advice/split-windows (&rest r)
   "Try to always maintain two windows, side by side (i.e. split
-horizontally), unless we get below some absolute minimum"
+horizontally), unless we get below some absolute minimum
+
+The idea is to keep the `split-width-threshold' set to the number of
+columns in the frame.  That way, as soon as more than one window has
+been created, any given window no longer meets the criteria for being
+able to be split again, even if the windows are unbalanced (e.g. one
+is only a few columns wide and the other takes up all the remaining
+space)"
   (let ((width (frame-text-width)))
     (if (< width 120)
         (setq split-width-threshold nil)
-      (let ((desired (1+ (/ (frame-width) 2))))
+      (let ((desired (frame-text-width)))
         (when (not (equal desired split-width-threshold))
           (setq split-width-threshold desired))))))
 
