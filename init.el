@@ -198,17 +198,19 @@ buffers whose visited file has disappeared and refreshes dired buffers."
               (kill-buffer b)))
            ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
 
-;; 2017-01-12 cperl: function to help split windows the way I like it
-(defun cp/split-windows-sensibly (&rest r)
-  (when (eq (length (window-list)) 1)
-    (let* ((columns (window-size nil t))
-           (new (1+ (/ columns 2))))
-      (progn
-        (message "Setting split-width-threshold to %d" new)
-        (setq split-width-threshold new)))))
+;; 2018-04-27 cperl: function to help split windows the way I like it
+(defun cp/advice/split-windows (&rest r)
+  "Try to always maintain two windows, side by side (i.e. split
+horizontally), unless we get below some absolute minimum"
+  (let ((width (frame-text-width)))
+    (if (< width 120)
+        (setq split-width-threshold nil)
+      (let ((desired (1+ (/ (frame-width) 2))))
+        (when (not (equal desired split-width-threshold))
+          (setq split-width-threshold desired))))))
 
-(advice-add 'split-window-sensibly     :before #'cp/split-windows-sensibly)
-(advice-add 'split-window-horizontally :before #'cp/split-windows-sensibly)
+(advice-add 'split-window-sensibly     :before #'cp/advice/split-windows)
+(advice-add 'split-window-horizontally :before #'cp/advice/split-windows)
 
 ;; 2017-08-17 cperl: misc stuff
 (defun cp/c-mode-hook-setup ()
@@ -895,7 +897,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
          (s
           (if width
               (let* ((number (cp/escreen-propertize-screen-number n))
-                     (fmt (format "%s %%%ds (%%d buffers)" number width))
+                     (fmt (format "%s %%-%ds (%%d buffers)" number width))
                      (n-buffers (->> screen-data (nth 3) (--map (nth 0 it)) (--map (nth 1 it)) (length))))
                 (format fmt name n-buffers))
             (format "%d:%s" n name))))
