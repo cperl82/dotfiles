@@ -437,14 +437,31 @@ space)"
       (revert-buffer)
       (message "dired-omit-files is now: %S" dired-omit-files)))
 
-(defun cp/dired-find-file-dwim ()
-  "A wrapper for `find-file' that will uses `dired-current-directory'
-instead of `default-directory'.  This is useful when a dired buffer
-has a subdirectory inserted, and you want to `find-file' from that
-subdirectory."
+(defun cp/dired-with-dired-default-directory (f &rest args)
   (interactive)
   (let ((default-directory (dired-default-directory)))
-    (call-interactively #'find-file)))
+    (call-interactively f args)))
+
+(defun cp/dired-smart-find-file ()
+  (interactive)
+  (cp/dired-with-dired-default-directory #'find-file))
+
+(defun cp/dired-smart-async-shell-command (command &optional output-buffer error-buffer)
+  "Like function `async-shell-command', but in the current Virtual
+Dired directory.  Copied from `dired-smart-shell-command' from
+dired-x"
+  (interactive
+   (list
+    (read-shell-command "Async shell command: " nil nil
+			(cond
+			 (buffer-file-name (file-relative-name buffer-file-name))
+			 ((eq major-mode 'dired-mode) (dired-get-filename t t))))
+    current-prefix-arg
+    shell-command-default-error-buffer))
+  (let ((default-directory (or (and (eq major-mode 'dired-mode)
+                                    (dired-current-directory))
+                               default-directory)))
+    (async-shell-command command output-buffer error-buffer)))
 
 (use-package dired
   :defer t
@@ -468,7 +485,8 @@ subdirectory."
    "o"   #'dired-find-file-other-window
    "r"   #'revert-buffer
    "."   #'cp/dired-toggle-hiding-dotfiles
-   ", f" #'cp/dired-find-file-dwim
+   ", f" #'cp/dired-smart-find-file
+   "M-&" #'cp/dired-smart-async-shell-command
    "SPC" nil)
   :config
   (progn
