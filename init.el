@@ -1418,25 +1418,20 @@ controlled by `include'."
 (defvar cp/projectile-project-full-feature-name t)
 
 (defun cp/projectile-project-name (project-root)
-  (let ((default (projectile-default-project-name project-root)))
-    (if (string= default "+share+")
+  (if (string-match "+share+" project-root)
+      (let ((feature-base (locate-dominating-file project-root "+share+")))
         (if cp/projectile-project-full-feature-name
             (let ((prefix
-                   (thread-last (locate-dominating-file project-root "+clone+")
+                   (thread-last (locate-dominating-file feature-base "+clone+")
                      (expand-file-name)
                      (file-name-directory)
                      (directory-file-name)
                      (file-name-directory)))
-                  (d
-                   (thread-last (directory-file-name project-root)
-                     (file-name-directory)
-                     (directory-file-name))))
+                  (d (directory-file-name feature-base)))
               (replace-regexp-in-string (format "^%s" prefix) "" d))
-          (thread-last (directory-file-name project-root)
-            (file-name-directory)
+          (thread-last (file-name-directory feature-base)
             (directory-file-name)
-            (file-name-nondirectory)))
-        default)))
+            (file-name-nondirectory))))))
 
 (setq cp/projectile-projects-cache-by-time (make-hash-table :test 'equal))
 
