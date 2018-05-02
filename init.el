@@ -373,6 +373,26 @@ space)"
 
 
 ;; swiper / ivy / counsel / smex
+(defun cp/counsel-rg-type-list ()
+  (thread-last (shell-command-to-string "rg --type-list")
+    (s-split "\n")))
+
+(defun cp/counsel-rg-with-prefix-arg (&rest args)
+  (let ((current-prefix-arg '(4)))
+    (apply #'counsel-rg args)))
+
+(defun cp/counsel-rg-with-type-list ()
+  "Prompt for a supported file type from rg and then run
+`counsel-rg' as if a prefix arg was passed, but explicitly
+setting the args to `-t TYPE' instead of prompting."
+  (interactive)
+  (let* ((file-type
+          (ivy-read "File type: " (cp/counsel-rg-type-list) :require-match t))
+         (file-type (nth 0 (s-split ":" file-type)))
+         (extra-rg-args (format "-t%s" file-type))
+         )
+    (cp/counsel-rg-with-prefix-arg nil nil extra-rg-args nil)))
+
 (use-package smex
   :defer t)
 
@@ -409,6 +429,12 @@ space)"
 (use-package counsel
   :defer t
   :diminish counsel-mode
+  :general
+  (:states '(motion insert emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "a g r" #'counsel-rg
+   "a g R" #'cp/counsel-rg-with-type-list)
   :init
   (progn
     ;; 2018-04-14 cperl: copying https://oremacs.com/2018/03/05/grep-exclude
@@ -997,8 +1023,9 @@ dired-x"
    "a e" '(:keymap escreen-map :which-key "escreen"))
   (:keymaps '(escreen-map)
    "C-b" nil
-   "e"   #'escreen-goto-last-screen
-   "w"   #'cp/escreen-get-active-screen-names-with-emphasis
+   "n"   nil
+   "p"   #'escreen-goto-last-screen
+   "e"   #'cp/escreen-get-active-screen-names-with-emphasis
    "v"   #'cp/escreen-get-active-screen-names-with-emphasis-vertical
    "r"   #'cp/escreen-rename-screen
    "s"   #'cp/escreen-switch-to-screen-with-ivy-completion
