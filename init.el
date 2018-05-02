@@ -389,8 +389,7 @@ setting the args to `-t TYPE' instead of prompting."
   (let* ((file-type
           (ivy-read "File type: " (cp/counsel-rg-type-list) :require-match t))
          (file-type (nth 0 (s-split ":" file-type)))
-         (extra-rg-args (format "-t%s" file-type))
-         )
+         (extra-rg-args (format "-t%s" file-type)))
     (cp/counsel-rg-with-prefix-arg nil nil extra-rg-args nil)))
 
 (use-package smex
