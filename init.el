@@ -220,11 +220,11 @@ space)"
   (hs-minor-mode))
 (add-hook 'c-mode-hook #'cp/c-mode-hook-setup)
 
-(setq cp/normal-prefix "SPC")
-(setq cp/non-normal-prefix "M-SPC")
+(defconst cp/normal-prefix "SPC")
+(defconst cp/non-normal-prefix "M-SPC")
 
 (global-unset-key (kbd "C-h"))
-(global-set-key (kbd "C-c h") 'help)
+(global-set-key   (kbd "C-c h") 'help)
 
 ;; Unbind existing keybindings in evil-motion-state-map
 (general-define-key
@@ -463,14 +463,11 @@ setting the args to `-t TYPE' instead of prompting."
       (revert-buffer)
       (message "dired-omit-files is now: %S" dired-omit-files)))
 
-(defun cp/dired-with-dired-default-directory (f &rest args)
-  (interactive)
-  (let ((default-directory (dired-default-directory)))
-    (call-interactively f args)))
-
 (defun cp/dired-smart-find-file ()
   (interactive)
-  (cp/dired-with-dired-default-directory #'find-file))
+  (let* ((name (dired-get-filename))
+         (default-directory (if (file-directory-p name) name (dired-default-directory))))
+    (call-interactively #'find-file)))
 
 (defun cp/dired-smart-async-shell-command (command &optional output-buffer error-buffer)
   "Like function `async-shell-command', but in the current Virtual
@@ -513,7 +510,8 @@ dired-x"
    "."   #'cp/dired-toggle-hiding-dotfiles
    ", f" #'cp/dired-smart-find-file
    "M-&" #'cp/dired-smart-async-shell-command
-   "SPC" nil)
+   "SPC" nil
+   )
   :config
   (progn
     (evil-set-initial-state 'dired-mode 'normal)
