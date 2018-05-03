@@ -234,7 +234,8 @@ space)"
 
 ;; Global keybinding that go into evil-motion-state-map and evil-emacs-state-map
 (general-define-key
- :keymaps '(motion emacs)
+ :keymaps '(override)
+ :states '(normal motion emacs)
  :prefix ","
   "h" #'cp/evil-highlight-symbol
   "s" #'split-window-vertically
@@ -248,7 +249,8 @@ space)"
 
 ;; Global keybinding that go into evil-motion-state-map, evil-insert-state-map and evil-emacs-state-map
 (general-define-key
- :keymaps '(motion insert emacs)
+ :keymaps '(override)
+ :states '(normal motion emacs)
  :prefix cp/normal-prefix
  :non-normal-prefix cp/non-normal-prefix
   "a" '(:ignore t :which-key "applications")
@@ -292,7 +294,8 @@ space)"
   :commands (buf-move-down buf-move-up buf-move-left buf-move-right)
   :load-path "lisp"
   :general
-  (:states '(motion insert emacs)
+  (:keymaps '(override)
+   :states '(normal motion emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w H" #'buf-move-left
@@ -329,7 +332,8 @@ space)"
 (use-package avy
   :defer t
   :general
-  (:keymaps '(motion insert emacs)
+  (:keymaps '(override)
+   :states '(normal motion emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a a"   '(:ignore t :which-key "avy")
@@ -346,7 +350,8 @@ space)"
   :general
   (:keymaps '(normal insert motion emacs)
    "M-O" #'ace-window)
-  (:keymaps '(motion insert emacs)
+  (:keymaps '(override)
+   :states '(normal motion emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w a" #'ace-window))
@@ -429,18 +434,14 @@ setting the args to `-t TYPE' instead of prompting."
   :defer t
   :diminish counsel-mode
   :general
-  (:states '(motion insert emacs)
+  (:keymaps '(override)
+   :states '(normal motion emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a g r" #'counsel-rg
    "a g R" #'cp/counsel-rg-with-type-list)
   :init
   (progn
-    ;; 2018-04-14 cperl: copying https://oremacs.com/2018/03/05/grep-exclude
-    (setq counsel-git-cmd "rg --files")
-    (defalias #'cp/project-files #'counsel-git)
-    (setq counsel-rg-base-command
-          "rg -i -M 120 --no-heading --line-number --color never %s .")
     (counsel-mode 1)))
 
 
@@ -548,7 +549,8 @@ dired-x"
 (use-package xcscope
   :defer t
   :general
-  (:keymaps '(normal visual motion insert emacs)
+  (:keymaps '(override)
+   :states '(normal motion emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a c" '(:keymap cscope-command-map :which-key "cscope"))
@@ -591,7 +593,7 @@ dired-x"
 
 
 ;; lisp-mode
-(use-package lisp-mode
+(use-package elisp-mode
   :defer t
   :config
   (add-hook
@@ -600,7 +602,8 @@ dired-x"
      (setq lisp-indent-function #'common-lisp-indent-function)
      (setq indent-tabs-mode nil)
      (hs-minor-mode)
-     (hs-hide-all))))
+     (hs-hide-all)
+     (company-mode))))
 
 
 
@@ -818,7 +821,8 @@ dired-x"
 (use-package windsize
   :defer t
   :general
-  (:states '(normal insert motion visual emacs)
+  (:keymaps '(override)
+   :states '(normal motion emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w r" #'cp/hydra-windsize/body))
@@ -829,7 +833,8 @@ dired-x"
 (use-package winner
   :defer t
   :general
-  (:keymaps '(motion visual emacs)
+  (:keymaps '(override)
+   :states  '(normal motion emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w u" #'winner-undo
@@ -1012,9 +1017,12 @@ dired-x"
   :load-path "lisp"
   :bind-keymap ("C-\\" . escreen-map)
   :general
-  (:states '(motion emacs)
-   ", e" '(:keymap escreen-map :which-key "escreen"))
-  (:states '(motion insert emacs)
+  (:keymaps '(override)
+   :states '(normal motion emacs)
+   :prefix ","
+   "e" '(:keymap escreen-map :which-key "escreen"))
+  (:keymaps '(override)
+   :states '(normal motion emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a e" '(:keymap escreen-map :which-key "escreen"))
@@ -1290,7 +1298,7 @@ controlled by `include'."
   :defer t
   :general
   (:keymaps '(org-mode-map org-agenda-mode-map)
-   :states  '(motion emacs)
+   :states  '(normal motion emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "o"       '(:ignore t :which-key "org")
@@ -1514,14 +1522,13 @@ controlled by `include'."
   :commands (projectile-project-p)
   :defer t
   :general
-  (:states '(motion insert emacs)
-   :prefix nil
-   :non-normal-prefix nil
-   "C-c p" '(:keymap projectile-command-map :which-key "projectile"))
-  (:states '(motion insert emacs)
+  (:keymaps '(override)
+   :states  '(normal motion emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a p"   '(:keymap projectile-command-map :which-key "projectile"))
+  (:states '(motion insert emacs)
+   "C-c p" '(:keymap projectile-command-map :which-key "projectile"))
   :init
   (progn
     (ivy-set-display-transformer 'projectile-completing-read 'ivy-rich-switch-buffer-transformer))
@@ -1659,18 +1666,20 @@ controlled by `include'."
 (use-package evil
   :diminish undo-tree-mode
   :general
-  (:keymaps '(motion insert emacs)
-   "C-h" #'evil-window-left
-   "C-j" #'evil-window-down
-   "C-k" #'evil-window-up
-   "C-l" #'evil-window-right)
-  (:keymaps '(motion insert emacs)
+  (:keymaps '(override)
+   :states  '(normal motion emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w h" #'evil-window-left
    "w j" #'evil-window-down
    "w k" #'evil-window-up
    "w l" #'evil-window-right)
+  (:keymaps '(override)
+   :states  '(normal motion emacs)
+   "C-h" #'evil-window-left
+   "C-j" #'evil-window-down
+   "C-k" #'evil-window-up
+   "C-l" #'evil-window-right)
   (:keymaps '(visual)
    "/"   #'cp/evil-search-forward
    "?"   #'cp/evil-search-backward
