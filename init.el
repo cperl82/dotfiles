@@ -453,7 +453,7 @@ setting the args to `-t TYPE' instead of prompting."
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a g r" #'counsel-rg
-   "a g R" #'cp/counsel-rg-with-type-list
+   "a g R" #'cp/counsel-rg-with-type
    "a g O" #'cp/counsel-rg-with-type-ocaml
    "a g C" #'cp/counsel-rg-with-type-c
    "a g E" #'cp/counsel-rg-with-type-elisp)
