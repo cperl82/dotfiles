@@ -235,7 +235,7 @@ space)"
 ;; Global keybinding that go into evil-motion-state-map and evil-emacs-state-map
 (general-define-key
  :keymaps '(override)
- :states '(normal motion emacs)
+ :states '(normal motion)
  :prefix ","
   "h" #'cp/evil-highlight-symbol
   "s" #'split-window-vertically
@@ -250,7 +250,7 @@ space)"
 ;; Global keybinding that go into evil-motion-state-map, evil-insert-state-map and evil-emacs-state-map
 (general-define-key
  :keymaps '(override)
- :states '(normal motion emacs)
+ :states '(normal motion insert emacs)
  :prefix cp/normal-prefix
  :non-normal-prefix cp/non-normal-prefix
   "a" '(:ignore t :which-key "applications")
@@ -283,7 +283,7 @@ space)"
   :diminish which-key-mode
   :config
   (progn
-    (setq which-key-idle-delay 2.0)
+    (setq which-key-idle-delay 1.0)
     (which-key-mode)))
 
 
@@ -295,7 +295,7 @@ space)"
   :load-path "lisp"
   :general
   (:keymaps '(override)
-   :states '(normal motion emacs)
+   :states '(normal motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w H" #'buf-move-left
@@ -333,13 +333,13 @@ space)"
   :defer t
   :general
   (:keymaps '(override)
-   :states '(normal motion emacs)
+   :states '(normal motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a a"   '(:ignore t :which-key "avy")
    "a a c" #'avy-goto-char
    "a a C" #'avy-goto-char-2
-   "a a W" #'avy-goto-word-1)
+   "a a w" #'avy-goto-word-1)
   :config
   (progn
     (setq avy-background t)))
@@ -348,10 +348,10 @@ space)"
 (use-package ace-window
   :defer t
   :general
-  (:keymaps '(normal insert motion emacs)
+  (:keymaps '(normal motion insert emacs)
    "M-O" #'ace-window)
   (:keymaps '(override)
-   :states '(normal motion emacs)
+   :states '(normal motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "w a" #'ace-window))
@@ -386,16 +386,30 @@ space)"
   (let ((current-prefix-arg '(4)))
     (apply #'counsel-rg args)))
 
-(defun cp/counsel-rg-with-type-list ()
+(defun cp/counsel-rg-with-type (&optional type)
   "Prompt for a supported file type from rg and then run
 `counsel-rg' as if a prefix arg was passed, but explicitly
 setting the args to `-t TYPE' instead of prompting."
   (interactive)
   (let* ((file-type
-          (ivy-read "File type: " (cp/counsel-rg-type-list) :require-match t))
-         (file-type (nth 0 (s-split ":" file-type)))
+          (or type
+              (thread-last (ivy-read "File type: " (cp/counsel-rg-type-list) :require-match t)
+                (s-split ":")
+                (nth 0))))
          (extra-rg-args (format "-t%s" file-type)))
     (cp/counsel-rg-with-prefix-arg nil nil extra-rg-args nil)))
+
+(defun cp/counsel-rg-with-type-ocaml ()
+  (interactive)
+  (cp/counsel-rg-with-type "ocaml"))
+
+(defun cp/counsel-rg-with-type-c ()
+  (interactive)
+  (cp/counsel-rg-with-type "c"))
+
+(defun cp/counsel-rg-with-type-elisp ()
+  (interactive)
+  (cp/counsel-rg-with-type "elisp"))
 
 (use-package smex
   :defer t)
@@ -439,7 +453,10 @@ setting the args to `-t TYPE' instead of prompting."
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a g r" #'counsel-rg
-   "a g R" #'cp/counsel-rg-with-type-list)
+   "a g R" #'cp/counsel-rg-with-type-list
+   "a g O" #'cp/counsel-rg-with-type-ocaml
+   "a g C" #'cp/counsel-rg-with-type-c
+   "a g E" #'cp/counsel-rg-with-type-elisp)
   :init
   (progn
     (counsel-mode 1)))
@@ -467,7 +484,10 @@ setting the args to `-t TYPE' instead of prompting."
 (defun cp/dired-smart-find-file ()
   (interactive)
   (let* ((name (dired-get-filename))
-         (default-directory (if (file-directory-p name) name (dired-default-directory))))
+         (default-directory
+          (if (file-directory-p name)
+              (file-name-as-directory name)
+            (dired-current-directory))))
     (call-interactively #'find-file)))
 
 (defun cp/dired-smart-async-shell-command (command &optional output-buffer error-buffer)
@@ -491,7 +511,7 @@ dired-x"
   :defer t
   :general
   (:keymaps '(dired-mode-map)
-   :states  '(normal)
+   :states  '(normal motion)
    "h"   #'dired-up-directory
    "j"   #'dired-next-line
    "k"   #'dired-previous-line
@@ -509,15 +529,19 @@ dired-x"
    "o"   #'dired-find-file-other-window
    "r"   #'revert-buffer
    "."   #'cp/dired-toggle-hiding-dotfiles
-   ", f" #'cp/dired-smart-find-file
    "M-&" #'cp/dired-smart-async-shell-command
-   "SPC" nil
-   )
+   ", f" #'cp/dired-smart-find-file)
   :config
   (progn
-    (evil-set-initial-state 'dired-mode 'normal)
     (put 'dired-find-alternate-file 'disabled nil)
-    (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))))
+    (add-hook 'dired-mode-hook
+              (lambda ()
+                (general-define-key
+                 :keymaps '(override)
+                 :states  '(normal motion)
+                 ", f"     #'cp/dired-smart-find-file
+                 "SPC f f" #'cp/dired-smart-find-file)
+                (dired-omit-mode 1)))))
 
 (use-package dired-x
   :after (dired))
@@ -1610,7 +1634,6 @@ controlled by `include'."
 (zenburn-with-color-variables
   (custom-theme-set-faces
    `zenburn
-   `(isearch                     ((t (:foreground ,zenburn-bg-05 :weight bold :background ,zenburn-orange))))
    `(lazy-highlight              ((t (:foreground ,zenburn-bg-05 :weight bold :background ,zenburn-orange))))
    `(diff-added                  ((t (:foreground ,zenburn-green :weight bold))))
    `(diff-removed                ((t (:foreground ,zenburn-red))))
