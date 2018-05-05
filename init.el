@@ -223,55 +223,52 @@ space)"
 (defconst cp/normal-prefix "SPC")
 (defconst cp/non-normal-prefix "M-SPC")
 
-(global-unset-key (kbd "C-h"))
-(global-set-key   (kbd "C-c h") 'help)
-
 ;; Unbind existing keybindings in evil-motion-state-map
 (general-define-key
  :keymaps '(motion)
   "SPC" nil
   ","   nil)
 
-;; Global keybinding that go into evil-motion-state-map and evil-emacs-state-map
+;; Global keybindings
 (general-define-key
  :keymaps '(override)
  :states '(normal motion)
  :prefix ","
-  "h" #'cp/evil-highlight-symbol
-  "s" #'split-window-vertically
-  "v" #'split-window-horizontally
-  "x" #'delete-window
-  "o" #'delete-other-windows
-  "f" #'find-file
-  "j" #'dired-jump
-  "r" #'find-file-read-only
-  "k" #'kill-buffer)
+ "h" #'cp/evil-highlight-symbol
+ "s" #'split-window-vertically
+ "v" #'split-window-horizontally
+ "x" #'delete-window
+ "o" #'delete-other-windows
+ "f" #'find-file
+ "j" #'dired-jump
+ "r" #'find-file-read-only
+ "k" #'kill-buffer)
 
-;; Global keybinding that go into evil-motion-state-map, evil-insert-state-map and evil-emacs-state-map
 (general-define-key
  :keymaps '(override)
  :states '(normal motion insert emacs)
  :prefix cp/normal-prefix
  :non-normal-prefix cp/non-normal-prefix
-  "a" '(:ignore t :which-key "applications")
-  "b" '(:ignore t :which-key "buffers")
-  "w" '(:ignore t :which-key "windows")
-  "f" '(:ignore t :which-key "files")
-  "f f" #'find-file
-  "f r" #'find-file-read-only
-  "f j" #'dired-jump
-  "b b" #'switch-to-buffer
-  "b k" #'kill-buffer
-  "b K" #'kill-buffer-and-window
-  "b r" #'revert-buffer
-  "b R" #'cp/revert-buffer-all
-  "b f" #'(lambda () (interactive) (message (buffer-file-name)))
-  "w s" #'split-window-vertically
-  "w v" #'split-window-horizontally
-  "w K" #'kill-buffer-and-window
-  "w o" #'delete-other-windows
-  "w x" #'delete-window
-  "w =" #'balance-windows)
+ "a"   '(:ignore t :which-key "applications")
+ "b"   '(:ignore t :which-key "buffers")
+ "w"   '(:ignore t :which-key "windows")
+ "f"   '(:ignore t :which-key "files")
+ "h"   #'help
+ "f f" #'find-file
+ "f r" #'find-file-read-only
+ "f j" #'dired-jump
+ "b b" #'switch-to-buffer
+ "b k" #'kill-buffer
+ "b K" #'kill-buffer-and-window
+ "b r" #'revert-buffer
+ "b R" #'cp/revert-buffer-all
+ "b f" #'(lambda () (interactive) (message (buffer-file-name)))
+ "w s" #'split-window-vertically
+ "w v" #'split-window-horizontally
+ "w K" #'kill-buffer-and-window
+ "w o" #'delete-other-windows
+ "w x" #'delete-window
+ "w =" #'balance-windows)
 
 (general-define-key
  :keymaps '(motion insert emacs)
@@ -873,6 +870,17 @@ dired-x"
   :defer t
   :init
   (progn
+    (setq hippie-expand-try-functions-list
+          '(try-expand-dabbrev
+            try-expand-dabbrev-all-buffers
+            try-expand-dabbrev-from-kill
+            try-complete-file-name-partially
+            try-complete-file-name
+            try-expand-all-abbrevs
+            try-expand-list
+            try-expand-line
+            try-complete-lisp-symbol-partially
+            try-complete-lisp-symbol))
     (global-set-key [remap dabbrev-expand] 'hippie-expand)))
 
 
