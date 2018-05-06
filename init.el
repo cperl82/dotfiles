@@ -239,10 +239,15 @@ space)"
  "v" #'split-window-horizontally
  "x" #'delete-window
  "o" #'delete-other-windows
- "f" #'find-file
  "j" #'dired-jump
  "r" #'find-file-read-only
  "k" #'kill-buffer)
+
+(general-define-key
+ :keymaps '(global)
+ :states '(normal motion)
+ :prefix ","
+ "f" #'find-file)
 
 (general-define-key
  :keymaps '(override)
@@ -533,11 +538,6 @@ dired-x"
     (put 'dired-find-alternate-file 'disabled nil)
     (add-hook 'dired-mode-hook
               (lambda ()
-                (general-define-key
-                 :keymaps '(override)
-                 :states  '(normal motion)
-                 ", f"     #'cp/dired-smart-find-file
-                 "SPC f f" #'cp/dired-smart-find-file)
                 (dired-omit-mode 1)))))
 
 (use-package dired-x
