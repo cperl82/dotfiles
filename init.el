@@ -220,6 +220,16 @@ space)"
   (hs-minor-mode))
 (add-hook 'c-mode-hook #'cp/c-mode-hook-setup)
 
+(defun cp/find-file ()
+  "A wrapper for `find-file' that dispatches to a special
+implementation if in dired-mode"
+  (interactive)
+  (let ((f
+         (cond
+           ((eq major-mode 'dired-mode) #'cp/dired-smart-find-file)
+           (t                           #'find-file))))
+    (call-interactively f)))
+
 (defconst cp/normal-prefix "SPC")
 (defconst cp/non-normal-prefix "M-SPC")
 
@@ -241,13 +251,8 @@ space)"
  "o" #'delete-other-windows
  "j" #'dired-jump
  "r" #'find-file-read-only
- "k" #'kill-buffer)
-
-(general-define-key
- :keymaps '(global)
- :states '(normal motion)
- :prefix ","
- "f" #'find-file)
+ "k" #'kill-buffer
+ "f" #'cp/find-file)
 
 (general-define-key
  :keymaps '(override)
@@ -259,7 +264,7 @@ space)"
  "w"   '(:ignore t :which-key "windows")
  "f"   '(:ignore t :which-key "files")
  "h"   #'help
- "f f" #'find-file
+ "f f" #'cp/find-file
  "f r" #'find-file-read-only
  "f j" #'dired-jump
  "b b" #'switch-to-buffer
