@@ -242,7 +242,7 @@ implementation if in dired-mode"
 ;; Global keybindings
 (general-define-key
  :keymaps '(override)
- :states '(normal motion)
+ :states '(normal motion emacs)
  :prefix ","
  "h" #'cp/evil-highlight-symbol
  "s" #'split-window-vertically
@@ -490,11 +490,7 @@ setting the args to `-t TYPE' instead of prompting."
 
 (defun cp/dired-smart-find-file ()
   (interactive)
-  (let* ((name (dired-get-filename))
-         (default-directory
-          (if (file-directory-p name)
-              (file-name-as-directory name)
-            (dired-current-directory))))
+  (let* ((default-directory (dired-current-directory)))
     (call-interactively #'find-file)))
 
 (defun cp/dired-smart-async-shell-command (command &optional output-buffer error-buffer)
@@ -1409,7 +1405,7 @@ controlled by `include'."
     (setq org-tags-column -90)
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-todo-keywords
-          '((sequence "DFER(r)" "DPND(x)" "WAIT(w)" "NEXT(n)" "|" "DONE(d!)" "CNCL(c@)")))
+          '((sequence "DFER(r)" "DPND(x)" "WAIT(w)" "NEXT(n)" "|" "DONE(d!)" "CNCL(c!)")))
     (setq org-todo-keyword-faces
           '(("DFER" . "#767676")
             ("DPND" . "#767676")
@@ -1648,6 +1644,7 @@ controlled by `include'."
   (custom-theme-set-faces
    `zenburn
    `(lazy-highlight              ((t (:foreground ,zenburn-bg-05 :weight bold :background ,zenburn-orange))))
+   `(info-node                   ((t (:foreground ,zenburn-red-3))))
    `(diff-added                  ((t (:foreground ,zenburn-green :weight bold))))
    `(diff-removed                ((t (:foreground ,zenburn-red))))
    `(linum                       ((t (:foreground ,zenburn-green-1 :background ,zenburn-bg))))
