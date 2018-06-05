@@ -282,7 +282,7 @@ implementation if in dired-mode"
 
 (general-define-key
  :keymaps '(motion insert emacs)
-  "M-o" #'other-window)
+ "M-o" #'other-window)
 
 
 ;; which-key
@@ -355,8 +355,6 @@ implementation if in dired-mode"
 (use-package ace-window
   :defer t
   :general
-  (:keymaps '(normal motion insert emacs)
-   "M-O" #'ace-window)
   (:keymaps '(override)
    :states '(normal motion insert emacs)
    :prefix cp/normal-prefix
