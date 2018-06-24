@@ -1,6 +1,6 @@
 (:name company-mode
- :website "http://company-mode.github.io/"
- :description "Modular in-buffer completion framework for Emacs"
- :type github
- :pkgname "company-mode/company-mode"
- :checkout "ed1085f43376fc26f10517ec6205a41fab43c245")
+       :website "http://company-mode.github.io/"
+       :description "Modular in-buffer completion framework for Emacs"
+       :type github
+       :pkgname "company-mode/company-mode"
+       :checkout "a9138030819833c481cea93ddf52442237e4874e")
