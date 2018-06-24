@@ -2,5 +2,5 @@
        :description "A minor mode for Emacs that displays the keybindings following your currently entered incomplete command."
        :type github
        :branch master
-       :checkout "2e855196c78420b76f6f6cb92822255669599d7e"
+       :checkout "ff79dfff66f880885c5893dd6fd05dc51173a476"
        :pkgname "justbur/emacs-which-key")
