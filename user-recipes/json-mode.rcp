@@ -2,5 +2,5 @@
        :description "Major mode for editing JSON files, extends the builtin js-mode to add better syntax highlighting for JSON."
        :type github
        :pkgname "joshwnj/json-mode"
-       :checkout "c3a7ab350533dddf6d18b4c55423bc0d1b40f3fb"
+       :checkout "32d5a9b3319e6797c4d52e7d61a65e5638102ef4"
        :depends (json-snatcher json-reformat))

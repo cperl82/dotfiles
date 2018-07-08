@@ -1,7 +1,6 @@
 (:name hydra
- :description "make Emacs bindings that stick around"
- :type github
- :depends (cl-lib)
- :pkgname "abo-abo/hydra"
- :checkout "62e0f374623df15c1eabebe78f4100850d708227"
- )
+       :description "make Emacs bindings that stick around"
+       :type github
+       :depends (cl-lib)
+       :pkgname "abo-abo/hydra"
+       :checkout "5b8f66299249cc771008248279544b8eb3ecdc19")
