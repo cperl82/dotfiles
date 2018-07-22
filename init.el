@@ -1496,7 +1496,7 @@ controlled by `include'."
           (thread-last (file-name-directory feature-base)
             (directory-file-name)
             (file-name-nondirectory))))
-    (projectile-default-project-name)))
+    (projectile-default-project-name project-root)))
 
 (setq cp/projectile-projects-cache-by-time (make-hash-table :test 'equal))
 
