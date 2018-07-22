@@ -1495,7 +1495,8 @@ controlled by `include'."
               (replace-regexp-in-string (format "^%s" prefix) "" d))
           (thread-last (file-name-directory feature-base)
             (directory-file-name)
-            (file-name-nondirectory))))))
+            (file-name-nondirectory))))
+    (projectile-default-project-name)))
 
 (setq cp/projectile-projects-cache-by-time (make-hash-table :test 'equal))
 
