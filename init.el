@@ -1570,6 +1570,7 @@ controlled by `include'."
     (setq projectile-cache-file (concat temporary-file-directory "projectile.cache"))
     (setq projectile-completion-system 'ivy)
     (setq projectile-project-name-function #'cp/projectile-project-name)
+    (setq projectile-switch-project-action #'projectile-dired)
     (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
     (projectile-mode)))
 
