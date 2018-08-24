@@ -336,6 +336,7 @@ implementation if in dired-mode"
 ;; company-mode
 (use-package company-mode
   :defer t
+  :diminish company-mode
   :general
   (:keymaps '(company-active-map)
    "M-n" nil
@@ -406,30 +407,49 @@ implementation if in dired-mode"
   (let ((current-prefix-arg '(4)))
     (apply #'counsel-rg args)))
 
-(defun cp/counsel-rg-with-type (&optional type)
+(defun cp/counsel-rg (&rest args)
+  "A wrapper around `counsel-rg' that always prompts for a directory,
+but if a prefix arg has already been specified, just passes that
+through to the underlying function"
+  (interactive)
+  (if current-prefix-arg
+      (call-interactively #'counsel-rg)
+    (cp/counsel-rg-with-prefix-arg "" nil "" nil)))
+
+(defun cp/counsel-rg-with-type (&optional types prompt)
   "Prompt for a supported file type from rg and then run
 `counsel-rg' as if a prefix arg was passed, but explicitly
 setting the args to `-t TYPE' instead of prompting."
   (interactive)
-  (let* ((file-type
-          (or type
+  (let* ((file-types
+          (or types
               (thread-last (ivy-read "File type: " (cp/counsel-rg-type-list) :require-match t)
                 (s-split ":")
-                (nth 0))))
-         (extra-rg-args (format "-t%s" file-type)))
-    (cp/counsel-rg-with-prefix-arg nil nil extra-rg-args nil)))
+                (nth 0)
+                (list))))
+         (extra-rg-args
+          (s-join " " (seq-map (lambda (type) (format "-t%s" type)) file-types))))
+    (cp/counsel-rg-with-prefix-arg nil nil extra-rg-args prompt)))
 
 (defun cp/counsel-rg-with-type-ocaml ()
   (interactive)
-  (cp/counsel-rg-with-type "ocaml"))
+  (cp/counsel-rg-with-type '("ocaml") "rg (ocaml)"))
 
 (defun cp/counsel-rg-with-type-c ()
   (interactive)
-  (cp/counsel-rg-with-type "c"))
+  (cp/counsel-rg-with-type '("c") "rg (c)"))
+
+(defun cp/counsel-rg-with-type-ocaml-or-c ()
+  (interactive)
+  (cp/counsel-rg-with-type '("ocaml" "c") "rg (ocaml or c)"))
 
 (defun cp/counsel-rg-with-type-elisp ()
   (interactive)
-  (cp/counsel-rg-with-type "elisp"))
+  (cp/counsel-rg-with-type '("elisp") "rg (elisp)"))
+
+(defun cp/counsel-rg-with-type-lisp ()
+  (interactive)
+  (cp/counsel-rg-with-type '("lisp") "rg (lisp)"))
 
 (use-package smex
   :defer t)
@@ -473,11 +493,13 @@ setting the args to `-t TYPE' instead of prompting."
    :states '(normal motion emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
-   "a g r" #'counsel-rg
+   "a g r" #'cp/counsel-rg
    "a g R" #'cp/counsel-rg-with-type
    "a g O" #'cp/counsel-rg-with-type-ocaml
    "a g C" #'cp/counsel-rg-with-type-c
-   "a g E" #'cp/counsel-rg-with-type-elisp)
+   "a g J" #'cp/counsel-rg-with-type-ocaml-or-c
+   "a g E" #'cp/counsel-rg-with-type-elisp
+   "a g L" #'cp/counsel-rg-with-type-lisp)
   :init
   (progn
     (counsel-mode 1)))
@@ -889,7 +911,7 @@ dired-x"
 (use-package evil-collection
     :after (evil)
     :config
-    (evil-collection-init 'dired))
+    (evil-collection-init))
 
 
 
