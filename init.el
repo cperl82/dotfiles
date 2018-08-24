@@ -22,6 +22,7 @@
    elisp-slime-nav
    emacs-request
    evil
+   evil-collection
    evil-smartparens
    evil-surround
    f
@@ -281,8 +282,17 @@ implementation if in dired-mode"
  "w =" #'balance-windows)
 
 (general-define-key
- :keymaps '(motion insert emacs)
- "M-o" #'other-window)
+ :keymaps '(override)
+ :states '(normal motion insert emacs)
+ "C-h" #'windmove-left
+ "C-j" #'windmove-down
+ "C-k" #'windmove-up
+ "C-l" #'windmove-right)
+
+
+;; zenburn
+(load-theme 'zenburn t)
+
 
 
 ;; which-key
@@ -359,7 +369,12 @@ implementation if in dired-mode"
    :states '(normal motion insert emacs)
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
-   "w a" #'ace-window))
+   "w a" #'ace-window)
+  (:keymaps '(override)
+   "M-o" #'ace-window)
+  :init
+  (progn
+    (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l))))
 
 
 
@@ -426,7 +441,8 @@ setting the args to `-t TYPE' instead of prompting."
   (:keymaps '(ivy-minibuffer-map)
    "<up>"   #'ivy-previous-history-element
    "<down>" #'ivy-next-history-element)
-  ("C-s"    #'counsel-grep-or-swiper)
+  (:keymaps '(override)
+   "C-s"    #'counsel-grep-or-swiper)
   :init
   (progn
     (use-package ivy-rich
@@ -619,6 +635,7 @@ dired-x"
   (add-hook
    'emacs-lisp-mode-hook
    (lambda ()
+     (setq lisp-loop-forms-indentation 3)
      (setq lisp-indent-function #'common-lisp-indent-function)
      (setq indent-tabs-mode nil)
      (hs-minor-mode)
@@ -794,28 +811,113 @@ dired-x"
         'set)
        (font-lock-mode 1)))))
 
+
+;; evil
+;; 2014-03-28: Functions to support selecting something in Visual mode
+;; and then automatically start searching for it by pressing "/" or "?"
+(defun cp/evil-highlight-symbol ()
+  "Do everything that `*' would do, but don't actually jump to the next match"
+  (interactive)
+  (let* ((string (evil-find-symbol t))
+         (case-fold-search
+          (unless (and search-upper-case
+                       (not (isearch-no-upper-case-p string nil)))
+            case-fold-search)))
+    (setq isearch-regexp t)
+    (setq isearch-forward t)
+    (setq string (format "\\_<%s\\_>" (regexp-quote string)))
+    (setq isearch-string string)
+    (isearch-update-ring string t)
+    (setq string (evil-search-message string t))
+    (evil-flash-search-pattern string t)))
+
+(use-package evil
+  :diminish undo-tree-mode
+  :general
+  (:keymaps '(override)
+   :states  '(normal motion emacs)
+   :prefix cp/normal-prefix
+   :non-normal-prefix cp/non-normal-prefix
+   "w h" #'evil-window-left
+   "w j" #'evil-window-down
+   "w k" #'evil-window-up
+   "w l" #'evil-window-right)
+  (:keymaps '(visual)
+   "/"   #'cp/evil-search-forward
+   "?"   #'cp/evil-search-backward
+   "TAB" #'indent-region)
+  :init
+  (progn
+    (setq evil-want-integration nil)
+    (setq evil-want-C-i-jump nil)
+    )
+  :config
+  (progn
+    (evil-define-operator cp/evil-search (beg end forward)
+      (let* ((search-string (buffer-substring-no-properties beg end))
+             (quoted-string (regexp-quote search-string)))
+        (setq isearch-forward forward)
+        (evil-search quoted-string forward t)))
+
+    (evil-define-operator cp/evil-search-forward (beg end type)
+      (cp/evil-search beg end t))
+
+    (evil-define-operator cp/evil-search-backward (beg end type)
+      (cp/evil-search beg end nil))
+
+    (evil-mode 1)
+    (evil-select-search-module 'evil-search-module 'isearch)
+    (setq evil-flash-delay 5)
+    (setq evil-mode-line-format nil)
+    (setq evil-move-beyond-eol t)
+    (setq evil-symbol-word-search t)
+    (zenburn-with-color-variables
+      (setq
+       evil-normal-state-tag               "NORMAL "
+       evil-insert-state-tag   (propertize "INSERT " 'face `(:foreground ,zenburn-red))
+       evil-visual-state-tag   (propertize "VISUAL " 'face `(:foreground ,zenburn-yellow))
+       evil-replace-state-tag  (propertize "REPLACE" 'face `(:foreground ,zenburn-orange))
+       evil-motion-state-tag   (propertize "MOTION " 'face `(:foreground ,zenburn-cyan))
+       evil-operator-state-tag (propertize "OPERATR" 'face `(:foreground ,zenburn-blue))
+       evil-emacs-state-tag    (propertize "EMACS  " 'face `(:foreground ,zenburn-magenta))))))
+
+
+
+;; evil-collection
+(use-package evil-collection
+    :after (evil)
+    :config
+    (evil-collection-init))
+
 
 
 ;; smartparens/evil-smartparens
 ; consider stealing some keybindings from https://github.com/expez/evil-smartparens/issues/19
 (defun cp/enable-evil-smartparens ()
   (progn
+    (smartparens-mode)
     (smartparens-strict-mode)
     (evil-smartparens-mode)))
 
 (use-package evil-smartparens
-  :defer t
-  :diminish evil-smartparens-mode
-  :init
-  (progn
-    (add-hook       'lisp-mode-hook #'cp/enable-evil-smartparens)
-    (add-hook 'emacs-lisp-mode-hook #'cp/enable-evil-smartparens))
+    :after (evil)
+    :diminish evil-smartparens-mode
+    :config
+    (progn
+      (add-hook       'lisp-mode-hook #'cp/enable-evil-smartparens)
+      (add-hook 'emacs-lisp-mode-hook #'cp/enable-evil-smartparens)
+      (sp-local-pair
+       '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
+      (sp-local-pair
+       '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil)))
+
+
+
+;; evil-surround
+(use-package evil-surround
   :config
   (progn
-    (sp-local-pair
-     '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
-    (sp-local-pair
-     '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil)))
+    (global-evil-surround-mode 1)))
 
 
 
@@ -1632,13 +1734,6 @@ controlled by `include'."
     ("420459d6eeb45aadf5db5fbcc3d6990b65141c104911f7359454fc29fa9d87a0" "4555c851795f0e0fd572ba82208373b0c32aaffa78289e983d4b25cd1557f472" "a1e99cb36d6235abbe426a0a96fc26c006306f6b9d2a64c2435363350a987b4c" default)))
  '(package-selected-packages (quote (rainbow-mode let-alist))))
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
 ; zenburn theme overrides
 (zenburn-with-color-variables
   (custom-theme-set-faces
@@ -1662,89 +1757,6 @@ controlled by `include'."
    `(swiper-match-face-4         ((t (:foreground "white" :weight bold :background ,zenburn-yellow-2))))
    '(hl-line                     ((t (:background "#4F4F4F"))))
    ))
-
-
-
-;; evil
-;; 2014-03-28: Functions to support selecting something in Visual mode
-;; and then automatically start searching for it by pressing "/" or "?"
-(defun cp/evil-highlight-symbol ()
-  "Do everything that `*' would do, but don't actually jump to the next match"
-  (interactive)
-  (let* ((string (evil-find-symbol t))
-         (case-fold-search
-          (unless (and search-upper-case
-                       (not (isearch-no-upper-case-p string nil)))
-            case-fold-search)))
-    (setq isearch-regexp t)
-    (setq isearch-forward t)
-    (setq string (format "\\_<%s\\_>" (regexp-quote string)))
-    (setq isearch-string string)
-    (isearch-update-ring string t)
-    (setq string (evil-search-message string t))
-    (evil-flash-search-pattern string t)))
-
-(evil-define-operator cp/evil-search (beg end forward)
-  (let* ((search-string (buffer-substring-no-properties beg end))
-         (quoted-string (regexp-quote search-string)))
-    (setq isearch-forward forward)
-    (evil-search quoted-string forward t)))
-
-(evil-define-operator cp/evil-search-forward (beg end type)
-  (cp/evil-search beg end t))
-
-(evil-define-operator cp/evil-search-backward (beg end type)
-  (cp/evil-search beg end nil))
-
-(use-package evil
-  :diminish undo-tree-mode
-  :general
-  (:keymaps '(override)
-   :states  '(normal motion emacs)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "w h" #'evil-window-left
-   "w j" #'evil-window-down
-   "w k" #'evil-window-up
-   "w l" #'evil-window-right)
-  (:keymaps '(override)
-   :states  '(normal motion emacs)
-   "C-h" #'evil-window-left
-   "C-j" #'evil-window-down
-   "C-k" #'evil-window-up
-   "C-l" #'evil-window-right)
-  (:keymaps '(visual)
-   "/"   #'cp/evil-search-forward
-   "?"   #'cp/evil-search-backward
-   "TAB" #'indent-region)
-  :init
-  (progn
-    (setq-default evil-symbol-word-search t)
-    (setq-default evil-flash-delay 5)
-    (setq-default evil-move-beyond-eol t)
-    (setq-default evil-want-C-i-jump nil))
-  :config
-  (progn
-    (evil-mode 1)
-    (evil-select-search-module 'evil-search-module 'isearch)
-    (setq evil-mode-line-format nil)
-    (zenburn-with-color-variables
-      (setq
-       evil-normal-state-tag               "NORMAL "
-       evil-insert-state-tag   (propertize "INSERT " 'face `(:foreground ,zenburn-red))
-       evil-visual-state-tag   (propertize "VISUAL " 'face `(:foreground ,zenburn-yellow))
-       evil-replace-state-tag  (propertize "REPLACE" 'face `(:foreground ,zenburn-orange))
-       evil-motion-state-tag   (propertize "MOTION " 'face `(:foreground ,zenburn-cyan))
-       evil-operator-state-tag (propertize "OPERATR" 'face `(:foreground ,zenburn-blue))
-       evil-emacs-state-tag    (propertize "EMACS  " 'face `(:foreground ,zenburn-magenta))))))
-
-
-
-;; evil-surround
-(use-package evil-surround
-  :config
-  (progn
-    (global-evil-surround-mode 1)))
 
 
 

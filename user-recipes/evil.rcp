@@ -6,7 +6,6 @@
        :type github
        :pkgname "emacs-evil/evil"
        :checkout "230b87212c81aaa68ef5547a6b998d9c365fe139"
-       :features evil
        :depends (undo-tree goto-chg)
        :build (("make" "info" "all"))
        :build/berkeley-unix (("gmake" "info" "all"))

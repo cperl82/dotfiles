@@ -1,0 +1,6 @@
+(:name ace-window
+       :description "A set of keybindings for evil-mode"
+       :type github
+       :pkgname "emacs-evil/evil-collection"
+       :checkout "79f5e0c2260fca36182ba5470314a1116aa3cacf"
+       :depends (evil))
