@@ -831,8 +831,11 @@ dired-x"
     (setq string (evil-search-message string t))
     (evil-flash-search-pattern string t)))
 
+(use-package undo-tree
+  :defer t
+  :diminish undo-tree-mode)
+
 (use-package evil
-  :diminish undo-tree-mode
   :general
   (:keymaps '(override)
    :states  '(normal motion emacs)
@@ -849,8 +852,7 @@ dired-x"
   :init
   (progn
     (setq evil-want-integration nil)
-    (setq evil-want-C-i-jump nil)
-    )
+    (setq evil-want-C-i-jump nil))
   :config
   (progn
     (evil-define-operator cp/evil-search (beg end forward)
@@ -887,7 +889,7 @@ dired-x"
 (use-package evil-collection
     :after (evil)
     :config
-    (evil-collection-init))
+    (evil-collection-init 'dired))
 
 
 
@@ -1687,29 +1689,6 @@ controlled by `include'."
     (ivy-set-display-transformer 'counsel-projectile-find-file        #'ivy-rich-switch-buffer-transformer)
     (ivy-set-display-transformer 'counsel-projectile-find-dir         #'ivy-rich-switch-buffer-transformer)
     (ivy-set-display-transformer 'counsel-projectile                  #'ivy-rich-switch-buffer-transformer)))
-
-
-
-; linum
-; 2014-04-04 cperl: Holy moly its effort to get line numbers like vim!
-; http://www.emacswiki.org/emacs/LineNumbers#toc6
-(defun cp/linum-format (line)
-  (concat
-   (propertize (format linum-format-fmt line) 'face 'linum)
-   (propertize " " 'face 'linum)))
-
-(use-package linum
-  :defer t
-  :config
-  (progn
-    (setq linum-format 'cp/linum-format)
-    (add-hook
-     'linum-before-numbering-hook
-     (lambda ()
-       (setq-local linum-format-fmt
-                   (let ((w (length (number-to-string
-                                     (count-lines (point-min) (point-max))))))
-                     (concat "%" (number-to-string w) "d")))))))
 
 
 
