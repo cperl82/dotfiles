@@ -613,7 +613,7 @@ dired-x"
    :non-normal-prefix cp/non-normal-prefix
    "a c" '(:keymap cscope-command-map :which-key "cscope"))
   (:keymaps '(cscope-list-entry-keymap)
-   :states  '(motion)
+   :states  '(normal motion)
    "RET" #'cscope-select-entry-inplace
    "TAB" #'cscope-select-entry-other-window
    "o"   #'cscope-select-entry-other-window
@@ -673,7 +673,7 @@ dired-x"
   (add-hook 'emacs-lisp-mode-hook #'turn-on-elisp-slime-nav-mode)
   :general
   (:keymaps '(elisp-slime-nav-mode-map)
-   :states  '(motion)
+   :states  '(normal motion)
    "C-c &"   #'evil-jump-backward
    "C-c ;"   #'elisp-slime-nav-find-elisp-thing-at-point
    "C-c C-t" #'elisp-slime-nav-describe-elisp-thing-at-point))
@@ -804,7 +804,7 @@ dired-x"
   :defer t
   :general
   (:keymaps '(Man-mode-map)
-   :states  '(motion)
+   :states  '(normal motion)
    "TAB" #'hs-toggle-hiding)
   :config
   (progn
@@ -1475,7 +1475,7 @@ controlled by `include'."
    "o K"     #'org-shiftmetaup
    "o L"     #'org-shiftmetaright)
   (:keymaps '(org-mode-map)
-   :states  '(motion)
+   :states  '(normal motion)
    "TAB"     #'org-cycle
    "M-h"     #'org-metaleft
    "M-j"     #'org-metadown
@@ -1686,7 +1686,7 @@ controlled by `include'."
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a p"   '(:keymap projectile-command-map :which-key "projectile"))
-  (:states '(motion insert emacs)
+  (:states '(normal motion insert emacs)
    "C-c p" '(:keymap projectile-command-map :which-key "projectile"))
   :init
   (progn
