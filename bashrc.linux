@@ -1,32 +1,32 @@
 # -*- mode: Shell-script; -*-
 
 function _ps {
-	local pre="user:15,pid,ppid,tid,nlwp,class,rtprio:3=RTP,ni,pri"
-	local post="vsz:9,rss:9,psr,pcpu,stat,wchan:25,tty"
+    local pre="user:15,pid,ppid,tid,nlwp,class,rtprio:3=RTP,ni,pri"
+    local post="vsz:9,rss:9,psr,pcpu,stat,wchan:25,tty"
 
-	local show_comm="${1}"
-	shift
-	local timefmt="${1}"
-	shift
+    local show_comm="${1}"
+    shift
+    local timefmt="${1}"
+    shift
 
-	local args=("${@}")
-	local selector=0
+    local args=("${@}")
+    local selector=0
 
-	for i in "${args[@]}"
-	do
-		if [[ "${i}" == "-t" || "${i}" == "-u" || "${i}" == "-p" ]]
-		then
-			selector=1
-			break
-		fi
-	done
+    for i in "${args[@]}"
+    do
+        if [[ "${i}" == "-t" || "${i}" == "-u" || "${i}" == "-p" ]]
+        then
+            selector=1
+            break
+        fi
+    done
 
-	[[ "${selector}"  -eq 0 ]] && args=("${args[@]}" "-e")
+    [[ "${selector}"  -eq 0 ]] && args=("${args[@]}" "-e")
 
-	[[ "${show_comm}" -eq 1 ]] && post=$(printf "%s,comm:15" "${post}")
+    [[ "${show_comm}" -eq 1 ]] && post=$(printf "%s,comm:15" "${post}")
 
-	cmd=$(printf "ps -o %s,%s,%s,args %s" "${pre}" "${timefmt}" "${post}" "${args[*]}")
-	eval "${cmd}"
+    cmd=$(printf "ps -o %s,%s,%s,args %s" "${pre}" "${timefmt}" "${post}" "${args[*]}")
+    eval "${cmd}"
 }
 
 function pse  { _ps 1 "bsdstart" "${@}"         ; }
@@ -410,27 +410,31 @@ function nfs-sockets {
 
 # 2014-09-04 ephemeral ports
 function ephemeral-port-netstat-ipv4 {
-	netstat -n --protocol=inet |
-	tail -n +3 | \
-	awk '
+    local awk=""
+
+    read -d '' -r awk <<-'EOF'
 	BEGIN {
-		getline < "/proc/sys/net/ipv4/ip_local_port_range";
-		low=int($1);
-		high=int($2);
+	        getline < "/proc/sys/net/ipv4/ip_local_port_range";
+	        low=int($1);
+	        high=int($2);
 	}
 
 	{
-		split($4, a, ":");
-		port=int(a[2]);
-		if (port >= low && port <= high) {
-			print
-		}
-	}'
+                split($4, a, ":");
+	        port=int(a[2]);
+	        if (port >= low && port <= high) {
+	                print
+	        }
+	}
+	EOF
+
+    netstat -n --protocol=inet | tail -n +3 | awk "${awk}"
 }
 
 function ephemeral-port-netstat-ipv4-unique-by-type {
-	ephemeral-port-netstat-ipv4 | \
-	awk '
+    local awk=""
+
+    read -d '' -r awk <<-'EOF'
 	BEGIN {
 		SUBSEP = " ";
 	}
@@ -444,27 +448,31 @@ function ephemeral-port-netstat-ipv4-unique-by-type {
 		for (key in by_type) {
 			print key
 		}
-	}' | sort
+	}
+	EOF
+
+    ephemeral-port-netstat-ipv4 | awk "${awk}" | sort
 }
 
 function battery {
-	upower -e | egrep '/battery_BAT[0-9]$'| xargs -n1 -t upower -i
+    upower -e | egrep '/battery_BAT[0-9]$'| xargs -n1 -t upower -i
 }
 
 function setup-tty-aliases {
-	if tty >/dev/null 2>&1
-	then
-		# Set directory listing colors to those listed in ~/.dircolors
-		if [ -r "${HOME}/.dircolors" ]
-		then
-			alias ls='ls --color=auto'
-			eval "$(dircolors ~/.dircolors)"
-		fi
+    local dircolors="${HOME}/.dircolors"
 
-		alias grep='grep --color=auto'
-	fi
+    if tty >/dev/null 2>&1
+    then
+        # Set directory listing colors to those listed in ~/.dircolors
+        if [ -r "${dircolors}" ]
+        then
+            eval "$(dircolors ${dircolors})"
+        fi
+
+        alias ls='ls --color=auto'
+        alias grep='grep --color=auto'
+    fi
 }
-setup-tty-aliases
 
 function setup-misc {
     export PS1='[\u@\h \w]\$ '
@@ -544,6 +552,16 @@ function setup-misc {
 		    done
 	    }
     fi
+
+    # 2017-05-12: default terminal for i3-sensible-terminal
+    export TERMINAL="${ENV_ROOT}/bin/urxvt256cc"
 }
-setup-misc
+
+function main
+{
+    setup-tty-aliases
+    setup-misc
+}
+
+main "${@}"
 

@@ -408,59 +408,68 @@ function centos-vault-url-for-sprm {
     }
 }
 
-# vim - function wrapper for use with screen
-# A conditional function definition to work around the fact that when screen
-# switches to the alternate screen ("\E[?1049h" and "\E[?1049l") and back, it
-# maintains the background color that was set.  This means that after running
-# vim with the xoria256 color scheme, I am left with my prompt having a light
-# greg background color.  This is highly annoying.  I have been manually getting
-# around this by running "cl" after I quit vim from within screen (see function
-# above), but this should do the same thing automatically if I am within screen.
-if test "${TERM}" = "screen" -o \
-	"${TERM}" = "screen-256color"; then
-    function vim
-    {
-	command vim "$@"
-	tput op
-    }
-fi
+function setup-misc {
+    local osname=""
+    local osfile=""
+    local localfile=""
 
-# PYTHONSTARTUP Environment variable
-# if the ${HOME}/.python_startup.py file exists, set PYTHONSTARTUP to point to
-# it such that its contents are executed for interactive python sessions
-if [[ -f "${HOME}/.python_startup.py" ]];
-then
-    export PYTHONSTARTUP="${HOME}/.python_startup.py"
-fi
+    # vim - function wrapper for use with screen
+    # A conditional function definition to work around the fact that when screen
+    # switches to the alternate screen ("\E[?1049h" and "\E[?1049l") and back, it
+    # maintains the background color that was set.  This means that after running
+    # vim with the xoria256 color scheme, I am left with my prompt having a light
+    # greg background color.  This is highly annoying.  I have been manually getting
+    # around this by running "cl" after I quit vim from within screen (see function
+    # above), but this should do the same thing automatically if I am within screen.
+    if test "${TERM}" = "screen" -o \
+	    "${TERM}" = "screen-256color"; then
+	function vim
+	{
+	    command vim "$@"
+	    tput op
+	}
+    fi
 
+    # PYTHONSTARTUP Environment variable
+    # if the ${HOME}/.python_startup.py file exists, set PYTHONSTARTUP to point to
+    # it such that its contents are executed for interactive python sessions
+    if [[ -f "${HOME}/.python_startup.py" ]];
+    then
+	export PYTHONSTARTUP="${HOME}/.python_startup.py"
+    fi
 
-# Important variable setting
-ENV_ROOT="$(dirname "$(dirname "$(path-canonical ${BASH_ARGV[0]})")")"
-DOTFILES_ROOT="${ENV_ROOT}/dotfiles"
-BUNDLE_ROOT="${ENV_ROOT}/bundles"
+    # Important variable setting
+    ENV_ROOT="$(dirname "$(dirname "$(path-canonical ${BASH_ARGV[0]})")")"
+    DOTFILES_ROOT="${ENV_ROOT}/dotfiles"
+    BUNDLE_ROOT="${ENV_ROOT}/bundles"
 
-export ENV_ROOT DOTFILES_ROOT BUNDLE_ROOT
+    export ENV_ROOT DOTFILES_ROOT BUNDLE_ROOT
 
-path-append "${ENV_ROOT}/bin"
-path-append "${HOME}/bin"
-maybe-add-fzf-to-path
+    path-append "${ENV_ROOT}/bin"
+    path-append "${HOME}/bin"
+    maybe-add-fzf-to-path
 
-# OS Specific bashrc file inclusion
-osname=$(uname -s | tr '[A-Z]' '[a-z]')
-osfile="${DOTFILES_ROOT}/bashrc.${osname}"
-if [[ -f "${osfile}" ]]
-then
-    source "${osfile}"
-fi
+    # OS Specific bashrc file inclusion
+    osname=$(uname -s | tr '[A-Z]' '[a-z]')
+    osfile="${DOTFILES_ROOT}/bashrc.${osname}"
+    if [[ -f "${osfile}" ]]
+    then
+	source "${osfile}"
+    fi
 
-# 2017-05-12: default terminal for i3-sensible-terminal
-export TERMINAL="${ENV_ROOT}/bin/urxvt256cc"
+    # Local bashrc file inclustion
+    # Allows inclusion of initialization stuff that I don't want to keep in my
+    # dotfiles repo
+    localfile="${HOME}/.bashrc.local"
+    if [[ -f "${localfile}" ]]
+    then
+	source "${localfile}"
+    fi
+}
 
-# Local bashrc file inclustion
-# Allows inclusion of initialization stuff that I don't want to keep in my
-# dotfiles repo
-localrc="${HOME}/.bashrc.local"
-if [[ -f "${localrc}" ]]
-then
-    source "${localrc}"
-fi
+function main
+{
+    setup-misc
+}
+
+main "${@}"
