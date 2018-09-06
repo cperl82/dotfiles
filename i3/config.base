@@ -150,6 +150,7 @@ bindsym $mod+o exec --no-startup-id				\
 
 set $terminal      ${HOME}/.config/i3/bin/find-or-launch-terminal-with-title.sh
 set $quickswitch   ${HOME}/.config/i3/bin/quickswitch.sh
+set $status        ${HOME}/.config/i3/bin/status.sh
 
 # 2016-12-11 cperl: Quickly throw windows I don't want to think about onto the scratchpad
 bindsym $mod+period move scratchpad
@@ -177,5 +178,5 @@ for_window [class="Google-chrome" title="Google Chrome"] border pixel 3
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status
+        status_command $status
 }

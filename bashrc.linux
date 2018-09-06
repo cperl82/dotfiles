@@ -1,4 +1,4 @@
-# -*- mode: sh-mode; -*-
+# -*- mode: Shell-script; -*-
 
 function _ps {
 	local pre="user:15,pid,ppid,tid,nlwp,class,rtprio:3=RTP,ni,pri"
@@ -29,15 +29,15 @@ function _ps {
 	eval "${cmd}"
 }
 
-function pse  { _ps 1 "bsdstart" "${@}"; }
+function pse  { _ps 1 "bsdstart" "${@}"         ; }
 
-function psel { _ps 1 "bsdstart" "${@}" -L; }
+function psel { _ps 1 "bsdstart" "${@}" -L      ; }
 
 function psef { _ps 0 "bsdstart" "${@}" --forest; }
 
-function pss  { _ps 1 "lstart"   "${@}"; } 
+function pss  { _ps 1 "lstart"   "${@}"         ; } 
 
-function pssl { _ps 1 "lstart"   "${@}" -L; }
+function pssl { _ps 1 "lstart"   "${@}" -L      ; }
 
 function pssf { _ps 0 "lstart"   "${@}" --forest; }
 
@@ -301,7 +301,7 @@ function rpmenv {
 }
 
 # 2016-04-16: more rpm related helpers, for when I don't want the full thing above
-function rpm_cmd_with_topdir {
+function _rpm-cmd-with-topdir {
 	cmd="${1}"
 	dir="${2}"
 	shift
@@ -311,17 +311,14 @@ function rpm_cmd_with_topdir {
 }
 
 function rpm-with-topdir {
-	cmd=$(rpm_cmd_with_topdir rpm "${@}")
+	cmd=$(_rpm-cmd-with-topdir rpm "${@}")
 	eval "${cmd}"
 }
 
 function rpmbuild-with-topdir {
-	cmd=$(rpm_cmd_with_topdir rpmbuild "${@}")
+	cmd=$(_rpm-cmd-with-topdir rpmbuild "${@}")
 	eval "${cmd}"
 }
-
-# 2014-03-21 formatted printing of /proc/mounts
-function proc-mounts { cat /proc/mounts | column -t | sort -k 3,2; }
 
 # 2014-07-01 mapping of NFS mount points to sockets
 function nfs-sockets {
@@ -451,7 +448,7 @@ function ephemeral-port-netstat-ipv4-unique-by-type {
 }
 
 function battery {
-	upower -e | awk '$1 ~ /battery_BAT[0-9]$/ {print}' | xargs -n1 -t upower -i
+	upower -e | egrep '/battery_BAT[0-9]$'| xargs -n1 -t upower -i
 }
 
 function setup-tty-aliases {

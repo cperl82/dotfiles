@@ -254,20 +254,14 @@ function nfs3-capture-filter-for-hosts {
     printf "${result}\n"
 }
 
-function lack {
-    ack --pager='less -R' "$@"
-}
-
 function maybe-add-fzf-to-path {
-    local fzf_home="${HOME}/.fzf"
-    local fzf_path=""
+    local fzf="${HOME}/.fzf/bin/fzf"
 
-    if [[ -e "${fzf_home}/bin/fzf" ]]
+    if [[ -e "${fzf}" ]]
     then
-	path-append "${HOME}/.fzf/bin"
+	path-append $(dirname "${fzf}")
     fi
 }
-maybe-add-fzf-to-path
 
 function with-fzf {
     local fzf=""
@@ -278,6 +272,7 @@ function with-fzf {
     local parsing_input=0
     local parsing_action=0
     local parsing_fzf_options=0
+    local substitution=0
 
     function usage {
 	echo "Usage: ${FUNCNAME[0]} --input INPUTGENCMD --action ACTION [--fzf-options OPTIONS] [--single]" 1>&2 
@@ -356,25 +351,62 @@ function with-fzf {
 	return 1
     fi
 
-    selected_input=( $(eval "${input_cmd[@]}" 2>/dev/null | eval "${fzf}" "${fzf_options[@]}") )
+    selected_input=$(eval "${input_cmd[@]}" 2>/dev/null | eval "${fzf}" "${fzf_options[@]}")
     rc="${?}"
     if [[ "${rc}" -eq 0 ]]
     then
-	if (( "${action_single}" ))
+	for ((i=0; i<"${#action_cmd[@]}"; i++))
+	do
+	    if [[ "${action_cmd[${i}]}" == "{}" ]]
+	    then
+		action_cmd[${i}] = "${selected_input}"
+		subsitution=1
+	    fi
+	done
+
+	if ! (( "${subsitution}" ))
 	then
-	    ${action_cmd[@]} "${selected_input[@]}"
-	else
-	    for input in "${selected_input[@]}"
-	    do
-		${action_cmd[@]} "${input}"
-	    done
+	    action_cmd+=("${selected_input}")
 	fi
+
+	eval "${action_cmd[@]}"
     else
 	return "${rc}"
     fi
 }
 
-# Misc Stuff
+function centos-vault-url-for-sprm {
+    local output=""
+    local base="http://vault.centos.org"
+    local urls=""
+    local cache_dir=""
+
+    function urls_for_version {
+	# For each version, get
+	# ${root}/${version}/{os,updates}/Source/SPackages
+
+	for version in "${@}"
+	do
+	    printf "%s/%s/os/Source/SPackages\n" "${base}" "${version}"
+	    printf "%s/%s/updates/Source/SPackages\n" "${base}" "${version}"
+	done
+    }
+
+    output=$(curl -vs -q "${base}")
+    versions=(
+	$(echo "${output}"				\
+	      | tidy -quiet -asxml -numeric -utf8	\
+	      | xmlstarlet sel -T -t -v "//_:a"		\
+	      | egrep '^[[:digit:]\.]+/?$'		\
+	      | sed -e 's#/$##'))
+
+    urls=$(urls_for_version "${versions[@]}")
+    cache_dir="${HOME}/.centos-vault-url-for-srpm"
+    { mkdir -p "${cache_dir}" && \
+      cd "${cache_dir}"       && \
+      xargs -n1 -P 6 curl -qs <<< "${urls}"
+    }
+}
 
 # vim - function wrapper for use with screen
 # A conditional function definition to work around the fact that when screen
@@ -411,6 +443,7 @@ export ENV_ROOT DOTFILES_ROOT BUNDLE_ROOT
 
 path-append "${ENV_ROOT}/bin"
 path-append "${HOME}/bin"
+maybe-add-fzf-to-path
 
 # OS Specific bashrc file inclusion
 osname=$(uname -s | tr '[A-Z]' '[a-z]')
@@ -418,8 +451,6 @@ osfile="${DOTFILES_ROOT}/bashrc.${osname}"
 if [[ -f "${osfile}" ]]
 then
     source "${osfile}"
-else
-    echo "Unknown Operating System"
 fi
 
 # 2017-05-12: default terminal for i3-sensible-terminal
