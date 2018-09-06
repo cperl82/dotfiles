@@ -9,6 +9,7 @@
 general {
     colors = true
     interval = 5
+    output_format = i3bar
 }
 
 order += "load"
@@ -16,7 +17,7 @@ order += "run_watch DHCP"
 order += "wireless _first_"
 order += "ethernet _first_"
 order += "battery 0"
-order += "tztime hkt"
+order += "tztime hkg"
 order += "tztime ldn"
 order += "tztime nyc"
 order += "volume master"
@@ -52,13 +53,9 @@ tztime ldn {
     format = " %Y-%m-%d %H:%M:%S LDN "
 }
 
-tztime hkt {
+tztime hkg {
     timezone="Asia/Hong_Kong"
     format = " %Y-%m-%d %H:%M:%S HKT "
-}
-
-disk "/" {
-    format = "%avail"
 }
 
 load {
