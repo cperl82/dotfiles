@@ -458,6 +458,22 @@ function battery {
     upower -e | egrep '/battery_BAT[0-9]$'| xargs -n1 -t upower -i
 }
 
+function urxvt-set-font {
+    local font="${1}"
+
+    printf '\e]710;%s\007' "${font}"
+}
+
+function urxvt-terminus-12 {
+    urxvt-set-font "-xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*"
+}
+alias 12='urxvt-terminus-12'
+
+function urxvt-terminus-16 {
+    urxvt-set-font "-xos4-terminus-medium-r-normal--16-*-*-*-*-*-*-*"
+}
+alias 16='urxvt-terminus-16'
+
 function setup-tty-aliases {
     local dircolors="${HOME}/.dircolors"
 
