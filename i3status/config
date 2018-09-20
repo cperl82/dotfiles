@@ -55,7 +55,7 @@ tztime ldn {
 
 tztime hkg {
     timezone="Asia/Hong_Kong"
-    format = " %Y-%m-%d %H:%M:%S HKT "
+    format = " %Y-%m-%d %H:%M:%S HKG "
 }
 
 load {
