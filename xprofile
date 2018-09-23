@@ -10,7 +10,7 @@ xsetroot -cursor_name left_ptr
 xresources="${HOME}/.Xresources"
 if [[ -e "${xresources}" ]]
 then
-	xrdb -merge -I${HOME} "${xresources}"
+	xrdb -merge -cpp /usr/bin/cpp -I${HOME} "${xresources}"
 fi
 
 # local overrides
