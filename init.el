@@ -372,6 +372,7 @@ implementation if in dired-mode"
    :non-normal-prefix cp/non-normal-prefix
    "w a" #'ace-window)
   (:keymaps '(override)
+   :states '(normal motion insert emacs)
    "M-o" #'ace-window)
   :init
   (progn
