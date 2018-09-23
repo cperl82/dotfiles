@@ -4,9 +4,10 @@ xset -b
 xsetroot -solid darkslategrey
 xsetroot -cursor_name left_ptr
 
-if [[ -e ${HOME}/.Xresources ]]
+xresources="${HOME}/.Xresources"
+if [[ -e "${xresources}" ]]
 then
-	xrdb -merge ${HOME}/.Xresources
+	xrdb -merge -cpp default -I${HOME} "${xresources}"
 fi
 
 # local overrides
@@ -15,10 +16,5 @@ then
 	source ${HOME}/.xinitrc.local
 fi
 
-# exec ck-launch-session fvwm
-# exec ck-launch-session openbox
-# exec ck-launch-session awesome
-# exec gnome-session
-# dbus-launch --exit-with-session xmonad
 ${HOME}/.config/i3/bin/generate-config.sh
 dbus-launch --exit-with-session i3
