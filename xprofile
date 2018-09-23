@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# This script is sourced from #{HOME}/.xinitrc if we're starting up
+# with startx(1) or directly if we're starting up via a login manager
+
+xset -b
+xsetroot -solid darkslategrey
+xsetroot -cursor_name left_ptr
+
+xresources="${HOME}/.Xresources"
+if [[ -e "${xresources}" ]]
+then
+	xrdb -merge -cpp default -I${HOME} "${xresources}"
+fi
+
+# local overrides
+xprofile_local="${HOME}/.xprofile.local"
+if [[ -e "${xprofile_local}" ]]
+then
+	source "${xprofile_local}" 
+fi
+
+${HOME}/.config/i3/bin/generate-config.sh

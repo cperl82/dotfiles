@@ -1,20 +1,16 @@
 #!/bin/bash
 
-xset -b
-xsetroot -solid darkslategrey
-xsetroot -cursor_name left_ptr
-
-xresources="${HOME}/.Xresources"
-if [[ -e "${xresources}" ]]
+xprofile="${HOME}/.xprofile"
+if [[ -e "${xprofile}" ]]
 then
-	xrdb -merge -cpp default -I${HOME} "${xresources}"
+	source "${xprofile}"
 fi
 
 # local overrides
-if [[ -e ${HOME}/.xinitrc.local ]]
+xinitrc_local="${HOME}/.xinitrc.local"
+if [[ -e "${xinitrc_local}" ]]
 then
-	source ${HOME}/.xinitrc.local
+	source "${xinitrc_local}" 
 fi
 
-${HOME}/.config/i3/bin/generate-config.sh
 dbus-launch --exit-with-session i3
