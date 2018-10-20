@@ -150,7 +150,7 @@ bindsym $mod+o exec --no-startup-id				\
 
 set $terminal      ${HOME}/.config/i3/bin/find-or-launch-terminal-with-title.sh
 set $quickswitch   ${HOME}/.config/i3/bin/quickswitch.sh
-set $status        ${HOME}/.config/i3/bin/status.sh
+set $status        ${HOME}/.config/i3status/bin/status.sh
 
 # 2016-12-11 cperl: Quickly throw windows I don't want to think about onto the scratchpad
 bindsym $mod+period move scratchpad
