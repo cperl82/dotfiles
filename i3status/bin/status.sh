@@ -23,8 +23,8 @@ function main
 	    case "${type}" in
 		 PLUGIN_OUTPUT_TEXT)
 		     read -r -d '' output <<-EOF
-			{ "name":      "name"
-			, "instance":  "instance"
+			{ "name":      "${plugin}"
+			, "instance":  "0"
 			, "color":     "#FFFFFF"
 			, "markup":    "none"
 			, "full_text": "${output}"
@@ -42,6 +42,9 @@ function main
 		     continue
 		 ;;
 	    esac
+
+	    # Insert the json from the plugin into the appropriate
+	    # spot in the array that will be consumed by i3bar
 	    json=$(jq -rc								\
 		      --argjson output "${output}"					\
 		      --arg     idx "${position}"					\
@@ -49,6 +52,8 @@ function main
 		       | .[0:($idx | tonumber)] + [$output] + .[($idx | tonumber):]'	\
 		      <<< "${json}")
 	done
+
+	# Send the output, augmented with plugin output, to i3bar
 	printf "%s,\n" "${json}"
     done < <(i3status | jq -c --unbuffered --stream 'fromstream(1|truncate_stream(inputs))')
 }

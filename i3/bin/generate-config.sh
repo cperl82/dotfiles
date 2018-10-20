@@ -15,7 +15,7 @@ function generate_workspace_to_output_mappings {
 		     | sort -n -k 1,2									\
 		     | awk '{print $3}') )
 
-    for i in {0..9}
+    for i in {1..10}
     do
 	idx=$(( i % ${#monitors[@]} ))
 	printf "workspace ${i} output ${monitors[${idx}]}\n"
