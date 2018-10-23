@@ -1,0 +1,5 @@
+(:name diminish
+ :description "This package implements hiding or abbreviation of the mode line displays (lighters) of minor-modes"
+ :type github
+ :pkgname "myrjola/diminish.el"
+ :checkout "d5c61a14e1a5590a65f83c099a5bd42fcadff24d")

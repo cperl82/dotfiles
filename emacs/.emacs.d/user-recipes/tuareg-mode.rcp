@@ -1,0 +1,14 @@
+(:name tuareg-mode
+       :website "https://github.com/ocaml/tuareg"
+       :description "Emacs OCaml mode"
+       :type github
+       :checkout "faa976ac930d3fba42ec59881046929c90ffa8f3"
+       :pkgname "ocaml/tuareg"
+       :load-path (".")
+       :prepare
+       (progn
+         (autoload 'tuareg-mode "tuareg" "Major mode for editing Caml code" t)
+         (autoload 'camldebug "camldebug" "Run the Caml debugger" t)
+         (dolist (ext '(".cmo" ".cmx" ".cma" ".cmxa" ".cmi"))
+           (add-to-list 'completion-ignored-extensions ext))
+         (add-to-list 'auto-mode-alist '("\\.ml[iylp]?" . tuareg-mode))))

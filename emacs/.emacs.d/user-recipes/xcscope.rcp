@@ -1,0 +1,6 @@
+(:name xcscope
+       :description "Cscope interface for (X)Emacs"
+       :type github
+       :checkout "1e4c8e60eb841a3ecb56ff4115b6a8ae5c0bf779"
+       :pkgname "dkogan/xcscope.el"
+       :features xcscope)

@@ -1,0 +1,5 @@
+(:name ios-config-mode
+       :description "ios-config-mode is an Emacs major mode that helps to view and edit Cisco IOS (tm) configuration files."
+       :type github
+       :checkout "ef1d26a3983006cb4574e4c14fcf36ceeda4a260"
+       :pkgname "nibrahim/IOS-config-mode")

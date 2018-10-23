@@ -1,0 +1,5 @@
+(:name highlight-parentheses
+       :description "Highlight the matching parentheses surrounding point."
+       :type github
+       :checkout "a821a314942f409cd69660d816cd9a0aebd1ae8f"
+       :pkgname "nschum/highlight-parentheses.el")

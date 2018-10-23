@@ -1,0 +1,8 @@
+(:name color-theme-zenburn
+       :description "The Zenburn colour theme ported to Emacs"
+       :website "https://github.com/bbatsov/zenburn-emacs"
+       :minimum-emacs-version "24"
+       :type github
+       :checkout "eea429cb2cbde8674b2a17ccc2bda94b54575c01"
+       :pkgname "bbatsov/zenburn-emacs"
+       :prepare (add-to-list 'custom-theme-load-path default-directory))
