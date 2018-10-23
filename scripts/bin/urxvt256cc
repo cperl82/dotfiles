@@ -1,0 +1,13 @@
+#!/bin/bash
+
+main ()
+{
+	urxvt256cc "${@}" >/dev/null 2>&1
+	if [[ $? -eq 2 ]]
+	then
+		urxvt256cd -q -f
+		urxvt256cc "${@}"
+	fi
+}
+
+main "${@}"
