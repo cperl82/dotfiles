@@ -439,15 +439,16 @@ function setup-misc {
     fi
 
     # Important variable setting
-    DOTFILES="$(dirname "$(dirname "$(path-canonical ${BASH_ARGV[0]})")")"
-    export DOTFILES_ROOT
+    BASHFILES=$(dirname $(path-canonical ${BASH_ARGV[0]}))
+    DOTFILES=$(dirname ${BASHFILES})
+    export BASHFILES DOTFILES
 
     path-append "${HOME}/bin"
     maybe-add-fzf-to-path
 
     # OS Specific bashrc file inclusion
     osname=$(uname -s | tr '[A-Z]' '[a-z]')
-    osfile="${DOTFILES_ROOT}/bashrc.${osname}"
+    osfile="${BASHFILES}/bashrc.${osname}"
     if [[ -f "${osfile}" ]]
     then
 	source "${osfile}"
