@@ -1,4 +1,4 @@
-#include "xrdb-themes/selected"
+#include ".xrdb-themes/cperl.xrdb"
 
 XTerm*font:            -xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*
 XTerm.termName:        xterm-256color
