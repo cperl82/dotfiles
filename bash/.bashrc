@@ -439,13 +439,9 @@ function setup-misc {
     fi
 
     # Important variable setting
-    ENV_ROOT="$(dirname "$(dirname "$(path-canonical ${BASH_ARGV[0]})")")"
-    DOTFILES_ROOT="${ENV_ROOT}/dotfiles"
-    BUNDLE_ROOT="${ENV_ROOT}/bundles"
+    DOTFILES="$(dirname "$(dirname "$(path-canonical ${BASH_ARGV[0]})")")"
+    export DOTFILES_ROOT
 
-    export ENV_ROOT DOTFILES_ROOT BUNDLE_ROOT
-
-    path-append "${ENV_ROOT}/bin"
     path-append "${HOME}/bin"
     maybe-add-fzf-to-path
 

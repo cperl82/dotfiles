@@ -1,5 +1,8 @@
 " Pathogen testing
-call pathogen#infect($BUNDLE_ROOT) 
+" 2018-10-24 cperl: commented out because I don't think I need this
+" anymore.  If I want to start using more bundles with vim, then I
+" expect to investigate git-subtree to manage them.
+"call pathogen#infect($BUNDLE_ROOT)
 
 " Change the default leader key
 let mapleader = ","
