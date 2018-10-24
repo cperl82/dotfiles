@@ -28,7 +28,7 @@ function main
     cat   "${config_base}/config.base"          \
           "${config_base}/config.local"         \
           "${config_base}/config.generated"     \
-        > "${config_base}/config" 2>&1
+        > "${config_base}/config" 2>/dev/null
 }
 
 main
