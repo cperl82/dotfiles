@@ -18,7 +18,7 @@ function generate_workspace_to_output_mappings {
     for i in {1..10}
     do
 	idx=$(( (i-1) % ${#monitors[@]} ))
-	printf "workspace ${i} output ${monitors[${idx}]}\n"
+	printf "workspace %d output %d\n" "${i}" "${monitors[${idx}]}"
     done
 }
 
