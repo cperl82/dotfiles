@@ -1,5 +1,6 @@
 caption always
 caption string '%{gk}[ %{W}%H %{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{w}%n*%f %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}]%{g}[ %{Y}%Y-%m-%d %c %{g}]'
+hardstatus alwaysignore
 defscrollback 10000
 altscreen on
 vbell off
