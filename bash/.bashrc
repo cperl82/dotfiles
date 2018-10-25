@@ -448,7 +448,7 @@ function setup-misc {
 
     # OS Specific bashrc file inclusion
     osname=$(uname -s | tr '[A-Z]' '[a-z]')
-    osfile="${BASHFILES}/bashrc.${osname}"
+    osfile="${BASHFILES}/.bashrc.${osname}"
     if [[ -f "${osfile}" ]]
     then
 	source "${osfile}"
