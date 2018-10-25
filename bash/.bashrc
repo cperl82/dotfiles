@@ -109,13 +109,21 @@ function cl {
 # path-canonical-simple
 function path-canonical-simple {
     local dst="${1}"
-    if [[ -z "${dst}" ]]; then
+    local target=""
+
+    if [[ -z "${dst}" ]]
+    then
 	dst="${PWD}"
     fi
 
-    cd -- $(dirname -- "${dst}") > /dev/null 2>&1 &&	\
-	echo $(pwd -P)/$(basename "${dst}") &&		\
-	cd -- - >/dev/null 2>&1
+    if [[ -d "${dst}" ]]
+    then
+	cd -- "${dst}" > /dev/null 2>&1 && pwd -P
+    else
+	cd -- $(dirname -- "${dst}") > /dev/null 2>&1 &&	\
+	echo $(pwd -P)/$(basename "${dst}")
+    fi
+    cd -- - >/dev/null 2>&1
 }
 
 # path-canonical
@@ -128,7 +136,7 @@ function path-canonical {
 
     dst=$(path-canonical-simple "${1}")
 
-    # Strip an potential trailing slash as it can cause `test -h' to fail
+    # Strip a potential trailing slash as it can cause `test -h' to fail
     while [[ -h "${dst%/}" ]]; do
 	local link_dst=$(command ls -l "${dst}" | sed -e 's/^.*[ \t]*->[ \t]*\(.*\)[ \t]*$/\1/g')
 	if   [[ "${link_dst}" =~ ^..$ ]]; then
@@ -413,7 +421,7 @@ function setup-misc {
     local osfile=""
     local localfile=""
 
-    # vim - function wrapper for use with screen
+    # vim: function wrapper for use with screen
     # A conditional function definition to work around the fact that when screen
     # switches to the alternate screen ("\E[?1049h" and "\E[?1049l") and back, it
     # maintains the background color that was set.  This means that after running
@@ -429,6 +437,47 @@ function setup-misc {
 	    tput op
 	}
     fi
+
+    # screen: function wrapper for screen to try to cover some common cases
+    function screen
+    {
+	local p=""
+	local b=""
+	local d=""
+	local dirent=""
+	local components=()
+	local idx=0
+
+	p=$(path-canonical "${PWD}")
+	b=$(basename "${p}")
+	components+=("${b}")
+
+	p=$(path-canonical "${p}/..")
+	b=$(basename "${p}")
+	components+=("${b}")
+
+	p=$(path-canonical "${p}/..")
+	b=$(basename "${p}")
+	while [[ "${p}" != "/" ]]
+	do
+	    for dirent in "rpmbuild" "git" "src"
+	    do
+		test -e "${p}/${dirent}" && break 2
+	    done
+	    dirent=""
+	    components+=("${b}")
+	    p=$(path-canonical "${p}/..")
+	done
+
+	if [[ -n "${dirent}" ]]
+	then
+	    idx=$(( ${#components[@]}-2 ))
+	    xt "${dirent} ${components[${idx}]}"
+	    command screen -S "${dirent}-${components[${idx}]}" "${@}"
+	else
+	    command screen "${@}"
+	fi
+    }
 
     # PYTHONSTARTUP Environment variable
     # if the ${HOME}/.python_startup.py file exists, set PYTHONSTARTUP to point to
