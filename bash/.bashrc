@@ -416,6 +416,47 @@ function centos-vault-url-for-sprm {
     }
 }
 
+# screen: function wrapper for screen to try to cover some common cases
+function scr-with-title
+{
+    local p=""
+    local b=""
+    local d=""
+    local dirent=""
+    local components=()
+    local idx=0
+
+    p=$(path-canonical "${PWD}")
+    b=$(basename "${p}")
+    components+=("${b}")
+
+    p=$(path-canonical "${p}/..")
+    b=$(basename "${p}")
+    components+=("${b}")
+
+    p=$(path-canonical "${p}/..")
+    b=$(basename "${p}")
+    while [[ "${p}" != "/" ]]
+    do
+	for dirent in "rpmbuild" "git" "src"
+	do
+	    test -e "${p}/${dirent}" && break 2
+	done
+	dirent=""
+	components+=("${b}")
+	p=$(path-canonical "${p}/..")
+    done
+
+    if [[ -n "${dirent}" ]]
+    then
+	idx=$(( ${#components[@]}-2 ))
+	xt "${dirent} ${components[${idx}]}"
+	screen -S "${dirent}-${components[${idx}]}" "${@}"
+    else
+	screen "${@}"
+    fi
+}
+
 function setup-misc {
     local osname=""
     local osfile=""
@@ -437,47 +478,6 @@ function setup-misc {
 	    tput op
 	}
     fi
-
-    # screen: function wrapper for screen to try to cover some common cases
-    function screen
-    {
-	local p=""
-	local b=""
-	local d=""
-	local dirent=""
-	local components=()
-	local idx=0
-
-	p=$(path-canonical "${PWD}")
-	b=$(basename "${p}")
-	components+=("${b}")
-
-	p=$(path-canonical "${p}/..")
-	b=$(basename "${p}")
-	components+=("${b}")
-
-	p=$(path-canonical "${p}/..")
-	b=$(basename "${p}")
-	while [[ "${p}" != "/" ]]
-	do
-	    for dirent in "rpmbuild" "git" "src"
-	    do
-		test -e "${p}/${dirent}" && break 2
-	    done
-	    dirent=""
-	    components+=("${b}")
-	    p=$(path-canonical "${p}/..")
-	done
-
-	if [[ -n "${dirent}" ]]
-	then
-	    idx=$(( ${#components[@]}-2 ))
-	    xt "${dirent} ${components[${idx}]}"
-	    command screen -S "${dirent}-${components[${idx}]}" "${@}"
-	else
-	    command screen "${@}"
-	fi
-    }
 
     # PYTHONSTARTUP Environment variable
     # if the ${HOME}/.python_startup.py file exists, set PYTHONSTARTUP to point to
