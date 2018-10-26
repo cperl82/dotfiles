@@ -417,8 +417,7 @@ function centos-vault-url-for-sprm {
 }
 
 # screen: function wrapper for screen to try to cover some common cases
-function scr-with-title
-{
+function scr-with-title {
     local p=""
     local b=""
     local d=""
