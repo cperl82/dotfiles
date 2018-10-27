@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# This script is sourced from #{HOME}/.xinitrc if we're starting up
-# with startx(1) or directly if we're starting up via a login manager
-
 xset -b
 xsetroot -solid darkslategrey
 xsetroot -cursor_name left_ptr
@@ -10,7 +7,7 @@ xsetroot -cursor_name left_ptr
 xresources="${HOME}/.Xresources"
 if [[ -e "${xresources}" ]]
 then
-	xrdb -merge -cpp /usr/bin/cpp -I${HOME} "${xresources}"
+	xrdb -merge -cpp /usr/bin/cpp -I"${HOME}" "${xresources}"
 fi
 
 # local overrides
@@ -20,4 +17,5 @@ then
 	source "${xprofile_local}" 
 fi
 
-${HOME}/.config/i3/bin/generate-config.sh
+# regenerate our i3 config
+"${HOME}/.config/i3/bin/generate-config.sh"
