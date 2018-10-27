@@ -1,6 +1,5 @@
-caption always
-caption string '%{gk}[ %{W}%H %{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{w}%n*%f %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}]%{g}[ %{Y}%Y-%m-%d %c %{g}]'
-hardstatus alwaysignore
+hardstatus off
+hardstatus alwayslastline '%{= kg}[ %{kW}%H %{kg}][%= %{kw}%?%-Lw%?%{kR}(%{kw}%n*%f %t%?(%u)%?%{kR})%{kw}%?%+Lw%?%?%= %{kg}][%{ky} %{Y}%Y-%m-%d %c %{kg}]'
 defscrollback 10000
 altscreen on
 vbell off
@@ -9,6 +8,8 @@ term screen-256color
 # Bindings for dealing with multiple regions
 bind j focus down
 bind k focus up
+bind h focus left
+bind l focus right
 bind t focus top
 bind b focus bottom
 
