@@ -21,3 +21,12 @@ bind - resize -1
 
 # Timeout for escape sequences
 maptimeout 5
+
+# Taken from https://gist.github.com/joaopizani/2718397
+bind r eval "command -c rsz"
+
+# use hjkl keys to resize regions
+bind -c rsz h eval "resize -h -5" "command -c rsz"
+bind -c rsz j eval "resize -v -5" "command -c rsz"
+bind -c rsz k eval "resize -v +5" "command -c rsz"
+bind -c rsz l eval "resize -h +5" "command -c rsz"
