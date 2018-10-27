@@ -15,5 +15,9 @@ bind l focus right
 bind t focus top
 bind b focus bottom
 
+# Bindings for resizing
+bind + resize +1
+bind - resize -1
+
 # Timeout for escape sequences
 maptimeout 5
