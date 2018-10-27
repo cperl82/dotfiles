@@ -1,9 +1,11 @@
 hardstatus off
 hardstatus alwayslastline '%{= kg}[ %{kW}%H %{kg}][%= %{kw}%?%-Lw%?%{kR}(%{kw}%n*%f %t%?(%u)%?%{kR})%{kw}%?%+Lw%?%?%= %{kg}][%{ky} %{Y}%Y-%m-%d %c %{kg}]'
+caption string "%{03} "
 defscrollback 10000
 altscreen on
 vbell off
 term screen-256color
+startup_message off
 
 # Bindings for dealing with multiple regions
 bind j focus down
