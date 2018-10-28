@@ -418,35 +418,33 @@ function centos-vault-url-for-sprm {
 
 # function wrapper for screen to try to cover some common cases of window title setting
 function scr {
-    local p=""
-    local parent=""
+    local parnt=""
     local child=""
     local i=0
     local components=()
 
-    p=$(path-canonical "${PWD}")
     while IFS=$'\n' read -r line
     do
 	components+=("${line}")
-    done < <(sed -e 's#^/##' -e 's#/$##' <<< "${p}" | tr '/' '\n')
+    done < <(path-canonical "${PWD}" | sed -e 's#^/##' -e 's#/$##' | tr '/' '\n')
 
-    for ((i=0; i < $(( ${#components[@]} - 1)); i++))
+    for ((i=0; i<$(( ${#components[@]} - 1)); i++))
     do
-	parent="${components[$((i  ))]}"
+	parnt="${components[$((i  ))]}"
 	child="${components[$((i+1))]}"
-	if [[ "${parent}" =~ rpmbuild|git|src ]]
+	if [[ "${parnt}" =~ rpmbuild|git|src ]]
 	then
 	    break
 	fi
 
-	parent=""
+	parnt=""
 	child=""
     done
 
-    if [[ -n "${parent}" && -n "${child}" ]]
+    if [[ -n "${parnt}" && -n "${child}" ]]
     then
-	xt "${parent} ${child}"
-	screen -S "${parent}-${child}" "${@}"
+	xt "${parnt} ${child}"
+	screen -S "${parnt}-${child}" "${@}"
     else
 	screen "${@}"
     fi
