@@ -1,3 +1,9 @@
+# 2018-10-28 cperl: On RHEL 7 based systems, they add an entry for `ds=\E]2;screen\007'
+# which causes every xterm window title to display just "screen" when you run screen.
+# Disable that behavior.
+termcapinfo xterm|xterm-* 'ds='
+
+# General settings
 hardstatus off
 hardstatus alwayslastline '%{= kg}[ %{kW}%H %{kg}][%= %{kw}%?%-Lw%?%{kR}(%{kw}%n*%f %t%?(%u)%?%{kR})%{kw}%?%+Lw%?%?%= %{kg}][%{ky} %{Y}%Y-%m-%d %c %{kg}]'
 caption string "%{03} "
