@@ -416,41 +416,37 @@ function centos-vault-url-for-sprm {
     }
 }
 
-# screen: function wrapper for screen to try to cover some common cases
-function scr-with-title {
+# function wrapper for screen to try to cover some common cases of window title setting
+function scr {
     local p=""
-    local b=""
-    local d=""
-    local dirent=""
+    local parent=""
+    local child=""
+    local i=0
     local components=()
-    local idx=0
 
     p=$(path-canonical "${PWD}")
-    b=$(basename "${p}")
-    components+=("${b}")
-
-    p=$(path-canonical "${p}/..")
-    b=$(basename "${p}")
-    components+=("${b}")
-
-    p=$(path-canonical "${p}/..")
-    b=$(basename "${p}")
-    while [[ "${p}" != "/" ]]
+    while IFS=$'\n' read -r line
     do
-	for dirent in "rpmbuild" "git" "src"
-	do
-	    test -e "${p}/${dirent}" && break 2
-	done
-	dirent=""
-	components+=("${b}")
-	p=$(path-canonical "${p}/..")
+	components+=("${line}")
+    done < <(sed -e 's#^/##' -e 's#/$##' <<< "${p}" | tr '/' '\n')
+
+    for ((i=0; i < $(( ${#components[@]} - 1)); i++))
+    do
+	parent="${components[$((i  ))]}"
+	child="${components[$((i+1))]}"
+	if [[ "${parent}" =~ rpmbuild|git|src ]]
+	then
+	    break
+	fi
+
+	parent=""
+	child=""
     done
 
-    if [[ -n "${dirent}" ]]
+    if [[ -n "${parent}" && -n "${child}" ]]
     then
-	idx=$(( ${#components[@]}-2 ))
-	xt "${dirent} ${components[${idx}]}"
-	screen -S "${dirent}-${components[${idx}]}" "${@}"
+	xt "${parent} ${child}"
+	screen -S "${parent}-${child}" "${@}"
     else
 	screen "${@}"
     fi
