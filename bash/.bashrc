@@ -436,7 +436,6 @@ function scr {
 	then
 	    break
 	fi
-
 	parnt=""
 	child=""
     done
