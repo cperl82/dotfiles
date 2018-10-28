@@ -2,7 +2,7 @@
 
 export PS1='[\u@\h \w]\$ '
 export PAGER=less
-export MYSQL_PS1="\u@\h [\d]> "
+export MYSQL_PS1='\u@\h [\d]> '
 export HISTIGNORE=' *'
 
 function _path-append-prepend-uniq {
@@ -21,7 +21,12 @@ function _path-append-prepend-uniq {
     then
 	dir=${dir//\/\//\/}
 	dir=${dir%/.}
-	components=( $(echo "${PATH}" | tr ':' '\n' | uniq) )
+
+	while IFS=$'\n' read -r line
+	do
+	    components+=("${line}")
+	done < <(tr ':' '\n' <<< "${PATH}" | uniq)
+
 	for p in "${components[@]}"
 	do
 	    if [[ "${p}" == "${dir}" ]]
@@ -65,32 +70,36 @@ function tmpmkcd {
     pathname="${HOME}/tmp/${today}"
     if [[ ! -d "${pathname}" ]]
     then
-	mkdir -p ${pathname} && cd ${pathname}
+	mkdir -p "${pathname}" && cd "${pathname}"
     else
-	cd ${pathname}
+	cd "${pathname}"
     fi
 }
 
 # xt - xterm title setter
 function xt {
+    local name=""
+
     if [[ -z "${1}" ]]
     then
-	NAME=${HOSTNAME}
+	name=${HOSTNAME}
     else
-	NAME=${1}
+	name=${1}
     fi
-    printf "\033]0;${NAME}\007"
+    printf '\033]0;%s\007' "${name}"
 }
 
 # st - screen window title setter
 function st {
+    local name=""
+
     if [[ -z "${1}" ]]
     then
-	NAME=${HOSTNAME}
+	name=${HOSTNAME}
     else
-	NAME=${1}
+	name=${1}
     fi
-    printf "\033k${NAME}\033\\"
+    printf '\033k%s\033\134' "${name}"
 }
 
 # cl - reset all attributes
@@ -405,7 +414,7 @@ function centos-vault-url-for-sprm {
 	$(echo "${output}"				\
 	      | tidy -quiet -asxml -numeric -utf8	\
 	      | xmlstarlet sel -T -t -v "//_:a"		\
-	      | egrep '^[[:digit:]\.]+/?$'		\
+	      | grep -E '^[[:digit:]\.]+/?$'		\
 	      | sed -e 's#/$##'))
 
     urls=$(urls_for_version "${versions[@]}")
