@@ -113,10 +113,14 @@
       gc-cons-threshold       100000000
       inhibit-startup-message t
       make-backup-files       nil
-      split-height-threshold  nil)
+      split-height-threshold  nil
+      load-prefer-newer       t)
 
 ;; 2015-09-11 Enable narrowing command which are disabled by default
 (put 'narrow-to-region 'disabled nil)
+
+;; 2018-10-30 Global auto revert mode
+(global-auto-revert-mode)
 
 (if (fboundp 'menu-bar-mode)   (menu-bar-mode   -1))
 (if (fboundp 'tool-bar-mode)   (tool-bar-mode   -1))
