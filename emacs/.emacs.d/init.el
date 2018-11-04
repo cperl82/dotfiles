@@ -250,6 +250,8 @@ implementation if in dired-mode"
  :states '(normal motion emacs)
  :prefix ","
  "h" #'cp/evil-highlight-symbol
+ "m" #'highlight-symbol-at-point
+ "u" #'unhighlight-regexp
  "s" #'split-window-vertically
  "v" #'split-window-horizontally
  "x" #'delete-window
