@@ -840,23 +840,23 @@ dired-x"
 
 
 ;; evil
-;; 2014-03-28: Functions to support selecting something in Visual mode
-;; and then automatically start searching for it by pressing "/" or "?"
 (defun cp/evil-highlight-symbol ()
-  "Do everything that `*' would do, but don't actually jump to the next match"
+  "Similar to `evil-search-word', but the idea is to just highlight
+the word under point as if it had been searched for."
   (interactive)
-  (let* ((string (evil-find-symbol t))
-         (case-fold-search
-          (unless (and search-upper-case
-                       (not (isearch-no-upper-case-p string nil)))
-            case-fold-search)))
-    (setq isearch-regexp t)
-    (setq isearch-forward t)
-    (setq string (format "\\_<%s\\_>" (regexp-quote string)))
-    (setq isearch-string string)
-    (isearch-update-ring string t)
-    (setq string (evil-search-message string t))
-    (evil-flash-search-pattern string t)))
+  (let ((forward t)
+        (regexp  t)
+        (start (save-excursion (backward-word) (point)))
+        (thing (evil-find-symbol t)))
+    (cond
+      ((null thing)
+       (user-error "No word under point"))
+      (t
+       (setq isearch-forward forward)
+       (evil-push-search-history thing forward)
+       (save-excursion
+         (evil-search (regexp-quote thing) forward regexp start)
+         (evil-flash-search-pattern thing t))))))
 
 (use-package undo-tree
   :defer t
