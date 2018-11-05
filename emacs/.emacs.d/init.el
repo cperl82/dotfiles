@@ -880,8 +880,9 @@ the word under point as if it had been searched for."
    "TAB" #'indent-region)
   :init
   (progn
-    (setq evil-want-integration nil)
-    (setq evil-want-C-i-jump nil))
+    (setq evil-want-integration t)
+    (setq evil-want-keybinding  nil)
+    (setq evil-want-C-i-jump    nil))
   :config
   (progn
     (evil-define-operator cp/evil-search (beg end forward)
