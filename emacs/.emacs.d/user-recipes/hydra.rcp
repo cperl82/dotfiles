@@ -3,4 +3,4 @@
        :type github
        :depends (cl-lib)
        :pkgname "abo-abo/hydra"
-       :checkout "d071278fcc0a62d10c3a3d8a1adf33461a90a0aa")
+       :checkout "5c5b9ca3262594c92f8f73c98db5ed0f1efd0319")
