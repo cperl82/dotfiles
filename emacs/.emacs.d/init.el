@@ -472,13 +472,6 @@ setting the args to `-t TYPE' instead of prompting."
    "C-s"    #'counsel-grep-or-swiper)
   :init
   (progn
-    (use-package ivy-rich
-      :config
-      (progn
-        (setq ivy-rich-path-style 'relative)
-        (setq ivy-rich-switch-buffer-name-max-length 40)
-        (setq ivy-rich-switch-buffer-project-max-length 25)
-        (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)))
     (setq ivy-height 10)
     (setq ivy-initial-inputs-alist nil)
     ;; 2017-05-06: `ivy--regex-ignore-order' doesn't seem to work well with swiper as the
@@ -491,6 +484,13 @@ setting the args to `-t TYPE' instead of prompting."
     (setq ivy-format-function 'ivy-format-function-arrow)
     (setq ivy-count-format "%d/%d ")
     (ivy-mode 1)))
+
+(use-package ivy-rich
+  :after (ivy)
+  :config
+  (progn
+    (setq ivy-rich-path-style 'relative)
+    (ivy-rich-mode 1)))
 
 (use-package counsel
   :defer t
@@ -1696,9 +1696,6 @@ controlled by `include'."
    "a p"   '(:keymap projectile-command-map :which-key "projectile"))
   (:states '(normal motion insert emacs)
    "C-c p" '(:keymap projectile-command-map :which-key "projectile"))
-  :init
-  (progn
-    (ivy-set-display-transformer 'projectile-completing-read 'ivy-rich-switch-buffer-transformer))
   :config
   (progn
     (setq projectile-enable-caching t)
@@ -1713,13 +1710,7 @@ controlled by `include'."
 
 ;; counsel-projectile
 (use-package counsel-projectile
-  :defer t
-  :config
-  (progn
-    (ivy-set-display-transformer 'counsel-projectile-switch-to-buffer #'ivy-rich-switch-buffer-transformer)
-    (ivy-set-display-transformer 'counsel-projectile-find-file        #'ivy-rich-switch-buffer-transformer)
-    (ivy-set-display-transformer 'counsel-projectile-find-dir         #'ivy-rich-switch-buffer-transformer)
-    (ivy-set-display-transformer 'counsel-projectile                  #'ivy-rich-switch-buffer-transformer)))
+  :defer t)
 
 
 
