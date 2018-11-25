@@ -33,7 +33,6 @@ XTerm*cursorColor:     Cursor_Color
 URxvt.font:                 -xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*, \
                             xft:monaco:pixelsize=10, \
                             xft:bitstream vera sans mono:pixelsize=10:antialias=true
-URxvt.perl-lib:             /home/cperl/.urxvt-perl-lib/
 URxvt.scrollBar:            false
 URxvt.skipBuiltinGlyphs:    true
 URxvt.cursorUnderline:      false
