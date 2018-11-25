@@ -5,7 +5,7 @@
        for writing custom extensions."
        :type github
        :pkgname "emacs-evil/evil"
-       :checkout "6fde982d731e2cc4e5f6bded6f8955ab2daee3b7"
+       :checkout "99bcf8c31ee72a3a571e013f40d105618fb92d19"
        :depends (undo-tree goto-chg)
        :build (("make" "info" "all"))
        :build/berkeley-unix (("gmake" "info" "all"))
