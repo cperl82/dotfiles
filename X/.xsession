@@ -4,5 +4,5 @@
 xinitrc="${HOME}/.xinitrc"
 if [[ -e "${xinitrc}" ]]
 then
-	source "${xinitrc}"
+    source "${xinitrc}"
 fi
