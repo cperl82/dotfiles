@@ -18,5 +18,5 @@ then
 fi
 
 # regenerate our i3 config
-"${HOME}/.config/i3/bin/generate-config.sh"
-dbus-launch --exit-with-session i3
+config=$("${HOME}/.config/i3/bin/generate-config.sh")
+exec i3 -c "${config}"

@@ -24,11 +24,16 @@ function generate_workspace_to_output_mappings {
 
 function main
 {
-    generate_workspace_to_output_mappings > "${config_base}/config.generated"
-    cat   "${config_base}/config.base"          \
-          "${config_base}/config.local"         \
-          "${config_base}/config.generated"     \
-        > "${config_base}/config" 2>/dev/null
+    local tmpdir=""
+    local config=""
+
+    tmpdir=$(mktemp -d -t "i3-generated-config-XXXXXX")
+    config="${tmpdir}/config"
+    generate_workspace_to_output_mappings > "${tmpdir}/config.generated"
+    cp "${config_base}/config.base"  "${tmpdir}"
+    cp "${config_base}/config.local" "${tmpdir}"
+    cat "${tmpdir}"/config.{base,generated,local} > "${config}" 2>/dev/null
+    echo "${config}"
 }
 
 main
