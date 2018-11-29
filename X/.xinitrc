@@ -27,7 +27,7 @@ function main {
 
     # regenerate our i3 config
     config=$("${HOME}/.config/i3/bin/generate-config.sh")
-    exec i3 -c "${config}"
+    i3 -c "${config}"
 }
 
 main "${@}"
