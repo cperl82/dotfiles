@@ -90,6 +90,9 @@ bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
 
+# 2018-11-28 cperl: auto back and forth
+workspace_auto_back_and_forth yes
+
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1
 bindsym $mod+Shift+2 move container to workspace 2
@@ -110,9 +113,8 @@ bindsym XF86AudioMute        exec --no-startup-id amixer set Master toggle
 # reload the configuration file
 bindsym $mod+Shift+c reload
 
-# restart i3 inplace, regenerating the config
-bindsym $mod+Shift+r exec --no-startup-id                       \
-        $HOME/.config/i3/bin/generate-config.sh, restart
+# restart i3 inplace
+bindsym $mod+Shift+r exec --no-startup-id restart
 
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec --no-startup-id \
