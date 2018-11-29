@@ -5,12 +5,6 @@ function main {
     xsetroot -solid darkslategrey
     xsetroot -cursor_name left_ptr
 
-    # force numlock on
-    for tty in /dev/tty[1-8]
-    do
-        setleds -D +num < "${tty}"
-    done
-
     # xresources
     xresources="${HOME}/.Xresources"
     if [[ -e "${xresources}" ]]
