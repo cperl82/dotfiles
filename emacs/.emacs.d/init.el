@@ -489,6 +489,31 @@ setting the args to `-t TYPE' instead of prompting."
   :after (ivy)
   :config
   (progn
+    (let ((switch-buffer-prefs
+           '(:columns
+             ((ivy-rich-candidate
+               (:width 50))
+              (ivy-rich-switch-buffer-size
+               (:width 7))
+              (ivy-rich-switch-buffer-indicators
+               (:width 4 :face error :align right))
+              (ivy-rich-switch-buffer-major-mode
+               (:width 20 :face warning))
+              (ivy-rich-switch-buffer-project
+               (:width 20 :face success))
+              (ivy-rich-switch-buffer-path
+               (:width
+                (lambda (x)
+                  (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))
+             :predicate
+             (lambda
+                 (cand)
+               (get-buffer cand)))))
+      (plist-put ivy-rich--display-transformers-list 'ivy-switch-buffer                   switch-buffer-prefs)
+      (plist-put ivy-rich--display-transformers-list 'counsel-projectile-switch-to-buffer switch-buffer-prefs)
+      (plist-put ivy-rich--display-transformers-list 'counsel-projectile-find-file        switch-buffer-prefs)
+      (plist-put ivy-rich--display-transformers-list 'counsel-projectile-find-dir         switch-buffer-prefs)
+      (plist-put ivy-rich--display-transformers-list 'counsel-projectile                  switch-buffer-prefs))
     (setq ivy-rich-path-style 'relative)
     (ivy-rich-mode 1)))
 
