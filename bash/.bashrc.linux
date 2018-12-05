@@ -568,9 +568,6 @@ function setup-misc {
 		    done
 	    }
     fi
-
-    # 2017-05-12: default terminal for i3-sensible-terminal
-    export TERMINAL="${HOME}/bin/urxvt256cc"
 }
 
 function main

@@ -605,6 +605,7 @@ dired-x"
   :config
   (progn
     (put 'dired-find-alternate-file 'disabled nil)
+    (setq dired-listing-switches "-atrl --group-directories-first")
     (add-hook 'dired-mode-hook
               (lambda ()
                 (dired-omit-mode 1)))))

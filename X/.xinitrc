@@ -22,6 +22,10 @@ function main {
     # regenerate our i3 config
     config=$("${HOME}/.config/i3/bin/generate-config.sh")
     i3 -c "${config}"
+
+    # start urxvtcd
+    urxvt256cd -q -o -f
+    export TERMINAL=urxvt256cc
 }
 
 main "${@}"
