@@ -1,0 +1,27 @@
+* Intro
+  This is my dotfiles repo.  There are many like it, but this one is mine.
+
+  The idea is pretty simple, using gnu ~stow~ to manage the dotfiles, copying some others on
+  the internet who did this before I did.
+
+  The repo has several paths that are git ignored, e.g.
+
+  : emacs/.emacs.d/el-get
+
+  where el-get downloads and stores all of the packages I ask it to in my emacs config.
+
+* stow.sh
+  Instead of running ~stow~ directly, I have a wrapper script called ~stow.sh~ that reads
+  an optional config file, ~stow.local~ that is git ignored.  This allows me to tailer
+  what I want stowed, depending on what environment I'm in.
+
+  If there is no local config file, ~stow.sh~ attempts to just stow everything.
+
+* Ignoring certain directories
+  Some directories, I never want to stow.  They are just kept around for hanging onto
+  plist files and things like that that I find valuable.
+
+  To make sure ~stow.sh~, and by extension ~stow~ do not stow them, I use a local ignore
+  file to ignore everything in them.  E.g.:
+
+  : plist/.stow-local-ignore
