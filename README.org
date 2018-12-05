@@ -25,3 +25,7 @@
   file to ignore everything in them.  E.g.:
 
   : plist/.stow-local-ignore
+
+  with an ignore of:
+
+  : .*

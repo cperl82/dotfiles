@@ -16,11 +16,11 @@ function main ()
 	    then
 		# Stow just what we've been asked to stow
 		cat "${local_conf}" \
-		    | xargs -t stow -R
+		    | xargs -t stow -Rvv
 	    else
 		# Stow everything
-		find . -mindepth 1 -maxdepth 1 -type d \
-		     | xargs -t stow -R
+		find * -mindepth 0 -maxdepth 0 -type d \
+		     | xargs -t stow -Rvv
 	    fi
 	}
 }
