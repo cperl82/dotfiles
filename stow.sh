@@ -8,8 +8,8 @@ function main ()
 {
     local local_conf="stow.local"
     local stow_dir=""
-
     stow_dir=$(dirname ${0})
+
     cd "${stow_dir}" && \
 	{
 	    if [[ -f "${local_conf}" ]]
