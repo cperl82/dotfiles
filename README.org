@@ -1,14 +1,8 @@
 * Intro
-  This is my dotfiles repo.  There are many like it, but this one is mine.
+  This is my dotfiles repo.
 
-  The idea is pretty simple, using gnu ~stow~ to manage the dotfiles, copying some others on
-  the internet who did this before I did.
-
-  The repo has several paths that are git ignored, e.g.
-
-  : emacs/.emacs.d/el-get
-
-  where el-get downloads and stores all of the packages I ask it to in my emacs config.
+  The idea is pretty simple, using gnu ~stow~ to manage the dotfiles, copying some others
+  on the internet who did this before I did.
 
 * stow.sh
   Instead of running ~stow~ directly, I have a wrapper script called ~stow.sh~ that reads

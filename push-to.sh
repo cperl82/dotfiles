@@ -13,20 +13,48 @@ function main ()
     stow_dir=$(dirname $(realpath -m ${0}))
     cd "${stow_dir}/.." && \
 	{
-	    tmp=$(mktemp -t)
 	    stow_basename=$(basename "${stow_dir}")
-	    echo "${stow_basename}" > "${tmp}"
+
+	    tmp=$(mktemp -t)
+	    printf "${stow_basename}\000" > "${tmp}"
 	    # enumerate all links that point into us
-	    find . -maxdepth 4 -lname "*${stow_basename}*" >> "${tmp}"
-	    rsync -av				\
-		  --delete			\
-		  --recursive			\
-		  --itemize-changes		\
-		  --files-from="${tmp}"		\
-		  --exclude="./"		\
-		  --dry-run			\
-		  "${PWD}/"			\
-		  "${*}"
+	    find .					\
+		 -maxdepth 3				\
+		 -name "${stow_basename}" -prune -o	\
+		 -lname "*${stow_basename}*"		\
+		 -print0 >> "${tmp}"
+	    for dst in "${@}"
+	    do
+		if [[ "${dst}" =~ : ]]
+		then
+		    h=$(awk -F: '{print $1}' <<< "${dst}")
+		    p=$(awk -F: '{print $2}' <<< "${dst}")
+		    prefix="ssh ${h} -- "
+		    dst="${p}"
+		else
+		    prefix=""
+		fi
+
+		eval				\
+		    ${prefix}			\
+		    cd "${dst}" &&		\
+		    {
+			find .					\
+			     -maxdepth 3			\
+			     -name "${stow_basename}" -prune -o \
+			     -lname "*${stow_basename}*"	\
+			     -print0
+		    } >> "${tmp}"
+		rsync -av			\
+		      --delete			\
+		      --recursive		\
+		      --itemize-changes		\
+		      --files-from="${tmp}"	\
+		      --from0			\
+		      --exclude="./"		\
+		      "${PWD}/"			\
+		      "${dst}"
+	    done
 	}
 }
 
