@@ -605,6 +605,8 @@ dired-x"
   :config
   (progn
     (put 'dired-find-alternate-file 'disabled nil)
+    (let ((prog (if (equal system-type 'darwin) "gls" "ls")))
+      (setq insert-directory-program prog))
     (setq dired-listing-switches "-atrl --group-directories-first")
     (add-hook 'dired-mode-hook
               (lambda ()
