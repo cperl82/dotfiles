@@ -1610,7 +1610,7 @@ controlled by `include'."
     (setq org-cycle-include-plain-lists 'integrate)
     (setq org-hide-leading-stars t)
     (setq org-make-link-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
-    (run-with-idle-timer 30 t 'org-save-all-org-buffers)
+    (run-with-idle-timer 30 t (lambda () (let ((inhibit-message t)) (org-save-all-org-buffers))))
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
     (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
     (org-babel-do-load-languages
@@ -1619,7 +1619,8 @@ controlled by `include'."
        (python . true)
        (awk    . true)
        (sed    . true)
-       (R      . true)))
+       (R      . true)
+       (calc   . true)))
     (add-hook
      'org-mode-hook
      (lambda ()
