@@ -778,8 +778,17 @@ dired-x"
   (progn
     (add-to-list
      'hs-special-modes-alist
-     `(tuareg-mode ,cp/tuareg-mode-hs-start-regexp nil nil  cp/tuareg-mode-hs-forward-sexp-fun))
-    (add-hook 'tuareg-mode-hook (lambda () (hs-minor-mode)))))
+     `(tuareg-mode
+       ,cp/tuareg-mode-hs-start-regexp nil nil  cp/tuareg-mode-hs-forward-sexp-fun))
+    (add-hook
+     'tuareg-mode-hook
+     (lambda ()
+       (hs-minor-mode)
+       (setq-local
+        face-remapping-alist
+        '((tuareg-font-double-colon-face        tuareg-font-lock-governing-face)
+          (tuareg-font-lock-extension-node-face tuareg-font-lock-governing-face)
+          (tuareg-font-lock-attribute-face      tuareg-font-lock-governing-face)))))))
 
 
 
@@ -1771,7 +1780,7 @@ controlled by `include'."
 ; zenburn theme overrides
 (zenburn-with-color-variables
   (custom-theme-set-faces
-   `zenburn
+   'zenburn
    `(lazy-highlight              ((t (:foreground ,zenburn-bg-05 :weight bold :background ,zenburn-orange))))
    `(info-node                   ((t (:foreground ,zenburn-red-3))))
    `(diff-added                  ((t (:foreground ,zenburn-green :weight bold))))
