@@ -3,4 +3,4 @@
        :type github
        :pkgname "ericdanan/counsel-projectile"
        :depends (swiper projectile)
-       :checkout "7607fb8bb4eb7fbe0ec20f9644b6bbaa5c363330")
+       :checkout "b3ea4f242d58ff9b903ece4b0e2513d6aed41578")
