@@ -405,8 +405,10 @@ implementation if in dired-mode"
 (use-package uniquify
   :config
   (progn
-    (setq uniquify-buffer-name-style 'forward)
-    (setq uniquify-strip-common-suffix nil)))
+    (setq uniquify-buffer-name-style 'post-forward
+          uniquify-separator " >> "
+          uniquify-strip-common-suffix nil
+          uniquify-after-kill-buffer-p t)))
 
 
 ;; swiper / ivy / counsel / smex
