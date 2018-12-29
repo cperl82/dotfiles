@@ -513,11 +513,11 @@ setting the args to `-t TYPE' instead of prompting."
              (lambda
                  (cand)
                (get-buffer cand)))))
-      (plist-put ivy-rich--display-transformers-list 'ivy-switch-buffer                   switch-buffer-prefs)
-      (plist-put ivy-rich--display-transformers-list 'counsel-projectile-switch-to-buffer switch-buffer-prefs)
-      (plist-put ivy-rich--display-transformers-list 'counsel-projectile-find-file        switch-buffer-prefs)
-      (plist-put ivy-rich--display-transformers-list 'counsel-projectile-find-dir         switch-buffer-prefs)
-      (plist-put ivy-rich--display-transformers-list 'counsel-projectile                  switch-buffer-prefs))
+      (plist-put ivy-rich-display-transformers-list 'ivy-switch-buffer                   switch-buffer-prefs)
+      (plist-put ivy-rich-display-transformers-list 'counsel-projectile-switch-to-buffer switch-buffer-prefs)
+      (plist-put ivy-rich-display-transformers-list 'counsel-projectile-find-file        switch-buffer-prefs)
+      (plist-put ivy-rich-display-transformers-list 'counsel-projectile-find-dir         switch-buffer-prefs)
+      (plist-put ivy-rich-display-transformers-list 'counsel-projectile                  switch-buffer-prefs))
     (setq ivy-rich-path-style 'relative)
     (ivy-rich-mode 1)))
 
