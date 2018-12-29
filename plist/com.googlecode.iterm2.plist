@@ -528,7 +528,7 @@
 	<key>MinimumContrast</key>
 	<real>0.0</real>
 	<key>NSFontPanelAttributes</key>
-	<string>1, 4</string>
+	<string>1, 0</string>
 	<key>NSFontPanelPreviewHeight</key>
 	<real>100</real>
 	<key>NSFontPanelSizeSliderParams</key>
@@ -536,9 +536,9 @@
 	<key>NSNavBrowserPreferedColumnContentWidth</key>
 	<real>186</real>
 	<key>NSNavLastRootDirectory</key>
-	<string>~/tmp/2014-03-24</string>
+	<string>~/.dotfiles/plist</string>
 	<key>NSNavPanelExpandedSizeForOpenMode</key>
-	<string>{743, 450}</string>
+	<string>{811, 470}</string>
 	<key>NSQuotedKeystrokeBinding</key>
 	<string></string>
 	<key>NSRepeatCountBinding</key>
@@ -732,29 +732,29 @@
 		<integer>1</integer>
 	</dict>
 	<key>NSWindow Frame NSFontPanel</key>
-	<string>329 446 445 285 0 0 2560 1417 </string>
+	<string>788 126 672 287 0 0 2560 1417 </string>
 	<key>NSWindow Frame Preferences</key>
 	<string>62 139 606 456 0 0 2560 1417 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>970 775 620 392 0 0 2560 1417 </string>
 	<key>NSWindow Frame SessionsPreferences</key>
-	<string>455 25 606 469 0 0 2560 1417 </string>
+	<string>1379 223 606 469 0 0 2560 1417 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>828 615 770 429 0 0 2560 1417 </string>
+	<string>765 489 796 486 0 0 2560 1417 </string>
 	<key>NSWindow Frame com.apple.typography_panel_Terminus</key>
 	<string>479 641 260 138 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>3 36 1272 1379 0 0 2560 1417 </string>
+	<string>3 45 2553 1370 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>690 409 942 665 0 0 2560 1417 </string>
+	<string>1282 45 1272 1370 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 10</key>
-	<string>3 -2 1272 1417 0 0 2560 1417 </string>
+	<string>1282 45 1272 1370 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 11</key>
-	<string>3 -2 1272 1417 0 0 2560 1417 </string>
+	<string>1282 45 1272 1370 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 12</key>
-	<string>585 1012 572 403 0 0 2560 1417 </string>
+	<string>1282 45 1272 1370 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 13</key>
-	<string>1282 32 1272 688 0 0 2560 1417 </string>
+	<string>3 45 1272 1370 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 14</key>
 	<string>1282 37 1272 1378 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 15</key>
@@ -766,26 +766,26 @@
 	<key>NSWindow Frame iTerm Window 18</key>
 	<string>1639 826 572 403 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>3 -2 1272 1417 0 0 2560 1417 </string>
+	<string>1282 45 1272 1370 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
-	<string>1282 -2 1272 1417 0 0 2560 1417 </string>
+	<string>1282 45 1272 1370 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
-	<string>1282 23 1272 1392 0 0 2560 1417 </string>
+	<string>3 45 1272 1370 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 5</key>
-	<string>3 23 1272 1392 0 0 2560 1417 </string>
+	<string>1282 45 1272 1370 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 6</key>
-	<string>3 23 1272 1392 0 0 2560 1417 </string>
+	<string>3 45 2553 1370 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 7</key>
-	<string>1282 23 1272 1392 0 0 2560 1417 </string>
+	<string>3 45 2553 1370 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 8</key>
-	<string>1282 25 1272 1392 0 0 2560 1417 </string>
+	<string>3 45 2553 1370 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 9</key>
-	<string>3 23 2550 1392 0 0 2560 1417 </string>
+	<string>3 45 1272 1370 0 0 2560 1417 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
 			<key>ASCII Anti Aliased</key>
-			<true/>
+			<false/>
 			<key>Allow Title Reporting</key>
 			<false/>
 			<key>Ambiguous Double Width</key>
@@ -1302,11 +1302,11 @@
 			<key>Name</key>
 			<string>Default</string>
 			<key>Non Ascii Font</key>
-			<string>Monaco 11</string>
+			<string>Terminus 14</string>
 			<key>Non-ASCII Anti Aliased</key>
-			<true/>
+			<false/>
 			<key>Normal Font</key>
-			<string>Terminus 12</string>
+			<string>Monaco 12</string>
 			<key>Option Key Sends</key>
 			<integer>2</integer>
 			<key>Prompt Before Closing 2</key>
@@ -1471,6 +1471,8 @@
 			<false/>
 			<key>Use Italic Font</key>
 			<false/>
+			<key>Use Non-ASCII Font</key>
+			<false/>
 			<key>Vertical Spacing</key>
 			<real>1</real>
 			<key>Visual Bell</key>
@@ -1615,7 +1617,7 @@
 		</dict>
 	</dict>
 	<key>PrefsCustomFolder</key>
-	<string>/Users/chris/.env/dotfiles</string>
+	<string>/Users/chris/.dotfiles/plist</string>
 	<key>PromptOnClose</key>
 	<true/>
 	<key>PromptOnQuit</key>
@@ -1635,9 +1637,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2018-03-24T20:52:08Z</date>
-	<key>SUSkippedVersion</key>
-	<string>3.1.6beta4</string>
+	<date>2018-12-27T15:33:12Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
@@ -1687,6 +1687,6 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.1.5</string>
+	<string>3.2.6</string>
 </dict>
 </plist>
