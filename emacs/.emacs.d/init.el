@@ -1577,6 +1577,7 @@ controlled by `include'."
         (setq appt-delete-window-function (lambda () t))))
     (use-package org-depend)
     (use-package org-man)
+    (use-package org-tempo)
     (setq org-tags-column -90)
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-todo-keywords
