@@ -406,7 +406,7 @@ implementation if in dired-mode"
   :config
   (progn
     (setq uniquify-buffer-name-style 'post-forward
-          uniquify-separator " >> "
+          uniquify-separator "@"
           uniquify-strip-common-suffix nil
           uniquify-after-kill-buffer-p t)))
 
