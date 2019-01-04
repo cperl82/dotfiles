@@ -464,6 +464,11 @@ setting the args to `-t TYPE' instead of prompting."
   (interactive)
   (cp/counsel-rg-with-type '("lisp") "rg (lisp)"))
 
+(defun cp/counsel-rg-files ()
+  (interactive)
+  (let ((counsel-git-cmd "rg --files --hidden -g '!.git/*' -g '!.hg/*'"))
+    (counsel-git)))
+
 (use-package smex
   :defer t)
 
@@ -532,6 +537,7 @@ setting the args to `-t TYPE' instead of prompting."
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a g r" #'cp/counsel-rg
+   "a g f" #'cp/counsel-rg-files
    "a g R" #'cp/counsel-rg-with-type
    "a g O" #'cp/counsel-rg-with-type-ocaml
    "a g C" #'cp/counsel-rg-with-type-c
