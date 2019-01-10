@@ -464,10 +464,23 @@ setting the args to `-t TYPE' instead of prompting."
   (interactive)
   (cp/counsel-rg-with-type '("lisp") "rg (lisp)"))
 
-(defun cp/counsel-rg-files ()
+(defun cp/counsel-rg-files (&optional initial-input)
+  "Find files with `rg --files'.  This started off as just setting
+`counsel-git-command' and then running `counsel-git', but I had to
+give that up as it requires being run from within a git repo, and this
+is more general than that."
   (interactive)
-  (let ((counsel-git-cmd "rg --files --hidden -g '!.git/*' -g '!.hg/*'"))
-    (counsel-git)))
+  (counsel-require-program "rg")
+  (let* ((cmd "rg --files --hidden -g '!.git/*' -g '!.hg/*'")
+         (cands (split-string (shell-command-to-string cmd) "\n" t))
+         (default-directory
+          (if current-prefix-arg
+              (read-directory-name "rg in directory: ")
+            default-directory)))
+    (ivy-read "Find file: " cands
+              :initial-input initial-input
+              :action #'counsel-git-action
+              :caller 'cp/counsel-rg-files)))
 
 (use-package smex
   :defer t)
