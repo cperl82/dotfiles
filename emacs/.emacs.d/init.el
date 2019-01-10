@@ -472,11 +472,11 @@ is more general than that."
   (interactive)
   (counsel-require-program "rg")
   (let* ((cmd "rg --files --hidden -g '!.git/*' -g '!.hg/*'")
-         (cands (split-string (shell-command-to-string cmd) "\n" t))
          (default-directory
           (if current-prefix-arg
               (read-directory-name "rg in directory: ")
-            default-directory)))
+            default-directory))
+         (cands (split-string (shell-command-to-string cmd) "\n" t)))
     (ivy-read "Find file: " cands
               :initial-input initial-input
               :action #'counsel-git-action
