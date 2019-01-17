@@ -1524,6 +1524,12 @@ controlled by `include'."
   ;; Add code here to encode the logic of displaying the appt notification.
   ;; You have to test whether `min-to-app' is a list or an atom, which can be done with `atom'
   ;; You'll need to think about how you want to override behavior for your various use cases
+  ;;
+  ;; If min-to-app is a list, then it means there are multiple notifications and you should handle them all.
+  ;;
+  ;; Example:
+  ;; ("5" "5") "Thu Jan 17 " (#("06:55 Foo" 6 9 (org-heading t org-category "foo" face org-level-1 fontified t)) #("06:55 Bar" 6 9 (org-heading t org-category "foo" face org-level-1 fontified t)))
+  (message "%S %S %S" min-to-app new-time msg)
   t)
 
 (use-package org
@@ -1580,6 +1586,19 @@ controlled by `include'."
    "C-c c"   #'org-capture)
   :config
   (progn
+    (use-package appt
+      :config
+      (progn
+        (appt-activate t)
+        (setq appt-message-warning-time 15)
+        ; (setq appt-display-mode-line nil)
+        ; (setq appt-display-interval appt-message-warning-time)
+        ;; Add code here to automatically run `cp/org-agenda-to-appt'
+        ;; at certain times, you need to run this to move any
+        ;; scheduled or deadline tasks from org to appt for
+        ;; notifications.
+        (setq appt-disp-window-function #'cp/org-appt-disp-window)
+        (setq appt-delete-window-function (lambda () t))))
     (use-package org-id
       :config
       (progn
@@ -1589,16 +1608,6 @@ controlled by `include'."
       (progn
         (setq org-habit-today-glyph ?t)
         (setq org-habit-completed-glyph ?d)))
-    (use-package appt
-      :config
-      (progn
-        (appt-activate t)
-        (setq appt-message-warning-time 15)
-        (setq appt-display-interval appt-message-warning-time)
-        (setq appt-display-mode-line nil)
-        ;; Add code here to automatically run `cp/org-agenda-to-appt' at certain times
-        (setq appt-disp-window-function #'cp/org-appt-disp-window)
-        (setq appt-delete-window-function (lambda () t))))
     (use-package org-depend)
     (use-package org-man)
     (use-package org-tempo)
