@@ -229,14 +229,28 @@ space)"
   "A wrapper for `find-file' that dispatches to a special
 implementation if in dired-mode"
   (interactive)
-  (let ((f
-         (cond
-           ((eq major-mode 'dired-mode) #'cp/dired-smart-find-file)
-           ;; Explicitly call `counsel-find-file' if in `counsel-mode'
-           ;; as it has additional actions and such that `find-file'
-           ;; does not, even though they look basically the same from
-           ;; a ui perspective.
-           (t (if counsel-mode #'counsel-find-file #'find-file)))))
+  ;; Explicitly call `counsel-find-file' if in `counsel-mode'
+  ;; as it has additional actions and such that `find-file'
+  ;; does not, even though they look basically the same from
+  ;; a ui perspective.
+  (let ((f (if counsel-mode #'counsel-find-file #'find-file))
+        (default-directory
+         (if current-prefix-arg
+             (let* ((buffers
+                     (-filter
+                      (lambda (b)
+                        (let ((name (buffer-name b)))
+                          (or (not (string-match "^\\(  *\\)?\\*.*\\*$" name))
+                              (equal name "*scratch*"))))
+                      (buffer-list)))
+                    (directories
+                     (-map
+                      (lambda (b)
+                        (with-current-buffer b (abbreviate-file-name default-directory)))
+                      buffers))
+                    (cands (-sort #'string-equal (-uniq directories))))
+               (ivy-read "Find file in directory: " cands))
+           (if (eq major-mode 'dired-mode) (dired-current-directory) default-directory))))
     (call-interactively f)))
 
 (defconst cp/normal-prefix "SPC")
@@ -577,11 +591,6 @@ is more general than that."
         (setq dired-omit-files (s-join "\\|" (-insert-at 0 regex elements))))
       (revert-buffer)
       (message "dired-omit-files is now: %S" dired-omit-files)))
-
-(defun cp/dired-smart-find-file ()
-  (interactive)
-  (let* ((default-directory (dired-current-directory)))
-    (call-interactively #'find-file)))
 
 (defun cp/dired-smart-async-shell-command (command &optional output-buffer error-buffer)
   "Like function `async-shell-command', but in the current Virtual
