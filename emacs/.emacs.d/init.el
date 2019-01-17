@@ -226,8 +226,7 @@ space)"
 (add-hook 'c-mode-hook #'cp/c-mode-hook-setup)
 
 (defun cp/find-file ()
-  "A wrapper for `find-file' that dispatches to a special
-implementation if in dired-mode"
+  "A wrapper for `find-file'"
   (interactive)
   ;; Explicitly call `counsel-find-file' if in `counsel-mode'
   ;; as it has additional actions and such that `find-file'
