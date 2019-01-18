@@ -252,6 +252,12 @@ space)"
            (if (eq major-mode 'dired-mode) (dired-current-directory) default-directory))))
     (call-interactively f)))
 
+(defun cp/run-counsel-grep-or-swiper-with-thing-at-point ()
+  (interactive)
+  (let ((initial-input
+         (evil-find-thing t 'symbol)))
+    (counsel-grep-or-swiper initial-input)))
+
 (defconst cp/normal-prefix "SPC")
 (defconst cp/non-normal-prefix "M-SPC")
 
@@ -266,7 +272,7 @@ space)"
  :keymaps '(override)
  :states '(normal motion emacs)
  :prefix ","
- "h" #'cp/evil-highlight-symbol
+ "h" #'cp/run-counsel-grep-or-swiper-with-thing-at-point
  "m" #'highlight-symbol-at-point
  "u" #'unhighlight-regexp
  "s" #'split-window-vertically
@@ -909,24 +915,6 @@ dired-x"
 
 
 ;; evil
-(defun cp/evil-highlight-symbol ()
-  "Similar to `evil-search-word', but the idea is to just highlight
-the word under point as if it had been searched for."
-  (interactive)
-  (let ((forward t)
-        (regexp  t)
-        (start (save-excursion (backward-word) (point)))
-        (thing (evil-find-symbol t)))
-    (cond
-      ((null thing)
-       (user-error "No word under point"))
-      (t
-       (setq isearch-forward forward)
-       (evil-push-search-history thing forward)
-       (save-excursion
-         (evil-search (regexp-quote thing) forward regexp start)
-         (evil-flash-search-pattern thing t))))))
-
 (use-package undo-tree
   :defer t
   :diminish undo-tree-mode)
