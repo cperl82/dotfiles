@@ -487,11 +487,15 @@ setting the args to `-t TYPE' instead of prompting."
   "Find files with `rg --files'.  This started off as just setting
 `counsel-git-command' and then running `counsel-git', but I had to
 give that up as it requires being run from within a git repo, and this
-is more general than that."
+is more general than that.
+
+By default, prompt for a directory to start in.  If passed a prefix
+argument, then just use `default-directory'
+"
   (interactive)
   (counsel-require-program "rg")
   (let* ((cmd "rg --files --hidden -g '!.git/*' -g '!.hg/*'")
-         (default-directory (read-directory-name "rg --files in directory: "))
+         (default-directory (if current-prefix-arg default-directory (read-directory-name "rg --files in directory: ")))
          (cands (split-string (shell-command-to-string cmd) "\n" t)))
     (ivy-read "Find file: " cands
               :initial-input initial-input
