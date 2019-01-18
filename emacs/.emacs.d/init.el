@@ -240,7 +240,7 @@ space)"
                       (lambda (b)
                         (let ((name (buffer-name b)))
                           (or (not (string-match "^\\(  *\\)?\\*.*\\*$" name))
-                              (equal name "*scratch*"))))
+                              (equal "*scratch*" name))))
                       (buffer-list)))
                     (directories
                      (-map
