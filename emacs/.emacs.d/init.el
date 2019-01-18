@@ -575,6 +575,8 @@ is more general than that."
    "a g L" #'cp/counsel-rg-with-type-lisp)
   :init
   (progn
+    ;; Use rg instead of grep because it has the nice smart case feature
+    (setq counsel-grep-base-command "rg --line-number --smart-case %s %s")
     (counsel-mode 1)))
 
 
