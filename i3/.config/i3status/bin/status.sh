@@ -16,7 +16,7 @@ function main
     i3bar_prolog
     while read -r json
     do
-	for plugin in $(find "${dir}/plugin.d" -type f -print)
+	for plugin in $(find "${dir}/plugin.d" -type f -print 2>/dev/null)
 	do
 	    test -x "${plugin}" || continue
 	    read -r type position output < <("${plugin}")
