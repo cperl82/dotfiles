@@ -113,6 +113,7 @@
       gc-cons-threshold       100000000
       inhibit-startup-message t
       make-backup-files       nil
+      create-lockfiles        nil
       split-height-threshold  nil
       load-prefer-newer       t)
 
