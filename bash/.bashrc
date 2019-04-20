@@ -496,6 +496,10 @@ function setup-misc {
     path-append "${HOME}/bin"
     maybe-add-fzf-to-path
 
+    # Add ripgrep config file
+    RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
+    export RIPGREP_CONFIG_PATH
+
     # OS Specific bashrc file inclusion
     osname=$(uname -s | tr '[A-Z]' '[a-z]')
     osfile="${BASHFILES}/.bashrc.${osname}"
