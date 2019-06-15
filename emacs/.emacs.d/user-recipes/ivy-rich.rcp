@@ -2,4 +2,4 @@
        :description "A more friendly interfaces for ivy-switch-buffer"
        :type github
        :pkgname "Yevgnen/ivy-rich"
-       :checkout "7b0fc52a6ebb9b53aef04f68672d25337c2a4540")
+       :checkout "58da08aeff58267c5a982ebbfc5cce0ea66db107")

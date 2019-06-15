@@ -2,5 +2,5 @@
        :description "Autoinsert pairs of defined brackets and wrap regions"
        :type github
        :pkgname "Fuco1/smartparens"
-       :checkout "806d770ebdce93d984401825d78816fcbec12f1f"
+       :checkout "046440700f292c90c4a992f959c8d6725aa9a3bc"
        :depends dash)
