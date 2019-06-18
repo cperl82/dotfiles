@@ -526,9 +526,11 @@ argument, then just use `default-directory'
     (setq ivy-re-builders-alist
           '((counsel-M-x . ivy--regex-ignore-order)
             (t . ivy--regex-plus)))
-    (setq ivy-format-function 'ivy-format-function-arrow)
     (setq ivy-count-format "%d/%d ")
-    (ivy-mode 1)))
+    (ivy-mode 1))
+  :config
+  (progn
+    (setf (cdr (assoc t ivy-format-functions-alist)) 'ivy-format-function-arrow)))
 
 (use-package ivy-rich
   :after (ivy)
