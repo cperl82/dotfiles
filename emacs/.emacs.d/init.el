@@ -503,6 +503,15 @@ argument, then just use `default-directory'
               :action #'counsel-git-action
               :caller 'cp/counsel-rg-files)))
 
+(defun cp/counsel-grep-use-swiper-p ()
+  "A small wrapper for `counsel-grep-use-swiper-p-default' that
+ensures we always use swiper on encrypted buffers/files as
+attempting to use grep (or ag, rg, etc) is always going to fail."
+  (let ((name (buffer-file-name)))
+    (if (and name (string-match-p "\\.gpg$" name))
+        t
+      (counsel-grep-use-swiper-p-default))))
+
 (use-package smex
   :defer t)
 
@@ -584,6 +593,7 @@ argument, then just use `default-directory'
   (progn
     ;; Use rg instead of grep because it has the nice smart case feature
     (setq counsel-grep-base-command "rg --line-number --smart-case %s %s")
+    (setq counsel-grep-use-swiper-p #'cp/counsel-grep-use-swiper-p)
     (counsel-mode 1)))
 
 
