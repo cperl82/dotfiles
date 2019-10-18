@@ -214,9 +214,8 @@ space)"
   (let ((width (frame-text-width)))
     (if (< width 120)
         (setq split-width-threshold nil)
-      (let ((desired (frame-text-width)))
-        (when (not (equal desired split-width-threshold))
-          (setq split-width-threshold desired))))))
+      (when (not (equal width split-width-threshold))
+        (setq split-width-threshold width)))))
 
 (advice-add 'split-window-sensibly     :before #'cp/advice/split-windows)
 (advice-add 'split-window-horizontally :before #'cp/advice/split-windows)
