@@ -465,23 +465,23 @@ setting the args to `-t TYPE' instead of prompting."
 
 (defun cp/counsel-rg-with-type-ocaml ()
   (interactive)
-  (cp/counsel-rg-with-type '("ocaml") "rg (ocaml)"))
+  (cp/counsel-rg-with-type '("ocaml") "rg (ocaml): "))
 
 (defun cp/counsel-rg-with-type-c ()
   (interactive)
-  (cp/counsel-rg-with-type '("c") "rg (c)"))
+  (cp/counsel-rg-with-type '("c") "rg (c): "))
 
 (defun cp/counsel-rg-with-type-ocaml-or-c ()
   (interactive)
-  (cp/counsel-rg-with-type '("ocaml" "c") "rg (ocaml or c)"))
+  (cp/counsel-rg-with-type '("ocaml" "c") "rg (ocaml or c): "))
 
 (defun cp/counsel-rg-with-type-elisp ()
   (interactive)
-  (cp/counsel-rg-with-type '("elisp") "rg (elisp)"))
+  (cp/counsel-rg-with-type '("elisp") "rg (elisp): "))
 
 (defun cp/counsel-rg-with-type-lisp ()
   (interactive)
-  (cp/counsel-rg-with-type '("lisp") "rg (lisp)"))
+  (cp/counsel-rg-with-type '("lisp") "rg (lisp): "))
 
 (defun cp/counsel-rg-files (&optional initial-input)
   "Find files with `rg --files'.  This started off as just setting
