@@ -3,4 +3,4 @@
        :type github
        :pkgname "emacs-evil/evil-collection"
        :checkout "76c12459718bcdcd7418ed0115c04377c2f64b3c"
-       :depends (evil))
+       :depends (evil annalist))

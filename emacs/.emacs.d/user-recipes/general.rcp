@@ -5,4 +5,4 @@
        :type github
        :pkgname "noctuid/general.el"
        :branch "master"
-       :checkout "356654668ee4f77aa330398c54b62fb33345fdff")
+       :checkout "f38fb2294bd29261374b772f765730f2fa168b3e")

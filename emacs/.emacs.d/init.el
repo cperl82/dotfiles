@@ -14,6 +14,7 @@
  'sync
  '(avy
    ace-window
+   annalist
    color-theme-zenburn
    company-mode
    counsel-projectile
