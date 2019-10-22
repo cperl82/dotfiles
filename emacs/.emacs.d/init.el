@@ -14,6 +14,7 @@
  'sync
  '(avy
    ace-window
+   annalist
    color-theme-zenburn
    company-mode
    counsel-projectile
@@ -661,7 +662,7 @@ dired-x"
     (put 'dired-find-alternate-file 'disabled nil)
     (let ((prog (if (equal system-type 'darwin) "gls" "ls")))
       (setq insert-directory-program prog))
-    (setq dired-listing-switches "-atrl --group-directories-first")
+    (setq dired-listing-switches "-aBhl --group-directories-first")
     (add-hook 'dired-mode-hook
               (lambda ()
                 (dired-omit-mode 1)))))
