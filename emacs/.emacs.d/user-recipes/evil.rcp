@@ -5,9 +5,9 @@
        for writing custom extensions."
        :type github
        :pkgname "emacs-evil/evil"
-       :checkout "874beba2cb243c325eca08fb7badff567f3c9494"
+       :checkout "3f3b2fea87172f155e5f91d75f0fb69d8648acf2"
        :depends (undo-tree goto-chg)
        :build (("make" "info" "all"))
        :build/berkeley-unix (("gmake" "info" "all"))
-       :build/darwin `(("make" ,(format "EMACS=%s" el-get-emacs) "info" "all"))
-       :info "doc")
+       :build/darwin `(("make" ,(format "EMACS=%s" el-get-emacs) "SPHINXBUILD=/usr/local/opt/sphinx-doc/bin/sphinx-build" "info" "all"))
+       :info "doc/build/texinfo")

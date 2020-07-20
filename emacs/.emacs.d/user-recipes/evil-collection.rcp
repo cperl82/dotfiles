@@ -2,5 +2,5 @@
        :description "A set of keybindings for evil-mode"
        :type github
        :pkgname "emacs-evil/evil-collection"
-       :checkout "76c12459718bcdcd7418ed0115c04377c2f64b3c"
+       :checkout "3e62b6b1312f7907081be41a032aaacffa732fef"
        :depends (evil annalist))
