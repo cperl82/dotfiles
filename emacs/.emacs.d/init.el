@@ -436,18 +436,19 @@ space)"
   (thread-last (shell-command-to-string "rg --type-list")
     (s-split "\n")))
 
-(defun cp/counsel-rg-with-prefix-arg (&rest args)
-  (let ((current-prefix-arg '(4)))
-    (apply #'counsel-rg args)))
-
 (defun cp/counsel-rg (&rest args)
-  "A wrapper around `counsel-rg' that always prompts for a directory,
-but if a prefix arg has already been specified, just passes that
-through to the underlying function"
+  "A wrapper around `counsel-rg' that increases the level of the
+prefix argument (from 0 to 1 or from 1 to 2).  The point is to always
+call `counsel-rg' with a prefix argument to force it to prompt for a
+directory, but optionally allow a single prefix argument can force it
+to prompt for additional args"
   (interactive)
-  (if current-prefix-arg
-      (call-interactively #'counsel-rg)
-    (cp/counsel-rg-with-prefix-arg "" nil "" nil)))
+  (let ((current-prefix-arg
+         (cond
+           ((equal current-prefix-arg nil) '(4))
+           ((equal current-prefix-arg '(4)) '(16))
+           (t current-prefix-arg))))
+    (apply #'counsel-rg args)))
 
 (defun cp/counsel-rg-with-type (&optional types prompt)
   "Prompt for a supported file type from rg and then run
@@ -462,7 +463,7 @@ setting the args to `-t TYPE' instead of prompting."
                 (list))))
          (extra-rg-args
           (s-join " " (seq-map (lambda (type) (format "-t%s" type)) file-types))))
-    (cp/counsel-rg-with-prefix-arg nil nil extra-rg-args prompt)))
+    (cp/counsel-rg nil nil extra-rg-args prompt)))
 
 (defun cp/counsel-rg-with-type-ocaml ()
   (interactive)
