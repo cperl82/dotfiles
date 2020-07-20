@@ -1617,7 +1617,7 @@ controlled by `include'."
         (setq org-habit-today-glyph ?t)
         (setq org-habit-completed-glyph ?d)))
     (use-package org-depend)
-    (use-package org-man)
+    (use-package ol-man)
     (use-package org-tempo)
     (setq org-tags-column -90)
     (setq org-agenda-restore-windows-after-quit t)
