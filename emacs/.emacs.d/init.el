@@ -48,6 +48,7 @@
    markdown-mode
    nasm-mode
    org-mode
+   org-ql
    origami
    projectile
    s
