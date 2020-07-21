@@ -8,6 +8,10 @@
       (url-retrieve-synchronously "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
     (goto-char (point-max)) (eval-print-last-sexp)))
 
+;; el-get-lock for locking package versions
+(el-get-bundle tarao/el-get-lock)
+(el-get-lock)
+
 (setq el-get-verbose t)
 (add-to-list 'el-get-recipe-path (concat user-emacs-directory "user-recipes"))
 (el-get
