@@ -1,6 +1,0 @@
-(:name elisp-slime-nav
-       :type github
-       :pkgname "purcell/elisp-slime-nav"
-       :description "Slime-style navigation for Emacs Lisp"
-       :branch "master"
-       :checkout "34938422929800839e2f935aca890cd4a229ca99")
