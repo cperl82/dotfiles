@@ -3,5 +3,4 @@
        :description "Emulate Tim Pope's surround.vim in evil, the extensible vim emulation layer for emacs"
        :type github
        :pkgname "emacs-evil/evil-surround"
-       :checkout "346d4d85fcf1f9517e9c4991c1efe68b4130f93a"
        :depends evil)

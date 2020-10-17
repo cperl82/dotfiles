@@ -5,7 +5,6 @@
        for writing custom extensions."
        :type github
        :pkgname "cperl82/evil"
-       :checkout "ba79ed6a3ae3f07e4a56387e09350f3d1cd90041"
        :depends (undo-tree goto-chg)
        :build (("make" "info" "all"))
        :build/berkeley-unix (("gmake" "info" "all"))
