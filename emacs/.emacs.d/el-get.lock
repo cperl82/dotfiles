@@ -26,7 +26,7 @@
         (tuareg-mode :checksum "b6271c4496a29b74ad1e47d6802b9cfba415fe77")
         (ts :checksum "df48734ef046547c1aa0de0f4c07d11964ef1f7f")
         (systemtap-mode :checksum "1a968c2b1f3a054bebf91ac49739d3a81ce050a9")
-        (systemd-mode :checksum "2c71ec55291eca382305b1f31020e0396907534d")
+        (systemd-mode :checksum "51c148e09a129ddf33d95276aa0e89d4ef6f8dd2")
         (smex :checksum "55aaebe3d793c2c990b39a302eb26c184281c42c")
         (peg :checksum "d944cde67d43941af85efbc3e3649cd5edc51a5b")
         (ov :checksum "c5b9aa4e1b00d702eb2caedd61c69a22a5fa1fab")
