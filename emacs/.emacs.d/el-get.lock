@@ -1,7 +1,7 @@
 (setq el-get-lock-package-versions
       '((evil :checksum "ba79ed6a3ae3f07e4a56387e09350f3d1cd90041")
         (transient :checksum "4d44d08e90355a8ef36aaad1f9f79c95de1ce0e9")
-        (org-mode :checksum "2c980de07341b015741dc2fdad27a3078c9618fb")
+        (org-mode :checksum "fbccf09c740a298e39daa9170bceaa92684f2fe0")
         (evil-collection :checksum "3e62b6b1312f7907081be41a032aaacffa732fef")
         (smartparens :checksum "046440700f292c90c4a992f959c8d6725aa9a3bc")
         (s :checksum "03410e6a7a2b11e47e1fea3b7d9899c7df26435e")
