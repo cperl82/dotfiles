@@ -23,7 +23,7 @@
         (vagrant-tramp :checksum "453ba605b28d2964bb4e10074f1e6891ebb4d2d6")
         (use-package :checksum "4aa14a4fcd5ca52b3f1bfcf5ab294173f7bbe390")
         (undo-tree :checksum "e9a9102f515acd7523158f20e83f300600374989")
-        (tuareg-mode :checksum "b6271c4496a29b74ad1e47d6802b9cfba415fe77")
+        (tuareg-mode :checksum "ccde45bbc292123ec20617f1af7f7e19f7481545")
         (ts :checksum "df48734ef046547c1aa0de0f4c07d11964ef1f7f")
         (systemtap-mode :checksum "1a968c2b1f3a054bebf91ac49739d3a81ce050a9")
         (systemd-mode :checksum "51c148e09a129ddf33d95276aa0e89d4ef6f8dd2")
