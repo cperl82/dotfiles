@@ -121,7 +121,8 @@
       make-backup-files       nil
       create-lockfiles        nil
       split-height-threshold  nil
-      load-prefer-newer       t)
+      load-prefer-newer       t
+      window-combination-resize t)
 
 ;; 2015-09-11 Enable narrowing command which are disabled by default
 (put 'narrow-to-region 'disabled nil)
