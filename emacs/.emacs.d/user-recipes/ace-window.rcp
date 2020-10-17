@@ -1,6 +1,0 @@
-(:name ace-window
-       :description "Quickly switch windows using `avy'"
-       :type github
-       :pkgname "abo-abo/ace-window"
-       :checkout "d93e16b52ee7c1b6c9df599060e7077b4e46cbf8"
-       :depends (avy))

@@ -1,6 +1,0 @@
-(:name ample-regexps
-       :description "Compose and reuse Emacs regular expressions with ease"
-       :type github
-       :pkgname "immerrr/ample-regexps.el"
-       :checkout "cbe91e148cac1ee8e223874dc956ed4cf607f046"
-       )

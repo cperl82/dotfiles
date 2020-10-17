@@ -1,5 +1,0 @@
-(:name dash
-       :description "A modern list api for Emacs. No 'cl required."
-       :type github
-       :checkout "77f3bf40c9c85386a50f2dab3dc950513f6f88bd"
-       :pkgname "magnars/dash.el")
