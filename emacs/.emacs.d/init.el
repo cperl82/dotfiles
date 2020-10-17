@@ -1627,7 +1627,7 @@ controlled by `include'."
     (setq org-tags-column -90)
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-todo-keywords
-          '((sequence "DFER(r)" "DPND(x)" "WAIT(w)" "NEXT(n)" "|" "DONE(d!)" "CNCL(c!)")))
+          '((sequence "NEXT(n)" "WAIT(w)" "DFER(r)" "DPND(x)" "|" "DONE(d!)" "CNCL(c!)")))
     (setq org-todo-keyword-faces
           '(("DFER" . "#767676")
             ("DPND" . "#767676")
