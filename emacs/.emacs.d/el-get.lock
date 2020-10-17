@@ -45,7 +45,7 @@
         (hydra :checksum "a2bb124a3f2e57c032fc264bcd08219fa3d513d9")
         (ht :checksum "fff8c43f0e03d5b98deb9f988522b839ce2ca253")
         (highlight-parentheses :checksum "a821a314942f409cd69660d816cd9a0aebd1ae8f")
-        (go-mode :checksum "99b06da201afb91e8db0c525c0f3c3590fd92fa6")
+        (go-mode :checksum "d17d21060b16a77f9ee28ff453e674225acbf1b1")
         (general :checksum "a0b17d207badf462311b2eef7c065b884462cb7c")
         (flycheck :checksum "0995b0bb3f518c7350f1428860c0fc7eeaee3c46")
         (f :checksum "8191672377816a1975414cc1f116fd3b94b30bd0")
