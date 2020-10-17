@@ -1,7 +1,0 @@
-(:name lua-mode
-       :description "A major-mode for editing Lua scripts"
-       :depends (ample-regexps)
-       :branch "master"
-       :checkout "652e299cb967fccca827dda381d61a9c144d97de"
-       :type github
-       :pkgname "immerrr/lua-mode")

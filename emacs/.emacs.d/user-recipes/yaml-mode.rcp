@@ -1,5 +1,0 @@
-(:name yaml-mode
-       :description "Simple major mode to edit YAML file for emacs"
-       :type github
-       :checkout "28c34033194130d452d5c958b5241c88d42ca02b"
-       :pkgname "yoshiki/yaml-mode")

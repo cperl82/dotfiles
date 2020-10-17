@@ -3,5 +3,4 @@
        :description "A text folding minor mode for Emacs"
        :type github
        :pkgname "gregsexton/origami.el"
-       :checkout "1f38085c8f9af7842765ed63f7d6dfe4dab59366"
        :depends (dash s))

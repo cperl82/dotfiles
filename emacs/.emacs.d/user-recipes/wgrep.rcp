@@ -1,5 +1,0 @@
-(:name wgrep
-       :description "Writable grep buffer and apply the changes to files"
-       :type github
-       :checkout "414be70bd313e482cd9f0b70fd2daad4ee23497c"
-       :pkgname "mhayashi1120/Emacs-wgrep")

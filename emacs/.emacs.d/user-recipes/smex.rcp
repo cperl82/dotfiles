@@ -1,7 +1,0 @@
-(:name smex
-       :description "M-x interface with Ido-style fuzzy matching."
-       :type github
-       :pkgname "nonsequitur/smex"
-       :checkout "55aaebe3d793c2c990b39a302eb26c184281c42c"
-       :features smex
-       :post-init (smex-initialize))

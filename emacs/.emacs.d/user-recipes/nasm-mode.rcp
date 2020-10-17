@@ -1,5 +1,4 @@
 (:name nasm-mode
        :description "nasm-mode is a major mode for editing NASM x86 assembly programs"
        :type github
-       :pkgname "skeeto/nasm-mode"
-       :checkout "51108863a38567c7e2e6d65490f2acf7ec044a61")
+       :pkgname "skeeto/nasm-mode")

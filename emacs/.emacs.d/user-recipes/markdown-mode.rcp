@@ -1,8 +1,0 @@
-(:name markdown-mode
-       :description "Major mode to edit Markdown files in Emacs"
-       :website "http://jblevins.org/projects/markdown-mode/"
-       :type github
-       :pkgname "jrblevin/markdown-mode"
-       :checkout "f69cca021750d932defcc423f4ea2215e4107499"
-       :prepare (add-to-list 'auto-mode-alist
-                             '("\\.\\(md\\|mdown\\|markdown\\)\\'" . markdown-mode)))
