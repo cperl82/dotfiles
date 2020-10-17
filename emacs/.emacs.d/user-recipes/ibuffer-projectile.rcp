@@ -1,5 +1,4 @@
 (:name ibuffer-projectile
        :description "Group ibuffer's list by projectile project"
        :type github
-       :pkgname "purcell/ibuffer-projectile"
-       :checkout "76496214144687cee0b5139be2e61b1e400cac87")
+       :pkgname "purcell/ibuffer-projectile")

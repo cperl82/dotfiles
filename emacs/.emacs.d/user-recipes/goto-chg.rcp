@@ -1,4 +1,0 @@
-(:name goto-chg
-       :description "Goto the point of the most recent edit in the buffer."
-       :checksum "50e58f9e6bb0b8b8e3a24ed817ff78512a770448"
-       :type emacswiki)

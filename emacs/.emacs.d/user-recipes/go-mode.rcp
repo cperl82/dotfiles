@@ -1,5 +1,0 @@
-(:name go-mode
-       :description "Major mode for the Go programming language"
-       :type github
-       :checkout "99b06da201afb91e8db0c525c0f3c3590fd92fa6"
-       :pkgname "dominikh/go-mode.el")
