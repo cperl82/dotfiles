@@ -1174,7 +1174,7 @@ dired-x"
              )
         (setq output
               (format "%s  %s %s" output (cp/escreen-propertize-screen-number n) screen-name)))
-      (message "escreen: active screens: %s" output))))
+      (message "screens: %s" output))))
 
 (defun cp/escreen-get-active-screen-names-with-emphasis-vertical ()
   (interactive)
@@ -1276,7 +1276,7 @@ dired-x"
   (:keymaps '(escreen-map)
    "C-b" nil
    "n"   nil
-   "p"   #'escreen-goto-last-screen
+   "t"   #'escreen-goto-last-screen
    "e"   #'cp/escreen-get-active-screen-names-with-emphasis
    "v"   #'cp/escreen-get-active-screen-names-with-emphasis-vertical
    "r"   #'cp/escreen-rename-screen
