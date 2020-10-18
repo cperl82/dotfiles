@@ -259,6 +259,13 @@ space)"
            (if (eq major-mode 'dired-mode) (dired-current-directory) default-directory))))
     (call-interactively f)))
 
+;; Adapted from https://emacsredux.com/blog/2013/04/21/edit-files-as-root/
+(defun cp/find-file-sudo ()
+    "Edit a file as root. "
+    (interactive "P")
+    (find-file (concat "/sudo:root@localhost:"
+                       (read-file-name "Find file (as root): "))))
+
 (defun cp/run-counsel-grep-or-swiper-with-thing-at-point ()
   (interactive)
   (let ((initial-input
@@ -287,9 +294,12 @@ space)"
  "x" #'delete-window
  "o" #'delete-other-windows
  "j" #'dired-jump
- "r" #'find-file-read-only
  "k" #'kill-buffer
- "f" #'cp/find-file)
+ "f" #'cp/find-file
+ "u" #'cp/find-file-sudo
+ "r" #'counsel-recentf
+ "R" #'projectile-recentf)
+
 
 (general-define-key
  :keymaps '(override)
