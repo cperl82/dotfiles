@@ -1167,14 +1167,17 @@ dired-x"
 
 (defun cp/escreen-get-active-screen-names-with-emphasis ()
   (interactive)
-  (let ((output ""))
+  (let ((output))
     (dolist (n (escreen-get-active-screen-numbers))
       (let* ((data (escreen-configuration-escreen n))
              (screen-name (nth 1 data))
              )
         (setq output
-              (format "%s  %s %s" output (cp/escreen-propertize-screen-number n) screen-name)))
-      (message "screens: %s" output))))
+              (format "%s%s %s"
+                      (if output (concat output " ") "")
+                      (cp/escreen-propertize-screen-number n)
+              screen-name)))
+      (message "%s" output))))
 
 (defun cp/escreen-get-active-screen-names-with-emphasis-vertical ()
   (interactive)
