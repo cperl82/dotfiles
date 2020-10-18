@@ -300,7 +300,6 @@ space)"
  "r" #'counsel-recentf
  "R" #'projectile-recentf)
 
-
 (general-define-key
  :keymaps '(override)
  :states '(normal motion insert emacs)
