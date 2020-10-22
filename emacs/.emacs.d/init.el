@@ -1,6 +1,16 @@
 ;; Required as of emacs 25
 (package-initialize)
 
+;; 2020-10-22 emacs startup tweaks from https://blog.d46.us/advanced-emacs-startup/
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "Emacs ready in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time
+                              (time-subtract after-init-time before-init-time)))
+                     gcs-done)))
+(setq gc-cons-threshold (* 50 1000 1000))
+
 ;; el-get
 (add-to-list 'load-path (concat user-emacs-directory "el-get/el-get"))
 (unless (require 'el-get nil 'noerror)
@@ -116,7 +126,6 @@
       c-default-style         "linux"
       column-number-mode      t
       confirm-kill-emacs      'y-or-n-p
-      gc-cons-threshold       100000000
       inhibit-startup-message t
       make-backup-files       nil
       create-lockfiles        nil
@@ -1870,3 +1879,5 @@ controlled by `include'."
 ; 2014-04-08: local emacs overrides
 (let ((local "~/.emacs.local"))
   (when (file-exists-p local) (load-file local)))
+
+(setq gc-cons-threshold (* 2 1000 1000))
