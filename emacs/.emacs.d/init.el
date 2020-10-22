@@ -873,6 +873,7 @@ dired-x"
 ;; hideshow
 (use-package hideshow
   :defer t
+  :after (evil)
   :config
   (progn
     (setq hs-isearch-open t)
@@ -1048,6 +1049,7 @@ dired-x"
 
 ;; evil-surround
 (use-package evil-surround
+  :after (evil)
   :config
   (progn
     (global-evil-surround-mode 1)))
@@ -1825,7 +1827,9 @@ controlled by `include'."
 
 ;; counsel-projectile
 (use-package counsel-projectile
-  :defer t)
+  :defer t
+  :after (projectile)
+  )
 
 
 
@@ -1873,8 +1877,6 @@ controlled by `include'."
    `(swiper-match-face-4         ((t (:foreground "white" :weight bold :background ,zenburn-yellow-2))))
    '(hl-line                     ((t (:background "#4F4F4F"))))
    ))
-
-
 
 
 ; 2014-04-08: local emacs overrides
