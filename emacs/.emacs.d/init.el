@@ -784,6 +784,7 @@ dired-x"
 
 ;; elisp-slime-nav
 (use-package elisp-slime-nav
+  :defer t
   :diminish elisp-slime-nav-mode
   :init
   (add-hook 'emacs-lisp-mode-hook #'turn-on-elisp-slime-nav-mode)
