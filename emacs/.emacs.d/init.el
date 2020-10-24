@@ -967,6 +967,7 @@ dired-x"
   :diminish undo-tree-mode)
 
 (use-package evil
+  :demand t
   :general
   (:keymaps '(override)
    :states  '(normal motion emacs)
