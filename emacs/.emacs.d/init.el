@@ -122,15 +122,15 @@
 
 
 ;; Misc
-(setq ad-redefinition-action  'accept
-      c-default-style         "linux"
-      column-number-mode      t
-      confirm-kill-emacs      'y-or-n-p
-      inhibit-startup-message t
-      make-backup-files       nil
-      create-lockfiles        nil
-      split-height-threshold  nil
-      load-prefer-newer       t
+(setq ad-redefinition-action    'accept
+      c-default-style           "linux"
+      column-number-mode        t
+      confirm-kill-emacs        'y-or-n-p
+      inhibit-startup-message   t
+      make-backup-files         nil
+      create-lockfiles          nil
+      split-height-threshold    nil
+      load-prefer-newer         t
       window-combination-resize t)
 
 ;; 2015-09-11 Enable narrowing command which are disabled by default
