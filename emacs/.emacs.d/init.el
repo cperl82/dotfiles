@@ -1195,7 +1195,7 @@ dired-x"
              )
         (setq output
               (format "%s%s %s"
-                      (if output (concat output " ") "")
+                      (if output (concat output "  ") "")
                       (cp/escreen-propertize-screen-number n)
               screen-name)))
       (message "%s" output))))
