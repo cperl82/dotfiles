@@ -351,6 +351,7 @@ space)"
 
 ;; which-key
 (use-package which-key
+  :defer t
   :diminish which-key-mode
   :config
   (progn
@@ -447,6 +448,7 @@ space)"
 
 ;; uniquify
 (use-package uniquify
+  :defer t
   :config
   (progn
     (setq uniquify-buffer-name-style 'post-forward
