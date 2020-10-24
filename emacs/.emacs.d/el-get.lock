@@ -1,6 +1,5 @@
 (setq el-get-lock-package-versions
-      '((esup :checksum "0de8af8233d9ce1b67f05a50f25c481c4f1118d8")
-        (evil :checksum "ba79ed6a3ae3f07e4a56387e09350f3d1cd90041")
+      '((evil :checksum "ba79ed6a3ae3f07e4a56387e09350f3d1cd90041")
         (transient :checksum "4d44d08e90355a8ef36aaad1f9f79c95de1ce0e9")
         (org-mode :checksum "fbccf09c740a298e39daa9170bceaa92684f2fe0")
         (evil-collection :checksum "3e62b6b1312f7907081be41a032aaacffa732fef")
@@ -14,7 +13,7 @@
         (avy :checksum "bbf1e7339eba06784dfe86643bb0fbddf5bb0342")
         (annalist :checksum "e0601539c9ac0171a684ea3ff6266d215d1d08e6")
         (ace-window :checksum "d93e16b52ee7c1b6c9df599060e7077b4e46cbf8")
-        (swiper :checksum "49f9d662a42d51db39b6a84c3fd1d78ca8c5103d")
+        (swiper :checksum "c6b60d34ac37bf4d91a25f16d22e528f85e06938")
         (haskell-mode :checksum "6a70c1858c7d505ba23185e209ef7eacf703ed8f")
         (yaml-mode :checksum "28c34033194130d452d5c958b5241c88d42ca02b")
         (xcscope :checksum "1e4c8e60eb841a3ecb56ff4115b6a8ae5c0bf779")
