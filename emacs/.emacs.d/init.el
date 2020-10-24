@@ -271,7 +271,7 @@ space)"
 ;; Adapted from https://emacsredux.com/blog/2013/04/21/edit-files-as-root/
 (defun cp/find-file-sudo ()
     "Edit a file as root. "
-    (interactive "P")
+    (interactive)
     (find-file (concat "/sudo:root@localhost:"
                        (read-file-name "Find file (as root): "))))
 
