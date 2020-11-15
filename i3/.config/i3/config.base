@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-set $font_core -xos4-terminus-bold-r-normal--12-120-72-72-c-60-iso10646-1
+set $font_core -xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso10646-1
 set $font_xft terminus:style=normal:pixelsize=12
 font $font_core
 
