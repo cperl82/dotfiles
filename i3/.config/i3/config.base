@@ -144,13 +144,13 @@ bindsym $mod+i exec --no-startup-id                                             
         i3-input                                                                        \
         -F "exec --no-startup-id xdotool getactivewindow -- set_window --name '%s'"     \
         -P "New window name: "                                                          \
-        -f $font
+        -f $font_core
 
 bindsym $mod+o exec --no-startup-id				\
         i3-input						\
         -F "rename workspace to %s"				\
         -P "New workspace name: "				\
-        -f $font
+        -f $font_core
 
 set $terminal      ${HOME}/.config/i3/bin/find-or-launch-terminal-with-title.sh
 set $quickswitch   ${HOME}/.config/i3/bin/quickswitch.sh
@@ -161,6 +161,12 @@ bindsym $mod+period move scratchpad
 
 # 2018-03-26 cperl: Make sure anything with the name "popup-terminal" is borderless
 for_window [title="^popup-terminal$"] floating enable border pixel 1 move down 70px
+
+# 2020-11-15 cperl: KeePassXC should always float
+for_window [title="^.*KeePassXC$"] floating enable
+
+# 2020-11-15 cperl: Various pop-ups
+for_window [window_role="pop-up"] floating enable
 
 # 2018-03-27 cperl: Use popup terminal to find a window by name in the scratchpad
 bindsym $mod+comma exec --no-startup-id		\
