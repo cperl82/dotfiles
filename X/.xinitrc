@@ -5,6 +5,13 @@ function main {
     xsetroot -solid darkslategrey
     xsetroot -cursor_name left_ptr
 
+    # local override for xinitrc
+    xinitrc_local="${HOME}/.xinitrc.local"
+    if [[ -e "${xinitrc_local}" ]]
+    then
+	source "${xinitrc_local}"
+    fi
+
     # xresources
     xresources="${HOME}/.Xresources"
     if [[ -e "${xresources}" ]]
@@ -12,11 +19,11 @@ function main {
 	xrdb -merge -cpp /usr/bin/cpp -I"${HOME}" "${xresources}"
     fi
 
-    # local overrides
-    xinitrc_local="${HOME}/.xinitrc.local"
-    if [[ -e "${xinitrc_local}" ]]
+    # xresources
+    xresources_local="${HOME}/.Xresources.local"
+    if [[ -e "${xresources_local}" ]]
     then
-	source "${xinitrc_local}"
+	xrdb -merge -cpp /usr/bin/cpp -I"${HOME}" "${xresources_local}"
     fi
 
     # start urxvtcd
