@@ -60,6 +60,6 @@
         (counsel-projectile :checksum "fb19569c9799e3edac7504d21a5ecf49231e9500")
         (color-theme-zenburn :checksum "b6090a1a343d5173e38e2966f7cf44d96cba037c")
         (ample-regexps :checksum "cbe91e148cac1ee8e223874dc956ed4cf607f046")
-        (goto-chg :checksum "50e58f9e6bb0b8b8e3a24ed817ff78512a770448")))
+        (goto-chg :checksum "2af612153bc9f5bed135d25abe62f46ddaa9027f")))
 (setq el-get-lock-locked-packages 'nil)
 (setq el-get-lock-unlocked-packages 'nil)
