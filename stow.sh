@@ -18,8 +18,8 @@ function main ()
 		xargs -r -n1 -t stow -Rvv < "${local_conf}"
 	    else
 		# Stow everything
-		find . -mindepth 1 -maxdepth 1 -type d	\
-		     | sed -e 's#^./##'			\
+		find . -mindepth 1 -maxdepth 1 \! -name ".*" -type d	\
+		     | sed -e 's#^./##'					\
 		     | xargs -r -n1 -t stow -Rvv
 	    fi
 	}
