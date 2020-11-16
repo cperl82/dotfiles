@@ -8,19 +8,19 @@ function main ()
 {
     local local_conf="stow.local"
     local stow_dir=""
-    stow_dir=$(dirname ${0})
+    stow_dir=$(dirname "${0}")
 
     cd "${stow_dir}" && \
 	{
 	    if [[ -f "${local_conf}" ]]
 	    then
 		# Stow just what we've been asked to stow
-		cat "${local_conf}" \
-		    | xargs -t stow -Rvv
+		xargs -r -n1 -t stow -Rvv < "${local_conf}"
 	    else
 		# Stow everything
-		find * -mindepth 0 -maxdepth 0 -type d \
-		     | xargs -t stow -Rvv
+		find . -mindepth 1 -maxdepth 1 -type d	\
+		     | sed -e 's#^./##'			\
+		     | xargs -r -n1 -t stow -Rvv
 	    fi
 	}
 }
