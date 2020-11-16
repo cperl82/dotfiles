@@ -13,7 +13,7 @@
         (avy :checksum "bbf1e7339eba06784dfe86643bb0fbddf5bb0342")
         (annalist :checksum "e0601539c9ac0171a684ea3ff6266d215d1d08e6")
         (ace-window :checksum "d93e16b52ee7c1b6c9df599060e7077b4e46cbf8")
-        (swiper :checksum "c6b60d34ac37bf4d91a25f16d22e528f85e06938")
+        (swiper :checksum "6a22192f11a4aa0d43692bf685fd9b9d75911d00")
         (haskell-mode :checksum "6a70c1858c7d505ba23185e209ef7eacf703ed8f")
         (yaml-mode :checksum "28c34033194130d452d5c958b5241c88d42ca02b")
         (xcscope :checksum "1e4c8e60eb841a3ecb56ff4115b6a8ae5c0bf779")

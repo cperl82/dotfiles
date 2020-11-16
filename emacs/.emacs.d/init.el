@@ -566,7 +566,7 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
     (ivy-mode 1))
   :config
   (progn
-    (setf (cdr (assoc t ivy-format-functions-alist)) 'ivy-format-function-arrow)))
+    (setf (cdr (assoc t ivy-format-functions-alist)) #'ivy-format-function-arrow)))
 
 (use-package ivy-rich
   :after (ivy)
@@ -619,7 +619,7 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
   :init
   (progn
     ;; Use rg instead of grep because it has the nice smart case feature
-    (setq counsel-grep-base-command "rg --line-number --smart-case %s %s")
+    (setq counsel-grep-base-command "rg -i -M 120 --no-heading --line-number --color never %s %s")
     (setq counsel-grep-use-swiper-p #'cp/counsel-grep-use-swiper-p)
     (counsel-mode 1)))
 
