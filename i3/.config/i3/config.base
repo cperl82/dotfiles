@@ -124,33 +124,46 @@ bindsym $mod+Shift+e exec --no-startup-id \
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-        bindsym h resize shrink width  3 px or 3 ppt
-        bindsym l resize grow   width  3 px or 3 ppt
-        bindsym j resize shrink height 3 px or 3 ppt
-        bindsym k resize grow   height 3 px or 3 ppt
+     # These bindings trigger as soon as you enter the resize mode
+     bindsym h resize shrink width  3 px or 3 ppt
+     bindsym l resize grow   width  3 px or 3 ppt
+     bindsym j resize shrink height 3 px or 3 ppt
+     bindsym k resize grow   height 3 px or 3 ppt
 
-        # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+     # back to normal: Enter or Escape
+     bindsym Return mode "default"
+     bindsym Escape mode "default"
 }
-
 bindsym $mod+r mode "resize"
+
+# 2020-11-19 cperl: taken from https://gist.github.com/pantuts/13623a7ba5e7e1c4ce44
+# Create Log out, Reboot, Poweroff bindings
+mode "(S)uspend, (L)ogout, (R)eboot, (P)oweroff" {
+     bindsym r exec --no-startup-id systemctl reboot
+     bindsym s exec --no-startup-id systemctl suspend; mode "default"
+     bindsym l exit
+     bindsym p exec --no-startup-id systemctl poweroff
+
+     # back to normal: Enter or Escape
+     bindsym Return mode "default"
+     bindsym Escape mode "default"
+}
+bindsym $mod+Shift+e mode "(S)uspend, (L)ogout, (R)eboot, (P)oweroff"
 
 # 2016-12-11 cperl: Invoke i3-input to read user input for a window title, then use the
 # response from that to construct an i3 command for running xdotool to actually set the
 # window title
 bindsym $mod+i exec --no-startup-id                                                     \
-        i3-input                                                                        \
-        -F "exec --no-startup-id xdotool getactivewindow -- set_window --name '%s'"     \
-        -P "New window name: "                                                          \
-        -f $font_core
+	i3-input                                                                        \
+	-F "exec --no-startup-id xdotool getactivewindow -- set_window --name '%s'"     \
+	-P "New window name: "                                                          \
+	-f $font_core
 
 bindsym $mod+o exec --no-startup-id				\
         i3-input						\
-        -F "rename workspace to %s"				\
-        -P "New workspace name: "				\
-        -f $font_core
+	-F "rename workspace to %s"				\
+	-P "New workspace name: "				\
+	-f $font_core
 
 set $terminal      ${HOME}/.config/i3/bin/find-or-launch-terminal-with-title.sh
 set $quickswitch   ${HOME}/.config/i3/bin/quickswitch.sh
