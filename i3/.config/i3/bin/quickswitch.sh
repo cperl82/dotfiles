@@ -65,7 +65,7 @@ function jump-to-window-or-restore-from-scratchpad {
                 title="${title/ - Google Chrome/}"
             fi
 
-            printf "%s %-*s %-*s %s\n"          \
+            printf "%s %-*s  %-*s  %s\n"        \
                    "${id}"                      \
                    "${desktop_w}"               \
                    "${desktop}"                 \
