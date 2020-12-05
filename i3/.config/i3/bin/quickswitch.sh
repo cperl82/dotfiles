@@ -57,6 +57,14 @@ function jump-to-window-or-restore-from-scratchpad {
                 title="${class}"
             fi
 
+            # Strip the redundant " - Google Chrome" from the end of
+            # Chrome windows since we're already showing the window
+            # class
+            if [[ "${title}" =~ \ -\ Google\ Chrome$ ]]
+            then
+                title="${title/ - Google Chrome/}"
+            fi
+
             printf "%s %-*s %-*s %s\n"          \
                    "${id}"                      \
                    "${desktop_w}"               \
