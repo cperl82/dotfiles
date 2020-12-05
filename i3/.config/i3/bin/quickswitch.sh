@@ -23,7 +23,7 @@ function jump-to-window-or-restore-from-scratchpad {
 
     read -d '' -r awk <<-'EOF' || true
 	$1 == w { next }
-	        { gsub(/-1/, "S", $2); gsub(/^.+\./, "", $3); print }
+	        { gsub(/-1/, "S", $2); gsub(/\..+$/, "", $3); print }
 	EOF
 
     printf -v this_window "0x%08x" "$(xdotool getactivewindow)"
@@ -51,6 +51,12 @@ function jump-to-window-or-restore-from-scratchpad {
         for window in "${windows[@]}"
         do
             read -r id desktop class _ title < <(echo "${window}")
+
+            if [[ -z "${title}" ]]
+            then
+                title="${class}"
+            fi
+
             printf "%s %-*s %-*s %s\n"          \
                    "${id}"                      \
                    "${desktop_w}"               \
