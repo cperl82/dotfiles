@@ -61,6 +61,7 @@
    org-ql
    origami
    projectile
+   rust-mode
    s
    smartparens
    smex
