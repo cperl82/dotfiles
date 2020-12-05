@@ -4,92 +4,86 @@ set -o pipefail
 set -o errexit
 
 function usage {
-    echo "${0} restore-from-scratchpad|jump-to-window|jump-to-workspace" 1>&2
+    echo "${0} jump-to-window-or-restore-from-scratchpad" 1>&2
 }
 
-function scratchpad-window-query {
-    cat <<-'EOF'
-        .nodes
-        | map(select(.name? == "__i3"))
-        | .[0]
-        | .nodes
-        | .[0]
-        | .nodes
-        | map(select(.name? == "__i3_scratch"))
-        | .[0]
-        | .floating_nodes
-        | map(.nodes)
-        | add
-        | map({ id: (.id | tostring)
-              , windows: [.. | select(.nodes? == [] and .floating_nodes? == [])] | map(.name) | join(", ")})
-        | map(join(" "))
-        | .[]
+function jump-to-window-or-restore-from-scratchpad {
+    local windows
+    local window
+    local selected
+    local id
+    local desktop
+    local class
+    local title
+    local len
+    local class_w
+    local desktop_w
+    local wmctrl
+    local awk
+
+    read -d '' -r awk <<-'EOF' || true
+	$1 == w { next }
+	        { gsub(/-1/, "S", $2); gsub(/^.+\./, "", $3); print }
 	EOF
-}
 
-function non-scratchpad-window-query {
-    cat <<-'EOF'
-          ..
-        | select(.type? == "output")
-        | select(.name? != "__i3")
-        | .nodes
-        | map(select(.type? != "dockarea"))
-        | [ .. | select(.nodes? == [] and .floating_nodes == [] and .focused == false) ]
-        | map([(.id | tostring), .name])
-        | map(join(" "))
-        | .[]
-	EOF
-}
+    printf -v this_window "0x%08x" "$(xdotool getactivewindow)"
+    mapfile -t windows < <(wmctrl -lx | awk -v w="${this_window}" "${awk}" | sort -k 2 -V -r)
 
-function workspace-query {
-    cat <<-'EOF'
-        [ .. | select(.type? == "workspace") ]
-        | map(select(.name != "__i3_scratch"))
-        | map({id: (.id | tostring), name: .name})
-        | map(join(" "))
-        | .[]
-	EOF
-}
+    # Figure out the max width for class and desktop
+    for window in "${windows[@]}"
+    do
+        read -r _ desktop class _ < <(echo "${window}")
+        len=${#class}
+        if [[ "${len}" -gt "${class_w}" ]]
+        then
+            class_w="${len}"
+        fi
 
-function subcmd--restore-from-scratchpad {
-    local tree
-    local q
+        len=${#desktop}
+        if [[ "${len}" -gt "${desktop_w}" ]]
+        then
+            desktop_w="${len}"
+        fi
+    done
 
-    tree=$(i3-msg -t get_tree)
-    q=$(scratchpad-window-query)
+    # Select the window
+    mapfile -t selected < <(
+        for window in "${windows[@]}"
+        do
+            read -r id desktop class _ title < <(echo "${window}")
+            printf "%s %-*s %-*s %s\n"          \
+                   "${id}"                      \
+                   "${desktop_w}"               \
+                   "${desktop}"                 \
+                   "${class_w}"                 \
+                   "${class}"                   \
+                   "${title}"
+        done | fzf --multi --with-nth=2.. --border)
 
-    jq -r "${q}" <<< "${tree}"                                                  \
-        | sort -k 2                                                             \
-        | fzf --with-nth=2.. --border --multi --no-sort                         \
-        | awk '{print $1}'                                                      \
-        | xargs -n1 -I{} i3-msg -t command "[con_id={}] scratchpad show"
+    # for each window, if it is on the scratchpad, pull it back, else jump to window
+    for window in "${selected[@]}"
+    do
+        read -r id desktop _ _ < <(echo "${window}")
+        if [[ "${desktop}" == "S" ]]
+        then
+            printf -v wmctrl "wmctrl -i -R %s" "${id}"
+        else
+            printf -v wmctrl "wmctrl -i -a %s" "${id}"
+        fi
+        eval "${wmctrl}"
+    done
 }
 
 function subcmd--jump-to-window {
-    local tree
-    local q
-
-    tree=$(i3-msg -t get_tree)
-    q=$(non-scratchpad-window-query)
-
-    jq -r "${q}" <<< "${tree}"                                  \
-        | fzf --with-nth=2.. --border                           \
-        | awk '{print $1}'                                      \
-        | xargs -n1 -I{} i3-msg -t command "[con_id={}] focus"
+    jump-to-window-or-restore-from-scratchpad
 }
 
-function subcmd--jump-to-workspace {
-    local tree
-    local q
+function subcmd--restore-from-scratchpad {
+    jump-to-window-or-restore-from-scratchpad
+}
 
-    tree=$(i3-msg -t get_tree)
-    q=$(workspace-query)
-
-    jq -r "${q}" <<< "${tree}"                                  \
-        | fzf --with-nth=2.. --border                           \
-        | awk '{print $1}'                                      \
-        | xargs -n1 -I{} i3-msg -t command "[con_id={}] focus"
-
+function subcmd--find-window {
+    jump-to-window-or-restore-from-scratchpad
 }
 
 function main {
@@ -111,7 +105,7 @@ function main {
     done
 
     completions=$(declare -F | awk '$2 ~ /^-f$/ {print $NF}' | sed -ne "s/^${subcmd_prefix}--//p")
-    subcmd=($(compgen -W "${completions}" -- "${1}" || true))
+    mapfile -t subcmd < <(compgen -W "${completions}" -- "${1}" || true)
 
     if [[ ${#subcmd[@]} -eq 1 ]]
     then

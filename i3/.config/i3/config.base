@@ -177,19 +177,12 @@ for_window [title="^.*KeePassXC$"] floating enable
 # 2020-11-15 cperl: Various pop-ups
 for_window [window_role="pop-up"] floating enable
 
-# 2018-03-27 cperl: Use popup terminal to find a window by name in the scratchpad
+# 2018-03-27 cperl: Use popup terminal to find a window by name
 bindsym $mod+comma exec --no-startup-id		\
 	$terminal				\
 	"popup-terminal"			\
 	-geometry 160x30			\
-	-e $quickswitch restore-from-scratchpad
-
-# 2018-03-27 cperl: Use popup terminal to find a window by name in the scratchpad
-bindsym $mod+n exec --no-startup-id		\
-	$terminal				\
-	"popup-terminal"			\
-	-geometry 160x30			\
-	-e $quickswitch jump-to-window
+	-e $quickswitch find-window
 
 # 2016-11-14 cperl: No borders for chrome
 for_window [class="Google-chrome" title="Google Chrome"] border pixel 3
