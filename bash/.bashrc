@@ -494,6 +494,7 @@ function setup-misc {
     export BASHFILES DOTFILES
 
     path-append "${HOME}/bin"
+    path-append "${HOME}/.local/bin"
     maybe-add-fzf-to-path
 
     # Add ripgrep config file
