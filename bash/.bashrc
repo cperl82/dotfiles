@@ -50,10 +50,6 @@ function _path-append-prepend-uniq {
 	else
 	    export PATH="${dir}:${path}"
 	fi
-    else
-	# We expect to be called as a helper, not directly
-	echo 1>&2 "${FUNCNAME[1]} called with non-directory"
-	return 1
     fi
 }
 
@@ -271,15 +267,6 @@ function nfs3-capture-filter-for-hosts {
     printf "${result}\n"
 }
 
-function maybe-add-fzf-to-path {
-    local fzf="${HOME}/.fzf/bin/fzf"
-
-    if [[ -e "${fzf}" ]]
-    then
-	path-append $(dirname "${fzf}")
-    fi
-}
-
 function with-fzf {
     local fzf=""
     local input_cmd=()
@@ -494,8 +481,8 @@ function setup-misc {
     export BASHFILES DOTFILES
 
     path-append "${HOME}/bin"
+    path-append "${HOME}/.fzf/bin"
     path-append "${HOME}/.local/bin"
-    maybe-add-fzf-to-path
 
     # Add ripgrep config file
     RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
