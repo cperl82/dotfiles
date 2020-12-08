@@ -8,10 +8,13 @@ function usage {
 }
 
 function jump-to-window-or-restore-from-scratchpad {
-    local windows
     local window
+    local windows
+    local candidate
+    local candidates
     local selected
     local id
+    local name
     local desktop
     local class
     local title
@@ -20,6 +23,9 @@ function jump-to-window-or-restore-from-scratchpad {
     local desktop_w
     local wmctrl
     local awk
+    local desktop_id_to_name
+
+    declare -A desktop_id_to_name
 
     read -d '' -r awk <<-'EOF' || true
 	$1 == w { next }
@@ -27,9 +33,16 @@ function jump-to-window-or-restore-from-scratchpad {
 	EOF
 
     printf -v this_window "0x%08x" "$(xdotool getactivewindow)"
-    mapfile -t windows < <(wmctrl -lx | awk -v w="${this_window}" "${awk}" | sort -k 2,3 -V -r)
+    mapfile -t windows < <(wmctrl -lx | awk -v w="${this_window}" "${awk}")
 
-    # Figure out the max width for class and desktop
+    # Integer to desktop naming
+    desktop_id_to_name['S']="S"
+    while read -r id _ _ _ _ _ _ _ name
+    do
+        desktop_id_to_name["${id}"]="${name}"
+    done < <(wmctrl -d)
+
+    # Max width for class and desktop
     for window in "${windows[@]}"
     do
         read -r _ desktop class _ < <(echo "${window}")
@@ -47,34 +60,36 @@ function jump-to-window-or-restore-from-scratchpad {
     done
 
     # Select the window
-    mapfile -t selected < <(
-        for window in "${windows[@]}"
-        do
-            read -r id desktop class _ title < <(echo "${window}")
+    for window in "${windows[@]}"
+    do
+        read -r id desktop class _ title < <(echo "${window}")
 
-            if [[ -z "${title}" ]]
-            then
-                title="${class}"
-            fi
+        if [[ -z "${title}" ]]
+        then
+            title="${class}"
+        fi
 
-            # Strip the redundant " - Google Chrome" from the end of
-            # Chrome windows since we're already showing the window
-            # class
-            if [[ "${title}" =~ \ -\ Google\ Chrome$ ]]
-            then
-                title="${title/ - Google Chrome/}"
-            fi
+        # Strip the redundant " - Google Chrome" from the end of
+        # Chrome windows since we're already showing the window
+        # class
+        if [[ "${title}" =~ \ -\ Google\ Chrome$ ]]
+        then
+            title="${title/ - Google Chrome/}"
+        fi
 
-            printf "%s %-*s  %-*s  %s\n"        \
-                   "${id}"                      \
-                   "${desktop_w}"               \
-                   "${desktop}"                 \
-                   "${class_w}"                 \
-                   "${class}"                   \
-                   "${title}"
-        done | fzf --multi --with-nth=2.. --border)
+        printf -v candidate                             \
+               "%s %-*s  %-*s  %s\n"                    \
+               "${id}"                                  \
+               "${desktop_w}"                           \
+               "${desktop_id_to_name[${desktop}]}"      \
+               "${class_w}"                             \
+               "${class}"                               \
+               "${title}"
+        candidates+="${candidate}"
+    done
+    mapfile -t selected < <(echo "${candidates}" | sort -k 2,3 -V -r | fzf --multi --with-nth=2.. --border)
 
-    # for each window, if it is on the scratchpad, pull it back, else jump to window
+    # For each window, if it is on the scratchpad, pull it back, else jump to window
     for window in "${selected[@]}"
     do
         read -r id desktop _ _ < <(echo "${window}")
