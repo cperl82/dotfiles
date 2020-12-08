@@ -29,7 +29,7 @@ function main
 
     tmpdir=$(mktemp -d -t "i3-generated-config-XXXXXX")
     config="${tmpdir}/config"
-    generate_workspace_to_output_mappings > "${tmpdir}/config.generated"
+    # generate_workspace_to_output_mappings > "${tmpdir}/config.generated"
     cp "${config_base}/config.base"  "${tmpdir}"
     cp "${config_base}/config.local" "${tmpdir}"
     cat "${tmpdir}"/config.{base,generated,local} > "${config}" 2>/dev/null
