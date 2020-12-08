@@ -181,7 +181,7 @@ for_window [window_role="pop-up"] floating enable
 bindsym $mod+comma exec --no-startup-id		\
 	$terminal				\
 	"popup-terminal"			\
-	-geometry 160x30			\
+	-geometry 160x50			\
 	-e $quickswitch find-window
 
 # 2016-11-14 cperl: No borders for chrome
