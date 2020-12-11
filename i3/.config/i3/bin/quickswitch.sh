@@ -35,14 +35,20 @@ function jump-to-window-or-restore-from-scratchpad {
     printf -v this_window "0x%08x" "$(xdotool getactivewindow)"
     mapfile -t windows < <(wmctrl -lx | awk -v w="${this_window}" "${awk}")
 
-    # Integer to desktop naming
+    # Integer to desktop naming and max desktop name width
     desktop_id_to_name['S']="S"
     while read -r id _ _ _ _ _ _ _ name
     do
+        len=${#name}
+        if [[ "${len}" -gt "${desktop_w}" ]]
+        then
+            desktop_w="${len}"
+        fi
+
         desktop_id_to_name["${id}"]="${name}"
     done < <(wmctrl -d)
 
-    # Max width for class and desktop
+    # Max width for class
     for window in "${windows[@]}"
     do
         read -r _ desktop class _ < <(echo "${window}")
@@ -52,11 +58,6 @@ function jump-to-window-or-restore-from-scratchpad {
             class_w="${len}"
         fi
 
-        len=${#desktop}
-        if [[ "${len}" -gt "${desktop_w}" ]]
-        then
-            desktop_w="${len}"
-        fi
     done
 
     # Select the window
