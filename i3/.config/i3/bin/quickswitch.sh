@@ -25,7 +25,7 @@ function jump-to-window-or-restore-from-scratchpad {
     declare -A desktop_id_to_name
 
     wmctrl_d=$(wmctrl -d)
-    wmctrl_w=$(wmctrl -lx)
+    wmctrl_w=$(wmctrl -lx | awk '{gsub(/^.+\./, "", $3); print}')
 
     # Integer to desktop name and width
     while read -r id _ _ _ _ _ _ _ name
@@ -40,7 +40,6 @@ function jump-to-window-or-restore-from-scratchpad {
     # Class width
     while read -r _ _ class _ _
     do
-        class="${class##*.}"
         if [[ ${#class} -gt "${class_w}" ]]
         then
             class_w=${#class}
@@ -55,14 +54,14 @@ function jump-to-window-or-restore-from-scratchpad {
             continue
         fi
 
+        # Shorten the class
+        class="${class##*.}"
+
         # Ensure we have a title
         if [[ -z "${title}" ]]
         then
             title="${class}"
         fi
-
-        # Shorten the class
-        class="${class##*.}"
 
         # Get the proper desktop name
         if [[ "${desktop}" -eq -1 ]]
