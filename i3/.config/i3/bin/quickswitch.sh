@@ -9,7 +9,6 @@ function usage {
 
 function jump-to-window-or-restore-from-scratchpad {
     local window
-    local windows
     local candidate
     local candidates
     local selected
@@ -18,56 +17,59 @@ function jump-to-window-or-restore-from-scratchpad {
     local desktop
     local class
     local title
-    local len
     local class_w
     local desktop_w
     local wmctrl
-    local awk
     local desktop_id_to_name
 
     declare -A desktop_id_to_name
 
-    read -d '' -r awk <<-'EOF' || true
-	$1 == w { next }
-	        { gsub(/-1/, "S", $2); gsub(/\..+$/, "", $3); print }
-	EOF
+    wmctrl_d=$(wmctrl -d)
+    wmctrl_w=$(wmctrl -lx)
 
-    printf -v this_window "0x%08x" "$(xdotool getactivewindow)"
-    mapfile -t windows < <(wmctrl -lx | awk -v w="${this_window}" "${awk}")
-
-    # Integer to desktop naming and max desktop name width
-    desktop_id_to_name['S']="S"
+    # Integer to desktop name and width
     while read -r id _ _ _ _ _ _ _ name
     do
-        len=${#name}
-        if [[ "${len}" -gt "${desktop_w}" ]]
+        if [[ ${#name} -gt "${desktop_w}" ]]
         then
-            desktop_w="${len}"
+            desktop_w=${#name}
         fi
-
         desktop_id_to_name["${id}"]="${name}"
-    done < <(wmctrl -d)
+    done < <(echo "${wmctrl_d}")
 
-    # Max width for class
-    for window in "${windows[@]}"
+    # Class width
+    while read -r _ _ class _ _
     do
-        read -r _ desktop class _ < <(echo "${window}")
-        len=${#class}
-        if [[ "${len}" -gt "${class_w}" ]]
+        class="${class##*.}"
+        if [[ ${#class} -gt "${class_w}" ]]
         then
-            class_w="${len}"
+            class_w=${#class}
+        fi
+    done < <(echo "${wmctrl_w}")
+
+    printf -v this_window "0x%08x" "$(xdotool getactivewindow)"
+    while read -r id desktop class _ title
+    do
+        if [[ "${id}" == "${this_window}" ]]
+        then
+            continue
         fi
 
-    done
-
-    # Select the window
-    for window in "${windows[@]}"
-    do
-        read -r id desktop class _ title < <(echo "${window}")
-
+        # Ensure we have a title
         if [[ -z "${title}" ]]
         then
             title="${class}"
+        fi
+
+        # Shorten the class
+        class="${class##*.}"
+
+        # Get the proper desktop name
+        if [[ "${desktop}" -eq -1 ]]
+        then
+            desktop="S"
+        else
+            desktop="${desktop_id_to_name[${desktop}]}"
         fi
 
         # Strip the redundant " - Google Chrome" from the end of
@@ -78,16 +80,17 @@ function jump-to-window-or-restore-from-scratchpad {
             title="${title/ - Google Chrome/}"
         fi
 
-        printf -v candidate                             \
-               "%s %-*s  %-*s  %s\n"                    \
-               "${id}"                                  \
-               "${desktop_w}"                           \
-               "${desktop_id_to_name[${desktop}]}"      \
-               "${class_w}"                             \
-               "${class}"                               \
+        printf -v candidate                     \
+               "%s %-*s  %-*s  %s\n"            \
+               "${id}"                          \
+               "${desktop_w}"                   \
+               "${desktop}"                     \
+               "${class_w}"                     \
+               "${class}"                       \
                "${title}"
         candidates+="${candidate}"
-    done
+    done < <(echo "${wmctrl_w}")
+
     mapfile -t selected < <(echo "${candidates}" | sort -k 2,3 -V -r | fzf --multi --with-nth=2.. --border)
 
     # For each window, if it is on the scratchpad, pull it back, else jump to window
