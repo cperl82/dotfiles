@@ -8,18 +8,10 @@ function usage {
 }
 
 function jump-to-window-or-restore-from-scratchpad {
-    local window
-    local candidate
-    local candidates
-    local selected
-    local id
-    local name
-    local desktop
-    local class
-    local title
-    local class_w
-    local desktop_w
-    local wmctrl
+    local wmctrl wmctrl_d wmctrl_w
+    local window candidate candidates selected
+    local id name desktop class title
+    local class_w desktop_w
     local desktop_id_to_name
 
     declare -A desktop_id_to_name
