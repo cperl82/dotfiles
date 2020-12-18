@@ -4,110 +4,90 @@ set -o pipefail
 set -o errexit
 
 function usage {
-    echo "${0} jump-to-window-or-restore-from-scratchpad" 1>&2
+    echo "${0} jump-to-window|jump-to-workspace" 1>&2
 }
 
-function jump-to-window-or-restore-from-scratchpad {
-    local wmctrl wmctrl_d wmctrl_w
-    local window candidate candidates selected
-    local id name desktop class title
-    local class_w desktop_w
-    local desktop_id_to_name
-
-    declare -A desktop_id_to_name
-
-    wmctrl_d=$(wmctrl -d)
-    wmctrl_w=$(wmctrl -lx | awk '{gsub(/^.+\./, "", $3); print}')
-
-    # Integer to desktop name and width
-    while read -r id _ _ _ _ _ _ _ name
-    do
-        if [[ ${#name} -gt "${desktop_w}" ]]
-        then
-            desktop_w=${#name}
-        fi
-        desktop_id_to_name["${id}"]="${name}"
-    done < <(echo "${wmctrl_d}")
-
-    # Class width
-    while read -r _ _ class _ _
-    do
-        if [[ ${#class} -gt "${class_w}" ]]
-        then
-            class_w=${#class}
-        fi
-    done < <(echo "${wmctrl_w}")
-
-    printf -v this_window "0x%08x" "$(xdotool getactivewindow)"
-    while read -r id desktop class _ title
-    do
-        if [[ "${id}" == "${this_window}" ]]
-        then
-            continue
-        fi
-
-        # Shorten the class
-        class="${class##*.}"
-
-        # Ensure we have a title
-        if [[ -z "${title}" ]]
-        then
-            title="${class}"
-        fi
-
-        # Get the proper desktop name
-        if [[ "${desktop}" -eq -1 ]]
-        then
-            desktop="S"
-        else
-            desktop="${desktop_id_to_name[${desktop}]}"
-        fi
-
-        # Strip the redundant " - Google Chrome" from the end of
-        # Chrome windows since we're already showing the window
-        # class
-        if [[ "${title}" =~ \ -\ Google\ Chrome$ ]]
-        then
-            title="${title/ - Google Chrome/}"
-        fi
-
-        printf -v candidate                     \
-               "%s %-*s  %-*s  %s\n"            \
-               "${id}"                          \
-               "${desktop_w}"                   \
-               "${desktop}"                     \
-               "${class_w}"                     \
-               "${class}"                       \
-               "${title}"
-        candidates+="${candidate}"
-    done < <(echo "${wmctrl_w}")
-
-    mapfile -t selected < <(echo "${candidates}" | sort -k 2,3 -V -r | fzf --multi --with-nth=2.. --border)
-
-    # For each window, if it is on the scratchpad, pull it back, else jump to window
-    for window in "${selected[@]}"
-    do
-        read -r id desktop _ _ < <(echo "${window}")
-        if [[ "${desktop}" == "S" ]]
-        then
-            printf -v wmctrl "wmctrl -i -R %s" "${id}"
-        else
-            printf -v wmctrl "wmctrl -i -a %s" "${id}"
-        fi
-        eval "${wmctrl}"
-    done
+function window-query {
+    cat <<-'EOF'
+	.nodes
+	| map(select(.type? == "output"))
+	| map(
+	    select(.name? != "__i3")
+	    | .nodes
+	    | map(select(.type? != "dockarea"))
+	    | map(.nodes)
+	    | add
+	    | map(
+	       .name as $workspace
+	       | [.. | select(.nodes? == [] and .floating_nodes == [] and .focused == false)]
+	       | map([(.id | tostring), $workspace, (.window_properties | .class), .name])
+	       | map(@tsv))
+	    | add
+	    | .[]
+	  ) as $workspace_windows
+	| map(
+	    select(.name? == "__i3")
+	    | .nodes
+	    | map(select(.type? == "con"))
+	    | map(.nodes)
+	    | add
+	    | map(select(.name? == "__i3_scratch"))
+	    | .[0]
+	    | .floating_nodes
+	    | map(.nodes)
+	    | add
+	    | map([ (.id | tostring)
+	          , "S"
+		  , (.window_properties | .class // "Container")
+	          , ([.. | select(.nodes? == [] and .floating_nodes? == [])]
+		     | map(.name)
+		     | join(", "))])
+	    | map(@tsv)
+	    | .[]
+	  ) as $scratchpad_windows
+	| [ $scratchpad_windows, $workspace_windows ]
+	| add
+	| .[]
+	EOF
 }
 
-function subcmd--jump-to-window {
-    jump-to-window-or-restore-from-scratchpad
-}
-
-function subcmd--restore-from-scratchpad {
-    jump-to-window-or-restore-from-scratchpad
+function workspace-query {
+    cat <<-'EOF'
+        [ .. | select(.type? == "workspace") ]
+        | map(select(.name != "__i3_scratch"))
+        | map({id: (.id | tostring), name: .name})
+        | map(join(" "))
+        | .[]
+	EOF
 }
 
 function subcmd--find-window {
-    jump-to-window-or-restore-from-scratchpad
+    local tree
+    local q
+
+    tree=$(i3-msg -t get_tree)
+    q=$(window-query)
+
+    jq -r "${q}" <<< "${tree}"					\
+        | sed -e 's/ - Google Chrome$//'			\
+        | column -t -d -N id,w,class,name -s$'\t'		\
+        | fzf --with-nth=2.. --border				\
+        | awk '{print $1}'					\
+        | xargs -n1 -I{} i3-msg -t command "[con_id={}] focus"
+}
+
+function subcmd--jump-to-workspace {
+    local tree
+    local q
+
+    tree=$(i3-msg -t get_tree)
+    q=$(workspace-query)
+
+    jq -r "${q}" <<< "${tree}"                                  \
+        | fzf --with-nth=2.. --border                           \
+        | awk '{print $1}'                                      \
+        | xargs -n1 -I{} i3-msg -t command "[con_id={}] focus"
+
 }
 
 function main {
@@ -128,7 +108,8 @@ function main {
         esac
     done
 
-    completions=$(declare -F | awk '$2 ~ /^-f$/ {print $NF}' | sed -ne "s/^${subcmd_prefix}--//p")
+    completions=$(
+	declare -F | awk '$2 ~ /^-f$/ {print $NF}' | sed -ne "s/^${subcmd_prefix}--//p")
     mapfile -t subcmd < <(compgen -W "${completions}" -- "${1}" || true)
 
     if [[ ${#subcmd[@]} -eq 1 ]]
