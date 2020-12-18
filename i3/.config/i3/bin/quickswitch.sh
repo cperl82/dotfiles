@@ -87,7 +87,6 @@ function subcmd--jump-to-workspace {
         | fzf --with-nth=2.. --border                           \
         | awk '{print $1}'                                      \
         | xargs -n1 -I{} i3-msg -t command "[con_id={}] focus"
-
 }
 
 function main {
