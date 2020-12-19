@@ -70,7 +70,7 @@ function subcmd--find-window {
 
     jq -r "${q}" <<< "${tree}"					\
         | sed -e 's/ - Google Chrome$//'			\
-        | column -t -d -N id,w,class,name -s$'\t'		\
+        | column -t -s$'\t'					\
         | fzf --with-nth=2.. --border				\
         | awk '{print $1}'					\
         | xargs -n1 -I{} i3-msg -t command "[con_id={}] focus"
