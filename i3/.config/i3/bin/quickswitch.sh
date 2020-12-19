@@ -20,9 +20,9 @@ function window-query {
 	    | map(
 	       .name as $workspace
 	       | [.. | select(.nodes? == [] and .floating_nodes == [] and .focused == false)]
-	       | map([(.id | tostring), $workspace, (.window_properties | .class), .name])
-	       | map(@tsv))
+	       | map([(.id | tostring), $workspace, (.window_properties | .class), .name]))
 	    | add
+	    | map(@tsv)
 	    | .[]
 	  ) as $workspace_windows
 	| map(
