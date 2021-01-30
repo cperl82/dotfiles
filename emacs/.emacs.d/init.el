@@ -1615,7 +1615,7 @@ controlled by `include'."
    :states  '(insert)
    "M-RET"   #'org-meta-return
    "M-."     #'cp/org-surround-tilda
-   "M-v"     #'cp/org-surround-equal
+   "M-,"     #'cp/org-surround-equal
    "M-u"     #'cp/org-complete-user-name-at-point)
   (:keymaps '(org-agenda-mode-map)
    :states  '(emacs)
