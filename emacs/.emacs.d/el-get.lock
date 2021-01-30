@@ -55,7 +55,7 @@
         (epl :checksum "78ab7a85c08222cd15582a298a364774e3282ce6")
         (elisp-slime-nav :checksum "34938422929800839e2f935aca890cd4a229ca99")
         (el-get-lock :checksum "df8cfe55441695865a64b97946750b6413a40425")
-        (el-get :checksum "6138ce5b0a9df779e33ef42eadc4c15a5cf65f39")
+        (el-get :checksum "215ff5e56cedcc18866aba6e451b61c06a050e74")
         (diminish :checksum "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
         (dash :checksum "77f3bf40c9c85386a50f2dab3dc950513f6f88bd")
         (counsel-projectile :checksum "fb19569c9799e3edac7504d21a5ecf49231e9500")

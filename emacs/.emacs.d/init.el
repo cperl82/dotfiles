@@ -1873,13 +1873,13 @@ controlled by `include'."
    `(ivy-current-match           ((t (:foreground nil :background nil :underline nil))))
    '(ivy-minibuffer-match-face-1 ((t (:foreground nil :background nil :underline nil))))
    `(ivy-minibuffer-match-face-2 ((t (:foreground ,zenburn-red-2    :background nil))))
-   `(ivy-minibuffer-match-face-3 ((t (:foreground ,zenburn-green+1  :background nil))))
+   `(ivy-minibuffer-match-face-3 ((t (:foreground ,zenburn-blue-1  :background nil))))
    `(ivy-minibuffer-match-face-4 ((t (:foreground ,zenburn-yellow-2 :background nil))))
    `(ivy-virtual                 ((t (:inherit font-lock-type-face))))
    '(swiper-line-face            ((t (:background "#4F4F4F"))))
    '(swiper-match-face-1         ((t (:foreground nil :background nil :underline nil))))
    `(swiper-match-face-2         ((t (:foreground "white" :weight bold :background ,zenburn-red-2))))
-   `(swiper-match-face-3         ((t (:foreground "white" :weight bold :background ,zenburn-green-1))))
+   `(swiper-match-face-3         ((t (:foreground "white" :weight bold :background ,zenburn-blue-1))))
    `(swiper-match-face-4         ((t (:foreground "white" :weight bold :background ,zenburn-yellow-2))))))
 
 ;; I don't quite understand why this is necessary, somehow related to:
