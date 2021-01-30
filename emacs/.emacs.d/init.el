@@ -296,7 +296,7 @@ space)"
  :keymaps '(override)
  :states '(normal motion emacs)
  :prefix ","
- "h" #'cp/run-counsel-grep-or-swiper-with-thing-at-point
+ "h" #'swiper-isearch-thing-at-point
  "m" #'highlight-symbol-at-point
  "u" #'unhighlight-regexp
  "s" #'split-window-vertically
@@ -551,7 +551,7 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
    "<up>"   #'ivy-previous-history-element
    "<down>" #'ivy-next-history-element)
   (:keymaps '(override)
-   "C-s"    #'counsel-grep-or-swiper)
+   "C-s"    #'swiper-isearch)
   :init
   (progn
     (setq ivy-height 10)
@@ -567,7 +567,8 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
     (ivy-mode 1))
   :config
   (progn
-    (setf (cdr (assoc t ivy-format-functions-alist)) #'ivy-format-function-arrow)))
+    (setf (cdr (assoc t ivy-format-functions-alist)) #'ivy-format-function-arrow))
+  )
 
 (use-package ivy-rich
   :after (ivy)
@@ -1862,12 +1863,13 @@ controlled by `include'."
 (zenburn-with-color-variables
   (custom-theme-set-faces
    'zenburn
-   `(lazy-highlight              ((t (:foreground ,zenburn-bg-05 :weight bold :background ,zenburn-orange))))
    `(info-node                   ((t (:foreground ,zenburn-red-3))))
    `(diff-added                  ((t (:foreground ,zenburn-green :weight bold))))
    `(diff-removed                ((t (:foreground ,zenburn-red))))
    `(linum                       ((t (:foreground ,zenburn-green-1 :background ,zenburn-bg))))
    '(dired-perm-write            ((t nil)))
+   '(hl-line                     ((t (:background "#4F4F4F"))))
+   '(ivy-cursor                  ((t (:background "#d6d6d6"))))
    `(ivy-current-match           ((t (:foreground nil :background nil :underline nil))))
    '(ivy-minibuffer-match-face-1 ((t (:foreground nil :background nil :underline nil))))
    `(ivy-minibuffer-match-face-2 ((t (:foreground ,zenburn-red-2    :background nil))))
@@ -1878,9 +1880,8 @@ controlled by `include'."
    '(swiper-match-face-1         ((t (:foreground nil :background nil :underline nil))))
    `(swiper-match-face-2         ((t (:foreground "white" :weight bold :background ,zenburn-red-2))))
    `(swiper-match-face-3         ((t (:foreground "white" :weight bold :background ,zenburn-green-1))))
-   `(swiper-match-face-4         ((t (:foreground "white" :weight bold :background ,zenburn-yellow-2))))
-   '(hl-line                     ((t (:background "#4F4F4F"))))
-   ))
+   `(swiper-match-face-4         ((t (:foreground "white" :weight bold :background ,zenburn-yellow-2))))))
+(enable-theme 'zenburn)
 
 
 ; 2014-04-08: local emacs overrides
