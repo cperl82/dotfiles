@@ -17,7 +17,7 @@
         (swiper :checksum "80101ca9c855ae2241e2e15130caa951b8416f70")
         (haskell-mode :checksum "6a70c1858c7d505ba23185e209ef7eacf703ed8f")
         (yaml-mode :checksum "28c34033194130d452d5c958b5241c88d42ca02b")
-        (xcscope :checksum "1e4c8e60eb841a3ecb56ff4115b6a8ae5c0bf779")
+        (xcscope :checksum "8e441efab0757778fe3594ff68c378bf90f539f9")
         (windsize :checksum "beb6376fdf52afa6f220c89032448460faf76e7f")
         (which-key :checksum "ff79dfff66f880885c5893dd6fd05dc51173a476")
         (wgrep :checksum "414be70bd313e482cd9f0b70fd2daad4ee23497c")
