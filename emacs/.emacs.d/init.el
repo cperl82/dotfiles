@@ -1869,7 +1869,7 @@ controlled by `include'."
    `(linum                       ((t (:foreground ,zenburn-green-1 :background ,zenburn-bg))))
    '(dired-perm-write            ((t nil)))
    '(hl-line                     ((t (:background "#4F4F4F"))))
-   '(ivy-cursor                  ((t (:background "#d6d6d6"))))
+   '(ivy-cursor                  ((t (:foreground "#000000" :background "#d6d6d6"))))
    `(ivy-current-match           ((t (:foreground nil :background nil :underline nil))))
    '(ivy-minibuffer-match-face-1 ((t (:foreground nil :background nil :underline nil))))
    `(ivy-minibuffer-match-face-2 ((t (:foreground ,zenburn-red-2    :background nil))))
