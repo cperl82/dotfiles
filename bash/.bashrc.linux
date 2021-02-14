@@ -461,18 +461,31 @@ function battery {
 function urxvt-set-font {
     local font="${1}"
 
-    printf '\e]710;%s\007' "${font}"
+    # 2021-02-14 cperl: It would be nice if we could confirm we're running inside of URxvt
+    # and just do nothing if not.  According to archlinux wiki, gnu screen versions newer
+    # than 4.4 change the TERM environment variable to screen.${original_term}, so it
+    # should be possible at some point.
+    if [[ "${TERM}" =~ ^screen ]]
+    then
+	# shellcheck disable=SC1003
+	printf '\eP\e]710;%s\007\e\\' "${font}"
+    else
+	printf '\e]710;%s\007' "${font}"
+    fi
 }
 
-function urxvt-terminus-12 {
-    urxvt-set-font "-xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*"
-}
-alias 12='urxvt-terminus-12'
+# 2021-02-14 cperl: I should also add one for xft fonts using fc-list
+function urxvt-set-font-xlfd {
+    local filter="${*}"
 
-function urxvt-terminus-16 {
-    urxvt-set-font "-xos4-terminus-medium-r-normal--16-*-*-*-*-*-*-*"
+    font=$(xlsfonts | fzf -q "${filter}")
+    if [[ -z "${font}" ]]
+    then
+	return
+    fi
+
+    urxvt-set-font "${font}"
 }
-alias 16='urxvt-terminus-16'
 
 function setup-tty-aliases {
     local dircolors="${HOME}/.dircolors"
