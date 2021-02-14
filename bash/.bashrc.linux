@@ -458,8 +458,13 @@ function battery {
     upower -e | egrep '/battery_BAT[0-9]$'| xargs -n1 -t upower -i
 }
 
-function urxvt-set-font {
+function _urxvt-set-font {
     local font="${1}"
+
+    if [[ -z "${font}" ]]
+    then
+	return
+    fi
 
     # 2021-02-14 cperl: It would be nice if we could confirm we're running inside of URxvt
     # and just do nothing if not.  According to archlinux wiki, gnu screen versions newer
@@ -484,7 +489,7 @@ function urxvt-set-font-xlfd {
 	return
     fi
 
-    urxvt-set-font "${font}"
+    _urxvt-set-font "${font}"
 }
 
 function setup-tty-aliases {
