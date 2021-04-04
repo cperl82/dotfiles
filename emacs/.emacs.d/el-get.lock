@@ -1,5 +1,8 @@
 (setq el-get-lock-package-versions
-      '((vala-mode :checksum "d696a8177e94c81ea557ad364a3b3dcc3abbc50f")
+      '((magit :checksum "abb61935c65bc02815a6397c0e5d867aebcf5e54")
+        (with-editor :checksum "ebcbd3b137154e6c5a2b976bacbb89d48ddfa242")
+        (term-keys :checksum "83c7d698f76eec1252c17286a146d14f801518c8")
+        (vala-mode :checksum "d696a8177e94c81ea557ad364a3b3dcc3abbc50f")
         (rust-mode :checksum "ca7d99c6fd90fc1e636aa9d4020a2f077786a0c3")
         (evil :checksum "ba79ed6a3ae3f07e4a56387e09350f3d1cd90041")
         (transient :checksum "4d44d08e90355a8ef36aaad1f9f79c95de1ce0e9")
@@ -15,7 +18,7 @@
         (avy :checksum "bbf1e7339eba06784dfe86643bb0fbddf5bb0342")
         (annalist :checksum "e0601539c9ac0171a684ea3ff6266d215d1d08e6")
         (ace-window :checksum "d93e16b52ee7c1b6c9df599060e7077b4e46cbf8")
-        (swiper :checksum "80101ca9c855ae2241e2e15130caa951b8416f70")
+        (swiper :checksum "39e08799eda8fa2131fe72772cfd477374a97640")
         (haskell-mode :checksum "6a70c1858c7d505ba23185e209ef7eacf703ed8f")
         (yaml-mode :checksum "28c34033194130d452d5c958b5241c88d42ca02b")
         (xcscope :checksum "8e441efab0757778fe3594ff68c378bf90f539f9")
