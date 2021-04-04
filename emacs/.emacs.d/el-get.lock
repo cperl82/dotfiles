@@ -7,7 +7,7 @@
         (evil :checksum "ba79ed6a3ae3f07e4a56387e09350f3d1cd90041")
         (transient :checksum "4d44d08e90355a8ef36aaad1f9f79c95de1ce0e9")
         (org-mode :checksum "abedf386b3f13af2769728755d00c4698ac5d3b0")
-        (evil-collection :checksum "be33708835ddbac6dad2d7ff1dde17f3d712a993")
+        (evil-collection :checksum "f2be91297029ae002d15e23510f9f686d848d7a8")
         (smartparens :checksum "046440700f292c90c4a992f959c8d6725aa9a3bc")
         (s :checksum "03410e6a7a2b11e47e1fea3b7d9899c7df26435e")
         (projectile :checksum "fd85829ef2bdb8b2c183ea1b3ccfd50925824d78")
