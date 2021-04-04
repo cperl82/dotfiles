@@ -55,6 +55,7 @@
    json-reformat
    json-snatcher
    lua-mode
+   magit
    markdown-mode
    nasm-mode
    org-mode
