@@ -26,7 +26,7 @@
         (which-key :checksum "ff79dfff66f880885c5893dd6fd05dc51173a476")
         (wgrep :checksum "414be70bd313e482cd9f0b70fd2daad4ee23497c")
         (vagrant-tramp :checksum "453ba605b28d2964bb4e10074f1e6891ebb4d2d6")
-        (use-package :checksum "4aa14a4fcd5ca52b3f1bfcf5ab294173f7bbe390")
+        (use-package :checksum "a7422fb8ab1baee19adb2717b5b47b9c3812a84c")
         (undo-tree :checksum "e9a9102f515acd7523158f20e83f300600374989")
         (tuareg-mode :checksum "ccde45bbc292123ec20617f1af7f7e19f7481545")
         (ts :checksum "df48734ef046547c1aa0de0f4c07d11964ef1f7f")
