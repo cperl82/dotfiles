@@ -4,9 +4,10 @@
        emulates the main features of Vim, and provides facilities
        for writing custom extensions."
        :type github
-       :pkgname "cperl82/evil"
+       :pkgname "emacs-evil/evil"
+       :features evil
        :depends (undo-tree goto-chg)
        :build (("make" "info" "all"))
        :build/berkeley-unix (("gmake" "info" "all"))
-       :build/darwin `(("make" ,(format "EMACS=%s" el-get-emacs) "SPHINXBUILD=/usr/local/opt/sphinx-doc/bin/sphinx-build" "info" "all"))
+       :build/darwin `(("make" ,(format "EMACS=%s" el-get-emacs) "info" "all"))
        :info "doc/build/texinfo")

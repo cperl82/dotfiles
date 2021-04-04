@@ -4,7 +4,7 @@
         (term-keys :checksum "83c7d698f76eec1252c17286a146d14f801518c8")
         (vala-mode :checksum "d696a8177e94c81ea557ad364a3b3dcc3abbc50f")
         (rust-mode :checksum "ca7d99c6fd90fc1e636aa9d4020a2f077786a0c3")
-        (evil :checksum "ba79ed6a3ae3f07e4a56387e09350f3d1cd90041")
+        (evil :checksum "62b6a9237502ba0f60734c3cd710427f381a9786")
         (transient :checksum "4d44d08e90355a8ef36aaad1f9f79c95de1ce0e9")
         (org-mode :checksum "abedf386b3f13af2769728755d00c4698ac5d3b0")
         (evil-collection :checksum "f2be91297029ae002d15e23510f9f686d848d7a8")
