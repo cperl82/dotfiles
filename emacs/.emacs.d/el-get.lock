@@ -6,7 +6,7 @@
         (rust-mode :checksum "ca7d99c6fd90fc1e636aa9d4020a2f077786a0c3")
         (evil :checksum "62b6a9237502ba0f60734c3cd710427f381a9786")
         (transient :checksum "4d44d08e90355a8ef36aaad1f9f79c95de1ce0e9")
-        (org-mode :checksum "abedf386b3f13af2769728755d00c4698ac5d3b0")
+        (org-mode :checksum "287af207fe3df69a5feb2387035fba63a58b3557")
         (evil-collection :checksum "f2be91297029ae002d15e23510f9f686d848d7a8")
         (smartparens :checksum "046440700f292c90c4a992f959c8d6725aa9a3bc")
         (s :checksum "03410e6a7a2b11e47e1fea3b7d9899c7df26435e")
