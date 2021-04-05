@@ -3,10 +3,6 @@
 set -o pipefail
 set -o errexit
 
-function usage {
-    echo "${0} jump-to-window|jump-to-workspace" 1>&2
-}
-
 function window-query {
     cat <<-'EOF'
 	.nodes
@@ -95,6 +91,14 @@ function main {
     local completions
     local subcmd
 
+    completions=$(
+	declare -F | awk '$2 ~ /^-f$/ {print $NF}' | sed -ne "s/^${subcmd_prefix}--//p")
+
+    function usage {
+	subcmds=$(echo "${completions}" | xargs | tr ' ' '|')
+	printf "%s %s\n" "${0}" "${subcmds}" 1>&2
+    }
+
     while [[ ${#} -gt 0 ]]
     do
         case "${1}" in
@@ -108,8 +112,6 @@ function main {
         esac
     done
 
-    completions=$(
-	declare -F | awk '$2 ~ /^-f$/ {print $NF}' | sed -ne "s/^${subcmd_prefix}--//p")
     mapfile -t subcmd < <(compgen -W "${completions}" -- "${1}" || true)
 
     if [[ ${#subcmd[@]} -eq 1 ]]
