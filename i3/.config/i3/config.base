@@ -38,7 +38,7 @@ bindsym $mod+Return exec --no-startup-id i3-sensible-terminal
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id dmenu_run -fn $font_xft
+# bindsym $mod+d exec --no-startup-id dmenu_run -fn $font_xft
 
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
@@ -163,13 +163,14 @@ bindsym $mod+o exec --no-startup-id				\
 
 set $terminal      ${HOME}/.config/i3/bin/find-or-launch-terminal-with-title.sh
 set $quickswitch   ${HOME}/.config/i3/bin/quickswitch.sh
+set $launch        ${HOME}/.config/i3/bin/launch.sh
 set $status        ${HOME}/.config/i3status/bin/status.sh
 
 # 2016-12-11 cperl: Quickly throw windows I don't want to think about onto the scratchpad
 bindsym $mod+period move scratchpad
 
 # 2018-03-26 cperl: Make sure anything with the name "popup-terminal" is borderless
-for_window [title="^popup-terminal$"] floating enable border pixel 1 move down 70px
+for_window [title="^popup-terminal$"] floating enable border pixel 1
 
 # 2020-11-15 cperl: KeePassXC should always float
 for_window [title="^.*KeePassXC$"] floating enable
@@ -183,6 +184,12 @@ bindsym $mod+comma exec --no-startup-id		\
 	"popup-terminal"			\
 	-geometry 160x50			\
 	-e $quickswitch find-window
+
+bindsym $mod+d exec --no-startup-id             \
+	$terminal				\
+	"popup-terminal"			\
+	-geometry 100x20			\
+	-e $launch
 
 # 2016-11-14 cperl: No borders for chrome
 for_window [class="Google-chrome" title="Google Chrome"] border pixel 3
