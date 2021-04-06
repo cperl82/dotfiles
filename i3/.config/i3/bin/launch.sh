@@ -9,7 +9,7 @@ main () {
 
     if [[ -n "${cmd}" ]]
     then
-	eval "${cmd}"
+	${cmd}
     fi
 }
 
