@@ -12,12 +12,12 @@ function window-query {
 	    | .nodes
 	    | map(select(.type? != "dockarea"))
 	    | map(.nodes)
-	    | add
+	    | flatten(1)
 	    | map(
 	       .name as $workspace
 	       | [.. | select(.nodes? == [] and .floating_nodes == [] and .focused == false)]
 	       | map([(.id | tostring), $workspace, (.window_properties | .class), .name]))
-	    | add
+	    | flatten(1)
 	    | map(@tsv)
 	    | .[]
 	  ) as $workspace_windows
@@ -26,12 +26,12 @@ function window-query {
 	    | .nodes
 	    | map(select(.type? == "con"))
 	    | map(.nodes)
-	    | add
+	    | flatten(1)
 	    | map(select(.name? == "__i3_scratch"))
 	    | .[0]
 	    | .floating_nodes
 	    | map(.nodes)
-	    | add
+	    | flatten(1)
 	    | map([ (.id | tostring)
 	          , "S"
 		  , (.window_properties | .class // "Container")
@@ -42,7 +42,7 @@ function window-query {
 	    | .[]
 	  ) as $scratchpad_windows
 	| [ $scratchpad_windows, $workspace_windows ]
-	| add
+	| flatten(1)
 	| .[]
 	EOF
 }
