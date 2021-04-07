@@ -189,7 +189,10 @@ bindsym $mod+d exec --no-startup-id \
         $terminal                   \
         "popup-terminal-run"        \
         -geometry 100x30            \
-        -e bash -c 'dmenu_path | fzf --prompt "launch: " | ${SHELL-:/bin/sh}'
+        -e bash -c 'dmenu_path                               \
+                     | fzf --print-query --prompt "launch: " \
+                     | tail -1                               \
+                     | ${SHELL-:/bin/sh}'
 
 # 2016-11-14 cperl: No borders for chrome
 for_window [class="Google-chrome" title="Google Chrome"] border pixel 3
