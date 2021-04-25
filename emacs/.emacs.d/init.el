@@ -1652,7 +1652,8 @@ controlled by `include'."
       :config
       (progn
         (setq org-habit-today-glyph ?t)
-        (setq org-habit-completed-glyph ?d)))
+        (setq org-habit-completed-glyph ?d)
+        (setq org-habit-graph-column 65)))
     (use-package org-depend)
     (use-package ol-man)
     (use-package org-tempo)
