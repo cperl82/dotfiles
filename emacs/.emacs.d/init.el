@@ -1728,7 +1728,6 @@ controlled by `include'."
          (define-and-bind-text-object "*" "\\*" "\\*")
          (define-and-bind-text-object "=" "\\=" "\\=")
          (add-hook 'write-contents-functions (lambda () (save-excursion (delete-trailing-whitespace)))))))
-    (add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode 1)))
     (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))
     (remove-hook 'org-mode-hook 'org-eldoc-load)))
 
