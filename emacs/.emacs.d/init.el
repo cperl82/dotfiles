@@ -58,6 +58,7 @@
    magit
    markdown-mode
    nasm-mode
+   ob-async
    org-mode
    org-ql
    origami
