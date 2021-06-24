@@ -969,7 +969,10 @@ dired-x"
 ;; evil
 (use-package undo-tree
   :defer t
-  :diminish undo-tree-mode)
+  :diminish undo-tree-mode
+  :config
+  (progn
+    (undo-tree-mode 1)))
 
 (use-package evil
   :demand t
@@ -1856,11 +1859,10 @@ controlled by `include'."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (zenburn)))
+ '(custom-enabled-themes '(zenburn))
  '(custom-safe-themes
-   (quote
-    ("420459d6eeb45aadf5db5fbcc3d6990b65141c104911f7359454fc29fa9d87a0" "4555c851795f0e0fd572ba82208373b0c32aaffa78289e983d4b25cd1557f472" "a1e99cb36d6235abbe426a0a96fc26c006306f6b9d2a64c2435363350a987b4c" default)))
- '(package-selected-packages (quote (rainbow-mode let-alist))))
+   '("420459d6eeb45aadf5db5fbcc3d6990b65141c104911f7359454fc29fa9d87a0" "4555c851795f0e0fd572ba82208373b0c32aaffa78289e983d4b25cd1557f472" "a1e99cb36d6235abbe426a0a96fc26c006306f6b9d2a64c2435363350a987b4c" default))
+ '(package-selected-packages '(rainbow-mode let-alist)))
 
 ; zenburn theme overrides
 (zenburn-with-color-variables
@@ -1895,3 +1897,9 @@ controlled by `include'."
   (when (file-exists-p local) (load-file local)))
 
 (setq gc-cons-threshold (* 2 1000 1000))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
