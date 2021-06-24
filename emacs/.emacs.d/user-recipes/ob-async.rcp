@@ -2,4 +2,5 @@
        :description "synchronous execution of org-babel src blocks"
        :website "https://github.com/astahlman/ob-async"
        :type github
-       :pkgname "astahlman/ob-async")
+       :pkgname "astahlman/ob-async"
+       :depends emacs-async dash org-plus-contrib)

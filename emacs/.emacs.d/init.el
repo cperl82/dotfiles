@@ -1661,6 +1661,7 @@ controlled by `include'."
     (use-package org-depend)
     (use-package ol-man)
     (use-package org-tempo)
+    (use-package ob-async)
     (setq org-startup-folded t)
     (setq org-tags-column -90)
     (setq org-agenda-restore-windows-after-quit t)

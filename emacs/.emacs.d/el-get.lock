@@ -1,5 +1,6 @@
 (setq el-get-lock-package-versions
-      '((org-mode :checksum "652430128896e690dc6ef2a83891a1209094b3da")
+      '((emacs-async :checksum "9a8cd0c3d5c120bfa03187c54dba6e33f6e3ca19")
+        (org-mode :checksum "652430128896e690dc6ef2a83891a1209094b3da")
         (ob-async :checksum "9aac486073f5c356ada20e716571be33a350a982")
         (magit :checksum "f592e367d7602106d6f8f8349148bd31a94ba231")
         (with-editor :checksum "5519b6a67ecd66865b4fdd5447425eee900c54f4")
