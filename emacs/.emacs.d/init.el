@@ -1,5 +1,5 @@
-;; Required as of emacs 25
-(package-initialize)
+(when (< emacs-major-version 27)
+  (package-initialize))
 
 ;; 2020-10-22 emacs startup tweaks from https://blog.d46.us/advanced-emacs-startup/
 (add-hook 'emacs-startup-hook
@@ -170,7 +170,7 @@
   `(progn
      (fset
       ,name
-      (lexical-let*
+      (let*
           ((expire ,timeout)
            (cache (make-hash-table :test 'equal)))
         (lambda (&rest args)
@@ -893,8 +893,7 @@ dired-x"
 (defun cp/sh-switch-to-indentation (n)
   (interactive "p")
   (progn
-    (setq sh-basic-offset n)
-    (setq sh-indentation n)))
+    (setq sh-basic-offset n)))
 
 (use-package sh-script
   :defer t
@@ -1292,6 +1291,7 @@ dired-x"
 
 (use-package escreen
   :defer t
+  :commands (escreen-create-screen)
   :load-path "lisp"
   :bind-keymap ("C-\\" . escreen-map)
   :general
@@ -1363,7 +1363,7 @@ dired-x"
       desc)))
 
 (defun cp/org-surround (c)
-  (let ((spc (looking-back " ")))
+  (let ((spc (looking-back " " nil)))
     (progn
       (evil-backward-WORD-begin)
       (insert-char c)
@@ -1706,7 +1706,7 @@ controlled by `include'."
     (setq org-ctrl-k-protect-subtree t)
     (setq org-cycle-include-plain-lists 'integrate)
     (setq org-hide-leading-stars t)
-    (setq org-make-link-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
+    (setq org-link-make-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
     (run-with-idle-timer 30 t (lambda () (let ((inhibit-message t)) (org-save-all-org-buffers))))
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
     (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
@@ -1811,8 +1811,8 @@ controlled by `include'."
    (funcall orig-fun force)))
 
 (use-package projectile
-  :commands (projectile-project-p)
   :defer t
+  :commands (projectile-project-p)
   :general
   (:keymaps '(override)
    :states  '(normal motion emacs)
