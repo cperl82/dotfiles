@@ -170,7 +170,7 @@
   `(progn
      (fset
       ,name
-      (let*
+      (lexical-let*
           ((expire ,timeout)
            (cache (make-hash-table :test 'equal)))
         (lambda (&rest args)
