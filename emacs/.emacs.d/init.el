@@ -972,6 +972,7 @@ dired-x"
   :diminish undo-tree-mode
   :config
   (progn
+    (setq undo-tree-auto-save-history nil)
     (undo-tree-mode 1)))
 
 (use-package evil
