@@ -88,6 +88,7 @@
 (require 'dash)
 (require 's)
 (require 'f)
+(require 'cl)
 
 
 ;; el-get helpers: these depend on packages that el-get installs,
