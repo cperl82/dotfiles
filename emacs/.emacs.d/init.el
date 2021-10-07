@@ -36,6 +36,7 @@
    diminish
    elisp-slime-nav
    emacs-request
+   embark
    evil
    evil-collection
    evil-smartparens
@@ -130,11 +131,12 @@
       c-default-style           "linux"
       column-number-mode        t
       confirm-kill-emacs        'y-or-n-p
-      inhibit-startup-message   t
-      make-backup-files         nil
       create-lockfiles          nil
-      split-height-threshold    nil
+      enable-recursive-minibuffers t
+      inhibit-startup-message   t
       load-prefer-newer         t
+      make-backup-files         nil
+      split-height-threshold    nil
       window-combination-resize t)
 
 ;; 2015-09-11 Enable narrowing command which are disabled by default
@@ -1856,6 +1858,14 @@ controlled by `include'."
     (setq ios-config-command-face  `((t . (:foreground ,zenburn-cyan))))
     (setq ios-config-ipadd-face    `((t . (:foreground ,zenburn-red))))
     (setq ios-config-toplevel-face `((t . (:foreground ,zenburn-yellow))))))
+
+
+(use-package embark
+  :defer t
+  :commands (embark-act)
+  :general
+  (:keymaps '(override)
+   "C-c ." #'embark-act))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
