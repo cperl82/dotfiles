@@ -1,5 +1,6 @@
 (setq el-get-lock-package-versions
-      '((org-mode :checksum "287af207fe3df69a5feb2387035fba63a58b3557")
+      '((embark :checksum "98121bacef39abaf6f6849f87a439ba2184c03e2")
+        (org-mode :checksum "287af207fe3df69a5feb2387035fba63a58b3557")
         (emacs-async :checksum "9a8cd0c3d5c120bfa03187c54dba6e33f6e3ca19")
         (ob-async :checksum "9aac486073f5c356ada20e716571be33a350a982")
         (magit :checksum "f592e367d7602106d6f8f8349148bd31a94ba231")
@@ -61,7 +62,7 @@
         (epl :checksum "78ab7a85c08222cd15582a298a364774e3282ce6")
         (elisp-slime-nav :checksum "8588d80d414aee1fafce5b9da0e913612ee0bcdd")
         (el-get-lock :checksum "df8cfe55441695865a64b97946750b6413a40425")
-        (el-get :checksum "ec135b5353867ce3564a675e99024944b834395d")
+        (el-get :checksum "b5a5a405d04f61ec9c5fcb19357a50a4b9e36a25")
         (diminish :checksum "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
         (dash :checksum "88d799595e8f1b4154637ce8a3f81b97b0520c1a")
         (counsel-projectile :checksum "06b03c1080d3ccc3fa9b9c41b1ccbcf13f058e4b")
