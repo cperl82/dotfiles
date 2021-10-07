@@ -1585,6 +1585,25 @@ controlled by `include'."
   (message "%S %S %S" min-to-app new-time msg)
   t)
 
+;; Taken from https://emacs.stackexchange.com/questions/28782/avoiding-underlined-spaces-between-two-lines
+(defface org-dont-underline-indents '((t :underline nil))
+  "Avoid underlining of indentation.")
+
+(defun org-search-underlined-indents (limit)
+  "Match function for `org-dont-underline-indents'."
+  (let (ret face)
+    (while
+        (and
+         (setq ret (re-search-forward "^[[:space:]]+" limit t))
+         (or (null (setq face (plist-get (text-properties-at (match-beginning 0)) 'face)))
+             (eq face 'org-dont-underline-indents))))
+    ret))
+
+(defun org-dont-underline-indents ()
+  "Remove underlining at indents."
+  (add-to-list 'org-font-lock-extra-keywords
+               '(org-search-underlined-indents 0 'org-dont-underline-indents t) 'append))
+
 (use-package org
   :defer t
   :general
@@ -1738,6 +1757,7 @@ controlled by `include'."
          (define-and-bind-text-object "=" "\\=" "\\=")
          (add-hook 'write-contents-functions (lambda () (save-excursion (delete-trailing-whitespace)))))))
     (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))
+    ; (add-hook 'org-font-lock-set-keywords-hook #'org-dont-underline-indents 'append)
     (remove-hook 'org-mode-hook 'org-eldoc-load)))
 
 
