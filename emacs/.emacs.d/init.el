@@ -971,12 +971,12 @@ dired-x"
 
 ;; evil
 (use-package undo-tree
-  :defer t
+  :demand t
   :diminish undo-tree-mode
   :config
   (progn
     (setq undo-tree-auto-save-history nil)
-    (undo-tree-mode 1)))
+    (global-undo-tree-mode)))
 
 (use-package evil
   :demand t
