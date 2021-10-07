@@ -9,7 +9,7 @@
                              (float-time
                               (time-subtract after-init-time before-init-time)))
                      gcs-done)))
-(setq gc-cons-threshold (* 50 1000 1000))
+(setq gc-cons-threshold (* 100 1000 1000))
 
 ;; el-get
 (add-to-list 'load-path (concat user-emacs-directory "el-get/el-get"))
