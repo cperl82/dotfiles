@@ -1,0 +1,4 @@
+(:name embark
+       :description "a sort of right-click contextual menu for Emacs"
+       :type github
+       :pkgname "oantolin/embark")
