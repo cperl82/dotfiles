@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t -*-
 (when (< emacs-major-version 27)
   (package-initialize))
 
@@ -79,7 +80,6 @@
 (straight-use-package 'xcscope)
 (straight-use-package 'yaml-mode)
 
-
 
 ;; Base packages
 (require 'general)
@@ -89,7 +89,6 @@
 (require 's)
 (require 'f)
 (require 'cl-lib)
-(require 'cl)
 
 
 ;; Misc
@@ -139,7 +138,7 @@
   `(progn
      (fset
       ,name
-      (lexical-let*
+      (let
           ((expire ,timeout)
            (cache (make-hash-table :test 'equal)))
         (lambda (&rest args)
@@ -1370,7 +1369,7 @@ dired-x"
 
 (defun cp/org-ivy-usernames (username)
   (ivy-read "username: "
-            (cp/org-username-list-all)
+            (cp/org-username-list-all-caching)
             :require-match t
             :initial-input username))
 
