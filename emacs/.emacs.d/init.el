@@ -87,11 +87,9 @@
 ;; Base packages
 (require 'general)
 (require 'use-package)
-(require 'diminish)
 (require 'dash)
 (require 's)
 (require 'f)
-(require 'cl-lib)
 
 
 ;; Misc
