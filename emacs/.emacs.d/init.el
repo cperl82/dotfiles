@@ -11,75 +11,74 @@
                      gcs-done)))
 (setq gc-cons-threshold (* 100 1000 1000))
 
-;; el-get
-(add-to-list 'load-path (concat user-emacs-directory "el-get/el-get"))
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-    (goto-char (point-max)) (eval-print-last-sexp)))
+;; straight
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
 
-;; el-get-lock for locking package versions
-(el-get-bundle tarao/el-get-lock)
-(el-get-lock)
+(straight-use-package 'avy)
+(straight-use-package 'ace-window)
+(straight-use-package 'annalist)
+(straight-use-package 'color-theme-zenburn)
+(straight-use-package 'company-mode)
+(straight-use-package 'counsel-projectile)
+(straight-use-package 'dash)
+(straight-use-package 'diminish)
+(straight-use-package 'elisp-slime-nav)
+(straight-use-package 'embark)
+(straight-use-package 'evil)
+(straight-use-package 'evil-collection)
+(straight-use-package 'evil-smartparens)
+(straight-use-package 'evil-surround)
+(straight-use-package 'f)
+(straight-use-package 'flycheck)
+(straight-use-package 'general)
+(straight-use-package 'go-mode)
+(straight-use-package 'haskell-mode)
+(straight-use-package 'highlight-parentheses)
+(straight-use-package 'hydra)
+(straight-use-package 'ibuffer-vc)
+(straight-use-package 'ibuffer-projectile)
+(straight-use-package 'ios-config-mode)
+(straight-use-package 'ivy-rich)
+(straight-use-package 'json-mode)
+(straight-use-package 'json-reformat)
+(straight-use-package 'json-snatcher)
+(straight-use-package 'lua-mode)
+(straight-use-package 'magit)
+(straight-use-package 'markdown-mode)
+(straight-use-package 'nasm-mode)
+(straight-use-package 'ob-async)
+(straight-use-package 'org-mode)
+(straight-use-package 'org-ql)
+(straight-use-package 'origami)
+(straight-use-package 'projectile)
+(straight-use-package 'rust-mode)
+(straight-use-package 's)
+(straight-use-package 'smartparens)
+(straight-use-package 'smex)
+(straight-use-package 'swiper)
+(straight-use-package 'systemd-mode)
+(straight-use-package 'systemtap-mode)
+(straight-use-package 'tuareg-mode)
+(straight-use-package 'undo-tree)
+(straight-use-package 'use-package)
+(straight-use-package 'vagrant-tramp)
+(straight-use-package 'wgrep)
+(straight-use-package 'which-key)
+(straight-use-package 'windsize)
+(straight-use-package 'xcscope)
+(straight-use-package 'yaml-mode)
 
-(setq el-get-verbose t)
-(add-to-list 'el-get-recipe-path (concat user-emacs-directory "user-recipes"))
-(el-get
- 'sync
- '(avy
-   ace-window
-   annalist
-   color-theme-zenburn
-   company-mode
-   counsel-projectile
-   dash
-   diminish
-   elisp-slime-nav
-   emacs-request
-   embark
-   evil
-   evil-collection
-   evil-smartparens
-   evil-surround
-   f
-   flycheck
-   general
-   go-mode
-   haskell-mode
-   highlight-parentheses
-   hydra
-   ibuffer-vc
-   ibuffer-projectile
-   ios-config-mode
-   ivy-rich
-   json-mode
-   json-reformat
-   json-snatcher
-   lua-mode
-   magit
-   markdown-mode
-   nasm-mode
-   ob-async
-   org-mode
-   org-ql
-   origami
-   projectile
-   rust-mode
-   s
-   smartparens
-   smex
-   swiper
-   systemd-mode
-   systemtap-mode
-   tuareg-mode
-   undo-tree
-   use-package
-   vagrant-tramp
-   wgrep
-   which-key
-   windsize
-   xcscope
-   yaml-mode))
 
 
 ;; Base packages
@@ -90,40 +89,7 @@
 (require 's)
 (require 'f)
 (require 'cl-lib)
-
-
-;; el-get helpers: these depend on packages that el-get installs,
-;; therefore they can't be used to help bootstrap el-get in any way
-(defun cp/el-get-list-recipes-without-hash ()
-  "Return a list of installed recipes that do not have :checkout in their recipe"
-  (thread-last (el-get-package-status-recipes)
-    ;; filter out el-get, we don't want to version lock it
-    (seq-filter (lambda (r) (not (equal (plist-get r :name) 'el-get))))
-    ;; filter out recipes that are builtin to this version of emacs
-    (seq-filter (lambda (r)
-                  (if-let (builtin (plist-get r :builtin))
-                      (not (version<= builtin emacs-version))
-                    t)))
-    (seq-filter (lambda (r)
-                  (not
-                   (or
-                    (plist-member r :checkout)
-                    (plist-member r :checksum)))))))
-
-(defun cp/el-get-list-package-names-without-hash ()
-  "Return a list of el-get package names that do not have :checkout in their property list"
-  (thread-last (cp/el-get-list-recipes-without-hash)
-    (seq-map (lambda (r) (plist-get r :name)))))
-
-(defun cp/el-get-annotate-package-names (package-names)
-  "Return (PACKAGE-NAME checksum filename) for each PACKAGE-NAME"
-  (seq-map
-   (lambda (package-name)
-     (let* ((type (el-get-package-type package-name))
-            (compute-checksum (el-get-method type :compute-checksum))
-            (checksum (and compute-checksum (funcall compute-checksum package-name))))
-       `(,package-name ,checksum ,(el-get-recipe-filename package-name))))
-   package-names))
+(require 'cl)
 
 
 ;; Misc
@@ -1681,7 +1647,6 @@ controlled by `include'."
         (setq org-habit-today-glyph ?t)
         (setq org-habit-completed-glyph ?d)
         (setq org-habit-graph-column 65)))
-    (use-package org-depend)
     (use-package ol-man)
     (use-package org-tempo)
     (use-package ob-async)

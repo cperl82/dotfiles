@@ -1,5 +1,0 @@
-(:name annalist
-       :description "A library that can be used to record information and later print that information using org-mode headings and tables"
-       :type github
-       :pkgname "noctuid/annalist.el"
-       :checkout "e0601539c9ac0171a684ea3ff6266d215d1d08e6")

@@ -8,6 +8,9 @@ emacs/.emacs.d/projectile-bookmarks.eld
 emacs/.emacs.d/projectile.cache
 emacs/.emacs.d/recentf
 emacs/.emacs.d/smex-items
+emacs/.emacs.d/straight/build
+emacs/.emacs.d/straight/repos
+emacs/.emacs.d/straight/build-cache.el
 emacs/.emacs.d/tramp
 emacs/.emacs.d/transient/*
 fonts/.fonts/.uuid

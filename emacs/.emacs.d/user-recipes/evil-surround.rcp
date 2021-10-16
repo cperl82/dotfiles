@@ -1,6 +1,0 @@
-(:name evil-surround
-       :website "https://github.com/emacs-evil/evil-surround"
-       :description "Emulate Tim Pope's surround.vim in evil, the extensible vim emulation layer for emacs"
-       :type github
-       :pkgname "emacs-evil/evil-surround"
-       :depends evil)

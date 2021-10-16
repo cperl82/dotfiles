@@ -1,5 +1,0 @@
-(:name evil-smartparens
-       :description "Evil smartparens is a minor mode which makes evil play nice with smartparens."
-       :type github
-       :pkgname "expez/evil-smartparens"
-       :depends smartparens)

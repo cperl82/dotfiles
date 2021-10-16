@@ -1,5 +1,0 @@
-(:name evil-collection
-       :description "A set of keybindings for evil-mode"
-       :type github
-       :pkgname "emacs-evil/evil-collection"
-       :depends (evil annalist))
