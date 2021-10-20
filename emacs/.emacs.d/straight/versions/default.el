@@ -43,7 +43,7 @@
  ("nasm-mode" . "65ca6546fc395711fac5b3b4299e76c2303d43a8")
  ("ob-async" . "9aac486073f5c356ada20e716571be33a350a982")
  ("org" . "ad224f5b8e5a124f57b3dc70c176c79ee2e8bcde")
- ("org-mode" . "652430128896e690dc6ef2a83891a1209094b3da")
+ ("org-mode" . "73875939a8b5545ac53a86ec467239f510d14de8")
  ("org-ql" . "31aeb0a2505acf8044c07824888ddec7f3e529c1")
  ("org-super-agenda" . "fb5e2ef277bc811a3b061106c99e4c47b6b86f80")
  ("origami.el" . "e558710a975e8511b9386edc81cd6bdd0a5bda74")
