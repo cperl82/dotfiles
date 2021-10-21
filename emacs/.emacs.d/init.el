@@ -1578,8 +1578,10 @@ controlled by `include'."
 
 (defun cp/org-dont-underline-leading-spaces-in-multiline-links ()
   "Remove underlining at indents."
-  (font-lock-add-keywords 'org-mode
-                          '((cp/org-search-underlined-leading-spaces-in-multiline-links 0 'cp/org-dont-underline-leading-spaces-in-multiline-links t)) 'append))
+  (font-lock-add-keywords
+   'org-mode
+   '((cp/org-search-underlined-leading-spaces-in-multiline-links 0 'cp/org-dont-underline-leading-spaces-in-multiline-links t))
+   'append))
 
 (use-package org
   :defer t
