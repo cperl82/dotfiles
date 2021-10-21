@@ -1562,23 +1562,24 @@ controlled by `include'."
   t)
 
 ;; Taken from https://emacs.stackexchange.com/questions/28782/avoiding-underlined-spaces-between-two-lines
-(defface org-dont-underline-indents '((t :underline nil))
+;; and modified slightly
+(defface cp/org-dont-underline-leading-spaces-in-multiline-links '((t :underline nil))
   "Avoid underlining of indentation.")
 
-(defun org-search-underlined-indents (limit)
-  "Match function for `org-dont-underline-indents'."
+(defun cp/org-search-underlined-leading-spaces-in-multiline-links (limit)
+  "Match function for `cp/org-dont-underline-leading-spaces-in-multiline-links'."
   (let (ret face)
     (while
         (and
          (setq ret (re-search-forward "^[[:space:]]+" limit t))
          (or (null (setq face (plist-get (text-properties-at (match-beginning 0)) 'face)))
-             (eq face 'org-dont-underline-indents))))
+             (not (eq face 'org-link)))))
     ret))
 
-(defun org-dont-underline-indents ()
+(defun cp/org-dont-underline-leading-spaces-in-multiline-links ()
   "Remove underlining at indents."
-  (add-to-list 'org-font-lock-extra-keywords
-               '(org-search-underlined-indents 0 'org-dont-underline-indents t) 'append))
+  (font-lock-add-keywords 'org-mode
+                          '((cp/org-search-underlined-leading-spaces-in-multiline-links 0 'cp/org-dont-underline-leading-spaces-in-multiline-links t)) 'append))
 
 (use-package org
   :defer t
@@ -1710,7 +1711,8 @@ controlled by `include'."
     (setq org-cycle-include-plain-lists 'integrate)
     (setq org-hide-leading-stars t)
     (setq org-link-make-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
-    (run-with-idle-timer 30 t (lambda () (let ((inhibit-message t)) (org-save-all-org-buffers))))
+    (run-with-idle-timer 30 t
+                         (lambda () (let ((inhibit-message t)) (org-save-all-org-buffers))))
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
     (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
     (org-babel-do-load-languages
@@ -1721,6 +1723,7 @@ controlled by `include'."
        (sed    . true)
        (R      . true)
        (calc   . true)))
+    (cp/org-dont-underline-leading-spaces-in-multiline-links)
     (add-hook
      'org-mode-hook
      (lambda ()
@@ -1731,9 +1734,9 @@ controlled by `include'."
          (define-and-bind-text-object "~" "\\~" "\\~")
          (define-and-bind-text-object "*" "\\*" "\\*")
          (define-and-bind-text-object "=" "\\=" "\\=")
-         (add-hook 'write-contents-functions (lambda () (save-excursion (delete-trailing-whitespace)))))))
+         (add-hook 'write-contents-functions
+                   (lambda () (save-excursion (delete-trailing-whitespace)))))))
     (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))
-    ; (add-hook 'org-font-lock-set-keywords-hook #'org-dont-underline-indents 'append)
     (remove-hook 'org-mode-hook 'org-eldoc-load)))
 
 
