@@ -13,6 +13,8 @@
 (setq gc-cons-threshold (* 100 1000 1000))
 
 ;; straight
+(setq straight-cache-autoloads t
+      straight-check-for-modifications nil)
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
