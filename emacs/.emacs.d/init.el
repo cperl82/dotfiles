@@ -70,6 +70,7 @@
         rust-mode
         s
         smartparens
+        smart-mode-line
         smex
         swiper
         systemd-mode
@@ -157,24 +158,6 @@
                     result))
               (cdr cache-entry))))))
      ,name))
-
-(setq-default mode-line-format
-              `("%e"
-                mode-line-front-space
-                mode-line-mule-info
-                mode-line-client
-                mode-line-modified
-                mode-line-remote
-                mode-line-frame-identification
-                mode-line-buffer-identification
-                " "
-                (:eval (cp/format-default-dir-for-mode-line default-directory 40))
-                " "
-                (:eval evil-mode-line-tag)
-                " "
-                mode-line-position
-                mode-line-modes
-                mode-line-end-spaces))
 
 (defun cp/revert-buffer-all ()
   "Revert all buffers.  This reverts buffers that are visiting a file, kills
@@ -1035,6 +1018,14 @@ dired-x"
        '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
       (sp-local-pair
        '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil)))
+
+
+
+;; smart-mode-line
+(use-package smart-mode-line
+    :config
+    (progn
+      (sml/setup)))
 
 
 
