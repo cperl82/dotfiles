@@ -121,26 +121,6 @@
 (if (fboundp 'tool-bar-mode)   (tool-bar-mode   -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-(defun cp/format-default-dir-for-mode-line (d max-length)
-  (let* ((reduced
-          (if (string-match (format "^%s" (getenv "HOME")) d) (replace-match "~" t t d) d))
-         (reduced (replace-regexp-in-string "/$" "" reduced)))
-    (if (> (length reduced) max-length)
-        (let* ((n 0)
-               (further-reduced nil)
-               (pieces
-                (reverse (remove-if (lambda (s) (equal "" s)) (split-string reduced "/"))))
-               (len (length pieces)))
-          (catch 'done
-            (while (< n len)
-              (setq further-reduced
-                    (if further-reduced
-                        (format "%s/%s" (nth n pieces) further-reduced)
-                      (nth n pieces)))
-              (when (> (length further-reduced) max-length) (throw 'done further-reduced))
-              (setq n (1+ n)))))
-      reduced)))
-
 (defmacro cp/make-symbol-caching-version-of (name f timeout)
   `(progn
      (fset
