@@ -1216,7 +1216,12 @@ dired-x"
           (if width
               (let* ((number (cp/escreen-propertize-screen-number n))
                      (fmt (format "%s %%-%ds (%%d buffers)" number width))
-                     (n-buffers (->> screen-data (nth 3) (--map (nth 0 it)) (--map (nth 1 it)) (length))))
+                     (n-buffers
+                      (->> screen-data
+                           (nth 3)
+                           (--map (nth 0 it))
+                           (--map (nth 1 it))
+                           (length))))
                 (format fmt name n-buffers))
             (format "%d:%s" n name))))
     `(,s . ,n)))
