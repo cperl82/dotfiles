@@ -99,7 +99,7 @@
 (setq ad-redefinition-action    'accept
       c-default-style           "linux"
       column-number-mode        t
-      confirm-kill-emacs        'y-or-n-p
+      confirm-kill-emacs        'yes-or-no-p
       create-lockfiles          nil
       enable-recursive-minibuffers t
       inhibit-startup-message   t
@@ -107,6 +107,9 @@
       make-backup-files         nil
       split-height-threshold    nil
       window-combination-resize t)
+
+;; 2021-10-22 Always use the short form
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; 2015-09-11 Enable narrowing command which are disabled by default
 (put 'narrow-to-region 'disabled nil)
