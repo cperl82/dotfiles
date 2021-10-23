@@ -1149,15 +1149,17 @@ dired-x"
               (let ((number (car screen))
                     (name   (cdr screen)))
                 (format "%s %s" (cp/escreen-propertize-screen-number number) name))))))
-         (horizontal-string (s-join "  " display-elements))
+         (h (apply-partially #'s-join "  "))
+         (v (apply-partially #'s-join "\n"))
          (string
           (cond
-            ((eq how 'horizontal) horizontal-string)
-            ((eq how 'vertical) (s-join "\n" display-elements))
+            ((eq how 'horizontal) (funcall h display-elements))
+            ((eq how 'vertical) (funcall v display-elements))
             (t
-             (if (< (length horizontal-string) (frame-width))
-                 horizontal-string
-               (s-join "\n" display-elements))))))
+             (let ((horizontal (funcall h display-elements)))
+               (if (< (length horizontal) (frame-width))
+                   horizontal
+                 (funcall v display-elements)))))))
     (message "%s" string))
   nil)
 
