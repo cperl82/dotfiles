@@ -1269,11 +1269,15 @@ dired-x"
    "r"   #'cp/escreen-rename-screen
    "s"   #'cp/escreen-switch-to-screen-with-ivy-completion
    "C"   #'cp/escreen-compress
+   "x"   #'escreen-kill-screen
    "H"   #'cp/escreen-move-screen-left
    "L"   #'cp/escreen-move-screen-right
-   "k"   #'escreen-kill-screen
+   "h"   #'escreen-goto-prev-screen
    "l"   #'escreen-goto-next-screen
-   "h"   #'escreen-goto-prev-screen)
+   "K"   #'cp/escreen-move-screen-left
+   "J"   #'cp/escreen-move-screen-right
+   "k"   #'escreen-goto-prev-screen
+   "j"   #'escreen-goto-next-screen)
   :config
   (progn
     (setq escreen-max-screens 20)
