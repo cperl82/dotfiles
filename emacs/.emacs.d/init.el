@@ -950,13 +950,13 @@ dired-x"
     (setq evil-mode-line-format '(after . mode-line-position))
     (zenburn-with-color-variables
       (setq
-       evil-normal-state-tag               " NO"
-       evil-insert-state-tag   (propertize " IN" 'face `(:foreground ,zenburn-red))
-       evil-visual-state-tag   (propertize " VI" 'face `(:foreground ,zenburn-yellow))
-       evil-replace-state-tag  (propertize " RE" 'face `(:foreground ,zenburn-orange))
-       evil-motion-state-tag   (propertize " MO" 'face `(:foreground ,zenburn-cyan))
-       evil-operator-state-tag (propertize " OP" 'face `(:foreground ,zenburn-blue))
-       evil-emacs-state-tag    (propertize " EM" 'face `(:foreground ,zenburn-magenta))))))
+       evil-normal-state-tag               " N"
+       evil-insert-state-tag   (propertize " I" 'face `(:foreground ,zenburn-red))
+       evil-visual-state-tag   (propertize " V" 'face `(:foreground ,zenburn-yellow))
+       evil-replace-state-tag  (propertize " R" 'face `(:foreground ,zenburn-orange))
+       evil-motion-state-tag   (propertize " M" 'face `(:foreground ,zenburn-cyan))
+       evil-operator-state-tag (propertize " O" 'face `(:foreground ,zenburn-blue))
+       evil-emacs-state-tag    (propertize " E" 'face `(:foreground ,zenburn-magenta))))))
 
 
 
