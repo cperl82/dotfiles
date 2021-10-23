@@ -976,18 +976,18 @@ dired-x"
     (evil-mode 1)
     (evil-select-search-module 'evil-search-module 'isearch)
     (setq evil-flash-delay 5)
-    (setq evil-mode-line-format nil)
     (setq evil-move-beyond-eol t)
     (setq evil-symbol-word-search t)
+    (setq evil-mode-line-format '(after . mode-line-position))
     (zenburn-with-color-variables
       (setq
-       evil-normal-state-tag               "NORMAL "
-       evil-insert-state-tag   (propertize "INSERT " 'face `(:foreground ,zenburn-red))
-       evil-visual-state-tag   (propertize "VISUAL " 'face `(:foreground ,zenburn-yellow))
-       evil-replace-state-tag  (propertize "REPLACE" 'face `(:foreground ,zenburn-orange))
-       evil-motion-state-tag   (propertize "MOTION " 'face `(:foreground ,zenburn-cyan))
-       evil-operator-state-tag (propertize "OPERATR" 'face `(:foreground ,zenburn-blue))
-       evil-emacs-state-tag    (propertize "EMACS  " 'face `(:foreground ,zenburn-magenta))))))
+       evil-normal-state-tag               " N"
+       evil-insert-state-tag   (propertize " I" 'face `(:foreground ,zenburn-red))
+       evil-visual-state-tag   (propertize " V" 'face `(:foreground ,zenburn-yellow))
+       evil-replace-state-tag  (propertize " R" 'face `(:foreground ,zenburn-orange))
+       evil-motion-state-tag   (propertize " M" 'face `(:foreground ,zenburn-cyan))
+       evil-operator-state-tag (propertize " O" 'face `(:foreground ,zenburn-blue))
+       evil-emacs-state-tag    (propertize " E" 'face `(:foreground ,zenburn-magenta))))))
 
 
 
@@ -1023,6 +1023,7 @@ dired-x"
 
 ;; smart-mode-line
 (use-package smart-mode-line
+    :after (evil)
     :config
     (progn
       (sml/setup)))
