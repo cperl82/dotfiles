@@ -1113,7 +1113,7 @@ dired-x"
           ((> other-screen-number escreen-highest-screen-number-used)
            (let ((other-screen-number (- other-screen-number (1+ escreen-highest-screen-number-used))))
              (cp/escreen-swap-screen screen-to-move other-screen-number)))))
-  (cp/escreen-get-active-screen-names-with-emphasis-vertical))
+  (cp/escreen-show-active-screens-auto))
 
 (defun cp/escreen-move-screen-left (&optional screen-number n)
   (interactive)
@@ -1125,46 +1125,53 @@ dired-x"
 
 (defun cp/escreen-rename-screen (&optional name number suppress-message)
   (interactive "sNew screen name: ")
-  (let ((screen-data (escreen-configuration-escreen (or number escreen-current-screen-number)))
+  (let ((screen-data
+         (escreen-configuration-escreen (or number escreen-current-screen-number)))
         (new-name (cond ((equal name "") nil)
                         ((stringp name) name)
                         (t "default"))))
     (setcar (cdr screen-data) new-name)
     (when (not suppress-message)
-      (cp/escreen-get-active-screen-names-with-emphasis-vertical))))
+      (cp/escreen-show-active-screens-auto))))
 
 (defun cp/escreen-propertize-screen-number (number)
   (let ((star (propertize "*" 'face 'font-lock-string-face)))
     (cond ((eq escreen-current-screen-number number) (format "%d%s" number star))
           (t (format "%d-" number)))))
 
-(defun cp/escreen-get-active-screen-names-with-emphasis ()
-  (interactive)
-  (let ((output))
-    (dolist (n (escreen-get-active-screen-numbers))
-      (let* ((data (escreen-configuration-escreen n))
-             (screen-name (nth 1 data))
-             )
-        (setq output
-              (format "%s%s %s"
-                      (if output (concat output "  ") "")
-                      (cp/escreen-propertize-screen-number n)
-              screen-name)))
-      (message "%s" output))))
-
-(defun cp/escreen-get-active-screen-names-with-emphasis-vertical ()
-  (interactive)
-  (->>
-   (cp/escreen-configuration-screen-numbers-and-names)
-   (-sort (lambda (s1 s2) (< (car s1) (car s2))))
-   (-map
-    (lambda (screen)
-      (let ((number (car screen))
-            (name   (cdr screen)))
-        (format "%s %s" (cp/escreen-propertize-screen-number number) name))))
-   (s-join "\n")
-   (message "%s"))
+(defun cp/escreen-show-active-screens (how)
+  (let* ((display-elements
+          (->>
+           (cp/escreen-configuration-screen-numbers-and-names)
+           (-sort (lambda (s1 s2) (< (car s1) (car s2))))
+           (-map
+            (lambda (screen)
+              (let ((number (car screen))
+                    (name   (cdr screen)))
+                (format "%s %s" (cp/escreen-propertize-screen-number number) name))))))
+         (horizontal-string (s-join "  " display-elements))
+         (string
+          (cond
+            ((eq how 'horizontal) horizontal-string)
+            ((eq how 'vertical) (s-join "\n" display-elements))
+            (t
+             (if (< (length horizontal-string) (frame-width))
+                 horizontal-string
+               (s-join "\n" display-elements))))))
+    (message "%s" string))
   nil)
+
+(defun cp/escreen-show-active-screens-horizontal ()
+  (interactive)
+  (cp/escreen-show-active-screens 'horizontal))
+
+(defun cp/escreen-show-active-screens-vertical ()
+  (interactive)
+  (cp/escreen-show-active-screens 'vertical))
+
+(defun cp/escreen-show-active-screens-auto ()
+  (interactive)
+  (cp/escreen-show-active-screens t))
 
 (defun cp/escreen-configuration-screen-numbers-and-names ()
   (-map
@@ -1197,7 +1204,7 @@ dired-x"
 
 (defun cp/escreen-ivy-action (selected)
   (escreen-goto-screen (cdr selected))
-  (cp/escreen-get-active-screen-names-with-emphasis-vertical))
+  (cp/escreen-show-active-screens-auto))
 
 (defun cp/escreen-switch-to-screen-with-ivy-completion ()
   (interactive)
@@ -1208,7 +1215,7 @@ dired-x"
           (ivy-read prompt collection
                     :require-match t
                     :action #'cp/escreen-ivy-action))
-      (cp/escreen-get-active-screen-names-with-emphasis-vertical))))
+      (cp/escreen-show-active-screens-auto))))
 
 (defun cp/escreen-compress ()
   "Compress all screen numbers to remove gaps"
@@ -1220,17 +1227,17 @@ dired-x"
         (progn
           (message "cp/escreen-compress shifting screen %d left by %d" screen-number shift)
           (cp/escreen-move-screen-left screen-number shift)))))
-  (cp/escreen-get-active-screen-names-with-emphasis-vertical))
+  (cp/escreen-show-active-screens-auto))
 
 (defun cp/advice/escreen-goto-screen (n &optional dont-update-current)
-  (cp/escreen-get-active-screen-names-with-emphasis-vertical))
+  (cp/escreen-show-active-screens-auto))
 
 (defun cp/advice/escreen-kill-screen (&optional n)
-  (cp/escreen-get-active-screen-names-with-emphasis-vertical))
+  (cp/escreen-show-active-screens-auto))
 
 (defun cp/advice/escreen-create-screen (&optional n)
   (cp/escreen-rename-screen)
-  (cp/escreen-get-active-screen-names-with-emphasis-vertical))
+  (cp/escreen-show-active-screens-auto))
 
 (defun cp/advice/escreen-install ()
   (cp/escreen-rename-screen nil nil t))
@@ -1254,9 +1261,9 @@ dired-x"
    "C-b" nil
    "n"   nil
    "t"   #'escreen-goto-last-screen
-   "e"   #'cp/escreen-get-active-screen-names-with-emphasis-vertical
-   "v"   #'cp/escreen-get-active-screen-names-with-emphasis-vertical
-   "f"   #'cp/escreen-get-active-screen-names-with-emphasis
+   "e"   #'cp/escreen-show-active-screens-auto
+   "v"   #'cp/escreen-show-active-screens-vertical
+   "f"   #'cp/escreen-show-active-screens-horizontal
    "r"   #'cp/escreen-rename-screen
    "s"   #'cp/escreen-switch-to-screen-with-ivy-completion
    "C"   #'cp/escreen-compress
