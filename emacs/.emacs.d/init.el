@@ -951,8 +951,6 @@ dired-x"
    "w k" #'evil-window-up
    "w l" #'evil-window-right)
   (:keymaps '(visual)
-   "/"   #'cp/evil-search-forward
-   "?"   #'cp/evil-search-backward
    "TAB" #'indent-region)
   :init
   (progn
@@ -961,18 +959,6 @@ dired-x"
     (setq evil-want-C-i-jump nil))
   :config
   (progn
-    (evil-define-operator cp/evil-search (beg end forward)
-      (let* ((search-string (buffer-substring-no-properties beg end))
-             (quoted-string (regexp-quote search-string)))
-        (setq isearch-forward forward)
-        (evil-search quoted-string forward t)))
-
-    (evil-define-operator cp/evil-search-forward (beg end type)
-      (cp/evil-search beg end t))
-
-    (evil-define-operator cp/evil-search-backward (beg end type)
-      (cp/evil-search beg end nil))
-
     (evil-mode 1)
     (evil-select-search-module 'evil-search-module 'isearch)
     (setq evil-flash-delay 5)
