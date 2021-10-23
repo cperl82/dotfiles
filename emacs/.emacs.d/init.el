@@ -1139,6 +1139,31 @@ dired-x"
     (cond ((eq escreen-current-screen-number number) (format "%d%s" number star))
           (t (format "%d-" number)))))
 
+(defvar cp/escreen-show-active-screens-fun nil)
+
+(defun cp/escreen-set-show-active-screens-fun (how)
+  (let ((val
+         (cond
+           ((eq how 'horizontal) #'cp/escreen-show-active-screens-horizontal)
+           ((eq how 'vertical) #'cp/escreen-show-active-screens-vertical)
+           (t nil))))
+    (setq cp/escreen-show-active-screens-fun val)))
+
+(defun cp/escreen-set-show-active-screens-fun-horizontal ()
+  (interactive)
+  (message "Setting escreen to always display horizontal")
+  (cp/escreen-set-show-active-screens-fun 'horizontal))
+
+(defun cp/escreen-set-show-active-screens-fun-vertical ()
+  (interactive)
+  (message "Setting escreen to always display vertical")
+  (cp/escreen-set-show-active-screens-fun 'vertical))
+
+(defun cp/escreen-set-show-active-screens-fun-auto ()
+  (interactive)
+  (message "Setting escreen to pick horizontal/vertical automatically")
+  (cp/escreen-set-show-active-screens-fun t))
+
 (defun cp/escreen-show-active-screens (how)
   (let* ((display-elements
           (->>
@@ -1173,7 +1198,9 @@ dired-x"
 
 (defun cp/escreen-show-active-screens-auto ()
   (interactive)
-  (cp/escreen-show-active-screens t))
+  (if cp/escreen-show-active-screens-fun
+      (funcall cp/escreen-show-active-screens-fun)
+    (cp/escreen-show-active-screens t)))
 
 (defun cp/escreen-configuration-screen-numbers-and-names ()
   (-map
@@ -1266,6 +1293,9 @@ dired-x"
    "e"   #'cp/escreen-show-active-screens-auto
    "v"   #'cp/escreen-show-active-screens-vertical
    "f"   #'cp/escreen-show-active-screens-horizontal
+   "V"   #'cp/escreen-set-show-active-screens-fun-vertical
+   "F"   #'cp/escreen-set-show-active-screens-fun-horizontal
+   "A"   #'cp/escreen-set-show-active-screens-fun-auto
    "r"   #'cp/escreen-rename-screen
    "s"   #'cp/escreen-switch-to-screen-with-ivy-completion
    "C"   #'cp/escreen-compress
