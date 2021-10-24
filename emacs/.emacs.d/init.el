@@ -1165,26 +1165,31 @@ dired-x"
   (cp/escreen-set-show-active-screens-fun-gen t))
 
 (defun cp/escreen-show-active-screens-gen (how)
-  (let* ((display-elements
-          (->>
-           (cp/escreen-configuration-screen-numbers-and-names)
-           (-sort (lambda (s1 s2) (< (car s1) (car s2))))
-           (-map
-            (lambda (screen)
-              (let ((number (car screen))
-                    (name   (cdr screen)))
-                (format "%s %s" (cp/escreen-propertize-screen-number number) name))))))
-         (h (apply-partially #'s-join "  "))
-         (v (apply-partially #'s-join "\n"))
+  (let* ((format-screens
+          (lambda (format-str join-str)
+            (->>
+             (cp/escreen-configuration-screen-numbers-and-names)
+             (-sort (lambda (s1 s2) (< (car s1) (car s2))))
+             (-map
+              (lambda (screen)
+                (let ((number (car screen))
+                      (name   (cdr screen)))
+                  (format format-str (cp/escreen-propertize-screen-number number) name))))
+             (s-join join-str))))
+         (h-args '("%s %s" "  "))
+         (v-args
+          (if (< (length escreen-configuration-alist) 10)
+              '("%2s %s" "\n")
+              '("%3s %s" "\n")))
          (string
           (cond
-            ((eq how 'horizontal) (funcall h display-elements))
-            ((eq how 'vertical) (funcall v display-elements))
+            ((eq how 'horizontal) (apply format-screens h-args))
+            ((eq how 'vertical) (apply format-screens v-args))
             (t
-             (let ((horizontal (funcall h display-elements)))
+             (let ((horizontal (apply format-screens h-args)))
                (if (< (length horizontal) (frame-width))
                    horizontal
-                 (funcall v display-elements)))))))
+                 (apply format-screens v-args)))))))
     (message "%s" string))
   nil)
 
