@@ -1113,7 +1113,7 @@ dired-x"
           ((> other-screen-number escreen-highest-screen-number-used)
            (let ((other-screen-number (- other-screen-number (1+ escreen-highest-screen-number-used))))
              (cp/escreen-swap-screen screen-to-move other-screen-number)))))
-  (cp/escreen-show-active-screens-auto))
+  (cp/escreen-show-active-screens))
 
 (defun cp/escreen-move-screen-left (&optional screen-number n)
   (interactive)
@@ -1132,39 +1132,39 @@ dired-x"
                         (t "default"))))
     (setcar (cdr screen-data) new-name)
     (when (not suppress-message)
-      (cp/escreen-show-active-screens-auto))))
+      (cp/escreen-show-active-screens))))
 
 (defun cp/escreen-propertize-screen-number (number)
   (let ((star (propertize "*" 'face 'font-lock-string-face)))
     (cond ((eq escreen-current-screen-number number) (format "%d%s" number star))
           (t (format "%d-" number)))))
 
-(defvar cp/escreen-show-active-screens-fun nil)
+(defvar cp/escreen-show-active-screens-fun #'cp/escreen-show-active-screens-auto)
 
-(defun cp/escreen-set-show-active-screens-fun (how)
+(defun cp/escreen-set-show-active-screens-fun-gen (how)
   (let ((val
          (cond
            ((eq how 'horizontal) #'cp/escreen-show-active-screens-horizontal)
            ((eq how 'vertical) #'cp/escreen-show-active-screens-vertical)
-           (t nil))))
+           (t #'cp/escreen-show-active-screens-auto))))
     (setq cp/escreen-show-active-screens-fun val)))
 
 (defun cp/escreen-set-show-active-screens-fun-horizontal ()
   (interactive)
   (message "Setting escreen to always display horizontal")
-  (cp/escreen-set-show-active-screens-fun 'horizontal))
+  (cp/escreen-set-show-active-screens-fun-gen 'horizontal))
 
 (defun cp/escreen-set-show-active-screens-fun-vertical ()
   (interactive)
   (message "Setting escreen to always display vertical")
-  (cp/escreen-set-show-active-screens-fun 'vertical))
+  (cp/escreen-set-show-active-screens-fun-gen 'vertical))
 
 (defun cp/escreen-set-show-active-screens-fun-auto ()
   (interactive)
   (message "Setting escreen to pick horizontal/vertical automatically")
-  (cp/escreen-set-show-active-screens-fun t))
+  (cp/escreen-set-show-active-screens-fun-gen t))
 
-(defun cp/escreen-show-active-screens (how)
+(defun cp/escreen-show-active-screens-gen (how)
   (let* ((display-elements
           (->>
            (cp/escreen-configuration-screen-numbers-and-names)
@@ -1190,17 +1190,19 @@ dired-x"
 
 (defun cp/escreen-show-active-screens-horizontal ()
   (interactive)
-  (cp/escreen-show-active-screens 'horizontal))
+  (cp/escreen-show-active-screens-gen 'horizontal))
 
 (defun cp/escreen-show-active-screens-vertical ()
   (interactive)
-  (cp/escreen-show-active-screens 'vertical))
+  (cp/escreen-show-active-screens-gen 'vertical))
 
 (defun cp/escreen-show-active-screens-auto ()
   (interactive)
-  (if cp/escreen-show-active-screens-fun
-      (funcall cp/escreen-show-active-screens-fun)
-    (cp/escreen-show-active-screens t)))
+  (cp/escreen-show-active-screens-gen t))
+
+(defun cp/escreen-show-active-screens ()
+  (interactive)
+  (funcall cp/escreen-show-active-screens-fun))
 
 (defun cp/escreen-configuration-screen-numbers-and-names ()
   (-map
@@ -1238,7 +1240,7 @@ dired-x"
 
 (defun cp/escreen-ivy-action (selected)
   (escreen-goto-screen (cdr selected))
-  (cp/escreen-show-active-screens-auto))
+  (cp/escreen-show-active-screens))
 
 (defun cp/escreen-switch-to-screen-with-ivy-completion ()
   (interactive)
@@ -1249,7 +1251,7 @@ dired-x"
           (ivy-read prompt collection
                     :require-match t
                     :action #'cp/escreen-ivy-action))
-      (cp/escreen-show-active-screens-auto))))
+      (cp/escreen-show-active-screens))))
 
 (defun cp/escreen-compress ()
   "Compress all screen numbers to remove gaps"
@@ -1261,17 +1263,17 @@ dired-x"
         (progn
           (message "cp/escreen-compress shifting screen %d left by %d" screen-number shift)
           (cp/escreen-move-screen-left screen-number shift)))))
-  (cp/escreen-show-active-screens-auto))
+  (cp/escreen-show-active-screens))
 
 (defun cp/advice/escreen-goto-screen (n &optional dont-update-current)
-  (cp/escreen-show-active-screens-auto))
+  (cp/escreen-show-active-screens))
 
 (defun cp/advice/escreen-kill-screen (&optional n)
-  (cp/escreen-show-active-screens-auto))
+  (cp/escreen-show-active-screens))
 
 (defun cp/advice/escreen-create-screen (&optional n)
   (cp/escreen-rename-screen)
-  (cp/escreen-show-active-screens-auto))
+  (cp/escreen-show-active-screens))
 
 (defun cp/advice/escreen-install ()
   (cp/escreen-rename-screen nil nil t))
@@ -1295,7 +1297,7 @@ dired-x"
    "C-b" nil
    "n"   nil
    "t"   #'escreen-goto-last-screen
-   "e"   #'cp/escreen-show-active-screens-auto
+   "e"   #'cp/escreen-show-active-screens
    "v"   #'cp/escreen-show-active-screens-vertical
    "f"   #'cp/escreen-show-active-screens-horizontal
    "V"   #'cp/escreen-set-show-active-screens-fun-vertical
