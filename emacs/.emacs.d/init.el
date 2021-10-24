@@ -1318,7 +1318,7 @@ dired-x"
    "l"   #'escreen-goto-next-screen)
   :config
   (progn
-    (setq escreen-max-screens 20)
+    (setq escreen-max-screens 30)
     (advice-add 'escreen-goto-screen   :after #'cp/advice/escreen-goto-screen)
     (advice-add 'escreen-kill-screen   :after #'cp/advice/escreen-kill-screen)
     (advice-add 'escreen-create-screen :after #'cp/advice/escreen-create-screen)
