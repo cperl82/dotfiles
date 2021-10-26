@@ -1177,10 +1177,7 @@ dired-x"
                   (format format-str (cp/escreen-propertize-screen-number number) name))))
              (s-join join-str))))
          (h-args '("%s %s" "  "))
-         (v-args
-          (if (<= (length escreen-configuration-alist) 10)
-              '("%2s %s" "\n")
-            '("%3s %s" "\n")))
+         (v-args `(,(if (<= (length escreen-configuration-alist) 10) "%2s %s" "%3s %s") "\n"))
          (string
           (cond
             ((eq how 'horizontal) (apply format-screens h-args))
