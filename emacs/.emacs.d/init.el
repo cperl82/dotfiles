@@ -1222,7 +1222,15 @@ dired-x"
          (s
           (if width
               (let* ((number (cp/escreen-propertize-screen-number n))
-                     (fmt (format "%s %%-%ds (%%d buffers)" number width))
+                     (fmt (format
+                           (concat
+                            (if (<= (length escreen-configuration-alist) 10) "%2s" "%3s")
+                            " "
+                            "%%-%ds"
+                            " "
+                            "(%%d buffers)")
+                           number
+                           width))
                      (n-buffers
                       (->> screen-data
                            (nth 3)
