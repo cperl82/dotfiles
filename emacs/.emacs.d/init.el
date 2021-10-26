@@ -947,7 +947,7 @@ dired-x"
     (setq evil-flash-delay 5)
     (setq evil-move-beyond-eol t)
     (setq evil-symbol-word-search t)
-    (setq evil-mode-line-format '(after . mode-line-mule-info))
+    (setq evil-mode-line-format '(before . mode-line-mule-info))
     (zenburn-with-color-variables
       (setq
        evil-normal-state-tag               " N"
