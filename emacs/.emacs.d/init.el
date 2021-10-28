@@ -1165,7 +1165,7 @@ dired-x"
   (message "Setting escreen to pick horizontal/vertical automatically")
   (cp/escreen-set-show-active-screens-fun-gen t))
 
-(defun cp/escreen-show-active-screens-gen (how)
+(defun cp/escreen-show-active-screens-gen (how &optional clear-delay)
   (let* ((format-screens
           (lambda (format-str join-str)
             (->>
@@ -1188,7 +1188,8 @@ dired-x"
                (if (< (length horizontal) (frame-width))
                    horizontal
                  (apply format-screens v-args)))))))
-    (message "%s" string))
+    (message "%s" string)
+    (run-with-timer (or clear-delay 2) nil (lambda () (message nil))))
   nil)
 
 (defun cp/escreen-show-active-screens-horizontal ()
