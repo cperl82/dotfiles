@@ -995,6 +995,7 @@ dired-x"
     :after (evil)
     :config
     (progn
+      (setq sml/show-file-name nil)
       (sml/setup)))
 
 
@@ -1764,10 +1765,6 @@ controlled by `include'."
 
 
 ;; projectile
-; 2016-04-25: Advice for the low level projectile functions that manage the cache so I can
-; track (roughly) when a project was cached and invalidate the cache if I determine there
-; is a good reason (e.g. ".hg/dirstate" is newer than the time the projects file were
-; cached). In addition, don't serialize to disk, only keep the cache in memory.
 (defvar cp/projectile-project-full-feature-name t)
 
 (defun cp/projectile-project-name (project-root)
@@ -1852,11 +1849,14 @@ controlled by `include'."
    "C-c p" '(:keymap projectile-command-map :which-key "projectile"))
   :config
   (progn
-    (setq projectile-enable-caching t)
-    (setq projectile-cache-file (concat temporary-file-directory "projectile.cache"))
-    (setq projectile-completion-system 'ivy)
-    (setq projectile-project-name-function #'cp/projectile-project-name)
-    (setq projectile-switch-project-action #'projectile-dired)
+    (setq projectile-enable-caching t
+          projectile-cache-file
+          (concat temporary-file-directory "projectile.cache")
+          projectile-known-projects-file
+          (concat temporary-file-directory "projectile-bookmarks.eld" )
+          projectile-completion-system 'ivy
+          projectile-project-name-function #'cp/projectile-project-name
+          projectile-switch-project-action #'projectile-dired)
     (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
     (projectile-mode)))
 
