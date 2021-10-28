@@ -1851,6 +1851,7 @@ controlled by `include'."
 
 (use-package projectile
   :defer t
+  :diminish projectile-mode
   :commands (projectile-project-p)
   :general
   (:keymaps '(override)
