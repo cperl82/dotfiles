@@ -1165,8 +1165,15 @@ dired-x"
   (message "Setting escreen to pick horizontal/vertical automatically")
   (cp/escreen-set-show-active-screens-fun-gen t))
 
-(defun cp/escreen-show-active-screens-gen (how &optional clear-delay)
-  (let* ((format-screens
+(defvar cp/escreen-show-active-screens-clear-timer nil)
+
+(defun cp/escreen-show-active-screens-gen (how &optional vertical-clear-delay)
+  (when cp/escreen-show-active-screens-clear-timer
+    (cancel-timer cp/escreen-show-active-screens-clear-timer))
+  (let* ((delayed-clear
+          (lambda ()
+            (run-with-timer (or vertical-clear-delay 2) nil (lambda () (message nil)))))
+         (format-screens
           (lambda (format-str join-str)
             (->>
              (cp/escreen-configuration-screen-numbers-and-names)
@@ -1178,18 +1185,23 @@ dired-x"
                   (format format-str (cp/escreen-propertize-screen-number number) name))))
              (s-join join-str))))
          (h-args '("%s %s" "  "))
-         (v-args `(,(if (<= (length escreen-configuration-alist) 10) "%2s %s" "%3s %s") "\n"))
+         (v-args
+          (list (if (<= (length escreen-configuration-alist) 10) "%2s %s" "%3s %s") "\n"))
          (string
           (cond
             ((eq how 'horizontal) (apply format-screens h-args))
-            ((eq how 'vertical) (apply format-screens v-args))
+            ((eq how 'vertical)
+             (progn
+               (setq cp/escreen-show-active-screens-clear-timer (apply delayed-clear ()))
+               (apply format-screens v-args)))
             (t
              (let ((horizontal (apply format-screens h-args)))
                (if (< (length horizontal) (frame-width))
                    horizontal
-                 (apply format-screens v-args)))))))
-    (message "%s" string)
-    (run-with-timer (or clear-delay 2) nil (lambda () (message nil))))
+                 (progn
+                   (setq cp/escreen-show-active-screens-clear-timer (apply delayed-clear ()))
+                   (apply format-screens v-args))))))))
+    (message "%s" string))
   nil)
 
 (defun cp/escreen-show-active-screens-horizontal ()
