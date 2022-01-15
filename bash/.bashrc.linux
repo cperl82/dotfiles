@@ -454,10 +454,6 @@ function ephemeral-port-netstat-ipv4-unique-by-type {
     ephemeral-port-netstat-ipv4 | awk "${awk}" | sort
 }
 
-function battery {
-    upower -e | egrep '/battery_BAT[0-9]$'| xargs -n1 -t upower -i
-}
-
 function _urxvt-set-font {
     local font="${1}"
 
