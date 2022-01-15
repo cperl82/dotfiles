@@ -996,7 +996,8 @@ dired-x"
     :after (evil)
     :config
     (progn
-      (setq sml/show-file-name nil)
+      (setq sml/show-file-name nil
+            sml/show-trailing-N t)
       (sml/setup)))
 
 
