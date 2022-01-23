@@ -480,9 +480,9 @@ function setup-misc {
     DOTFILES=$(dirname ${BASHFILES})
     export BASHFILES DOTFILES
 
-    path-append "${HOME}/bin"
-    path-append "${HOME}/.fzf/bin"
-    path-append "${HOME}/.local/bin"
+    path-prepend "${HOME}/.fzf/bin"
+    path-prepend "${HOME}/.local/bin"
+    path-prepend "${HOME}/bin"
 
     # Add ripgrep config file
     RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
