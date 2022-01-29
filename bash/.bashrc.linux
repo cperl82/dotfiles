@@ -590,6 +590,7 @@ function setup-op {
 	function op-ssh-key {
 	    local uuid
 	    local timeout
+	    local preview
 
 	    if [[ -n ${OP_SESSION_my} ]]
 	    then
@@ -607,10 +608,14 @@ function setup-op {
 		fi
 	    done
 
+	    preview="echo {} | awk '{print $1}' | xargs -r op get item | jq -r '.details | .notesPlain'"
 	    uuid=$(
-                op list items --tags "ssh-key"                                  \
-                    | jq -r '.[] | [.uuid, (.overview | .title)] | @tsv'        \
-                    | fzf -d '\t' --with-nth 2                                  \
+                op list items --tags "ssh-key"					\
+                    | jq -r '.[] | [.uuid, (.overview | .title)] | @tsv'	\
+                    | fzf -d '\t'						\
+			  --with-nth 2						\
+			  --preview-window down,1,border-horizontal		\
+			  --preview "${preview}"				\
                     | awk '{print $1}')
 
 	    if [[ -z "${uuid}" ]]
