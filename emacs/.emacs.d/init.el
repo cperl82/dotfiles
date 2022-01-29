@@ -1781,7 +1781,8 @@ controlled by `include'."
 
 (defun cp/projectile-project-name (project-root)
   (if (string-match "+share+" project-root)
-      (let ((feature-base (locate-dominating-file project-root "+share+")))
+      (let ((feature-base
+             (expand-file-name (locate-dominating-file project-root "+share+"))))
         (if cp/projectile-project-full-feature-name
             (let ((prefix
                    (thread-last (locate-dominating-file feature-base "+clone+")
@@ -1851,7 +1852,7 @@ controlled by `include'."
 (use-package projectile
   :defer t
   :diminish projectile-mode
-  :commands (projectile-project-p)
+  :commands (projectile-project-p projectile-project-name)
   :general
   (:keymaps '(override)
    :states  '(normal motion emacs)
