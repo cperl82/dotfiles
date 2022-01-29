@@ -584,10 +584,42 @@ function setup-misc {
     fi
 }
 
+function setup-op {
+    if command -v op > /dev/null
+    then
+	function op-ssh-key {
+
+	    if [[ -n ${OP_SESSION_my} ]]
+	    then
+		cmd="op --session ${OP_SESSION_my} signin my"
+	    else
+		cmd="op signin my"
+	    fi
+
+	    while true
+	    do
+		if output=$(${cmd})
+		then
+		    eval "${output}"
+		    break
+		fi
+	    done
+
+	    op list items --tags "ssh-key"				\
+		| jq -r '.[] | [.uuid, (.overview | .title)] | @tsv'	\
+		| fzf -d '\t' --with-nth 2				\
+		| awk '{print $1}'					\
+		| xargs op get document					\
+		| ssh-add -t 3600 -
+	}
+    fi
+}
+
 function main
 {
     setup-tty-aliases
     setup-misc
+    setup-op
 }
 
 main "${@}"
