@@ -588,6 +588,8 @@ function setup-op {
     if command -v op > /dev/null
     then
 	function op-ssh-key {
+	    local uuid
+	    local timeout
 
 	    if [[ -n ${OP_SESSION_my} ]]
 	    then
@@ -605,12 +607,27 @@ function setup-op {
 		fi
 	    done
 
-	    op list items --tags "ssh-key"				\
-		| jq -r '.[] | [.uuid, (.overview | .title)] | @tsv'	\
-		| fzf -d '\t' --with-nth 2				\
-		| awk '{print $1}'					\
-                | xargs op get document                                 \
-		| ssh-add -t 3600 -
+	    uuid=$(
+                op list items --tags "ssh-key"                                  \
+                    | jq -r '.[] | [.uuid, (.overview | .title)] | @tsv'        \
+                    | fzf -d '\t' --with-nth 2                                  \
+                    | awk '{print $1}')
+
+	    if [[ -z "${uuid}" ]]
+	    then
+		return
+	    fi
+
+	    timeout=$(
+                printf "%d\n%d\n%d\n" 3600 $((3600*2)) $((3600*6)) \
+                    | fzf --no-sort)
+
+	    if [[ -z "${timeout}" ]]
+	    then
+		return
+	    fi
+
+            op get document "${uuid}" | ssh-add -t "${timeout}" -
 	}
     fi
 }
