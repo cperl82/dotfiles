@@ -63,14 +63,14 @@
         markdown-mode
         nasm-mode
         ob-async
-        org-mode
+        org
         org-ql
         origami
         projectile
         rust-mode
         s
         smartparens
-        smart-mode-line
+        doom-modeline
         smex
         swiper
         systemd-mode
@@ -991,15 +991,12 @@ dired-x"
 
 
 
-;; smart-mode-line
-(use-package smart-mode-line
+;; doom-modeline
+(use-package doom-modeline
     :after (evil)
-    :config
+    :init
     (progn
-      (setq sml/show-file-name nil
-            sml/show-trailing-N t)
-      (sml/setup)))
-
+      (doom-modeline-mode 1)))
 
 
 ;; evil-surround
