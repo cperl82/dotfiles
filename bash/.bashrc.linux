@@ -609,7 +609,7 @@ function setup-op {
 		| jq -r '.[] | [.uuid, (.overview | .title)] | @tsv'	\
 		| fzf -d '\t' --with-nth 2				\
 		| awk '{print $1}'					\
-		| xargs op get document					\
+                | xargs op get document                                 \
 		| ssh-add -t 3600 -
 	}
     fi
