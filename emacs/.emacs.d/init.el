@@ -950,13 +950,13 @@ dired-x"
     (setq evil-mode-line-format '(before . mode-line-mule-info))
     (zenburn-with-color-variables
       (setq
-       evil-normal-state-tag               " N"
-       evil-insert-state-tag   (propertize " I" 'face `(:foreground ,zenburn-red))
-       evil-visual-state-tag   (propertize " V" 'face `(:foreground ,zenburn-yellow))
-       evil-replace-state-tag  (propertize " R" 'face `(:foreground ,zenburn-orange))
-       evil-motion-state-tag   (propertize " M" 'face `(:foreground ,zenburn-cyan))
-       evil-operator-state-tag (propertize " O" 'face `(:foreground ,zenburn-blue))
-       evil-emacs-state-tag    (propertize " E" 'face `(:foreground ,zenburn-magenta))))))
+       evil-normal-state-tag   " N"
+       evil-insert-state-tag   " I"
+       evil-visual-state-tag   " V"
+       evil-replace-state-tag  " R"
+       evil-motion-state-tag   " M"
+       evil-operator-state-tag " O"
+       evil-emacs-state-tag    " E"))))
 
 
 
@@ -996,7 +996,13 @@ dired-x"
     :after (evil)
     :init
     (progn
-      (doom-modeline-mode 1)))
+      (doom-modeline-mode 1)
+      (zenburn-with-color-variables
+        (set-face-attribute 'doom-modeline-evil-visual-state nil :foreground zenburn-yellow)
+        (set-face-attribute 'doom-modeline-evil-replace-state nil :foreground zenburn-orange)
+        (set-face-attribute 'doom-modeline-evil-motion-state nil :foreground zenburn-cyan)
+        (set-face-attribute 'doom-modeline-evil-operator-state nil :foreground zenburn-blue)
+        (set-face-attribute 'doom-modeline-evil-emacs-state nil :foreground zenburn-magenta))))
 
 
 ;; evil-surround
