@@ -592,7 +592,7 @@ function setup-op {
 	    local timeout
 	    local preview
 
-	    if [[ -n ${OP_SESSION_my} ]]
+	    if [[ -n "${OP_SESSION_my}" ]]
 	    then
 		cmd="op --session ${OP_SESSION_my} signin my"
 	    else
