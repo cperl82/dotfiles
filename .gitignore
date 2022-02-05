@@ -15,5 +15,6 @@ emacs/.emacs.d/tramp
 emacs/.emacs.d/transient/*
 fonts/.fonts/.uuid
 i3/.config/i3/config.local
+i3/.config/i3status/plugin.d/local-*
 stow.local
 X/.xrdb-themes/selected
