@@ -292,7 +292,7 @@ space)"
 
 ;; which-key
 (use-package which-key
-  :defer t
+  :defer 5
   :diminish which-key-mode
   :config
   (progn
