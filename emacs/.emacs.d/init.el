@@ -102,6 +102,7 @@
       confirm-kill-emacs        'yes-or-no-p
       create-lockfiles          nil
       enable-recursive-minibuffers t
+      indent-tabs-mode          nil
       inhibit-startup-message   t
       load-prefer-newer         t
       make-backup-files         nil
