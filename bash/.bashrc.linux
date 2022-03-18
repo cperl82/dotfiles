@@ -588,15 +588,15 @@ function setup-op {
     if command -v op > /dev/null
     then
 	function op-ssh-key {
-	    local uuid
+	    local id
 	    local timeout
 	    local preview
 
 	    if [[ -n "${OP_SESSION_my}" ]]
 	    then
-		cmd="op --session ${OP_SESSION_my} signin my"
+		cmd="op signin --session ${OP_SESSION_my} --account my.1password.com"
 	    else
-		cmd="op signin my"
+		cmd="op signin --account my.1password.com"
 	    fi
 
 	    while true
@@ -608,17 +608,18 @@ function setup-op {
 		fi
 	    done
 
-	    preview="echo {} | awk '{print $1}' | xargs -r op get item | jq -r '.details | .notesPlain'"
-	    uuid=$(
-                op list items --tags "ssh-key"					\
-                    | jq -r '.[] | [.uuid, (.overview | .title)] | @tsv'	\
-                    | fzf -d '\t'						\
-			  --with-nth 2						\
-			  --preview-window down,1,border-horizontal		\
-			  --preview "${preview}"				\
+	    preview="echo {} | cut -f1 | xargs -r -I%% op item get %% --fields notesPlain"
+	    id=$(
+                op item list --tags "ssh-key"				\
+		    | tail -n +2					\
+		    | awk '{printf("%s\t%s\n", $1, $2)}'		\
+                    | fzf -d '\t'					\
+			  --with-nth 2					\
+			  --preview-window down,1,border-horizontal	\
+			  --preview "${preview}"			\
                     | awk '{print $1}')
 
-	    if [[ -z "${uuid}" ]]
+	    if [[ -z "${id}" ]]
 	    then
 		return
 	    fi
@@ -632,7 +633,9 @@ function setup-op {
 		return
 	    fi
 
-            op get document "${uuid}" | ssh-add -t "${timeout}" -
+            op item get "${id}" --fields "private key"	\
+		| sed -e 's/^"//' -e 's/"$//'		\
+		| ssh-add -t "${timeout}" -
 	}
     fi
 }
