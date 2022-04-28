@@ -618,8 +618,6 @@ dired-x"
   (:keymaps '(dired-mode-map)
    :states  '(normal motion)
    "h"   #'dired-up-directory
-   "j"   #'dired-next-line
-   "k"   #'dired-previous-line
    "l"   #'dired-find-file
    "n"   #'evil-search-next
    "N"   #'evil-search-previous
@@ -629,10 +627,7 @@ dired-x"
    "M-K" #'dired-kill-subdir
    "M-n" #'dired-next-subdir
    "M-p" #'dired-prev-subdir
-   "q"   #'bury-buffer
    "TAB" #'cp/dired-tab-dwim
-   "o"   #'dired-find-file-other-window
-   "r"   #'revert-buffer
    "."   #'cp/dired-toggle-hiding-dotfiles
    "M-&" #'cp/dired-smart-async-shell-command
    ", f" #'cp/dired-smart-find-file)
