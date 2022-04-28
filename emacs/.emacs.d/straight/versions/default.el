@@ -44,7 +44,7 @@
  ("melpa" . "cca2c57104e14cb0c47e27d7fe4b437b38009a5c")
  ("nasm-mode" . "65ca6546fc395711fac5b3b4299e76c2303d43a8")
  ("ob-async" . "9aac486073f5c356ada20e716571be33a350a982")
- ("org" . "ac5742f296a75f9234191f5550c644b9a5bcbc35")
+ ("org" . "69c588947d1be9bca1eb8c773f2a8ff117d264ba")
  ("org-ql" . "31aeb0a2505acf8044c07824888ddec7f3e529c1")
  ("org-super-agenda" . "fb5e2ef277bc811a3b061106c99e4c47b6b86f80")
  ("origami.el" . "e558710a975e8511b9386edc81cd6bdd0a5bda74")
