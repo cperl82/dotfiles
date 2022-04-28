@@ -40,7 +40,7 @@
  ("lua-mode" . "5a9bee8d5fc978dc64fcb677167417010321ba65")
  ("magit" . "e99ef096043da3a671ec0d6ac5a62ab636daf9e4")
  ("map" . "7ef991a4e234195f125dc2b2ad4cad5a1d11a7d5")
- ("markdown-mode" . "862ae8addd29bf6affca1a35fd0176cb0c1392da")
+ ("markdown-mode" . "d2a3d5b8625a7c6be21f19f9146745cd5c791a6a")
  ("melpa" . "cca2c57104e14cb0c47e27d7fe4b437b38009a5c")
  ("nasm-mode" . "65ca6546fc395711fac5b3b4299e76c2303d43a8")
  ("ob-async" . "9aac486073f5c356ada20e716571be33a350a982")
