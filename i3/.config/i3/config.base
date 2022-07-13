@@ -134,17 +134,18 @@ bindsym $mod+r mode "resize"
 
 # 2020-11-19 cperl: taken from https://gist.github.com/pantuts/13623a7ba5e7e1c4ce44
 # Create Log out, Reboot, Poweroff bindings
-mode "(S)uspend, (L)ogout, (R)eboot, (P)oweroff" {
+mode "(S)uspend, (L)ogout, (R)eboot, (P)oweroff, (B)lank" {
      bindsym r exec --no-startup-id systemctl reboot
      bindsym s exec --no-startup-id systemctl suspend; mode "default"
      bindsym l exit
      bindsym p exec --no-startup-id systemctl poweroff
+     bindsym b exec --no-startup-id xset dpms force off; mode "default"
 
      # back to normal: Enter or Escape
      bindsym Return mode "default"
      bindsym Escape mode "default"
 }
-bindsym $mod+Shift+e mode "(S)uspend, (L)ogout, (R)eboot, (P)oweroff"
+bindsym $mod+Shift+e mode "(S)uspend, (L)ogout, (R)eboot, (P)oweroff, (B)lank"
 
 # 2016-12-11 cperl: Invoke i3-input to read user input for a window title, then use the
 # response from that to construct an i3 command for running xdotool to actually set the
