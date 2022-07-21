@@ -2,6 +2,9 @@
 (when (< emacs-major-version 27)
   (package-initialize))
 
+(when (> emacs-major-version 28)
+  (setq native-comp-async-report-warnings-errors nil))
+
 ;; 2020-10-22 emacs startup tweaks from https://blog.d46.us/advanced-emacs-startup/
 (add-hook 'emacs-startup-hook
           (lambda ()

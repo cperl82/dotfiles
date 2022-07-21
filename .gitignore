@@ -2,6 +2,7 @@ emacs/.emacs.d/auto-save-list/*
 emacs/.emacs.d/bookmarks
 emacs/.emacs.d/*.elc
 emacs/.emacs.d/el-get/*
+emacs/.emacs.d/eln-cache/*
 emacs/.emacs.d/elpa/*
 emacs/.emacs.d/.org-id-locations
 emacs/.emacs.d/projectile-bookmarks.eld
@@ -9,8 +10,8 @@ emacs/.emacs.d/projectile.cache
 emacs/.emacs.d/recentf
 emacs/.emacs.d/smex-items
 emacs/.emacs.d/straight/build
-emacs/.emacs.d/straight/repos
 emacs/.emacs.d/straight/build-cache.el
+emacs/.emacs.d/straight/repos
 emacs/.emacs.d/tramp
 emacs/.emacs.d/transient/*
 fonts/.fonts/.uuid
