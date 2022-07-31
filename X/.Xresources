@@ -1,7 +1,7 @@
 #include ".xrdb-themes/cperl.xrdb"
 
 ! xterm
-XTerm*font:            -xos4-terminus-medium-r-normal--12-*-*-*-*-*-*-*
+XTerm*font:            -xos4-terminus-medium-r-normal--12-*-*-*-*-*-iso10646-1
 XTerm.termName:        xterm-256color
 XTerm.vt100.scrollBar: false
 XTerm*on2Clicks:       regex [-_.[:alpha:][:digit:]]+
