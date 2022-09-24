@@ -9,11 +9,12 @@ function generate_workspace_to_output_mappings {
     # Order all monitors according to their left to right and top to
     # bottom order and then bind the first 10 workspaces to those
     # outputs in order.
-    monitors=( $(xrandr											\
-		     | grep -E '\bconnected\b'								\
-		     | sed -re 's/^([^ ]+).* [0-9]+x[0-9]+([+-][0-9]+)([+-][0-9]+) .*$/\2 \3 \1/'	\
-		     | sort -n -k 1,2									\
-		     | awk '{print $3}') )
+    mapfilt -t monitors <                                                                       \
+	    <( xrandr                                                                           \
+                   | grep -E '\bconnected\b'                                                    \
+                   | sed -re 's/^([^ ]+).* [0-9]+x[0-9]+([+-][0-9]+)([+-][0-9]+) .*$/\2 \3 \1/' \
+                   | sort -n -k 1,2                                                             \
+                   | awk '{print $3}' )
 
     for i in {1..10}
     do
