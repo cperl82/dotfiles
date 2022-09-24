@@ -62,20 +62,20 @@ function subcmd--find-window {
     local q
 
     function mangle_names {
-	# shellcheck disable=SC2016
+        # shellcheck disable=SC2016
         sed -e 's/ - Google Chrome$//' \
-	    -e 's/org.cryptomator.launcher.Cryptomator$MainApp/Cryptomator/'
+            -e 's/org.cryptomator.launcher.Cryptomator$MainApp/Cryptomator/'
     }
 
     tree=$(i3-msg -t get_tree)
     q=$(window-query)
 
-    jq -r "${q}" <<< "${tree}"					\
-	| mangle_names						\
-        | column -t -s$'\t'					\
-	| sort -k 2,3 -Vr					\
-        | fzf --with-nth=2.. --border				\
-        | awk '{print $1}'					\
+    jq -r "${q}" <<<"${tree}"                                   \
+        | mangle_names                                          \
+        | column -t -s$'\t'                                     \
+        | sort -k 2,3 -Vr                                       \
+        | fzf --with-nth=2.. --border                           \
+        | awk '{print $1}'                                      \
         | xargs -I{} i3-msg -t command "[con_id={}] focus"
 }
 
@@ -86,7 +86,7 @@ function subcmd--jump-to-workspace {
     tree=$(i3-msg -t get_tree)
     q=$(workspace-query)
 
-    jq -r "${q}" <<< "${tree}"                                  \
+    jq -r "${q}" <<<"${tree}"                                   \
         | fzf --with-nth=2.. --border                           \
         | awk '{print $1}'                                      \
         | xargs -I{} i3-msg -t command "[con_id={}] focus"
@@ -98,15 +98,15 @@ function main {
     local subcmd
 
     completions=$(
-	declare -F | awk '$2 ~ /^-f$/ {print $NF}' | sed -ne "s/^${subcmd_prefix}--//p")
+        declare -F | awk '$2 ~ /^-f$/ {print $NF}' | sed -ne "s/^${subcmd_prefix}--//p"
+    )
 
     function usage {
-	subcmds=$(echo "${completions}" | xargs | tr ' ' '|')
-	printf "%s %s\n" "${0}" "${subcmds}" 1>&2
+        subcmds=$(echo "${completions}" | xargs | tr ' ' '|')
+        printf "%s %s\n" "${0}" "${subcmds}" 1>&2
     }
 
-    while [[ ${#} -gt 0 ]]
-    do
+    while [[ ${#} -gt 0 ]]; do
         case "${1}" in
             -*)
                 usage
@@ -120,8 +120,7 @@ function main {
 
     mapfile -t subcmd < <(compgen -W "${completions}" -- "${1}" || true)
 
-    if [[ ${#subcmd[@]} -eq 1 ]]
-    then
+    if [[ ${#subcmd[@]} -eq 1 ]]; then
         shift
         "${subcmd_prefix}--${subcmd[0]}" "$@"
     else
