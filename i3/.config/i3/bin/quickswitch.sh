@@ -75,7 +75,7 @@ function subcmd--find-window {
     jq -r "${q}" <<<"${tree}"                                   \
         | mangle_names                                          \
         | column -t -s$'\t'                                     \
-        | sort -k 2,3 -Vr                                       \
+        | sort -k 2,2n -k 3,3Vr -k 4,4Vr                        \
         | fzf --with-nth=2.. --border                           \
         | awk '{print $1}'                                      \
         | xargs -I{} i3-msg -t command "[con_id={}] focus"
