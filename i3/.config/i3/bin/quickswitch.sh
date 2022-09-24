@@ -70,7 +70,7 @@ function subcmd--find-window {
 	| sort -k 2,3 -Vr					\
         | fzf --with-nth=2.. --border				\
         | awk '{print $1}'					\
-        | xargs -n1 -I{} i3-msg -t command "[con_id={}] focus"
+        | xargs -I{} i3-msg -t command "[con_id={}] focus"
 }
 
 function subcmd--jump-to-workspace {
@@ -83,7 +83,7 @@ function subcmd--jump-to-workspace {
     jq -r "${q}" <<< "${tree}"                                  \
         | fzf --with-nth=2.. --border                           \
         | awk '{print $1}'                                      \
-        | xargs -n1 -I{} i3-msg -t command "[con_id={}] focus"
+        | xargs -I{} i3-msg -t command "[con_id={}] focus"
 }
 
 function main {
