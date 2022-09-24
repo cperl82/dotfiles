@@ -62,8 +62,10 @@ function subcmd--find-window {
     local q
 
     function mangle_names {
+        # 1Password doesn't use an ASCII "-", they use the utf-8 8212 code point, EM DASH
         # shellcheck disable=SC2016
-        sed -e 's/ - Google Chrome$//' \
+        sed -e 's/ - Google Chrome$//'                                          \
+            -e 's/ \xe2\x80\x94 1Password$//'                                   \
             -e 's/org.cryptomator.launcher.Cryptomator$MainApp/Cryptomator/'
     }
 
