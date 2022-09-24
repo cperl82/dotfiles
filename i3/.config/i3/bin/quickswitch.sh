@@ -61,11 +61,17 @@ function subcmd--find-window {
     local tree
     local q
 
+    function mangle_names {
+	# shellcheck disable=SC2016
+        sed -e 's/ - Google Chrome$//' \
+	    -e 's/org.cryptomator.launcher.Cryptomator$MainApp/Cryptomator/'
+    }
+
     tree=$(i3-msg -t get_tree)
     q=$(window-query)
 
     jq -r "${q}" <<< "${tree}"					\
-        | sed -e 's/ - Google Chrome$//'			\
+	| mangle_names						\
         | column -t -s$'\t'					\
 	| sort -k 2,3 -Vr					\
         | fzf --with-nth=2.. --border				\
