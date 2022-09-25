@@ -114,7 +114,8 @@ function cl {
 # path-canonical-simple
 function path-canonical-simple {
     local dst="${1}"
-    local target=""
+    local d
+    local b
 
     if [[ -z "${dst}" ]]
     then
@@ -125,10 +126,11 @@ function path-canonical-simple {
     then
 	cd -- "${dst}" > /dev/null 2>&1 && pwd -P
     else
-	cd -- $(dirname -- "${dst}") > /dev/null 2>&1 &&	\
-	echo $(pwd -P)/$(basename "${dst}")
+	d=$(dirname -- "${dst}")
+	b=$(basename -- "${dst}")
+	cd -- "${d}" >/dev/null 2>&1 && echo "$(pwd -P)/${b}"
     fi
-    cd -- - >/dev/null 2>&1
+    cd -- - >/dev/null 2>&1 || return
 }
 
 # path-canonical
