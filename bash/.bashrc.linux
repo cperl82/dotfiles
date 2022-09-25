@@ -25,7 +25,7 @@ function _ps {
 
     [[ "${selector}"  -eq 0 ]] && args=("${args[@]}" "-e")
 
-    [[ "${show_comm}" -eq 1 ]] && post=$(printf "%s,comm:15" "${post}")
+    [[ "${show_comm}" -eq 1 ]] && post=$(printf "%s,comm:20" "${post}")
 
     cmd=$(
         printf "ps -o %s,%s,%s,%s,args %s"    \
