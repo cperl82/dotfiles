@@ -62,14 +62,14 @@ function path-append {
 }
 
 function tmpmkcd {
-    today=$(date '+%Y-%m-%d')
-    pathname="${HOME}/tmp/${today}"
-    if [[ ! -d "${pathname}" ]]
+    local p
+
+    p="${HOME}/tmp/$(date '+%Y-%m-%d')"
+    if [[ ! -d "${p}" ]]
     then
-	mkdir -p "${pathname}" && cd "${pathname}"
-    else
-	cd "${pathname}"
+	mkdir -p "${p}"
     fi
+    cd "${p}" || return
 }
 
 # xt - xterm title setter
