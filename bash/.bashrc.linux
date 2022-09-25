@@ -2,11 +2,13 @@
 
 function _ps {
     local pre="user:15,pid,ppid,tid,nlwp,class,rtprio:3=RTP,ni,pri"
-    local post="vsz:9,rss:9,psr,pcpu,stat,wchan:25,tty"
+    local post="vsz:9,rss:9,psr,pcpu,stat,tty"
 
     local show_comm="${1}"
     shift
     local timefmt="${1}"
+    shift
+    local additional_info="${1}"
     shift
 
     local args=("${@}")
@@ -25,21 +27,27 @@ function _ps {
 
     [[ "${show_comm}" -eq 1 ]] && post=$(printf "%s,comm:15" "${post}")
 
-    cmd=$(printf "ps -o %s,%s,%s,args %s" "${pre}" "${timefmt}" "${post}" "${args[*]}")
+    cmd=$(
+        printf "ps -o %s,%s,%s,%s,args %s"    \
+	       "${pre}"                       \
+	       "${timefmt}"                   \
+               "${additional_info}"           \
+	       "${post}"                      \
+	       "${args[*]}")
     eval "${cmd}"
 }
 
-function pse  { _ps 1 "bsdstart" "${@}"         ; }
+function pse  { _ps 1 "lstart"   "wchan:25" "${@}"         ; }
 
-function psel { _ps 1 "bsdstart" "${@}" -L      ; }
+function psel { _ps 1 "lstart"   "wchan:25" "${@}" -L      ; }
 
-function psef { _ps 0 "bsdstart" "${@}" --forest; }
+function psef { _ps 0 "lstart"   "wchan:25" "${@}" --forest; }
 
-function pss  { _ps 1 "lstart"   "${@}"         ; } 
+function psc  { _ps 1 "lstart"   "cgroup:40" "${@}"         ; }
 
-function pssl { _ps 1 "lstart"   "${@}" -L      ; }
+function pscl { _ps 1 "lstart"   "cgroup:40" "${@}" -L      ; }
 
-function pssf { _ps 0 "lstart"   "${@}" --forest; }
+function pscf { _ps 0 "lstart"   "cgroup:40" "${@}" --forest; }
 
 # 2013-04-16: wrapper for nfsiostat to make it easier to read
 # TODO: Remove the ability to pass flags that break parsing, i.e. `-h'.
