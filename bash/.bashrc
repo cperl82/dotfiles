@@ -151,7 +151,7 @@ function path-canonical {
 	    dst=$(dirname $(dirname "${dst}"))
 	elif [[ "${link_dst}" =~ ^.$  ]]; then
 	    # special case
-	    dst="${dst}"
+	    :
 	elif [[ "${link_dst}" =~ ^/   ]]; then
 	    # absolute symlink
 	    dst="${link_dst}"
