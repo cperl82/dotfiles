@@ -1938,7 +1938,8 @@ controlled by `include'."
    '(swiper-match-face-1         ((t (:foreground nil :background nil :underline nil))))
    `(swiper-match-face-2         ((t (:foreground "white" :weight bold :background ,zenburn-red-2))))
    `(swiper-match-face-3         ((t (:foreground "white" :weight bold :background ,zenburn-blue-1))))
-   `(swiper-match-face-4         ((t (:foreground "white" :weight bold :background ,zenburn-yellow-2))))))
+   `(swiper-match-face-4         ((t (:foreground "white" :weight bold :background ,zenburn-yellow-2))))
+   `(org-agenda-done             ((t (:foreground ,zenburn-green+4 :background ,zenburn-green+4))))))
 
 ;; I don't quite understand why this is necessary, somehow related to:
 ;; https://emacs.stackexchange.com/questions/48365/custom-theme-set-faces-does-not-work-in-emacs-27
