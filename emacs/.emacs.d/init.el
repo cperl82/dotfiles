@@ -1700,7 +1700,14 @@ controlled by `include'."
         (setq org-habit-graph-column 65)))
     (use-package ol-man)
     (use-package org-tempo)
-    (use-package ob-async)
+    (use-package ob-async
+      :config
+      ;; 2022-10-22 cperl: A workaround for :async not working
+      ;; sometimes as described at
+      ;; https://github.com/astahlman/ob-async/issues/75
+      (defun no-hide-overlays (orig-fun &rest args)
+        (setq org-babel-hide-result-overlays nil))
+      (advice-add 'ob-async-org-babel-execute-src-block :before #'no-hide-overlays))
     (setq org-adapt-indentation t)
     (setq org-startup-folded t)
     (setq org-tags-column -90)
