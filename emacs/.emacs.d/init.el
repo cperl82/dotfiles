@@ -726,7 +726,7 @@ dired-x"
    'emacs-lisp-mode-hook
    (lambda ()
      (setq lisp-loop-forms-indentation 3)
-     (setq lisp-indent-function #'common-lisp-indent-function)
+     (setq lisp-indent-function #'lisp-indent-function)
      (setq indent-tabs-mode nil)
      (hs-minor-mode)
      (hs-hide-all)
