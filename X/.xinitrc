@@ -26,9 +26,8 @@ function main {
 	xrdb -merge -cpp /usr/bin/cpp -I"${HOME}" "${xresources_local}"
     fi
 
-    # start urxvtcd
-    urxvt256cd -q -o -f
-    export TERMINAL=urxvt256cc
+    # Set the terminal to be invoked by i3-sensible-terminal
+    export TERMINAL=xterm
 
     # regenerate our i3 config
     config=$("${HOME}/.config/i3/bin/generate-config.sh")
