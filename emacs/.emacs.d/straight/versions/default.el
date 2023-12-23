@@ -4,6 +4,7 @@
  ("annalist.el" . "134fa3f0fb91a636a1c005c483516d4b64905a6d")
  ("avy" . "e92cb37457b43336b765630dbfbea8ba4be601fa")
  ("company-mode" . "4c08ef468678bbf3b3c9e750f6e694eea1aa8423")
+ ("compat" . "605f224633eb28efbe62252605515ce3d557e19f")
  ("counsel-projectile" . "40d1e1d4bb70acb00fddd6f4df9778bf2c52734b")
  ("dash.el" . "0ac1ecf6b56eb67bb81a3cf70f8d4354b5782341")
  ("diminish.el" . "6ec6ebc391371418efc6c98d70b013f34af5a2ee")
@@ -43,6 +44,7 @@
  ("markdown-mode" . "d2a3d5b8625a7c6be21f19f9146745cd5c791a6a")
  ("melpa" . "6c0b41b01bdb4f94d08cf7677f58eb3ab364a967")
  ("nasm-mode" . "65ca6546fc395711fac5b3b4299e76c2303d43a8")
+ ("nerd-icons.el" . "3af4d38c1119567b20ef9020f70de163d0d58c37")
  ("ob-async" . "9aac486073f5c356ada20e716571be33a350a982")
  ("org" . "e0b05b07528dea684f3439c017370436b8d37b50")
  ("org-ql" . "bacdacb1b233e4199ccda810152484edd59fa091")
@@ -71,5 +73,5 @@
  ("with-editor" . "8d52f933e50624c7bca3880f57297ac17ba4ac2d")
  ("xcscope.el" . "d228d7593d762e457340f678d14b663ef66d7cee")
  ("yaml-mode" . "63b637f846411806ae47e63adc06fe9427be1131")
- ("zenburn-emacs" . "fd10925a3a8c39818a9e353b804ac8b1a847d73a"))
+ ("zenburn-emacs" . "373a07f99ee595dee83b6cee8b6841b5d1c01e38"))
 :beta
