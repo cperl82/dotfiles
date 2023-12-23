@@ -68,10 +68,10 @@
  ("tuareg" . "1d53723e39f22ab4ab76d31f2b188a2879305092")
  ("undo-tree" . "e326c6135e62f5fe8536528d3acd5e798f847407")
  ("use-package" . "a7422fb8ab1baee19adb2717b5b47b9c3812a84c")
- ("vagrant-tramp" . "5f00b42a0c023c461cef7af4de7652d90c788b4d")
+ ("vagrant-tramp" . "2b7a4fabd328961384da06e0e302250cd97edc47")
  ("windsize" . "62c2846bbe95b0a73e996c75e4a644d05f57aaaa")
  ("with-editor" . "8d52f933e50624c7bca3880f57297ac17ba4ac2d")
  ("xcscope.el" . "d228d7593d762e457340f678d14b663ef66d7cee")
  ("yaml-mode" . "63b637f846411806ae47e63adc06fe9427be1131")
  ("zenburn-emacs" . "373a07f99ee595dee83b6cee8b6841b5d1c01e38"))
-:beta
+:gamma
