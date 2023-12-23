@@ -39,7 +39,7 @@
  ("json-snatcher" . "b28d1c0670636da6db508d03872d96ffddbc10f2")
  ("let-alist" . "d2d0cac92851d4480328bc3f41d30c518beb1f99")
  ("lua-mode" . "5a9bee8d5fc978dc64fcb677167417010321ba65")
- ("magit" . "e99ef096043da3a671ec0d6ac5a62ab636daf9e4")
+ ("magit" . "466c7adf5de85257712629dfa637dc03b9bc6cb4")
  ("map" . "7ef991a4e234195f125dc2b2ad4cad5a1d11a7d5")
  ("markdown-mode" . "d2a3d5b8625a7c6be21f19f9146745cd5c791a6a")
  ("melpa" . "6c0b41b01bdb4f94d08cf7677f58eb3ab364a967")
