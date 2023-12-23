@@ -1867,7 +1867,7 @@ controlled by `include'."
 (use-package projectile
   :defer t
   :diminish projectile-mode
-  :commands (projectile-project-p projectile-project-name)
+  :commands (projectile-project-p projectile-project-name projectile-project-root)
   :general
   (:keymaps '(override)
    :states  '(normal motion emacs)
