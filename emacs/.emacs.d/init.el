@@ -38,6 +38,7 @@
         annalist
         color-theme-zenburn
         company-mode
+        compat
         counsel-projectile
         dash
         diminish
@@ -65,6 +66,7 @@
         magit
         markdown-mode
         nasm-mode
+        nerd-icons
         ob-async
         org
         org-ql
@@ -995,6 +997,7 @@ dired-x"
     :after (evil)
     :init
     (progn
+      (setq doom-modeline-icon nil)
       (doom-modeline-mode 1)
       (zenburn-with-color-variables
         (set-face-attribute 'doom-modeline-evil-visual-state nil :foreground zenburn-yellow)
