@@ -29,7 +29,7 @@
  ("haskell-mode" . "8402caa341d90b4236f5c0a802751f9023ccfbe7")
  ("highlight-parentheses" . "98178e79a92515fcacd278fb486702dedde0bed3")
  ("ht.el" . "c4c1be487d6ecb353d07881526db05d7fc90ea87")
- ("hydra" . "2d553787aca1aceb3e6927e426200e9bb9f056f1")
+ ("hydra" . "317e1de33086637579a7aeb60f77ed0405bf359b")
  ("ibuffer-projectile" . "ecbe482804a217b1471593f6c7a8b3d64f3cdc47")
  ("ibuffer-vc" . "5fa6aea09bc67f71ea743302d609f459967b1e81")
  ("ios-config-mode" . "ef1d26a3983006cb4574e4c14fcf36ceeda4a260")
