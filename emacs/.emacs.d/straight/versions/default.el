@@ -46,7 +46,7 @@
  ("nasm-mode" . "65ca6546fc395711fac5b3b4299e76c2303d43a8")
  ("nerd-icons.el" . "3af4d38c1119567b20ef9020f70de163d0d58c37")
  ("ob-async" . "9aac486073f5c356ada20e716571be33a350a982")
- ("org" . "e0b05b07528dea684f3439c017370436b8d37b50")
+ ("org" . "f280b2178c0d55cd3c13d16a961f0ff56db551a7")
  ("org-ql" . "bacdacb1b233e4199ccda810152484edd59fa091")
  ("org-super-agenda" . "3108bc3f725818f0e868520d2c243abe9acbef4e")
  ("origami.el" . "e558710a975e8511b9386edc81cd6bdd0a5bda74")
