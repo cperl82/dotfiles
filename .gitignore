@@ -12,6 +12,7 @@ emacs/.emacs.d/smex-items
 emacs/.emacs.d/straight/build
 emacs/.emacs.d/straight/build-cache.el
 emacs/.emacs.d/straight/repos
+emacs/.emacs.d/straight/modified
 emacs/.emacs.d/tramp
 emacs/.emacs.d/transient/*
 fonts/.fonts/.uuid
