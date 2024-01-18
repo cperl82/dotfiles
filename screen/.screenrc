@@ -36,3 +36,12 @@ bind -c rsz h eval "resize -h -5" "command -c rsz"
 bind -c rsz j eval "resize -v -5" "command -c rsz"
 bind -c rsz k eval "resize -v +5" "command -c rsz"
 bind -c rsz l eval "resize -h +5" "command -c rsz"
+
+# 2024-01-18 cperl: Unset COLORTERM until running a screen version
+# that supports it. Some terminal emulators set this as a kludy way to
+# let programs know they support true color. E.g. alacritty does this,
+# but when you run screen, which doesn't yet support true color in
+# it's released version, and then run emacs, emacs sees the variable
+# and tries to output using truecolor, but then the colors are all
+# messed up because screen doesn't get it.
+unsetenv COLORTERM
