@@ -1704,6 +1704,10 @@ controlled by `include'."
     (use-package ol-man)
     (use-package org-tempo)
     (use-package ob-async
+      ;; 2024-02-01 cperl: Disabled for now after some issues running
+      ;; non-async src blocks, something about wrong number of
+      ;; arguments or something like that.
+      :disabled t
       :config
       ;; 2022-10-22 cperl: A workaround for :async not working
       ;; sometimes as described at
