@@ -27,7 +27,7 @@ function main {
     fi
 
     # Set the terminal to be invoked by i3-sensible-terminal
-    export TERMINAL=xterm
+    export TERMINAL=alacritty
 
     # regenerate our i3 config
     config=$("${HOME}/.config/i3/bin/generate-config.sh")
