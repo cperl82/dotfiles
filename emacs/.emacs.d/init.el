@@ -1758,6 +1758,7 @@ controlled by `include'."
     (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-agenda-sticky t)
+    (setq org-attach-use-inheritance t)
     (setq org-log-into-drawer t)
     (setq org-refile-use-cache t)
     (setq org-catch-invisible-edits 'error)
