@@ -1738,11 +1738,14 @@ controlled by `include'."
              ((org-agenda-sorting-strategy '(tag-up todo-state-up ts-up tsia-up))))))
     (setq org-agenda-sorting-strategy '(todo-state-up deadline-up tsia-up))
     (setq org-capture-templates
-          '(("n" "Next Action" entry
-             (file "~/org/capture.org") "* NEXT %?\n  captured: %U"
-             :empty-lines 1)
-            ("N" "Next Action with Gmail Id" entry
-             (file "~/org/capture.org") "* NEXT %?\n  captured: %U\n  [[gmail:%^{gmail id}][%\\1]]"
+          `(("n" "Next Action" entry
+             (file "~/org/capture.org")
+             ,(string-join
+               '("* NEXT %?"
+                 ":PROPERTIES:"
+                 ":CAPTURED: %U"
+                 ":END:")
+               "\n  ")
              :empty-lines 1)))
     (setq org-link-abbrev-alist
           '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
