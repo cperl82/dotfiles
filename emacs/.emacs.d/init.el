@@ -1737,15 +1737,11 @@ controlled by `include'."
             ("@" "Tagged By Person" cp/org-agenda-tagged-by-person nil
              ((org-agenda-sorting-strategy '(tag-up todo-state-up ts-up tsia-up))))))
     (setq org-agenda-sorting-strategy '(todo-state-up deadline-up tsia-up))
+    ;; 2024-06-01 cperl: Remove the `string-join' if/when you move to using
+    ;; `org-indent-mode' (which turns off `org-adapt-indentation')
     (setq org-capture-templates
-          `(("n" "Next Action" entry
-             (file "~/org/capture.org")
-             ,(string-join
-               '("* NEXT %?"
-                 ":PROPERTIES:"
-                 ":CAPTURED: %U"
-                 ":END:")
-               "\n  ")
+          `(("n" "Next Action" entry (file "~/org/capture.org")
+             ,(string-join '("* NEXT %?" ":PROPERTIES:" ":CAPTURED: %U" ":END:") "\n  ")
              :empty-lines 1)))
     (setq org-link-abbrev-alist
           '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
