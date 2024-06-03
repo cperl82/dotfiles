@@ -35,6 +35,7 @@
     (package
       '(avy
         ace-window
+        adaptive-wrap
         annalist
         color-theme-zenburn
         company-mode
@@ -84,6 +85,7 @@
         undo-tree
         use-package
         vagrant-tramp
+        visual-fill-column
         wgrep
         which-key
         windsize
