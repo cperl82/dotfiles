@@ -1744,7 +1744,7 @@ controlled by `include'."
     ;; `org-indent-mode' (which turns off `org-adapt-indentation')
     (setq org-capture-templates
           `(("n" "Next Action" entry (file "~/org/capture.org")
-             ,(string-join '("* NEXT %?" ":PROPERTIES:" ":CAPTURED: %U" ":END:") "\n  ")
+             ,(string-join '("* NEXT %?" ":PROPERTIES:" ":CAPTURED: %U" ":END:") "\n")
              :empty-lines 1)))
     (setq org-link-abbrev-alist
           '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
