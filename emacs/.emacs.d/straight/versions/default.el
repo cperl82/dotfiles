@@ -69,6 +69,7 @@
  ("ts.el" . "3fee71ceefac71ba55eb34829d7e94bb3df37cee")
  ("tuareg" . "1d53723e39f22ab4ab76d31f2b188a2879305092")
  ("undo-tree" . "e326c6135e62f5fe8536528d3acd5e798f847407")
+ ("unfill" . "1516baa1a83d3cebd619c42a79b9dcf06ef5ffa6")
  ("use-package" . "a7422fb8ab1baee19adb2717b5b47b9c3812a84c")
  ("vagrant-tramp" . "2b7a4fabd328961384da06e0e302250cd97edc47")
  ("visual-fill-column" . "e04d3521b6dc2435de4c4a4b9cac5feb194f0d5b")
