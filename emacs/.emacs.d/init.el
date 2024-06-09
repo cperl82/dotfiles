@@ -1731,7 +1731,11 @@ controlled by `include'."
             ("WAIT" . "#8C5353")
             ("CNCL" . "#FFFFFF")
             ("DONE" . "#FFFFFF")))
-    (setq org-agenda-files '("~/org/capture.org", "~/org/todo.org", "~/meeting-notes.org"))
+    (setq org-agenda-files
+          (let ((default-directory "~/org"))
+            `(,(expand-file-name "capture.org")
+              ,(expand-file-name "todo.org")
+              ,(expand-file-name "meeting-notes.org"))))
     (setq org-agenda-tags-column -90)
     (setq org-agenda-custom-commands
           `(,(cp/generate-category-agenda-cmds "c" "Captured" ("capture") t 7)
