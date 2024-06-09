@@ -1569,7 +1569,7 @@ controlled by `include'."
              ,@options))))
     `(quote ,forms)))
 
-(defun cp/org-agenda-tagged-by-person (search-string)
+(defun cp/org-agenda-tagged-by-context (search-string)
   ;; CR-someday cperl: Have to figure out how to make C-u r in the buffer work correctly.
   ;; Right now it regenerated the buffer with a different tag, but winds up leaving it
   ;; named incorrectly.  I was thinking one way around it might be to substitute in the
@@ -1742,7 +1742,7 @@ controlled by `include'."
             ,(cp/generate-category-agenda-cmds "h" "House"    ("house")   t 7)
             ,(cp/generate-category-agenda-cmds "g" "General"  ("general") t 7)
             ,(cp/generate-category-agenda-cmds "e" "Everything else" ("capture" "house" "general") nil 7)
-            ("@" "Tagged By Person" cp/org-agenda-tagged-by-person nil
+            ("@" "By Context" cp/org-agenda-tagged-by-context nil
              ((org-agenda-sorting-strategy '(tag-up todo-state-up ts-up tsia-up))))))
     (setq org-agenda-sorting-strategy '(todo-state-up deadline-up tsia-up))
     ;; 2024-06-01 cperl: Remove the `string-join' if/when you move to using
