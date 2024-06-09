@@ -941,9 +941,10 @@ dired-x"
    "TAB" #'indent-region)
   :init
   (progn
-    (setq evil-want-keybinding nil)
-    (setq evil-want-integration t)
-    (setq evil-want-C-i-jump nil))
+    (setq evil-want-keybinding nil
+          evil-want-integration t
+          evil-want-C-i-jump nil
+          evil-respect-visual-line-mode t))
   :config
   (progn
     (evil-mode 1)
@@ -1788,12 +1789,15 @@ controlled by `include'."
      'org-mode-hook
      (lambda ()
        (progn
-         (auto-fill-mode)
-         (setq fill-column 90)
-         (setq indent-tabs-mode nil)
          (define-and-bind-text-object "~" "\\~" "\\~")
          (define-and-bind-text-object "*" "\\*" "\\*")
          (define-and-bind-text-object "=" "\\=" "\\=")
+         (setq fill-column 90
+               indent-tabs-mode nil
+               adaptive-wrap-extra-indent 2)
+         (visual-line-mode)
+         (visual-fill-colum-mode)
+         (adaptive-wrap-prefix-mode)
          (add-hook 'write-contents-functions
                    (lambda () (save-excursion (delete-trailing-whitespace)))))))
     (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))
