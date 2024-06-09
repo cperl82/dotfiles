@@ -1745,8 +1745,6 @@ controlled by `include'."
             ("@" "By Context" cp/org-agenda-tagged-by-context nil
              ((org-agenda-sorting-strategy '(tag-up todo-state-up ts-up tsia-up))))))
     (setq org-agenda-sorting-strategy '(todo-state-up deadline-up tsia-up))
-    ;; 2024-06-01 cperl: Remove the `string-join' if/when you move to using
-    ;; `org-indent-mode' (which turns off `org-adapt-indentation')
     (setq org-capture-templates
           `(("n" "Next Action" entry (file "~/org/capture.org")
              ,(string-join '("* NEXT %?" ":PROPERTIES:" ":CAPTURED: %U" ":END:") "\n")
