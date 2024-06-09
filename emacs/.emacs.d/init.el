@@ -1720,7 +1720,7 @@ controlled by `include'."
         (setq org-babel-hide-result-overlays nil))
       (advice-add 'ob-async-org-babel-execute-src-block :before #'no-hide-overlays))
     (setq org-adapt-indentation nil)
-    (setq org-indent-mode t)
+    (setq org-startup-indented t)
     (setq org-startup-folded t)
     (setq org-tags-column -90)
     (setq org-agenda-restore-windows-after-quit t)
@@ -1793,10 +1793,9 @@ controlled by `include'."
          (define-and-bind-text-object "*" "\\*" "\\*")
          (define-and-bind-text-object "=" "\\=" "\\=")
          (setq fill-column 90
-               indent-tabs-mode nil
-               adaptive-wrap-extra-indent 2)
+               indent-tabs-mode nil)
          (visual-line-mode)
-         (visual-fill-colum-mode)
+         (visual-fill-column-mode)
          (adaptive-wrap-prefix-mode)
          (add-hook 'write-contents-functions
                    (lambda () (save-excursion (delete-trailing-whitespace)))))))
