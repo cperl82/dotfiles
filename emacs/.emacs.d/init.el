@@ -114,7 +114,6 @@
       inhibit-startup-message   t
       load-prefer-newer         t
       make-backup-files         nil
-      split-height-threshold    nil
       window-combination-resize t)
 
 ;; 2021-10-22 Always use the short form
@@ -166,24 +165,16 @@ buffers whose visited file has disappeared and refreshes dired buffers."
               (kill-buffer b)))
            ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
 
-(defun cp/advice/split-windows (&rest r)
-  "Try to always maintain two windows, side by side (i.e. split
-horizontally), unless we get below some absolute minimum
+(defun cp/split-window-sensibly (&rest r)
+  "When there is one window, split it horizontally unless the frame is smaller than 120.
 
-The idea is to keep the `split-width-threshold' set to the number of
-columns in the frame.  That way, as soon as more than one window has
-been created, any given window no longer meets the criteria for being
-able to be split again, even if the windows are unbalanced (e.g. one
-is only a few columns wide and the other takes up all the remaining
-space)"
-  (let ((width (frame-text-width)))
-    (if (< width 120)
-        (setq split-width-threshold nil)
-      (when (not (equal width split-width-threshold))
-        (setq split-width-threshold width)))))
-
-(advice-add 'split-window-sensibly     :before #'cp/advice/split-windows)
-(advice-add 'split-window-horizontally :before #'cp/advice/split-windows)
+If there are multiple windows, don't split anything."
+  (let ((width (frame-text-width))
+        (nwindows (length (window-list))))
+    (if (= nwindows 1)
+        (if (< width 120) (split-window-below) (split-window-right))
+      nil)))
+(setq split-window-preferred-function #'cp/split-window-sensibly)
 
 ;; 2017-08-17 cperl: misc stuff
 (defun cp/c-mode-hook-setup ()
@@ -1722,7 +1713,7 @@ controlled by `include'."
     (setq org-adapt-indentation nil)
     (setq org-startup-indented t)
     (setq org-startup-folded t)
-    (setq org-tags-column -90)
+    (setq org-tags-column -85)
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-todo-keywords
           '((sequence "NEXT(n)" "WAIT(w)" "DFER(r)" "DPND(x)" "|" "DONE(d!)" "CNCL(c!)")))
@@ -1792,11 +1783,12 @@ controlled by `include'."
          (define-and-bind-text-object "~" "\\~" "\\~")
          (define-and-bind-text-object "*" "\\*" "\\*")
          (define-and-bind-text-object "=" "\\=" "\\=")
-         (setq fill-column 90
-               indent-tabs-mode nil)
          (visual-line-mode)
          (visual-fill-column-mode)
          (adaptive-wrap-prefix-mode)
+         (setq fill-column 999999
+               visual-fill-column-width 90
+               indent-tabs-mode nil)
          (add-hook 'write-contents-functions
                    (lambda () (save-excursion (delete-trailing-whitespace)))))))
     (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))
