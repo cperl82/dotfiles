@@ -1456,7 +1456,7 @@ The key is the todo keyword and the value is its relative position in the list."
          (not-finished (nth 0 todo-keywords-split-by-finished))
          (finished (nth 1 todo-keywords-split-by-finished))
          (n-finished-states (length finished))
-         (rotated (-rotate n-finished-states (-concat not-finished finished))))
+         (rotated (-rotate n-finished-states (-concat (reverse not-finished) (reverse finished)))))
     (-map-indexed
      (lambda (idx elem)
        (let ((todo (replace-regexp-in-string "(.*)$" "" elem)))
