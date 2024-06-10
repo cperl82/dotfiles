@@ -1619,6 +1619,9 @@ controlled by `include'."
    '((cp/org-search-underlined-leading-spaces-in-multiline-links 0 'cp/org-dont-underline-leading-spaces-in-multiline-links t))
    'append))
 
+(defun cp/adaptive-wrap-prefix-function (beg end)
+  (setq adaptive-wrap-extra-indent (1+ (org-outline-level))))
+
 (use-package org
   :defer t
   :general
@@ -1712,6 +1715,7 @@ controlled by `include'."
       (advice-add 'ob-async-org-babel-execute-src-block :before #'no-hide-overlays))
     (setq org-adapt-indentation nil)
     (setq org-startup-indented t)
+    (setq org-indent-indentation-per-level 1)
     (setq org-startup-folded t)
     (setq org-tags-column -85)
     (setq org-agenda-restore-windows-after-quit t)
@@ -1767,6 +1771,7 @@ controlled by `include'."
                          (lambda () (let ((inhibit-message t)) (org-save-all-org-buffers))))
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
     (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
+    (advice-add  'adaptive-wrap-prefix-function :before #'cp/adaptive-wrap-prefix-function)
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((shell  . true)
@@ -1786,9 +1791,9 @@ controlled by `include'."
          (visual-line-mode)
          (visual-fill-column-mode)
          (adaptive-wrap-prefix-mode)
-         (setq fill-column 999999
-               visual-fill-column-width 90
-               indent-tabs-mode nil)
+         (setq fill-column 999999)
+         (setq visual-fill-column-width 90)
+         (setq indent-tabs-mode nil)
          (add-hook 'write-contents-functions
                    (lambda () (save-excursion (delete-trailing-whitespace)))))))
     (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))
