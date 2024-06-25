@@ -1767,6 +1767,13 @@ controlled by `include'."
     (setq org-cycle-include-plain-lists 'integrate)
     (setq org-hide-leading-stars t)
     (setq org-link-make-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
+    ;; CR cperl: Perhaps update this so it only does this if it
+    ;; detects that `~/org' points at Dropbox
+    (setq auto-revert-notify-exclude-dir-regexp
+          (concat
+           auto-revert-notify-exclude-dir-regexp
+           "\\|"
+           (rx (: bol (0+ "/" (1+ anything)) "/" "org" "/"))))
     (run-with-idle-timer 30 t
                          (lambda () (let ((inhibit-message t)) (org-save-all-org-buffers))))
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
@@ -1791,9 +1798,8 @@ controlled by `include'."
          (visual-line-mode)
          (visual-fill-column-mode)
          (adaptive-wrap-prefix-mode)
-         (setq fill-column 999999)
-         (setq visual-fill-column-width 90)
-         (setq indent-tabs-mode nil)
+         (setq-local visual-fill-column-width 95)
+         (setq-local indent-tabs-mode nil)
          (add-hook 'write-contents-functions
                    (lambda () (save-excursion (delete-trailing-whitespace)))))))
     (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))
