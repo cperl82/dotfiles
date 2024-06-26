@@ -1737,13 +1737,13 @@ controlled by `include'."
               ,(expand-file-name "todo.org")
               ,(expand-file-name "meeting-notes.org"))))
     (setq org-agenda-tags-column -90)
-    (setq org-agenda-custom-commands
-          `(,(cp/generate-category-agenda-cmds "c" "Captured" ("capture") t 7)
-            ,(cp/generate-category-agenda-cmds "h" "House"    ("house")   t 7)
-            ,(cp/generate-category-agenda-cmds "g" "General"  ("general") t 7)
-            ,(cp/generate-category-agenda-cmds "e" "Everything else" ("capture" "house" "general") nil 7)
-            ("@" "By Context" cp/org-agenda-tagged-by-context nil
-             ((org-agenda-sorting-strategy '(tag-up todo-state-up ts-up tsia-up))))))
+    ;; (setq org-agenda-custom-commands
+    ;;       `(,(cp/generate-category-agenda-cmds "c" "Captured" ("capture") t 7)
+    ;;         ,(cp/generate-category-agenda-cmds "h" "House"    ("house")   t 7)
+    ;;         ,(cp/generate-category-agenda-cmds "g" "General"  ("general") t 7)
+    ;;         ,(cp/generate-category-agenda-cmds "e" "Everything else" ("capture" "house" "general") nil 7)
+    ;;         ("@" "By Context" cp/org-agenda-tagged-by-context nil
+    ;;          ((org-agenda-sorting-strategy '(tag-up todo-state-up ts-up tsia-up))))))
     (setq org-agenda-sorting-strategy '(todo-state-up deadline-up tsia-up))
     (setq org-capture-templates
           `(("n" "Next Action" entry (file "~/org/capture.org")
@@ -1790,7 +1790,7 @@ controlled by `include'."
        (sed    . true)
        (R      . true)
        (calc   . true)))
-    (cp/org-dont-underline-leading-spaces-in-multiline-links)
+    ;; (cp/org-dont-underline-leading-spaces-in-multiline-links)
     (add-hook
      'org-mode-hook
      (lambda ()
