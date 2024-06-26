@@ -1689,6 +1689,10 @@ controlled by `include'."
         ;; notifications.
         (setq appt-disp-window-function #'cp/org-appt-disp-window)
         (setq appt-delete-window-function (lambda () t))))
+    (use-package org-attach
+      :config
+      (progn
+        (setq org-attach-use-inheritance t)))
     (use-package org-id
       :config
       (progn
@@ -1759,7 +1763,6 @@ controlled by `include'."
     (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-agenda-sticky t)
-    (setq org-attach-use-inheritance t)
     (setq org-log-into-drawer t)
     (setq org-refile-use-cache t)
     (setq org-catch-invisible-edits 'error)
