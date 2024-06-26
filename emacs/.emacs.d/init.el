@@ -1777,6 +1777,8 @@ controlled by `include'."
            auto-revert-notify-exclude-dir-regexp
            "\\|"
            (rx (: bol (0+ "/" (1+ anything)) "/" "org" "/"))))
+    ;; Ensure png files are opened in an external application
+    (append 'org-file-apps '("\\.png\\'" . default))
     (run-with-idle-timer 30 t
                          (lambda () (let ((inhibit-message t)) (org-save-all-org-buffers))))
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
