@@ -62,7 +62,7 @@
  ("smartparens" . "2834c66c4f09778d0c57e99886c329188eed591a")
  ("smex" . "55aaebe3d793c2c990b39a302eb26c184281c42c")
  ("straight.el" . "b3760f5829dba37e855add7323304561eb57a3d4")
- ("swiper" . "8c30f4cab5948aa8d942a3b2bbf5fb6a94d9441d")
+ ("swiper" . "2a25a6fb5b081cb141c5eccac8ee58ab1feeb747")
  ("systemd-mode" . "b6ae63a236605b1c5e1069f7d3afe06ae32a7bae")
  ("systemtap-mode" . "1a968c2b1f3a054bebf91ac49739d3a81ce050a9")
  ("transient" . "45975c24e1ab08bb32e9bdc06f5c5efe7c256e16")
