@@ -1769,6 +1769,7 @@ controlled by `include'."
     (setq org-ctrl-k-protect-subtree t)
     (setq org-cycle-include-plain-lists 'integrate)
     (setq org-hide-leading-stars t)
+    (setq org-agenda-show-future-repeats nil)
     (setq org-link-make-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
     ;; CR cperl: Perhaps update this so it only does this if it
     ;; detects that `~/org' points at Dropbox
