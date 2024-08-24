@@ -1,7 +1,10 @@
 #!/bin/bash
 
 function main {
-    xset -b
+    xset b off
+    xset s 0 0
+    xset s off
+    xset dpms 0 0 0
     xsetroot -solid darkslategrey
     xsetroot -cursor_name left_ptr
 
