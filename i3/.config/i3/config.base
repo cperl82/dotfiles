@@ -182,7 +182,6 @@ for_window [window_role="pop-up"] floating enable
 bindsym $mod+comma exec --no-startup-id \
         $terminal                       \
         "popup-terminal-qsw"            \
-        -geometry 140x50                \
         -e $quickswitch find-window
 
 # 2021-04-06 cperl: Replace dmenu ui

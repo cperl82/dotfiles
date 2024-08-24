@@ -9,7 +9,7 @@ function main
     shift
 
     xdotool search --name "${title}" windowmap windowactivate \
-	|| urxvt256c -title "${title}" "${@}"
+	|| alacritty --title "${title}" "${@}"
 }
 
 main "${@}"
