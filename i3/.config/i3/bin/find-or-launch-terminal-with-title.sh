@@ -8,8 +8,11 @@ function main
     local title="${1}"
     shift
 
+    local here=""
+
+    here=$(dirname "${0}")
     xdotool search --name "${title}" windowmap windowactivate \
-	|| alacritty --title "${title}" "${@}"
+	|| "${here}/sensible-terminal.sh" --title "${title}" "${@}"
 }
 
 main "${@}"

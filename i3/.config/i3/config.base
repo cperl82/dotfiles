@@ -32,7 +32,7 @@ font $font_core
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec --no-startup-id i3-sensible-terminal
+bindsym $mod+Return exec --no-startup-id ${HOME}/.config/i3/bin/sensible-terminal.sh
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -172,17 +172,15 @@ bindsym $mod+period move scratchpad
 # 2018-03-26 cperl: Make sure anything with the name "popup-terminal" is borderless
 for_window [title="^popup-terminal(-.*)?$"] floating enable border pixel 1
 
-# 2020-11-15 cperl: KeePassXC should always float
-for_window [title="^.*KeePassXC$"] floating enable
-
 # 2020-11-15 cperl: Various pop-ups
 for_window [window_role="pop-up"] floating enable
 
 # 2021-04-06 cperl: Quick switching of windows
-bindsym $mod+comma exec --no-startup-id \
-        $terminal                       \
-        "popup-terminal-qsw"            \
-        -e $quickswitch find-window
+bindsym $mod+comma exec --no-startup-id         \
+        $terminal                               \
+        "popup-terminal-qsw"                    \
+        --geometry 130x50                       \
+        --execute $quickswitch find-window
 
 # 2021-04-06 cperl: Replace dmenu ui
 # bindsym $mod+d exec --no-startup-id \
