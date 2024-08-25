@@ -18,6 +18,7 @@ run () {
     local geometry="${2}"
     local execute="${3}"
     local emulator=""
+    local cmd=""
 
     for emulator in "alacritty" "xterm" "urxvt256c" "urxvt" ""
     do
@@ -29,7 +30,7 @@ run () {
 
     case "${emulator}" in
 	alacritty)
-	    local cmd="alacritty"
+	    cmd="alacritty"
 
 	    if [[ -n "${title}" ]]
 	    then
@@ -54,7 +55,7 @@ run () {
 	    ;;
 
 	xterm)
-	    local cmd="xterm"
+	    cmd="xterm"
 
 	    if [[ -n "${title}" ]]
 	    then
@@ -63,10 +64,7 @@ run () {
 
 	    if [[ -n "${geometry}" ]]
 	    then
-		printf -v cmd \
-		       '%s -geometry %s' \
-		       "${cmd}" \
-		       "${geometry}"
+		printf -v cmd '%s -geometry %s' "${cmd}" "${geometry}"
 	    fi
 
 	    if [[ -n "${execute}" ]]
