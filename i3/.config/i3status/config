@@ -45,7 +45,7 @@ run_watch DHCP {
 
 tztime nyc {
     timezone="America/New_York"
-    format = " %Y-%m-%d %H:%M:%S NYC "
+    format = " %a %Y-%m-%d %H:%M:%S NYC "
 }
 
 tztime ldn {
