@@ -1724,10 +1724,10 @@ controlled by `include'."
     (setq org-tags-column -85)
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-todo-keywords
-          '((sequence "NEXT(n)" "WAIT(w)" "DFER(r)" "DPND(x)" "|" "DONE(d!)" "CNCL(c!)")))
+          '((sequence "NEXT(n)" "DFER(r)" "WAIT(w)" "DPND(x)" "|" "DONE(d!)" "CNCL(c!)")))
     (setq org-todo-keyword-faces
-          '(("DFER" . "#8C5353")
-            ("WAIT" . "#B06060")
+          '(("DFER" . "#B06060")
+            ("WAIT" . "#8C5353")
             ("DPND" . "#767676")
             ("CNCL" . "#FFFFFF")
             ("DONE" . "#FFFFFF")))
@@ -1744,7 +1744,7 @@ controlled by `include'."
     ;;         ,(cp/generate-category-agenda-cmds "e" "Everything else" ("capture" "house" "general") nil 7)
     ;;         ("@" "By Context" cp/org-agenda-tagged-by-context nil
     ;;          ((org-agenda-sorting-strategy '(tag-up todo-state-up ts-up tsia-up))))))
-    (setq org-agenda-sorting-strategy '(todo-state-up deadline-up tsia-up))
+    (setq org-agenda-sorting-strategy '(category-up todo-state-up deadline-up tsia-up))
     (setq org-capture-templates
           `(("n" "Next Action" entry (file "~/org/capture.org")
              ,(string-join '("* NEXT %?" ":PROPERTIES:" ":CAPTURED: %U" ":END:") "\n")
