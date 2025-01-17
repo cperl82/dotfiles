@@ -1726,9 +1726,9 @@ controlled by `include'."
     (setq org-todo-keywords
           '((sequence "NEXT(n)" "WAIT(w)" "DFER(r)" "DPND(x)" "|" "DONE(d!)" "CNCL(c!)")))
     (setq org-todo-keyword-faces
-          '(("DFER" . "#767676")
+          '(("DFER" . "#8C5353")
+            ("WAIT" . "#B06060")
             ("DPND" . "#767676")
-            ("WAIT" . "#8C5353")
             ("CNCL" . "#FFFFFF")
             ("DONE" . "#FFFFFF")))
     (setq org-agenda-files
