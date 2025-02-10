@@ -34,7 +34,7 @@ function _ps {
                "${additional_info}"           \
 	       "${post}"                      \
 	       "${args[*]}")
-    eval exec "${cmd}"
+    eval "${cmd}"
 }
 
 function pse  { _ps 1 "lstart"   "wchan:25" "${@}"         ; }
