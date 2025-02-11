@@ -34,7 +34,10 @@ run () {
 
 	    if [[ -n "${title}" ]]
 	    then
-		printf -v cmd '%s --title "%s"' "${cmd}" "${title}"
+                printf -v cmd '%s --title "%s" --class "%s"'    \
+                       "${cmd}"                                 \
+                       "${title}"                               \
+                       "${title}"
 	    fi
 
 	    if [[ -n "${geometry}" ]]
