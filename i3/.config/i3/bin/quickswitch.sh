@@ -7,42 +7,21 @@ function window-query {
     cat <<-'EOF'
 	.nodes
 	| map(select(.type? == "output"))
+	| map(.. | select(.type? == "workspace"))
 	| map(
-	    select(.name? != "__i3")
-	    | .nodes
-	    | map(select(.type? != "dockarea"))
-	    | map(.nodes)
-	    | flatten(1)
-	    | map(
-	       .name as $workspace
-	       | [.. | select(.nodes? == [] and .floating_nodes == [] and .focused == false)]
-	       | map([(.id | tostring), $workspace, (.window_properties | .class), .name]))
-	    | flatten(1)
-	    | map(@tsv)
-	    | .[]
-	  ) as $workspace_windows
-	| map(
-	    select(.name? == "__i3")
-	    | .nodes
-	    | map(select(.type? == "con"))
-	    | map(.nodes)
-	    | flatten(1)
-	    | map(select(.name? == "__i3_scratch"))
-	    | .[0]
-	    | .floating_nodes
-	    | map(.nodes)
-	    | flatten(1)
-	    | map([ (.id | tostring)
-	          , "S"
-		  , (.window_properties | .class // "Container")
-	          , ([.. | select(.nodes? == [] and .floating_nodes? == [])]
-		     | map(.name)
-		     | join(", "))])
-	    | map(@tsv)
-	    | .[]
-	  ) as $scratchpad_windows
-	| [ $scratchpad_windows, $workspace_windows ]
-	| flatten(1)
+	    (if .name == "__i3_scratch" then "S" else .name end) as $workspace
+	    | [.nodes?, .floating_nodes? ]
+	    | flatten
+	    | [.. | select(.nodes? == [] and .floating_nodes? == [] and .focused == false)]
+	    | map([
+	        .id
+	        , $workspace
+	        , if has("app_id") then .app_id else (.window_properties | .class) end
+	        , .name]))
+	| .[]
+	| .[]
+	| [ . ]
+	| map(@tsv)
 	| .[]
 	EOF
 }
