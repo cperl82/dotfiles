@@ -128,12 +128,24 @@ bindsym $mod+o exec --no-startup-id                             \
         -P "New workspace name: "                               \
         -f $font_core
 
-set $terminal      ${HOME}/.config/i3/bin/find-or-launch-terminal-with-title.sh
+# 2020-11-15 cperl: Various pop-ups
+for_window [window_role="pop-up"] floating enable
+
 set $quickswitch   ${HOME}/.config/i3/bin/quickswitch.sh
 set $status        ${HOME}/.config/i3status/bin/status.sh
 
 # 2016-12-11 cperl: Quickly throw windows I don't want to think about onto the scratchpad
 bindsym $mod+period move scratchpad
+
+# 2025-02-13 cperl: Quick switching of windows
+bindsym $mod+comma \
+        exec \
+        bash -c 'wlrctl toplevel focus app_id:popup-terminal-qsw ||             \
+                   alacritty                                                    \
+                     --option "font.size=14"                                    \
+                     --option "window.dimensions={columns=130, lines=50}"       \
+                     --class  "popup-terminal-qsw"                              \
+                     --command $quickswitch find-window'
 
 # 2018-03-26 cperl: Make sure anything with the name "popup-terminal"
 # floats and has no border
@@ -141,20 +153,6 @@ for_window [app_id="^popup-terminal(-.*)?$"] {
            floating enable
            border none
 }
-
-# 2020-11-15 cperl: Various pop-ups
-for_window [window_role="pop-up"] floating enable
-
-# 2025-02-13 cperl: Quick switching of windows
-bindsym $mod+comma \
-        exec \
-        bash -c 'wlrctl toplevel focus title:popup-terminal-qsw ||              \
-                   alacritty                                                    \
-                     --option "font.size=14"                                    \
-                     --option "window.dimensions={columns=130, lines=50}"       \
-                     --title  "popup-terminal-qsw"                              \
-                     --class  "popup-terminal-qsw"                              \
-                     --command $quickswitch find-window'
 
 # 2016-11-14 cperl: No borders for chrome
 for_window [app_id="google-chrome"] border none
