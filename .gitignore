@@ -18,5 +18,6 @@ emacs/.emacs.d/transient/*
 fonts/.fonts/.uuid
 i3/.config/i3/config.local
 i3/.config/i3status/plugin.d/local-*
+sway/.config/sway/config.local
 stow.local
 X/.xrdb-themes/selected
