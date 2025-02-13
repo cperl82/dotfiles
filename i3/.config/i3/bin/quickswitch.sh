@@ -13,11 +13,12 @@ function window-query {
 	    | [.nodes?, .floating_nodes? ]
 	    | flatten
 	    | [.. | select(.nodes? == [] and .floating_nodes? == [] and .focused == false)]
-	    | map([
-	        .id
+	    | map(
+	        [ .id
 	        , $workspace
-	        , if has("app_id") then .app_id else (.window_properties | .class) end
-	        , .name]))
+	        , (if .app_id? then .app_id else (.window_properties? | .class) end)
+	        , .name
+		]))
 	| .[]
 	| .[]
 	| [ . ]
