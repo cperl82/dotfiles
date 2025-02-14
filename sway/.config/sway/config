@@ -140,12 +140,12 @@ bindsym $mod+period move scratchpad
 # 2025-02-13 cperl: Quick switching of windows
 bindsym $mod+comma \
         exec \
-        bash -c 'wlrctl toplevel focus title:popup-terminal-qsw ||		\
-                   alacritty							\
-                     --option "font.size=14"					\
-                     --option "window.dimensions={columns=130, lines=50}"	\
-                     --title  "popup-terminal-qsw"				\
-                     --command $quickswitch find-window'
+        'wlrctl toplevel focus title:popup-terminal-qsw ||		\
+           alacritty							\
+             --option "font.size=14"					\
+             --option "window.dimensions={columns=130, lines=50}"	\
+             --title  "popup-terminal-qsw"				\
+             --command $quickswitch find-window'
 
 # 2018-03-26 cperl: Make sure anything with the name "popup-terminal"
 # floats and has no border
