@@ -122,11 +122,10 @@ bindsym $mod+i exec --no-startup-id                                             
         -P "New window name: "                                                          \
         -f $font_core
 
-bindsym $mod+o exec --no-startup-id                             \
-        i3-input                                                \
-        -F "rename workspace to %s"                             \
-        -P "New workspace name: "                               \
-        -f $font_core
+bindsym $mod+o \
+	exec \
+	'wmenu -f "Terminus 14" -p "New name: " < /dev/null \
+	   | xargs -r -I{} swaymsg "rename workspace to {}"'
 
 # 2020-11-15 cperl: Various pop-ups
 for_window [window_role="pop-up"] floating enable
