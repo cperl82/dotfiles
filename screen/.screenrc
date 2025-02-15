@@ -1,7 +1,8 @@
-# 2018-10-28 cperl: On RHEL 7 based systems, they add an entry for `ds=\E]2;screen\007'
-# which causes every xterm window title to display just "screen" when you run screen.
-# Disable that behavior.
-termcapinfo xterm|xterm-* 'ds='
+# 2025-02-15 cperl: Regardless of the terminal emulator that screen is
+# running inside, we don't want screen mucking around with window
+# titles, so override termcap/terminfo to say that every terminal's
+# "status line presence" flag is false.
+termcapinfo * 'hs@'
 
 # General settings
 hardstatus off
