@@ -16,7 +16,7 @@ function window-query {
 	    | map(
 	        [ .id
 	        , $workspace
-	        , (if .app_id? then .app_id else (.window_properties? | .class) end)
+	        , .app_id? // (.window_properties? | .class?)
 	        , .name
 		]))
 	| .[]
