@@ -46,8 +46,8 @@ function subcmd--find-window {
 	# alphanumeric to the end of line. The first is a plain "-" and the
 	# second is UTF-8 code point 8212 (EM DASH).
         sed -r									\
-	    -e 's/ - [[:alpha:][:blank:]]+$//'					\
-            -e 's/ \xe2\x80\x94 [[:alpha:][:blank:]]+$//'			\
+	    -e 's/ - [[:alnum:][:blank:]]+$//'					\
+            -e 's/ \xe2\x80\x94 [[:alnum:][:blank:]]+$//'			\
             -e 's/org.cryptomator.launcher.Cryptomator[$]MainApp/Cryptomator/'	\
 	    -e 's/org.mozilla.firefox/Firefox/'
     }
