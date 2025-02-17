@@ -42,11 +42,14 @@ function subcmd--find-window {
     local q
 
     function mangle_names {
-        # 1Password doesn't use an ASCII "-", they use the utf-8 8212 code point, EM DASH
-        # shellcheck disable=SC2016
-        sed -e 's/ - Google Chrome$//'                                          \
-            -e 's/ \xe2\x80\x94 1Password$//'                                   \
-            -e 's/org.cryptomator.launcher.Cryptomator$MainApp/Cryptomator/'
+	# The first two substitutions handle a dash followed by anything
+	# alphanumeric to the end of line. The first is a plain "-" and the
+	# second is UTF-8 code point 8212 (EM DASH).
+        sed -r									\
+	    -e 's/ - [[:alpha:][:blank:]]+$//'					\
+            -e 's/ \xe2\x80\x94 [[:alpha:][:blank:]]+$//'			\
+            -e 's/org.cryptomator.launcher.Cryptomator[$]MainApp/Cryptomator/'	\
+	    -e 's/org.mozilla.firefox/Firefox/'
     }
 
     tree=$(i3-msg -t get_tree)
