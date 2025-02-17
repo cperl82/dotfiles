@@ -153,6 +153,16 @@ for_window [title="^popup-terminal(-.*)?$"] {
            border none
 }
 
+# 2025-02-17 cperl: Various things taken from:
+# https://www.reddit.com/r/swaywm/comments/q90v6l/sharing_some_for_window_rules/
+for_window {
+	   [shell="xwayland"] title_format "%title [XWayland]"
+	   [window_role="pop-up"] floating enable
+	   [window_role="bubble"] floating enable
+	   [window_role="dialog"] floating enable
+	   [window_type="dialog"] floating enable
+}
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
