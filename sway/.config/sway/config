@@ -101,7 +101,7 @@ bindsym $mod+r mode "resize"
 # 2020-11-19 cperl: taken from https://gist.github.com/pantuts/13623a7ba5e7e1c4ce44
 # Create Log out, Reboot, Poweroff bindings
 mode "(B)lank, (L)ogout, (S)uspend, (R)eboot, (P)oweroff" {
-     bindsym b output * dpms force off; mode "default"
+     bindsym b output * power off; mode "default"
      bindsym l exit
      bindsym s exec systemctl suspend; mode "default"
      bindsym r exec systemctl reboot
@@ -162,9 +162,13 @@ bar {
         status_command $status
 }
 
-# Idle configuration
-exec swayidle -w \
-       timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
+# Idle commands
+# We make this a variable so the local configuration can add to it and then exec
+# swayidle after
+set $swayidle_cmds \
+    timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"'
 
 # local overrides
 include config.local
+
+exec swayidle -w $swayidle_cmds
