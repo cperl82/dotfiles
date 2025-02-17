@@ -116,11 +116,11 @@ bindsym $mod+Shift+e mode "(B)lank, (L)ogout, (S)uspend, (R)eboot, (P)oweroff"
 # 2016-12-11 cperl: Invoke i3-input to read user input for a window title, then use the
 # response from that to construct an i3 command for running xdotool to actually set the
 # window title
-bindsym $mod+i exec --no-startup-id                                                     \
-        i3-input                                                                        \
-        -F "exec --no-startup-id xdotool getactivewindow -- set_window --name '%s'"     \
-        -P "New window name: "                                                          \
-        -f $font_core
+# bindsym $mod+i exec --no-startup-id                                                     \
+#         i3-input                                                                        \
+#         -F "exec --no-startup-id xdotool getactivewindow -- set_window --name '%s'"     \
+#         -P "New window name: "                                                          \
+#         -f $font_core
 
 bindsym $mod+o \
 	exec \
