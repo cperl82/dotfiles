@@ -1622,6 +1622,44 @@ controlled by `include'."
 (defun cp/adaptive-wrap-prefix-function (beg end)
   (setq adaptive-wrap-extra-indent (1+ (org-outline-level))))
 
+(defun cp/org-agenda-generate-and-run-forms (_)
+  (let* ((tags
+          (-keep
+           (lambda (tag)
+             (let ((tag (substring-no-properties (car tag))))
+               (if (s-matches? "^@" tag) tag)))
+           (org-global-tags-completion-table)))
+         (tags-todo-forms
+          (-map
+           (lambda (tag)
+             ;; I think you can likely replace the SCHEDULED bit with
+             ;; `org-agenda-skip-entry-if '(scheduled)'
+             (let ((search (format "%s/NEXT&-SCHEDULED={.+}" tag))
+                   (overriding-header (format "%s next actions" tag)))
+               `(tags-todo ,search
+                           ((org-agenda-overriding-header
+                             ,overriding-header)
+                            (org-agenda-sorting-strategy
+                             '(category-up todo-state-up alpha-up))
+                            (org-agenda-todo-ignore-scheduled 'all)
+                            (org-agenda-tags-todo-honor-ignore-options t)))))
+           tags))
+         (agenda-forms
+          (push
+           '(agenda ""
+	            ((org-agenda-span 1)
+	             (org-deadline-warning-days 7)
+	             (org-agenda-overriding-header
+	              (format-time-string
+                       "Agenda (generated %Y-%m-%d %H:%M:%S)"))
+	             (org-agenda-sorting-strategy
+	              '(habit-up timestamp-up category-up todo-state-down alpha-up))
+                     (org-agenda-skip-scheduled-if-deadline-is-shown t)
+                     (org-agenda-show-future-repeats nil)
+                     (org-habit-show-all-today nil)))
+           tags-todo-forms)))
+    (org-agenda-run-series "" `(,agenda-forms ((org-agenda-buffer-name "*Org Agenda*"))))))
+
 (use-package org
   :defer t
   :general
@@ -1737,13 +1775,6 @@ controlled by `include'."
               ,(expand-file-name "todo.org")
               ,(expand-file-name "meeting-notes.org"))))
     (setq org-agenda-tags-column -90)
-    ;; (setq org-agenda-custom-commands
-    ;;       `(,(cp/generate-category-agenda-cmds "c" "Captured" ("capture") t 7)
-    ;;         ,(cp/generate-category-agenda-cmds "h" "House"    ("house")   t 7)
-    ;;         ,(cp/generate-category-agenda-cmds "g" "General"  ("general") t 7)
-    ;;         ,(cp/generate-category-agenda-cmds "e" "Everything else" ("capture" "house" "general") nil 7)
-    ;;         ("@" "By Context" cp/org-agenda-tagged-by-context nil
-    ;;          ((org-agenda-sorting-strategy '(tag-up todo-state-up ts-up tsia-up))))))
     (setq org-agenda-sorting-strategy '(category-up todo-state-up deadline-up tsia-up))
     (setq org-capture-templates
           `(("n" "Next Action" entry (file "~/org/capture.org")
@@ -1758,11 +1789,26 @@ controlled by `include'."
     (setq org-agenda-skip-scheduled-if-done t)
     (setq org-agenda-skip-deadline-if-done t)
     (setq org-agenda-block-separator ?-)
-    (setq org-agenda-scheduled-leaders '("   Scheduled:" "  Sched %3dx:"))
-    (setq org-agenda-deadline-leaders '("Deadline due:" "     In %3dd:" "   %4dd ago:"))
     (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-agenda-sticky t)
+    (setq org-agenda-prefix-format
+          '((agenda . "  %-9:c%13 s")
+            (todo   . "  %-9:c")
+            (tags   . "  %-9:c")
+            (search . "  %-9:c")))
+    (setq org-agenda-breadcrumbs-separator ">")
+    (setq org-agenda-scheduled-leaders '("schd: " "schd(%2dd): "))
+    (setq org-agenda-deadline-leaders '("due: " "due(-%dd): " "due(+%dd): "))
+    (setq org-agenda-format-date
+          (lambda (date)
+            (concat "\n"
+	            (format-time-string "%a %Y-%m-%d:" (org-time-from-absolute date)))))
+    (setq org-agenda-remove-tags t)
+    (setq org-agenda-custom-commands
+          '(("." "Today's agenda with next actions tagged by context"
+             cp/org-agenda-generate-and-run-forms "")))
+    (setq org-tags-column -85)
     (setq org-log-into-drawer t)
     (setq org-refile-use-cache t)
     (setq org-catch-invisible-edits 'error)
@@ -1779,8 +1825,8 @@ controlled by `include'."
            "\\|"
            (rx (: bol (0+ "/" (1+ anything)) "/" "org" "/"))))
     ;; Ensure png/jpg files are opened in an external application
-    (add-to-list org-file-apps '("\\.png\\'" . default))
-    (add-to-list org-file-apps '("\\.jpe?g\\'" . default))
+    (add-to-list 'org-file-apps '("\\.png\\'" . default))
+    (add-to-list 'org-file-apps '("\\.jpe?g\\'" . default))
     (run-with-idle-timer 30 t
                          (lambda () (let ((inhibit-message t)) (org-save-all-org-buffers))))
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
