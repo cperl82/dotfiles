@@ -1559,8 +1559,7 @@ The key is the todo keyword and the value is its relative position in the list."
                             (org-agenda-tags-todo-honor-ignore-options t)))))
            tags))
          (agenda-forms
-          (push
-           '(agenda ""
+          '((agenda ""
 	            ((org-agenda-span 1)
 	             (org-deadline-warning-days 7)
 	             (org-agenda-overriding-header
@@ -1570,9 +1569,9 @@ The key is the todo keyword and the value is its relative position in the list."
 	              '(habit-up timestamp-up category-up todo-state-down alpha-up))
                      (org-agenda-skip-scheduled-if-deadline-is-shown t)
                      (org-agenda-show-future-repeats nil)
-                     (org-habit-show-all-today nil)))
-           tags-todo-forms)))
-    (org-agenda-run-series "" `(,agenda-forms ((org-agenda-buffer-name "*Org Agenda*"))))))
+                     (org-habit-show-all-today nil)))))
+         (all-forms (append agenda-forms tags-todo-forms)))
+    (org-agenda-run-series "" `(,all-forms ((org-agenda-buffer-name "*Org Agenda*"))))))
 
 (use-package org
   :defer t
