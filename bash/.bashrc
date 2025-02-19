@@ -452,23 +452,6 @@ function setup-misc {
     local osfile=""
     local localfile=""
 
-    # vim: function wrapper for use with screen
-    # A conditional function definition to work around the fact that when screen
-    # switches to the alternate screen ("\E[?1049h" and "\E[?1049l") and back, it
-    # maintains the background color that was set.  This means that after running
-    # vim with the xoria256 color scheme, I am left with my prompt having a light
-    # greg background color.  This is highly annoying.  I have been manually getting
-    # around this by running "cl" after I quit vim from within screen (see function
-    # above), but this should do the same thing automatically if I am within screen.
-    if test "${TERM}" = "screen" -o \
-	    "${TERM}" = "screen-256color"; then
-	function vim
-	{
-	    command vim "$@"
-	    tput op
-	}
-    fi
-
     # PYTHONSTARTUP Environment variable
     # if the ${HOME}/.python_startup.py file exists, set PYTHONSTARTUP to point to
     # it such that its contents are executed for interactive python sessions
