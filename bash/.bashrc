@@ -441,9 +441,9 @@ function scr {
     if [[ -n "${parnt}" && -n "${child}" ]]
     then
 	xt "${parnt} ${child}"
-	screen -S "${parnt}-${child}" "${@}"
+	screen -S "${parnt}-${child}" emacs -nw
     else
-	screen "${@}"
+	screen emacs -nw
     fi
 }
 
