@@ -1597,28 +1597,6 @@ controlled by `include'."
   (message "%S %S %S" min-to-app new-time msg)
   t)
 
-;; Taken from https://emacs.stackexchange.com/questions/28782/avoiding-underlined-spaces-between-two-lines
-;; and modified slightly
-(defface cp/org-dont-underline-leading-spaces-in-multiline-links '((t :underline nil))
-  "Avoid underlining of indentation.")
-
-(defun cp/org-search-underlined-leading-spaces-in-multiline-links (limit)
-  "Match function for `cp/org-dont-underline-leading-spaces-in-multiline-links'."
-  (let (ret face)
-    (while
-        (and
-         (setq ret (re-search-forward "^[[:space:]]+" limit t))
-         (or (null (setq face (plist-get (text-properties-at (match-beginning 0)) 'face)))
-             (not (eq face 'org-link)))))
-    ret))
-
-(defun cp/org-dont-underline-leading-spaces-in-multiline-links ()
-  "Remove underlining at indents."
-  (font-lock-add-keywords
-   'org-mode
-   '((cp/org-search-underlined-leading-spaces-in-multiline-links 0 'cp/org-dont-underline-leading-spaces-in-multiline-links t))
-   'append))
-
 (defun cp/adaptive-wrap-prefix-function (beg end)
   (setq adaptive-wrap-extra-indent (1+ (org-outline-level))))
 
@@ -1840,7 +1818,6 @@ controlled by `include'."
        (sed    . true)
        (R      . true)
        (calc   . true)))
-    ;; (cp/org-dont-underline-leading-spaces-in-multiline-links)
     (add-hook
      'org-mode-hook
      (lambda ()
