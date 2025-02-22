@@ -122,7 +122,7 @@ bindsym $mod+Shift+e mode "(B)lank, (L)ogout, (S)uspend, (R)eboot, (P)oweroff"
 # title "%title" and then it'll show the application's window title again.
 bindsym $mod+i \
 	exec \
-	' name=$(wmenu -f "Terminus 14" -p "New window name: "); \
+	'name=$(wmenu -f "Terminus 14" -p "New window name: "); \
 	 swaymsg "[con_id="__focused__"] title_format ${name}"'
 
 bindsym $mod+o \
