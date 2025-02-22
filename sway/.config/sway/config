@@ -11,7 +11,7 @@ bindsym $mod+Return exec alacritty -o font.size=14
 # kill focused window
 bindsym $mod+Shift+q kill
 
-# start dmenu (a program launcher)
+# wmenu, for launching things
 bindsym $mod+d exec wmenu-run -f $font
 
 # change focus
