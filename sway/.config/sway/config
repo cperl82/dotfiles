@@ -122,9 +122,8 @@ bindsym $mod+Shift+e mode "(B)lank, (L)ogout, (S)uspend, (R)eboot, (P)oweroff"
 # title "%title" and then it'll show the application's window title again.
 bindsym $mod+i \
 	exec \
-	'id=$(swaymsg -t get_tree | jq -r ".. | select(.focused? == true) | .id"); \
-	 name=$(wmenu -f "Terminus 14" -p "New window name: "); \
-	 swaymsg "[con_id=${id}] title_format ${name}"'
+	' name=$(wmenu -f "Terminus 14" -p "New window name: "); \
+	 swaymsg "[con_id="__focused__"] title_format ${name}"'
 
 bindsym $mod+o \
 	exec \
