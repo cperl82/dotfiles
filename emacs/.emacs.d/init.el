@@ -1538,11 +1538,13 @@ The key is the todo keyword and the value is its relative position in the list."
 
 (defun cp/org-agenda-generate-and-run-forms (_)
   (let* ((tags
-          (-keep
-           (lambda (tag)
-             (let ((tag (substring-no-properties (car tag))))
-               (if (s-matches? "^@" tag) tag)))
-           (org-global-tags-completion-table)))
+          (-sort
+           #'string<
+           (-keep
+            (lambda (tag)
+              (let ((tag (substring-no-properties (car tag))))
+                (if (s-matches? "^@" tag) tag)))
+            (org-global-tags-completion-table))))
          (tags-todo-forms
           (-map
            (lambda (tag)
