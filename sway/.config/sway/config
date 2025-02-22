@@ -114,12 +114,12 @@ mode "(B)lank, (L)ogout, (S)uspend, (R)eboot, (P)oweroff" {
 bindsym $mod+Shift+e mode "(B)lank, (L)ogout, (S)uspend, (R)eboot, (P)oweroff"
 
 # 2025-02-21 cperl: Invoke wmenu to read user input for a window title, then use
-# the response to construct a sway command for overriding the title_format.
+# swaymsg to override the title_format for the focused window.
 #
 # This is an abuse of title_format and means that the application can no longer
-# set the title at all, but it allows me to dynamically set the window title via
-# a hotkey. If you want to undo this, you can just run it again but make the
-# title "%title" and then it'll show the application's window title again.
+# set the title. But it allows me to dynamically set the window title via a
+# hotkey. If you want to undo this, you can just run it again but make the title
+# "%title" and then it'll show the application's window title again.
 bindsym $mod+i \
 	exec \
 	'name=$(wmenu -f "'$font'" -p "New window name:"); \
