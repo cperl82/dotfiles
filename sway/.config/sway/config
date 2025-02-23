@@ -120,6 +120,12 @@ bindsym $mod+Shift+e mode "(B)lank, (L)ogout, (S)uspend, (R)eboot, (P)oweroff"
 # set the title. But it allows me to dynamically set the window title via a
 # hotkey. If you want to undo this, you can just run it again but make the title
 # "%title" and then it'll show the application's window title again.
+#
+# This actually doesn't work the way I want it to. While it allows the window
+# decoration to *look* the way I want, I can't search for that title with
+# quickswitch as the title_format isn't exposed in the get_tree call. I think I
+# can probably get what I want using marks, but I have to look into that a bit
+# more.
 bindsym $mod+i \
 	exec \
 	'name=$(wmenu -f "'$font'" -p "New window name:"); \
