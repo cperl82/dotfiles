@@ -17,9 +17,9 @@ function window-query {
 	        [ .id
 	        , $workspace
 	        , .app_id? // (.window_properties? | .class?)
-		, (.marks | join(","))
+	        , (.marks | join(","))
 	        , .name
-		]))
+	        ]))
 	| .[]
 	| .[]
 	| [ . ]
@@ -43,46 +43,46 @@ function subcmd--find-window {
     local q
 
     function mangle_names {
-	awk -F'\t' \
-	'{
-	    OFS="\t"
-	    # Remove leading dot separated components, e.g. turn
-	    # org.mozilla.firefox into firefox
-	    gsub(/^([^.]+\.)+/, "", $3);
+        awk -F'\t' \
+        '{
+            OFS="\t"
+            # Remove leading dot separated components, e.g. turn
+            # org.mozilla.firefox into firefox
+            gsub(/^([^.]+\.)+/, "", $3);
 
-	    # Remove trailing dollar separate components, e.g. turn
-	    # Cryptomator$MainApp to Cryptomator
-	    gsub(/([$][^$]+)+$/, "", $3);
+            # Remove trailing dollar separate components, e.g. turn
+            # Cryptomator$MainApp to Cryptomator
+            gsub(/([$][^$]+)+$/, "", $3);
 
-	    # Remove from "-" or EM DASH (Unicode point 8212) to the
-	    # end of the line
-	    gsub(/ (-|\xe2\x80\x94) .*$/, "", $5);
+            # Remove from "-" or EM DASH (Unicode point 8212) to the
+            # end of the line
+            gsub(/ (-|\xe2\x80\x94) .*$/, "", $5);
 
-	    print
-	}'
+            print
+        }'
     }
 
     function prepend_header {
-	printf "%s\t" "Dummy" "W" "App" "Marks" "Title" \
-	    | sed -e 's/\t$/\n/'
-	cat
+        printf "%s\t" "Dummy" "W" "App" "Marks" "Title" \
+            | sed -e 's/\t$/\n/'
+        cat
     }
 
     tree=$(i3-msg -t get_tree)
     q=$(window-query)
 
-    jq -r "${q}" <<<"${tree}"					\
-        | mangle_names						\
-        | sort -k 2,2n -k 3,3Vr -k 4,4Vr			\
-	| prepend_header					\
-        | column -t -s$'\t'					\
-        | fzf							\
-	      --bind 'enter:become(echo {1})'			\
-	      --with-nth=2..					\
-	      --border						\
-	      --header-first					\
-	      --header-lines 1					\
-	      --layout reverse					\
+    jq -r "${q}" <<<"${tree}"                                   \
+        | mangle_names                                          \
+        | sort -k 2,2nr -k 3,3V -k 4,4V                         \
+        | prepend_header                                        \
+        | column -t -s$'\t'                                     \
+        | fzf                                                   \
+              --bind 'enter:become(echo {1})'                   \
+              --with-nth=2..                                    \
+              --border                                          \
+              --header-first                                    \
+              --header-lines 1                                  \
+              --layout reverse                                  \
         | xargs -I{} i3-msg -t command "[con_id={}] focus"
 }
 
