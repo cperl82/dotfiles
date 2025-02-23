@@ -128,13 +128,15 @@ bindsym $mod+Shift+e mode "(B)lank, (L)ogout, (S)uspend, (R)eboot, (P)oweroff"
 # more.
 bindsym $mod+i \
 	exec \
-	'name=$(wmenu -f "'$font'" -p "New window name:"); \
-	 swaymsg "[con_id="__focused__"] title_format ${name}"'
+	'swaymsg -t get_tree								\
+	  | jq -r ".. | select(.focused?) | .marks[]"					\
+	  | wmenu -f "'$font'" -p "Marks:"						\
+	  | xargs -r -I{} swaymsg "[con_id=\"__focused__\"] mark --add --toggle {}"'
 
 bindsym $mod+o \
 	exec \
-	'name=$(wmenu -f "'$font'" -p "New workspace name:"); \
-	 swaymsg "rename workspace to ${name}"'
+	'wmenu -f "'$font'" -p "New workspace name:"		\
+	  | xargs -r -I{} swaymsg "rename workspace to {}"'
 
 set $quickswitch   ${HOME}/.config/i3/bin/quickswitch.sh
 set $status        ${HOME}/.config/i3status/bin/status.sh
