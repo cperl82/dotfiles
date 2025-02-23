@@ -138,7 +138,7 @@ bindsym $mod+comma \
         'wlrctl toplevel focus title:popup-terminal-qsw ||		\
            alacritty							\
              --option "font.size=14"					\
-             --option "window.dimensions={columns=130, lines=50}"	\
+             --option "window.dimensions={columns=145, lines=45}"	\
              --title  "popup-terminal-qsw"				\
              --command $quickswitch find-window'
 
