@@ -113,19 +113,7 @@ mode "(B)lank, (L)ogout, (S)uspend, (R)eboot, (P)oweroff" {
 }
 bindsym $mod+Shift+e mode "(B)lank, (L)ogout, (S)uspend, (R)eboot, (P)oweroff"
 
-# 2025-02-21 cperl: Invoke wmenu to read user input for a window title, then use
-# swaymsg to override the title_format for the focused window.
-#
-# This is an abuse of title_format and means that the application can no longer
-# set the title. But it allows me to dynamically set the window title via a
-# hotkey. If you want to undo this, you can just run it again but make the title
-# "%title" and then it'll show the application's window title again.
-#
-# This actually doesn't work the way I want it to. While it allows the window
-# decoration to *look* the way I want, I can't search for that title with
-# quickswitch as the title_format isn't exposed in the get_tree call. I think I
-# can probably get what I want using marks, but I have to look into that a bit
-# more.
+# 2025-02-21 cperl: Using wmenu to allow mark management and changing of workspace names.
 bindsym $mod+i \
 	exec \
 	'swaymsg -t get_tree								\
