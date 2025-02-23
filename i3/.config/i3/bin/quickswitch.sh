@@ -17,6 +17,7 @@ function window-query {
 	        [ .id
 	        , $workspace
 	        , .app_id? // (.window_properties? | .class?)
+		, (.marks | join(","))
 	        , .name
 		]))
 	| .[]
@@ -42,25 +43,46 @@ function subcmd--find-window {
     local q
 
     function mangle_names {
-	# The first two substitutions handle a dash followed by anything
-	# alphanumeric to the end of line. The first is a plain "-" and the
-	# second is UTF-8 code point 8212 (EM DASH).
-        sed -r									\
-	    -e 's/ - [[:alnum:][:blank:]]+$//'					\
-            -e 's/ \xe2\x80\x94 [[:alnum:][:blank:]]+$//'			\
-            -e 's/org.cryptomator.launcher.Cryptomator[$]MainApp/Cryptomator/'	\
-	    -e 's/org.mozilla.firefox/Firefox/'
+	awk -F'\t' \
+	'{
+	    OFS="\t"
+	    # Remove leading dot separated components, e.g. turn
+	    # org.mozilla.firefox into firefox
+	    gsub(/^([^.]+\.)+/, "", $3);
+
+	    # Remove trailing dollar separate components, e.g. turn
+	    # Cryptomator$MainApp to Cryptomator
+	    gsub(/([$][^$]+)+$/, "", $3);
+
+	    # Remove from "-" or EM DASH (Unicode point 8212) to the
+	    # end of the line
+	    gsub(/ (-|\xe2\x80\x94) .*$/, "", $5);
+
+	    print
+	}'
+    }
+
+    function prepend_header {
+	printf "%s\t" "Dummy" "W" "App" "Marks" "Title" \
+	    | sed -e 's/\t$/\n/'
+	cat
     }
 
     tree=$(i3-msg -t get_tree)
     q=$(window-query)
 
-    jq -r "${q}" <<<"${tree}"                                   \
-        | mangle_names                                          \
-        | column -t -s$'\t'                                     \
-        | sort -k 2,2n -k 3,3Vr -k 4,4Vr                        \
-        | fzf --with-nth=2.. --border                           \
-        | awk '{print $1}'                                      \
+    jq -r "${q}" <<<"${tree}"					\
+        | mangle_names						\
+        | sort -k 2,2n -k 3,3Vr -k 4,4Vr			\
+	| prepend_header					\
+        | column -t -s$'\t'					\
+        | fzf							\
+	      --bind 'enter:become(echo {1})'			\
+	      --with-nth=2..					\
+	      --border						\
+	      --header-first					\
+	      --header-lines 1					\
+	      --layout reverse					\
         | xargs -I{} i3-msg -t command "[con_id={}] focus"
 }
 
