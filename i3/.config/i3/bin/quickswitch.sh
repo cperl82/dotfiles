@@ -56,7 +56,7 @@ function subcmd--find-window {
 
             # Remove from "-" or EM DASH (Unicode point 8212) to the
             # end of the line
-            gsub(/ (-|\xe2\x80\x94) .*$/, "", $5);
+            gsub(/ (-|\xe2\x80\x94) [[:alnum:][:space:]]+$/, "", $5);
 
             print
         }'
