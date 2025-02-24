@@ -46,6 +46,7 @@ function subcmd--find-window {
         awk -F'\t' \
         '{
             OFS="\t"
+
             # Remove leading dot separated components, e.g. turn
             # org.mozilla.firefox into firefox
             gsub(/^([^.]+\.)+/, "", $3);
@@ -53,6 +54,9 @@ function subcmd--find-window {
             # Remove trailing dollar separate components, e.g. turn
             # Cryptomator$MainApp to Cryptomator
             gsub(/([$][^$]+)+$/, "", $3);
+
+            # Attempt to upper case first letter of app name
+            $3 = toupper(substr($3, 1, 1)) substr($3, 2)
 
             # Remove from "-" or EM DASH (Unicode point 8212) to the
             # end of the line
