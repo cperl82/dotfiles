@@ -6,7 +6,7 @@ font $font
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec alacritty -o font.size=14
+bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -137,7 +137,6 @@ bindsym $mod+comma \
         exec \
         'wlrctl toplevel focus title:popup-terminal-qsw ||		\
            alacritty							\
-             --option "font.size=14"					\
              --option "window.dimensions={columns=145, lines=45}"	\
              --title  "popup-terminal-qsw"				\
              --command $quickswitch find-window'
