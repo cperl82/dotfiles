@@ -163,8 +163,6 @@ bar {
         status_command $status
 }
 
-exec xsettingsd
-
 # Idle commands
 # We make this a variable so the local configuration can add to it and then exec
 # swayidle after
