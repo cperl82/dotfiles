@@ -121,7 +121,7 @@ bindsym $mod+i \
         'swaymsg -t get_tree                                                            \
            | jq -r ".. | select(.focused?) | .marks[]"                                  \
            | wmenu -f "'$font'" -p "Marks:"                                             \
-           | xargs -r -I{} swaymsg "[con_id=\"__focused__\"] mark --add --toggle {}"'
+           | xargs -r -I{} swaymsg "[con_id=__focused__] mark --add --toggle {}"'
 
 bindsym $mod+o \
 	exec \
