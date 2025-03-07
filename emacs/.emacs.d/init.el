@@ -1568,7 +1568,13 @@ The key is the todo keyword and the value is its relative position in the list."
 	              (format-time-string
                        "Agenda (generated %Y-%m-%d %H:%M:%S)"))
 	             (org-agenda-sorting-strategy
-	              '(habit-up timestamp-up time-down category-up todo-state-down alpha-up))
+	              '(habit-up
+                        scheduled-up
+                        deadline-up
+                        time-down
+                        category-up
+                        todo-state-down
+                        alpha-up))
                      (org-agenda-skip-scheduled-if-deadline-is-shown t)
                      (org-agenda-show-future-repeats nil)
                      (org-habit-show-all-today nil)))))
