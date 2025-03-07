@@ -118,15 +118,15 @@ bindsym $mod+Shift+e mode "(B)lank, (L)ogout, (S)uspend, (R)eboot, (P)oweroff"
 # 2025-02-21 cperl: Using wmenu to allow mark management and changing of workspace names.
 bindsym $mod+i \
 	exec \
-	'swaymsg -t get_tree								\
-	   | jq -r ".. | select(.focused?) | .marks[]"					\
-	   | wmenu -f "'$font'" -p "Marks:"						\
-	   | xargs -r -I{} swaymsg "[con_id=\"__focused__\"] mark --add --toggle {}"'
+        'swaymsg -t get_tree                                                            \
+           | jq -r ".. | select(.focused?) | .marks[]"                                  \
+           | wmenu -f "'$font'" -p "Marks:"                                             \
+           | xargs -r -I{} swaymsg "[con_id=\"__focused__\"] mark --add --toggle {}"'
 
 bindsym $mod+o \
 	exec \
-	'wmenu -f "'$font'" -p "New workspace name:"		\
-	   | xargs -r -I{} swaymsg "rename workspace to {}"'
+        'wmenu -f "'$font'" -p "New workspace name:"            \
+           | xargs -r -I{} swaymsg "rename workspace to {}"'
 
 set $quickswitch   ${HOME}/.config/i3/bin/quickswitch.sh
 set $status        ${HOME}/.config/i3status/bin/status.sh
