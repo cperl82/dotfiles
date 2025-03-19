@@ -1548,16 +1548,15 @@ The key is the todo keyword and the value is its relative position in the list."
          (tags-todo-forms
           (-map
            (lambda (tag)
-             ;; I think you can likely replace the SCHEDULED bit with
-             ;; `org-agenda-skip-entry-if '(scheduled)'
-             (let ((search (format "%s/NEXT&-SCHEDULED={.+}" tag))
+             (let ((search (format "%s/NEXT" tag))
                    (overriding-header (format "%s next actions" tag)))
                `(tags-todo ,search
                            ((org-agenda-overriding-header
                              ,overriding-header)
                             (org-agenda-sorting-strategy
                              '(category-up todo-state-up alpha-up))
-                            (org-agenda-todo-ignore-scheduled 'all)
+                            (org-agenda-todo-ignore-scheduled t)
+                            (org-agenda-todo-ignore-deadlines t)
                             (org-agenda-tags-todo-honor-ignore-options t)))))
            tags))
          (agenda-forms
