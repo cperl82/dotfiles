@@ -163,6 +163,10 @@ bar {
         status_command $status
 }
 
+# Background color
+# #2f4f4f is x11 darkslategrey
+output * background "#2f4f4f" solid_color
+
 # Idle commands
 # We make this a variable so the local configuration can add to it and then exec
 # swayidle after
