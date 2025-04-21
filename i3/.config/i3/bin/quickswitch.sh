@@ -42,32 +42,52 @@ function subcmd--find-window {
     local tree
     local q
 
+    function extract_name_context {
+	# If a window title starts with [Foo] extract that as a separate field
+	awk -F'\t' \
+        '{
+           OFS="\t"
+
+           if (where = match($5, /^\[.+\] /)) {
+               $6 = substr($5, RLENGTH+1)
+               $5 = substr($5, where+1, RLENGTH-3)
+           }
+           else {
+               $6 = $5
+               $5 = ""
+           }
+
+           print
+        }'
+    }
+
     function mangle_names {
+	# Fixup various things about window titles
         awk -F'\t' \
         '{
-            OFS="\t"
+           OFS="\t"
 
-            # Remove leading dot separated components, e.g. turn
-            # org.mozilla.firefox into firefox
-            gsub(/^([^.]+\.)+/, "", $3);
+           # Remove leading dot separated components, e.g. turn
+           # org.mozilla.firefox into firefox
+           gsub(/^([^.]+\.)+/, "", $3);
 
-            # Remove trailing dollar separate components, e.g. turn
-            # Cryptomator$MainApp to Cryptomator
-            gsub(/([$][^$]+)+$/, "", $3);
+           # Remove trailing dollar separate components, e.g. turn
+           # Cryptomator$MainApp to Cryptomator
+           gsub(/([$][^$]+)+$/, "", $3);
 
-            # Attempt to upper case first letter of app name
-            $3 = toupper(substr($3, 1, 1)) substr($3, 2)
+           # Attempt to upper case first letter of app name
+           $3 = toupper(substr($3, 1, 1)) substr($3, 2)
 
-            # Remove from "-" or EM DASH (Unicode point 8212) to the
-            # end of the line
-            gsub(/ (-|\xe2\x80\x94) [[:alnum:][:space:]]+$/, "", $5);
+           # Remove from "-" or EM DASH (Unicode point 8212) to the
+           # end of the line
+           gsub(/ (-|\xe2\x80\x94) [[:alnum:][:space:]]+$/, "", $6);
 
-            print
+           print
         }'
     }
 
     function prepend_header {
-        printf "%s\t" "Dummy" "W" "App" "Marks" "Title" \
+        printf "%s\t" "Dummy" "W" "App" "Marks" "Context" "Title" \
             | sed -e 's/\t$/\n/'
         cat
     }
@@ -76,8 +96,9 @@ function subcmd--find-window {
     q=$(window-query)
 
     jq -r "${q}" <<<"${tree}"                                   \
+        | extract_name_context                                  \
         | mangle_names                                          \
-        | sort -k 2,2nr -k 3,3V -k 4,4V                         \
+        | sort -k 2,2nr -k 3,3V -k 4,4V -k 5,5V                 \
         | prepend_header                                        \
         | column -t -s$'\t'                                     \
         | fzf                                                   \
