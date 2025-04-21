@@ -100,12 +100,12 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-# 2020-11-19 cperl: taken from https://gist.github.com/pantuts/13623a7ba5e7e1c4ce44
-# Create Log out, Reboot, Poweroff bindings
-mode "(B)lank, (L)ogout, (S)uspend, (R)eboot, (P)oweroff" {
-     bindsym b output * power off; mode "default"
+# 2020-11-19 cperl: Originally taken from https://gist.github.com/pantuts/13623a7ba5e7e1c4ce44
+mode "(L)ogout, (I)dle, (S)uspend, (R)eboot, (P)oweroff" {
      bindsym l exit
-     bindsym s exec systemctl suspend; mode "default"
+     bindsym i nop
+     bindsym --release i mode "default"; exec pkill -u $(id -u) -x swayidle -USR1
+     bindsym s mode "default"; exec systemctl suspend
      bindsym r exec systemctl reboot
      bindsym p exec systemctl poweroff
 
@@ -113,7 +113,7 @@ mode "(B)lank, (L)ogout, (S)uspend, (R)eboot, (P)oweroff" {
      bindsym Return mode "default"
      bindsym Escape mode "default"
 }
-bindsym $mod+Shift+e mode "(B)lank, (L)ogout, (S)uspend, (R)eboot, (P)oweroff"
+bindsym $mod+Shift+e mode "(L)ogout, (I)dle, (S)uspend, (R)eboot, (P)oweroff"
 
 # 2025-02-21 cperl: Using wmenu to allow mark management and changing of workspace names.
 bindsym $mod+i \
