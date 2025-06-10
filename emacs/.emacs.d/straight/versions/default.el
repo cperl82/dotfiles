@@ -20,7 +20,7 @@
  ("evil-collection" . "4748cfb78488fce96812130e0b53aae6d042ca6d")
  ("evil-smartparens" . "026d4a3cfce415a4dfae1457f871b385386e61d3")
  ("evil-surround" . "da05c60b0621cf33161bb4335153f75ff5c29d91")
- ("f.el" . "50af874cd19042f17c8686813d52569b1025c76a")
+ ("f.el" . "931b6d0667fe03e7bf1c6c282d6d8d7006143c52")
  ("flycheck" . "784f184cdd9f9cb4e3dbb997c09d93e954142842")
  ("general.el" . "9651024e7f40a8ac5c3f31f8675d3ebe2b667344")
  ("gnu-elpa-mirror" . "ab9bcb0be30511d4fff7e413135507cebc447f7c")
