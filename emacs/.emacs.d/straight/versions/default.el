@@ -17,7 +17,7 @@
  ("embark" . "a4847042ce53823624d115eebfd77eb3b4477d1b")
  ("epl" . "78ab7a85c08222cd15582a298a364774e3282ce6")
  ("evil" . "682e87fce99f39ea3155f11f87ee56b6e4593304")
- ("evil-collection" . "acb056b1d0d3aad2f32b1ca9c019a9a2e976f03e")
+ ("evil-collection" . "4748cfb78488fce96812130e0b53aae6d042ca6d")
  ("evil-smartparens" . "026d4a3cfce415a4dfae1457f871b385386e61d3")
  ("evil-surround" . "da05c60b0621cf33161bb4335153f75ff5c29d91")
  ("f.el" . "50af874cd19042f17c8686813d52569b1025c76a")
