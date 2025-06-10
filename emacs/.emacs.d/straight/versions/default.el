@@ -65,7 +65,7 @@
  ("swiper" . "2a25a6fb5b081cb141c5eccac8ee58ab1feeb747")
  ("systemd-mode" . "b6ae63a236605b1c5e1069f7d3afe06ae32a7bae")
  ("systemtap-mode" . "1a968c2b1f3a054bebf91ac49739d3a81ce050a9")
- ("transient" . "45975c24e1ab08bb32e9bdc06f5c5efe7c256e16")
+ ("transient" . "f3f498aa155f88c7e2ab6d1d01d1361813059db8")
  ("ts.el" . "3fee71ceefac71ba55eb34829d7e94bb3df37cee")
  ("tuareg" . "1d53723e39f22ab4ab76d31f2b188a2879305092")
  ("undo-tree" . "e326c6135e62f5fe8536528d3acd5e798f847407")
