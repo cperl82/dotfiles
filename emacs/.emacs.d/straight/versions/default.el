@@ -47,7 +47,7 @@
  ("nerd-icons.el" . "3af4d38c1119567b20ef9020f70de163d0d58c37")
  ("nongnu-elpa" . "b299b0d074a4762e99474ba443d37263f87ace1d")
  ("ob-async" . "9aac486073f5c356ada20e716571be33a350a982")
- ("org" . "d6c0bbe280bf4ece9068e106437ad709d730acb3")
+ ("org" . "84f18cceaec74f42587b9ff4c796b23b5073d377")
  ("org-ql" . "bacdacb1b233e4199ccda810152484edd59fa091")
  ("org-super-agenda" . "3108bc3f725818f0e868520d2c243abe9acbef4e")
  ("origami.el" . "e558710a975e8511b9386edc81cd6bdd0a5bda74")
