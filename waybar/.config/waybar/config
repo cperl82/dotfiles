@@ -1,0 +1,9 @@
+{
+    "layer": "top",
+    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-right": ["battery", "clock", "pulseaudio", "tray"],
+    "clock": {
+	"format": "{:%F %H:%M:%S}",
+	"timezone": "America/New_York",
+    }
+}
