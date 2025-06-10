@@ -38,6 +38,7 @@
  ("json-reformat" . "8eb6668ed447988aea06467ba8f42e1f2178246f")
  ("json-snatcher" . "b28d1c0670636da6db508d03872d96ffddbc10f2")
  ("let-alist" . "d2d0cac92851d4480328bc3f41d30c518beb1f99")
+ ("llama" . "6a67e4253cc02aa9ce85ef96290c95198b65d913")
  ("lua-mode" . "5a9bee8d5fc978dc64fcb677167417010321ba65")
  ("magit" . "2f1ff91f128f28aa277e0e060ef44b4be8a989c1")
  ("map" . "7ef991a4e234195f125dc2b2ad4cad5a1d11a7d5")
