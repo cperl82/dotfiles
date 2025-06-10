@@ -6,7 +6,7 @@
  ("company-mode" . "4c08ef468678bbf3b3c9e750f6e694eea1aa8423")
  ("compat" . "605f224633eb28efbe62252605515ce3d557e19f")
  ("counsel-projectile" . "40d1e1d4bb70acb00fddd6f4df9778bf2c52734b")
- ("dash.el" . "6db80c711ce947f6c6fa11e5c2257fff2c79d139")
+ ("dash.el" . "fcb5d831fc08a43f984242c7509870f30983c27c")
  ("diminish.el" . "6ec6ebc391371418efc6c98d70b013f34af5a2ee")
  ("doom-modeline" . "a312ea8f4ad6fcf9cf1d22fe65aa897f73336a4b")
  ("el-get" . "a5ba5852648a90ee0cde9fb5d72e69497d260eec")
