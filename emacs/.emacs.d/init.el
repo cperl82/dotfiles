@@ -36,9 +36,7 @@
 
 (dolist
     (package
-      '(avy
-        ace-window
-        adaptive-wrap
+      '(adaptive-wrap
         annalist
         color-theme-zenburn
         company-mode
@@ -341,40 +339,6 @@ If there are multiple windows, don't split anything."
    "M-p" nil
    "C-n" #'company-select-next
    "C-p" #'company-select-previous))
-
-
-
-;; avy
-(use-package avy
-  :defer t
-  :general
-  (:keymaps '(override)
-   :states '(normal motion insert emacs)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "a a"   '(:ignore t :which-key "avy")
-   "a a c" #'avy-goto-char
-   "a a C" #'avy-goto-char-2
-   "a a w" #'avy-goto-word-1)
-  :config
-  (progn
-    (setq avy-background t)))
-
-;; ace-window
-(use-package ace-window
-  :defer t
-  :general
-  (:keymaps '(override)
-   :states '(normal motion insert emacs)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "w a" #'ace-window)
-  (:keymaps '(override)
-   :states '(normal motion insert emacs)
-   "M-o" #'ace-window)
-  :init
-  (progn
-    (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l))))
 
 
 
