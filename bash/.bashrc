@@ -460,6 +460,12 @@ function setup-misc {
 	export PYTHONSTARTUP="${HOME}/.python_startup.py"
     fi
 
+    # Rustup / cargo
+    if [[ -f "${HOME}/.cargo/env" ]]
+    then
+	source "${HOME}/.cargo/env"
+    fi
+
     # Important variable setting
     BASHFILES=$(dirname $(path-canonical ${BASH_ARGV[0]}))
     DOTFILES=$(dirname ${BASHFILES})
