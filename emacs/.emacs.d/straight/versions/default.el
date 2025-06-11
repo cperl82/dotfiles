@@ -1,4 +1,4 @@
-(("Emacs-wgrep" . "f9687c28bbc2e84f87a479b6ce04407bb97cfb23")
+(("Emacs-wgrep" . "49f09ab9b706d2312cab1199e1eeb1bcd3f27f6f")
  ("adaptive-wrap" . "a3b179ea21aeb4e8cfaf5646bb66d9d045263780")
  ("annalist.el" . "134fa3f0fb91a636a1c005c483516d4b64905a6d")
  ("bind-key" . "aa22c8c3c740c2f306509b9c37d9511cfa41b612")
