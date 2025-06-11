@@ -60,7 +60,7 @@
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
  ("smartparens" . "2834c66c4f09778d0c57e99886c329188eed591a")
  ("smex" . "55aaebe3d793c2c990b39a302eb26c184281c42c")
- ("straight.el" . "3ea32a95f454dccdff6da71bb903c7e4ede08052")
+ ("straight.el" . "d157afbec4ec8659ad2026f57354d58d849a7c94")
  ("swiper" . "2a25a6fb5b081cb141c5eccac8ee58ab1feeb747")
  ("systemd-mode" . "b6ae63a236605b1c5e1069f7d3afe06ae32a7bae")
  ("systemtap-mode" . "1a968c2b1f3a054bebf91ac49739d3a81ce050a9")
