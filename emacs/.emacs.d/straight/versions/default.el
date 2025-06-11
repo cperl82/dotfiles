@@ -76,6 +76,5 @@
  ("windsize" . "62c2846bbe95b0a73e996c75e4a644d05f57aaaa")
  ("with-editor" . "8d52f933e50624c7bca3880f57297ac17ba4ac2d")
  ("xcscope.el" . "d228d7593d762e457340f678d14b663ef66d7cee")
- ("yaml-mode" . "63b637f846411806ae47e63adc06fe9427be1131")
  ("zenburn-emacs" . "373a07f99ee595dee83b6cee8b6841b5d1c01e38"))
 :gamma

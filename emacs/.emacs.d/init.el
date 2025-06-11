@@ -91,8 +91,7 @@
         wgrep
         which-key
         windsize
-        xcscope
-        yaml-mode))
+        xcscope))
   (straight-use-package package))
 
 
