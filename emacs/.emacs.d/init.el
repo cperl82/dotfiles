@@ -62,6 +62,7 @@
         ios-config-mode
         ivy-rich
         json-mode
+        lsp-mode
         lua-mode
         magit
         markdown-mode
