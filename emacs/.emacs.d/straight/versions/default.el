@@ -57,6 +57,7 @@
  ("pkg-info" . "76ba7415480687d05a4353b27fea2ae02b8d9d61")
  ("projectile" . "e0fc464d1e41c8d7267636ea2b7330491087c19d")
  ("rust-mode" . "494d59f92cbe12533eb89b202fc4f5342afcd543")
+ ("rustic" . "194f15c91ace0c3e95a81d315d2a481480d80a3e")
  ("s.el" . "4d7d83122850cf70dc60662a73124f0be41ad186")
  ("seq" . "4355cde01767911660f761cf874edb412d06bd7a")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")

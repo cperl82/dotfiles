@@ -74,6 +74,7 @@
         origami
         projectile
         rust-mode
+        rustic
         s
         smartparens
         doom-modeline
