@@ -34,7 +34,6 @@
  ("ios-config-mode" . "ef1d26a3983006cb4574e4c14fcf36ceeda4a260")
  ("ivy-rich" . "aff9b6bd53e0fdcf350ab83c90e64e651b47dba4")
  ("json-mode" . "eedb4560034f795a7950fa07016bd4347c368873")
- ("json-reformat" . "8eb6668ed447988aea06467ba8f42e1f2178246f")
  ("json-snatcher" . "b28d1c0670636da6db508d03872d96ffddbc10f2")
  ("let-alist" . "d2d0cac92851d4480328bc3f41d30c518beb1f99")
  ("llama" . "6a67e4253cc02aa9ce85ef96290c95198b65d913")

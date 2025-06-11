@@ -62,7 +62,6 @@
         ios-config-mode
         ivy-rich
         json-mode
-        json-reformat
         json-snatcher
         lua-mode
         magit
