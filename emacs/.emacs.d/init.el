@@ -1536,6 +1536,7 @@ The key is the todo keyword and the value is its relative position in the list."
 	              '(habit-up scheduled-up deadline-up time-up category-up todo-state-down alpha-up))
                      (org-agenda-skip-scheduled-if-deadline-is-shown t)
                      (org-agenda-show-future-repeats nil)
+                     (org-agenda-use-time-grid nil)
                      (org-habit-show-all-today nil)))))
          (all-forms (append agenda-forms tags-todo-forms)))
     (org-agenda-run-series "" `(,all-forms ((org-agenda-buffer-name "*Org Agenda*"))))))
@@ -1573,6 +1574,18 @@ The key is the todo keyword and the value is its relative position in the list."
       (when (looking-at-p block-re)
         (delete-region (point) (1+ (point-at-eol))))))
   (setq buffer-read-only t))
+
+(defun cp/org-save-all-org-buffers-and-commit ()
+  (interactive)
+  (org-save-all-org-buffers)
+  (let* ((lines
+          (->>
+           (process-lines "git" "status" "--porcelain")
+           (-map #'s-trim))))
+    (if (> (length lines) 0)
+        (progn
+          (process-lines "git" "commit" "-a" "-m" "Automatic commit")
+          t))))
 
 (use-package org
   :defer t
@@ -1625,7 +1638,9 @@ The key is the todo keyword and the value is its relative position in the list."
    "G"       #'evil-goto-line
    "gg"      #'evil-goto-first-line
    "C-c a"   #'org-agenda
-   "C-c c"   #'org-capture)
+   "C-c c"   #'org-capture
+   "s"       #'cp/org-save-all-org-buffers-and-commit
+   )
   :config
   (progn
     (use-package appt
