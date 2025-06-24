@@ -1700,11 +1700,7 @@ The key is the todo keyword and the value is its relative position in the list."
             ("DPND" . "#767676")
             ("CNCL" . "#FFFFFF")
             ("DONE" . "#FFFFFF")))
-    (setq org-agenda-files
-          (let ((default-directory "~/org"))
-            `(,(expand-file-name "capture.org")
-              ,(expand-file-name "todo.org")
-              ,(expand-file-name "meeting-notes.org"))))
+    (setq org-agenda-files (file-expand-wildcards "~/org/*.org" t))
     (setq org-agenda-tags-column -90)
     (setq org-agenda-sorting-strategy '(category-up todo-state-up deadline-up tsia-up))
     (setq org-capture-templates
