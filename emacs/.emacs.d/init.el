@@ -1724,10 +1724,10 @@ The key is the todo keyword and the value is its relative position in the list."
     (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-agenda-sticky t)
     (setq org-agenda-prefix-format
-          '((agenda . " %-9:c %7:s %-6 t")
-            (todo   . " %-9:c")
-            (tags   . " %-9:c")
-            (search . " %-9:c")))
+          '((agenda . "  %-9:c %7:s %-6 t")
+            (todo   . "  %-9:c")
+            (tags   . "  %-9:c")
+            (search . "  %-9:c")))
     (setq org-agenda-time-grid
           '((daily today require-timed)
             (800 1000 1200 1400 1600 1800 2000)
