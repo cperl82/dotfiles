@@ -102,7 +102,7 @@ function subcmd--find-window {
         | prepend_header                                        \
         | column -t -s$'\t'                                     \
         | fzf                                                   \
-              --bind 'enter:become(echo {1})'                   \
+	      --accept-nth='{1}'                                \
               --with-nth=2..                                    \
               --border                                          \
               --header-first                                    \
