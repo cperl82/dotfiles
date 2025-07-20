@@ -125,8 +125,8 @@ bindsym $mod+o \
         'wmenu -f "'$font'" -p "New workspace name:"            \
            | xargs -r -I{} swaymsg "rename workspace to {}"'
 
-set $quickswitch   ${HOME}/.config/i3/bin/quickswitch.sh
 set $status        ${HOME}/.config/i3status/bin/status.sh
+set $quickswitch   ${HOME}/.config/sway/bin/quickswitch
 set $run-command   ${HOME}/.config/sway/bin/run-command
 
 # wmenu, for launching things
