@@ -144,10 +144,10 @@ bindsym $mod+period move scratchpad
 # 2025-02-13 cperl: Quick switching of windows
 bindsym $mod+comma \
         exec \
-        'wlrctl toplevel focus title:popup-terminal-qsw ||		\
-           alacritty							\
-             --option "window.dimensions={columns=145, lines=45}"	\
-             --title  "popup-terminal-qsw"				\
+        'wlrctl toplevel focus title:popup-terminal-qsw ||        \
+           alacritty                                              \
+             --option "window.dimensions={columns=145, lines=45}" \
+             --title  "popup-terminal-qsw"                        \
              --command $quickswitch find-window'
 
 for_window {
