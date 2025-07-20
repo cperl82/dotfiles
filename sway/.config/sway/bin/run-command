@@ -1,0 +1,74 @@
+#!/bin/bash
+
+from_path () {
+    OFS="${IFS}"
+    IFS=$':'
+    set -o noglob
+    # shellcheck disable=SC2086
+    find -L ${PATH}                             \
+         -maxdepth 1                            \
+         -type f                                \
+         -executable                            \
+         -printf "P,%f,%f\n"  2>/dev/null       \
+        | sort -u
+    IFS="${OFS}"
+    set +o noglob
+}
+
+from_flatpak () {
+    while IFS=$'\t' read -r name id
+    do
+        printf "F,%s,flatpak run %s\n" "${name}" "${id}"
+    done < <(flatpak list --app --columns name,application)
+}
+
+apps () {
+    printf "W,App\n"
+    from_path
+    from_flatpak
+}
+
+main () {
+    local result
+    local how
+    local cmd
+    local d
+
+    mapfile -t -n 2 result < <(
+	fzf --delimiter=,			\
+            --with-nth='{1} {2}'		\
+            --accept-nth=3			\
+            --border				\
+            --header-first			\
+            --header-lines=1			\
+            --layout reverse			\
+	    --bind 'enter:print(Run)+accept'	\
+            --bind 'tab:print(Edit)+accept' < <(apps))
+    how=${result[0]}
+    cmd=${result[1]}
+
+    case "${how}" in
+	 "Run")
+	     :
+	     ;;
+	 "Edit")
+	     # Mock shell to allow editing of the command, although
+	     # it currently doesn't allow for overriding the
+	     # redirection.
+	     read -r -e -p "$ " -i "${cmd} " cmd
+	     ;;
+	 *)
+	     exit 1
+	     ;;
+    esac
+
+    d="${TMPDIR:-/tmp}/run-command"
+    mkdir -p "${d}"
+    (
+	# shellcheck disable=2086
+	setsid --fork ${cmd} </dev/null > "${d}/$$.stdout" 2> "${d}/$$.stderr"
+    ) &
+    wait
+}
+
+main "${@}"
