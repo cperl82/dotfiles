@@ -1536,8 +1536,7 @@ The key is the todo keyword and the value is its relative position in the list."
 	              '(habit-up scheduled-up deadline-up time-up category-up todo-state-down alpha-up))
                      (org-agenda-skip-scheduled-if-deadline-is-shown t)
                      (org-agenda-show-future-repeats nil)
-                     (org-agenda-use-time-grid nil)
-                     (org-habit-show-all-today nil)))))
+                     (org-agenda-use-time-grid nil)))))
          (all-forms (append agenda-forms tags-todo-forms)))
     (org-agenda-run-series "" `(,all-forms ((org-agenda-buffer-name "*Org Agenda*"))))))
 
