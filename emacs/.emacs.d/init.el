@@ -1525,18 +1525,18 @@ The key is the todo keyword and the value is its relative position in the list."
            (-keep
             (lambda (tag)
               (let ((tag (substring-no-properties (car tag))))
-                (if (s-matches? "^@" tag) tag)))
+                (unless (string= tag "ATTACH") tag)))
             (org-global-tags-completion-table))))
          (tags-todo-forms
           (-map
            (lambda (tag)
-             (let ((search (format "%s/NEXT" tag))
-                   (overriding-header (format "%s next actions" tag)))
+             (let ((search (format "%s" tag))
+                   (overriding-header (format "%s" tag)))
                `(tags-todo ,search
                            ((org-agenda-overriding-header
                              ,overriding-header)
                             (org-agenda-sorting-strategy
-                             '(category-up todo-state-up alpha-up))
+                             '(todo-state-up alpha-up category-up))
                             (org-agenda-todo-ignore-scheduled t)
                             (org-agenda-todo-ignore-deadlines t)
                             (org-agenda-tags-todo-honor-ignore-options t)))))
@@ -1752,7 +1752,7 @@ The key is the todo keyword and the value is its relative position in the list."
 	            (format-time-string "%a %Y-%m-%d:" (org-time-from-absolute date)))))
     (setq org-agenda-remove-tags t)
     (setq org-agenda-custom-commands
-          '(("." "Today's agenda with next actions tagged by context"
+          '(("." "Today's agenda with todo items broken out by tags"
              cp/org-agenda-generate-and-run-forms "")))
     (add-hook 'org-agenda-finalize-hook #'cp/org-agenda-delete-empty-blocks)
     (setq org-tags-column -85)
