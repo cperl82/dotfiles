@@ -1735,10 +1735,10 @@ The key is the todo keyword and the value is its relative position in the list."
     (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-agenda-sticky t)
     (setq org-agenda-prefix-format
-          '((agenda . "  %-10:c %7:s %-6 t")
-            (todo   . "  %-10:c")
-            (tags   . "  %-10:c")
-            (search . "  %-10:c")))
+          '((agenda . "  %-11c %6:s %-6 t")
+            (todo   . "  %-11c")
+            (tags   . "  %-11c")
+            (search . "  %-11c")))
     (setq org-agenda-time-grid
           '((daily today require-timed)
             (800 1000 1200 1400 1600 1800 2000)
@@ -1746,7 +1746,7 @@ The key is the todo keyword and the value is its relative position in the list."
             "----------------"))
     (setq org-agenda-breadcrumbs-separator ">")
     (setq org-agenda-scheduled-leaders '("s" "%dd s"))
-    (setq org-agenda-deadline-leaders '("d" "-%dd d" "+%dd d"))
+    (setq org-agenda-deadline-leaders '("d" "-%dd d" "%dd d"))
     (setq org-agenda-format-date
           (lambda (date)
             (concat "\n"
