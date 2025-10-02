@@ -1546,8 +1546,9 @@ The key is the todo keyword and the value is its relative position in the list."
 	            ((org-agenda-span 1)
 	             (org-deadline-warning-days 7)
 	             (org-agenda-overriding-header
-	              (format-time-string
-                       "Agenda (generated %Y-%m-%d %H:%M:%S)"))
+	              (s-join "\n"
+                               `("Agenda and todo items without SCHEDULED or DEADLINE by tag"
+                                 ,(format-time-string "Generated: %Y-%m-%d %H:%M:%S"))))
 	             (org-agenda-sorting-strategy
 	              '(habit-up scheduled-up deadline-up time-up category-up todo-state-down alpha-up))
                      (org-agenda-show-future-repeats nil)
@@ -1734,10 +1735,10 @@ The key is the todo keyword and the value is its relative position in the list."
     (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-agenda-sticky t)
     (setq org-agenda-prefix-format
-          '((agenda . "  %-9:c %7:s %-6 t")
-            (todo   . "  %-9:c")
-            (tags   . "  %-9:c")
-            (search . "  %-9:c")))
+          '((agenda . "  %-10:c %7:s %-6 t")
+            (todo   . "  %-10:c")
+            (tags   . "  %-10:c")
+            (search . "  %-10:c")))
     (setq org-agenda-time-grid
           '((daily today require-timed)
             (800 1000 1200 1400 1600 1800 2000)
