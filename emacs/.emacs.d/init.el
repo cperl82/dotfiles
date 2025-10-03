@@ -1684,7 +1684,7 @@ The key is the todo keyword and the value is its relative position in the list."
       (progn
         (setq org-habit-today-glyph ?t)
         (setq org-habit-completed-glyph ?d)
-        (setq org-habit-graph-column 69)
+        (setq org-habit-graph-column 72)
         (setq org-habit-preceding-days 21)
         (setq org-habit-following-days 3)))
     (use-package ol-man)
@@ -1735,7 +1735,7 @@ The key is the todo keyword and the value is its relative position in the list."
     (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-agenda-sticky t)
     (setq org-agenda-prefix-format
-          '((agenda . "  %-11c %6:s %-6 t")
+          '((agenda . "  %-11c %7:s %-6 t")
             (todo   . "  %-11c")
             (tags   . "  %-11c")
             (search . "  %-11c")))
