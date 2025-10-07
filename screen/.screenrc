@@ -6,7 +6,7 @@ termcapinfo * 'hs@'
 
 # General settings
 hardstatus off
-hardstatus alwayslastline '%{= kg}[ %{kW}%H %{kg}][%= %{kw}%?%-Lw%?%{kR}(%{kw}%n*%f %t%?(%u)%?%{kR})%{kw}%?%+Lw%?%?%= %{kg}][%{ky} %{Y}%Y-%m-%d %c %{kg}]'
+hardstatus alwayslastline '%{2;0}[%{-} %H %{2;0}][%{-}%=%?%-Lw%?(%n%{1;0}%f%{-} %t)%?%+Lw%?%=%{2;0}][%{-} %{3;0}%Y-%m-%d %c%{-} %{2;0}]%{-}'
 caption string "%{03} "
 defscrollback 10000
 altscreen on
