@@ -1684,7 +1684,7 @@ The key is the todo keyword and the value is its relative position in the list."
       (progn
         (setq org-habit-today-glyph ?t)
         (setq org-habit-completed-glyph ?d)
-        (setq org-habit-graph-column 72)
+        (setq org-habit-graph-column 69)
         (setq org-habit-preceding-days 21)
         (setq org-habit-following-days 3)))
     (use-package ol-man)
