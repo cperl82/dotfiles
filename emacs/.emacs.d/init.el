@@ -1624,7 +1624,8 @@ The key is the todo keyword and the value is its relative position in the list."
    "o H"     #'org-shiftmetaleft
    "o J"     #'org-shiftmetadown
    "o K"     #'org-shiftmetaup
-   "o L"     #'org-shiftmetaright)
+   "o L"     #'org-shiftmetaright
+   "o c"     #'cp/org-save-all-org-buffers-and-commit)
   (:keymaps '(org-mode-map)
    :states  '(normal motion)
    "TAB"     #'org-cycle
