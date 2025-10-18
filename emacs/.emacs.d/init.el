@@ -1537,9 +1537,9 @@ The key is the todo keyword and the value is its relative position in the list."
                              ,overriding-header)
                             (org-agenda-sorting-strategy
                              '(todo-state-up alpha-up category-up))
-                            (org-agenda-todo-ignore-scheduled t)
-                            (org-agenda-todo-ignore-deadlines t)
-                            (org-agenda-tags-todo-honor-ignore-options t)))))
+                            (org-agenda-tags-todo-honor-ignore-options t)
+                            (org-agenda-todo-ignore-scheduled 'all)
+                            (org-agenda-todo-ignore-deadlines 'all)))))
            tags))
          (agenda-forms
           '((agenda ""
