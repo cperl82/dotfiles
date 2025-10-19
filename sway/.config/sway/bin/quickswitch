@@ -108,7 +108,7 @@ function subcmd--find-window {
               --header-first                                    \
               --header-lines 1                                  \
               --layout reverse                                  \
-        | xargs -I{} i3-msg -t command "[con_id={}] focus"
+        | xargs -I{} sway-msg -t command "[con_id={}] focus"
 }
 
 function subcmd--jump-to-workspace {
@@ -121,7 +121,7 @@ function subcmd--jump-to-workspace {
     jq -r "${q}" <<<"${tree}"                                   \
         | fzf --with-nth=2.. --border                           \
         | awk '{print $1}'                                      \
-        | xargs -I{} i3-msg -t command "[con_id={}] focus"
+        | xargs -I{} sway-msg -t command "[con_id={}] focus"
 }
 
 function main {
