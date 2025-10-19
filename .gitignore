@@ -4,6 +4,8 @@ emacs/.emacs.d/*.elc
 emacs/.emacs.d/el-get/*
 emacs/.emacs.d/eln-cache/*
 emacs/.emacs.d/elpa/*
+emacs/.emacs.d/eshell/*
+emacs/.emacs.d/.lsp-session-v1
 emacs/.emacs.d/.org-id-locations
 emacs/.emacs.d/projectile-bookmarks.eld
 emacs/.emacs.d/projectile.cache
@@ -11,8 +13,8 @@ emacs/.emacs.d/recentf
 emacs/.emacs.d/smex-items
 emacs/.emacs.d/straight/build
 emacs/.emacs.d/straight/build-cache.el
-emacs/.emacs.d/straight/repos
 emacs/.emacs.d/straight/modified
+emacs/.emacs.d/straight/repos
 emacs/.emacs.d/tramp
 emacs/.emacs.d/transient/*
 fonts/.fonts/.uuid
