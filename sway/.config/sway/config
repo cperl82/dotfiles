@@ -125,8 +125,6 @@ bindsym $mod+o \
         'wmenu -f "'$font'" -p "New workspace name:"            \
            | xargs -r -I{} swaymsg "rename workspace to {}"'
 
-set $status        ${HOME}/.config/i3status/bin/status.sh
-
 # 2025-10-22 cperl: Note that if you wanted to dynamically set the
 # window size based on the current resolution, you could exec a script
 # that queries the current resolution via `swaymsg -t get_outputs' and
@@ -134,7 +132,7 @@ set $status        ${HOME}/.config/i3status/bin/status.sh
 # of complexity quite yet.
 
 # 2025-10-22 cperl: For launching things
-set $run-command   ${HOME}/.config/sway/bin/run-command
+set $run-command ${HOME}/.config/sway/bin/run-command
 for_window [title="popup-terminal-rc"] \
 	   floating enable, \
 	   border none, \
@@ -148,7 +146,7 @@ bindsym $mod+d \
              --command $run-command'
 
 # 2025-02-13 cperl: Quick switching of windows
-set $quickswitch   ${HOME}/.config/sway/bin/quickswitch
+set $quickswitch ${HOME}/.config/sway/bin/quickswitch
 for_window [title="popup-terminal-qs"] \
 	   floating enable, \
 	   border none, \
@@ -177,7 +175,7 @@ for_window {
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command $status
+        status_command ${HOME}/.config/i3status/bin/status.sh
 }
 
 # Background color
