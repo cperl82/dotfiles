@@ -38,7 +38,7 @@ function workspace-query {
 	EOF
 }
 
-function subcmd--find-window {
+function subcmd--focus-window {
     local tree
     local q
 
@@ -87,7 +87,7 @@ function subcmd--find-window {
     }
 
     function prepend_header {
-        printf "%s\t" "Dummy" "W" "App" "Marks" "Context" "Title" \
+        printf "%s\t" "_" "W" "App" "Marks" "Context" "Title" \
             | sed -e 's/\t$/\n/'
         cat
     }
@@ -102,6 +102,7 @@ function subcmd--find-window {
         | prepend_header                                        \
         | column -t -s$'\t'                                     \
         | fzf                                                   \
+	      --border-label="[ Focus Window ]"                 \
 	      --accept-nth='{1}'                                \
               --with-nth=2..                                    \
               --border                                          \

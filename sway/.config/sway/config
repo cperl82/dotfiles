@@ -148,7 +148,7 @@ bindsym $mod+comma \
            alacritty                                              \
              --option "window.dimensions={columns=145, lines=45}" \
              --title  "popup-terminal-qsw"                        \
-             --command $quickswitch find-window'
+             --command $quickswitch focus-window'
 
 for_window {
 	   # 2018-03-26 cperl: Make sure anything with the name "popup-terminal"
