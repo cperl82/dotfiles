@@ -127,6 +127,12 @@ bindsym $mod+o \
 
 set $status        ${HOME}/.config/i3status/bin/status.sh
 
+# 2025-10-22 cperl: Note that if you wanted to dynamically set the
+# window size based on the current resolution, you could exec a script
+# that queries the current resolution via `swaymsg -t get_outputs' and
+# then issues the below commands. But, I don't think I need that level
+# of complexity quite yet.
+
 # 2025-10-22 cperl: For launching things
 set $run-command   ${HOME}/.config/sway/bin/run-command
 for_window [title="popup-terminal-rc"] \
