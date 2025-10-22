@@ -126,35 +126,39 @@ bindsym $mod+o \
            | xargs -r -I{} swaymsg "rename workspace to {}"'
 
 set $status        ${HOME}/.config/i3status/bin/status.sh
-set $quickswitch   ${HOME}/.config/sway/bin/quickswitch
-set $run-command   ${HOME}/.config/sway/bin/run-command
 
-# wmenu, for launching things
+# 2025-10-22 cperl: For launching things
+set $run-command   ${HOME}/.config/sway/bin/run-command
+for_window [title="popup-terminal-rc"] \
+	   floating enable, \
+	   border none, \
+	   resize set width 500 px, \
+	   resize set height 500 px
 bindsym $mod+d \
 	exec \
         'wlrctl toplevel focus title:popup-terminal-rc ||         \
            alacritty                                              \
-             --option "window.dimensions={columns=145, lines=45}" \
              --title  "popup-terminal-rc"                         \
              --command $run-command'
+
+# 2025-02-13 cperl: Quick switching of windows
+set $quickswitch   ${HOME}/.config/sway/bin/quickswitch
+for_window [title="popup-terminal-qs"] \
+	   floating enable, \
+	   border none, \
+	   resize set width 960 px, \
+	   resize set height 500 px
+bindsym $mod+comma \
+        exec \
+        'wlrctl toplevel focus title:popup-terminal-qs ||         \
+           alacritty                                              \
+             --title  "popup-terminal-qs"                         \
+             --command $quickswitch focus-window'
 
 # 2016-12-11 cperl: Quickly throw windows I don't want to think about onto the scratchpad
 bindsym $mod+period move scratchpad
 
-# 2025-02-13 cperl: Quick switching of windows
-bindsym $mod+comma \
-        exec \
-        'wlrctl toplevel focus title:popup-terminal-qsw ||        \
-           alacritty                                              \
-             --option "window.dimensions={columns=145, lines=45}" \
-             --title  "popup-terminal-qsw"                        \
-             --command $quickswitch focus-window'
-
 for_window {
-	   # 2018-03-26 cperl: Make sure anything with the name "popup-terminal"
-	   # floats and has no border
-	   [title="^popup-terminal(-.*)?$"] floating enable; border none
-
 	   # 2025-02-17 cperl: Various things taken from:
 	   # https://www.reddit.com/r/swaywm/comments/q90v6l/sharing_some_for_window_rules/
 	   [shell="xwayland"] title_format "%title [XWayland]"
