@@ -36,6 +36,7 @@ main () {
 
     mapfile -t -n 2 result < <(
 	fzf --delimiter=,			\
+	    --border-label="[ Run Command ]"    \
             --with-nth='{1} {2}'		\
             --accept-nth=3			\
             --border				\
