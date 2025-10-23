@@ -48,7 +48,7 @@ function subcmd--focus-window {
         '{
            OFS="\t"
 
-           if (where = match($5, /^\[.+\] /)) {
+           if (where = match($5, /^\[[^\]]+\] /)) {
                $6 = substr($5, RLENGTH+1)
                $5 = substr($5, where+1, RLENGTH-3)
            }
