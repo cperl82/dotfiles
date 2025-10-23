@@ -136,8 +136,8 @@ set $run-command ${HOME}/.config/sway/bin/run-command
 for_window [title="popup-terminal-rc"] \
 	   floating enable, \
 	   border none, \
-	   resize set width 500 px, \
-	   resize set height 500 px
+	   resize set width 25 ppt, \
+	   resize set height 50 ppt
 bindsym $mod+d \
 	exec \
         'wlrctl toplevel focus title:popup-terminal-rc ||         \
@@ -150,8 +150,8 @@ set $quickswitch ${HOME}/.config/sway/bin/quickswitch
 for_window [title="popup-terminal-qs"] \
 	   floating enable, \
 	   border none, \
-	   resize set width 960 px, \
-	   resize set height 500 px
+	   resize set width 50 ppt, \
+	   resize set height 50 ppt
 bindsym $mod+comma \
         exec \
         'wlrctl toplevel focus title:popup-terminal-qs ||         \
