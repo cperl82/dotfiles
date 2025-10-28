@@ -17,7 +17,7 @@
  ("emacsmirror-mirror" . "6c387f044ab033f3a912d08b11bc565679187ba6")
  ("embark" . "a4847042ce53823624d115eebfd77eb3b4477d1b")
  ("epl" . "78ab7a85c08222cd15582a298a364774e3282ce6")
- ("evil" . "682e87fce99f39ea3155f11f87ee56b6e4593304")
+ ("evil" . "b06f644bdb5b06c6ac46c11b0259f15ac9ffd5da")
  ("evil-collection" . "4748cfb78488fce96812130e0b53aae6d042ca6d")
  ("evil-smartparens" . "026d4a3cfce415a4dfae1457f871b385386e61d3")
  ("evil-surround" . "da05c60b0621cf33161bb4335153f75ff5c29d91")
