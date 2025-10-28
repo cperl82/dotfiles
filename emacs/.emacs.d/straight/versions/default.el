@@ -12,7 +12,7 @@
  ("el-get" . "d3815eb03df07d755a14e6be2c5305daa47ba28b")
  ("eldoc" . "1d11743436e9ce0d11529bfdf1e548e64f31a92e")
  ("elisp-slime-nav" . "8588d80d414aee1fafce5b9da0e913612ee0bcdd")
- ("emacs-async" . "d604187c3c8a3290e78c00b4532b83d8d908b5c3")
+ ("emacs-async" . "d040f72cb0be5265d50ac541ddb09ebbc68b7908")
  ("emacs-which-key" . "4790a14683a2f3e4f72ade197c78e4c0af1cdd4b")
  ("emacsmirror-mirror" . "6c387f044ab033f3a912d08b11bc565679187ba6")
  ("embark" . "a4847042ce53823624d115eebfd77eb3b4477d1b")
