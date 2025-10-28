@@ -25,7 +25,7 @@
  ("flycheck" . "784f184cdd9f9cb4e3dbb997c09d93e954142842")
  ("general.el" . "9651024e7f40a8ac5c3f31f8675d3ebe2b667344")
  ("gnu-elpa-mirror" . "e15f2d8da53d44f3b6a7b39cdb49f6e01e7e2b87")
- ("go-mode.el" . "34974346d1f74fa835d745514c9fe9afccce8dae")
+ ("go-mode.el" . "6f4ff9ef874d151ed8d297a80f1bf27db5d9dbf0")
  ("goto-chg" . "3ce1389fea12edde4e343bc7d54c8da97a1a6136")
  ("haskell-mode" . "8402caa341d90b4236f5c0a802751f9023ccfbe7")
  ("highlight-parentheses.el" . "438a1cb2563e2a2496be4678cc0df8d5b22caf5d")
