@@ -46,3 +46,6 @@ bind -c rsz l eval "resize -h +5" "command -c rsz"
 # and tries to output using truecolor, but then the colors are all
 # messed up because screen doesn't get it.
 unsetenv COLORTERM
+
+# 2025-10-27 cperl: Local overrides
+source ~/.screenrc.local
