@@ -55,6 +55,7 @@
  ("ov" . "c5b9aa4e1b00d702eb2caedd61c69a22a5fa1fab")
  ("peg" . "014927e2130edcc453ca078a4fa06b48be63d834")
  ("pkg-info" . "76ba7415480687d05a4353b27fea2ae02b8d9d61")
+ ("project" . "de0deb8dbfb65eae6eaaf45aea77f12aa9a25f89")
  ("projectile" . "e0fc464d1e41c8d7267636ea2b7330491087c19d")
  ("rust-mode" . "494d59f92cbe12533eb89b202fc4f5342afcd543")
  ("rustic" . "194f15c91ace0c3e95a81d315d2a481480d80a3e")
@@ -79,5 +80,7 @@
  ("windsize" . "62c2846bbe95b0a73e996c75e4a644d05f57aaaa")
  ("with-editor" . "8d52f933e50624c7bca3880f57297ac17ba4ac2d")
  ("xcscope.el" . "d228d7593d762e457340f678d14b663ef66d7cee")
+ ("xref" . "63b5875528e9c8dba3abbc76dae1b49351273c1c")
+ ("xterm-color" . "2ad407c651e90fff2ea85d17bf074cee2c022912")
  ("zenburn-emacs" . "373a07f99ee595dee83b6cee8b6841b5d1c01e38"))
 :gamma
