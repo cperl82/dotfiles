@@ -1698,7 +1698,8 @@ to return a list"
     (use-package org-attach
       :config
       (progn
-        (setq org-attach-use-inheritance t)))
+        (setq org-attach-use-inheritance t)
+        (setq org-attach-id-dir "~/org/data")))
     (use-package org-id
       :config
       (progn
