@@ -1773,9 +1773,10 @@ The key is the todo keyword and the value is its relative position in the list."
            auto-revert-notify-exclude-dir-regexp
            "\\|"
            (rx (: bol (0+ "/" (1+ anything)) "/" "org" "/"))))
-    ;; Ensure png/jpg files are opened in an external application
-    (add-to-list 'org-file-apps '("\\.png\\'" . default))
-    (add-to-list 'org-file-apps '("\\.jpe?g\\'" . default))
+    ;; Ensure certain files are opened in certain apps
+    (add-to-list 'org-file-apps '("\\.png\\'" . "eog %s"))
+    (add-to-list 'org-file-apps '("\\.jpe?g\\'" . "eog %s"))
+    (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))
     (run-with-idle-timer 30 t
                          (lambda () (let ((inhibit-message t)) (org-save-all-org-buffers))))
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
