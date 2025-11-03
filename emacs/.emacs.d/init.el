@@ -1777,8 +1777,8 @@ The key is the todo keyword and the value is its relative position in the list."
     (add-to-list 'org-file-apps '("\\.png\\'" . "eog %s"))
     (add-to-list 'org-file-apps '("\\.jpe?g\\'" . "eog %s"))
     (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))
-    (run-with-idle-timer 30 t
-                         (lambda () (let ((inhibit-message t)) (org-save-all-org-buffers))))
+    (run-with-idle-timer 30 t (lambda ()
+                                (let ((inhibit-message t)) (cp/org-save-all-org-buffers-and-commit))))
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
     (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
     (advice-add  'adaptive-wrap-prefix-function :before #'cp/adaptive-wrap-prefix-function)
