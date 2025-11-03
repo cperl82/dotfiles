@@ -1801,7 +1801,7 @@ to return a list"
     (add-to-list 'org-file-apps '("\\.jpe?g\\'" . "eog %s"))
     (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))
     (run-with-idle-timer 30 t (lambda ()
-                                (let ((inhibit-message t)) (cp/org-save-all-org-buffers-and-commit))))
+                                (let ((inhibit-message t)) (org-save-all-org-buffers))))
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
     (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
     (advice-add  'adaptive-wrap-prefix-function :before #'cp/adaptive-wrap-prefix-function)
