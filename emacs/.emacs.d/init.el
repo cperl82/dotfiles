@@ -1602,6 +1602,29 @@ The key is the todo keyword and the value is its relative position in the list."
           (process-lines "git" "commit" "-a" "-m" "Automatic commit")
           t))))
 
+(defun cp/advice/org-archive--compute-location (location)
+  "A function for use as :filter-args advice on `org-archive--compute-location'.
+
+This function escapes any %s's in LOCATION by turning %s into %%s
+and then runs LOCATION through `format-time-string'. This allows
+having archive locations like:
+
+  archive/%Y/%s_archive::* Tasks
+
+via ARCHIVE properties.
+
+Now when calling `org-archive-subtree-default' the headline will be
+archived to the current year's subdirectory. If the subdirectory doesn't
+exist, you'll be prompted to create it.
+
+This means we'll be able to keep archive files to a reasonable size
+rather than growing indefinitely.
+
+Note that because we're being called via advice as :filter-args, we
+receive a list of `org-archive--compute-locations's arguments and have
+to return a list"
+  (list (format-time-string (replace-regexp-in-string "%s" "%%s" (car location)))))
+
 (use-package org
   :defer t
   :general
@@ -1782,6 +1805,7 @@ The key is the todo keyword and the value is its relative position in the list."
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
     (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
     (advice-add  'adaptive-wrap-prefix-function :before #'cp/adaptive-wrap-prefix-function)
+    (advice-add  'org-archive--compute-location :filter-args #'cp/advice/org-archive--compute-location)
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((shell  . true)
