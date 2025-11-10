@@ -36,8 +36,7 @@
 
 (dolist
     (package
-      '(adaptive-wrap
-        annalist
+      '(annalist
         color-theme-zenburn
         company-mode
         compat
@@ -1515,9 +1514,6 @@ The key is the todo keyword and the value is its relative position in the list."
   (message "%S %S %S" min-to-app new-time msg)
   t)
 
-(defun cp/adaptive-wrap-prefix-function (beg end)
-  (setq adaptive-wrap-extra-indent (1+ (org-outline-level))))
-
 (defun cp/org-agenda-generate-and-run-forms (_)
   (let* ((tags
           (-sort
@@ -1805,7 +1801,6 @@ to return a list"
                                 (let ((inhibit-message t)) (org-save-all-org-buffers))))
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
     (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
-    (advice-add  'adaptive-wrap-prefix-function :before #'cp/adaptive-wrap-prefix-function)
     (advice-add  'org-archive--compute-location :filter-args #'cp/advice/org-archive--compute-location)
     (org-babel-do-load-languages
      'org-babel-load-languages
@@ -1824,7 +1819,6 @@ to return a list"
          (define-and-bind-text-object "=" "\\=" "\\=")
          (visual-line-mode)
          (visual-fill-column-mode)
-         (adaptive-wrap-prefix-mode)
          (setq-local visual-fill-column-width 95)
          (setq-local indent-tabs-mode nil)
          (add-hook 'write-contents-functions
