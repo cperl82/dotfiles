@@ -1727,7 +1727,6 @@ to return a list"
     (setq org-indent-indentation-per-level 1)
     (setq org-startup-folded t)
     (setq org-tags-column -85)
-    (setq org-agenda-restore-windows-after-quit t)
     (setq org-todo-keywords
           '((sequence "NEXT(n)" "DFER(r)" "WAIT(w)" "DPND(x)" "|" "DONE(d!)" "CNCL(c!)")))
     (setq org-todo-keyword-faces
@@ -1736,9 +1735,6 @@ to return a list"
             ("DPND" . "#767676")
             ("CNCL" . "#FFFFFF")
             ("DONE" . "#FFFFFF")))
-    (setq org-agenda-files (file-expand-wildcards "~/org/*.org" t))
-    (setq org-agenda-tags-column -90)
-    (setq org-agenda-sorting-strategy '(category-up todo-state-up deadline-up tsia-up))
     (setq org-capture-templates
           `(("n" "Next Action" entry (file "~/org/capture.org")
              ,(string-join '("* NEXT %?" ":PROPERTIES:" ":CAPTURED: %U" ":END:") "\n")
@@ -1749,6 +1745,10 @@ to return a list"
     (setq org-outline-path-complete-in-steps nil)
     (setq org-hide-block-startup t)
     (setq org-refile-targets '((org-agenda-files . (:maxlevel . 5))))
+    (setq org-agenda-restore-windows-after-quit t)
+    (setq org-agenda-files (file-expand-wildcards "~/org/*.org" t))
+    (setq org-agenda-tags-column -90)
+    (setq org-agenda-sorting-strategy '(category-up todo-state-up deadline-up tsia-up))
     (setq org-agenda-skip-scheduled-if-done t)
     (setq org-agenda-skip-deadline-if-done t)
     (setq org-agenda-block-separator ?-)
@@ -1773,6 +1773,7 @@ to return a list"
             (concat "\n"
 	            (format-time-string "%a %Y-%m-%d:" (org-time-from-absolute date)))))
     (setq org-agenda-remove-tags t)
+    (setq org-agenda-show-future-repeats nil)
     (setq org-agenda-custom-commands
           '(("." "Today's agenda with todo items broken out by tags"
              cp/org-agenda-generate-and-run-forms "")))
@@ -1784,7 +1785,6 @@ to return a list"
     (setq org-ctrl-k-protect-subtree t)
     (setq org-cycle-include-plain-lists 'integrate)
     (setq org-hide-leading-stars t)
-    (setq org-agenda-show-future-repeats nil)
     (setq org-link-make-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
     ;; CR cperl: Perhaps update this so it only does this if it
     ;; detects that `~/org' points at Dropbox
