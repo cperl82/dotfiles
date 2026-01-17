@@ -1,25 +1,10 @@
-* Intro
-  This is my dotfiles repo.
+* Dotfiles
+This is my dotfiles repo.
 
-  The idea is pretty simple, using gnu ~stow~ to manage the dotfiles, copying some others
-  on the internet who did this before I did.
+The idea is pretty simple, using gnu ~stow~ to manage the dotfiles, copying some others on the internet who did this before I did.
 
-* Ignoring certain directories
-  Some directories, I never want to stow.  They are just kept around for hanging onto
-  plist files and things like that that I find valuable.
+Instead of running ~stow~ directly, I have a wrapper script called ~stow.sh~ that reads an optional config file, ~stow.local~ that is git ignored.  This allows me to change the set of things I want to stow depending on the environment I'm in.
 
-  To make sure ~stow.sh~, and by extension ~stow~ do not stow them, I use a local ignore
-  file to ignore everything in them.  E.g.:
+If there is no local config file, ~stow.sh~ attempts to just stow everything.
 
-  : plist/.stow-local-ignore
-
-  with an ignore of:
-
-  : .*
-
-* stow.sh
-  Instead of running ~stow~ directly, I have a wrapper script called ~stow.sh~ that reads
-  an optional config file, ~stow.local~ that is git ignored.  This allows me to change the
-  set of things I want to stow depending on the environment I'm in.
-
-  If there is no local config file, ~stow.sh~ attempts to just stow everything.
+Note that I don't currently use the ~--dotfiles~ flag to stow because I started storing my dotfiles like this before that option was a thing. I might convert to it someday, but having the directories full of hidden files doesn't really bother me.
