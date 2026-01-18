@@ -6,7 +6,7 @@ termcapinfo * 'hs@'
 
 # General settings
 hardstatus off
-hardstatus alwayslastline '%{2;0}[%{-} %H %{2;0}][%{-} %= %?%{+d}%-Lw%{-}%?%n%{1;0}%f%{-} %t%?%{+d}%+Lw%{-}%? %= %{2;0}][%{-} %{3;0}%Y-%m-%d %c%{-} %{2;0}]%{-}'
+hardstatus alwayslastline '%{2;0}[%{-} %S %{2;0}][%{-} %= %?%{+d}%-Lw%{-}%?%n%{1;0}%f%{-} %t%?%{+d}%+Lw%{-}%? %= %{2;0}][%{-} %{3;0}%Y-%m-%d %c%{-} %{2;0}]%{-}'
 caption string "%{03} "
 defscrollback 10000
 altscreen on
