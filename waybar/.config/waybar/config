@@ -1,9 +1,13 @@
 {
     "layer": "top",
-    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-left": ["wlr/workspaces"],
     "modules-right": ["battery", "clock", "pulseaudio", "tray"],
+    "battery": {
+	"format": "{capacity}% {icon}",
+	"format-icons": ["", "", "", "", ""]
+    },
     "clock": {
 	"format": "{:%F %H:%M:%S}",
 	"timezone": "America/New_York",
-    }
+    },
 }
