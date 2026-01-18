@@ -17,6 +17,7 @@ emacs/.emacs.d/straight/modified
 emacs/.emacs.d/straight/repos
 emacs/.emacs.d/tramp
 emacs/.emacs.d/transient/*
+emacs/.emacs.d/tree-sitter/*
 fonts/.fonts/.uuid
 i3/.config/i3/config.local
 i3/.config/i3status/plugin.d/local-*
