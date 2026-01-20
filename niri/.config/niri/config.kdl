@@ -335,6 +335,9 @@ window-rule {
     block-out-from "screen-capture"
 }
 
+workspace "scratch" {
+}
+
 // Example: block out two password managers from screen capture.
 // (This example rule is commented out with a "/-" in front.)
 /-window-rule {
