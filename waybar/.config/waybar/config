@@ -1,8 +1,8 @@
 {
     "layer": "top",
     "position": "bottom",
-    "modules-left": ["wlr/workspaces"],
-    "modules-right": ["battery", "clock", "pulseaudio", "tray"],
+    "modules-left": ["niri/workspaces"],
+    "modules-right": ["battery", "network", "clock", "pulseaudio", "tray"],
     "battery": {
         "format": "{capacity}% {icon}",
         "format-icons": ["", "", "", "", ""],
@@ -11,8 +11,17 @@
             "critical": 15,
         },
     },
+    "network": {
+	"format": "{ifname}",
+	"format-wifi": "{essid} ({signalStrength}%) ",
+        "format-disconnected": "",
+    },
     "clock": {
-        "format": "{:%F %H:%M:%S} ET",
-        "timezone": "America/New_York",
+        "format": "{:%F %H:%M:%S %Z}",
+        "timezones": ["America/New_York", "UTC", "Asia/Hong_Kong"],
+	"actions": {
+	    "on-click-right": "tz_up",
+	    "on-click": "tz_down",
+	}
     },
 }
