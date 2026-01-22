@@ -19,6 +19,8 @@
     "clock": {
         "format": "{:%F %H:%M:%S %Z}",
         "timezones": ["America/New_York", "UTC", "Asia/Hong_Kong"],
+	"tooltip": true,
+	"tooltip-format": "{timezoned_time_list}",
 	"actions": {
 	    "on-click-right": "tz_up",
 	    "on-click": "tz_down",
