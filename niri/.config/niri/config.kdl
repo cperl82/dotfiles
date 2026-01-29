@@ -649,3 +649,7 @@ binds {
     // moving the mouse or pressing any other key.
     Mod+Shift+P { power-off-monitors; }
 }
+
+overview {
+        zoom 0.50
+}
