@@ -107,6 +107,10 @@ input {
     position x=1280 y=0
 }
 
+output "PNP(BNQ) BenQ PD2700U ETB8L03919SL0" {
+        scale 1.00
+}
+
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Layout
