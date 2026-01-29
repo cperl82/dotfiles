@@ -330,8 +330,23 @@ window-rule {
 }
 
 window-rule {
-    match app-id=r#"^1Password$"#
+    match app-id=r#"^1password$"#
     open-floating true
+    block-out-from "screen-capture"
+}
+
+window-rule {
+    match app-id=r#"^blueman-manager$"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"^org.mozilla.firefox$"#
+    clip-to-geometry true
+}
+
+window-rule {
+    match title=r#"^org$"#
     block-out-from "screen-capture"
 }
 
