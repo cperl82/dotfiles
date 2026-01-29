@@ -7,7 +7,6 @@
 // Find the full list of options on the wiki:
 // https://yalter.github.io/niri/Configuration:-Input
 input {
-    focus-follows-mouse
     keyboard {
         xkb {
             // You can set rules, model, layout, variant and options.
@@ -67,7 +66,7 @@ input {
 
     // Focus windows and outputs automatically when moving the mouse into them.
     // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
-    // focus-follows-mouse max-scroll-amount="0%"
+    focus-follows-mouse max-scroll-amount="0%"
     workspace-auto-back-and-forth
 }
 
