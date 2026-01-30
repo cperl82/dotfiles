@@ -1,6 +1,6 @@
 [font]
 size = 14
-normal = { family = "terminus", style = "regular" }
+normal = { family = "JetBrainsMono Nerd Font Mono", style = "regular" }
 
 [scrolling]
 multiplier = 0
