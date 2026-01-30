@@ -8,6 +8,7 @@ select-window () {
     local workspaces="${1}"
     local windows="${2}"
     local filter="${3}"
+    local title="${4}"
 
     function mangle_names {
         # Fixup various things about window titles
@@ -80,7 +81,7 @@ select-window () {
              | sort -k 2,2n -k 3,3V -k 4,4V		\
              | prepend_header				\
              | column -t -s$'\t'			\
-             | fzf --border-label="[ Select Window ]"	\
+             | fzf --border-label="[ ${title} ]"	\
 		   --accept-nth='{1}'			\
 		   --with-nth=2..			\
 		   --border				\
@@ -113,7 +114,7 @@ subcmd--move-window-to-last-workspace () {
     lwsid=$(jq -r "${last_workspace_query}" <<< "${workspaces}")
     wid=$(jq -r "${curr_window_query}" <<< "${windows}")
 
-    if [[ -z "${ws}" || -z "${wid}" ]]; then
+    if [[ -z "${lwsid}" || -z "${wid}" ]]; then
         return 1
     fi
     niri msg action move-window-to-workspace	\
@@ -121,6 +122,7 @@ subcmd--move-window-to-last-workspace () {
 	 --focus false				\
 	 "${lwsid}"
     niri msg action move-window-to-tiling --id "${wid}"
+    niri msg action set-window-width "50%" --id "${wid}"
 }
 
 subcmd--select-and-pull-window-from-last-workspace () {
@@ -133,7 +135,7 @@ subcmd--select-and-pull-window-from-last-workspace () {
     read -d '' -r curr_and_last_workspace_query<<-'EOF' || true
 	sort_by(.idx)
 	| (map(select(.is_active and .is_focused)) | .[0]) as $c
-	| [($c | .id), (.[-2] | .id)]
+	| [($c | .idx), (.[-2] | .id)]
 	| @tsv
 	EOF
 
@@ -141,9 +143,14 @@ subcmd--select-and-pull-window-from-last-workspace () {
     windows=$(niri msg -j windows)
     read -r cwsid lwsid < \
 	 <(jq -r "${curr_and_last_workspace_query}" <<< "$workspaces")
-    id=$(select-window "${workspaces}" "${windows}" ".workspace_id == ${lwsid}")
+    id=$(select-window					\
+	     "${workspaces}"				\
+	     "${windows}"				\
+	     ".workspace_id == ${lwsid}"		\
+	     "Pull Window")
     niri msg action move-window-to-floating --id "${id}"
-    niri msg action set-window-height -10% --id "${id}"
+    niri msg action set-window-height 60% --id "${id}"
+    niri msg action set-window-width 40% --id "${id}"
     niri msg action move-window-to-workspace --window-id "${id}" "${cwsid}"
     niri msg action center-window --id "${id}"
     niri msg action focus-window --id "${id}"
@@ -155,7 +162,11 @@ subcmd--select-and-focus-window () {
     local id
     workspaces=$(niri msg -j workspaces)
     windows=$(niri msg -j windows)
-    id=$(select-window "${workspaces}" "${windows}" ".")
+    id=$(select-window				\
+	     "${workspaces}"			\
+	     "${windows}"			\
+	     "."				\
+	     "Focus Window")
     niri msg action focus-window --id "${id}"
 }
 
