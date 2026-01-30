@@ -147,7 +147,7 @@ subcmd--select-and-pull-window-from-last-workspace () {
 	     "${workspaces}"				\
 	     "${windows}"				\
 	     ".workspace_id == ${lwsid}"		\
-	     "Pull Window")
+	     "Select Window to Pull")
     niri msg action move-window-to-floating --id "${id}"
     niri msg action set-window-height 75% --id "${id}"
     niri msg action set-window-width 50% --id "${id}"
@@ -165,13 +165,9 @@ subcmd--select-and-focus-window () {
     id=$(select-window				\
 	     "${workspaces}"			\
 	     "${windows}"			\
-	     "."				\
-	     "Focus Window")
+	     ".is_focused | not"		\
+	     "Select Window to Focus")
     niri msg action focus-window --id "${id}"
-}
-
-subcmd--move-columns-workspace-down () {
-    :
 }
 
 function main {
