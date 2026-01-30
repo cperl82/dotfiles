@@ -1756,10 +1756,10 @@ to return a list"
     (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-agenda-sticky t)
     (setq org-agenda-prefix-format
-          '((agenda . "  %-11c %7:s %-6 t")
-            (todo   . "  %-11c")
-            (tags   . "  %-11c")
-            (search . "  %-11c")))
+          '((agenda . "  %-9c %7:s %?-5 t")
+            (todo   . "  %-9c")
+            (tags   . "  %-9c")
+            (search . "  %-9c")))
     (setq org-agenda-time-grid
           '((daily today require-timed)
             (800 1000 1200 1400 1600 1800 2000)
