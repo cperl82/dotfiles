@@ -149,8 +149,8 @@ subcmd--select-and-pull-window-from-last-workspace () {
 	     ".workspace_id == ${lwsid}"		\
 	     "Pull Window")
     niri msg action move-window-to-floating --id "${id}"
-    niri msg action set-window-height 60% --id "${id}"
-    niri msg action set-window-width 40% --id "${id}"
+    niri msg action set-window-height 75% --id "${id}"
+    niri msg action set-window-width 50% --id "${id}"
     niri msg action move-window-to-workspace --window-id "${id}" "${cwsid}"
     niri msg action center-window --id "${id}"
     niri msg action focus-window --id "${id}"
