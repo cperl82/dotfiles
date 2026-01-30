@@ -449,6 +449,8 @@ binds {
     Mod+Shift+J     { move-window-down-or-to-workspace-down; }
     Mod+Shift+K     { move-window-up-or-to-workspace-up; }
     Mod+Shift+L     { move-column-right; }
+    Mod+Ctrl+J      { move-workspace-down; }
+    Mod+Ctrl+K      { move-workspace-up; }
 
     // Alternative commands that move across workspaces when reaching
     // the first or last window in a column.
@@ -490,10 +492,6 @@ binds {
 
     Mod+Page_Down       { focus-workspace-down; }
     Mod+Page_Up         { focus-workspace-up; }
-    Mod+Shift+Page_Down { move-column-to-workspace-down; }
-    Mod+Shift+Page_Up   { move-column-to-workspace-up; }
-    Mod+Ctrl+Page_Down  { move-workspace-down; }
-    Mod+Ctrl+Page_Up    { move-workspace-up; }
 
     // You can bind mouse wheel scroll ticks using the following syntax.
     // These binds will change direction based on the natural-scroll setting.
