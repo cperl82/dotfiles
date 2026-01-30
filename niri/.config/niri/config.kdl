@@ -354,10 +354,8 @@ window-rule {
 }
 
 window-rule {
-    match app-id=r#"^dropdown$"#
+    match app-id=r#"^quickswitch$"#
     open-floating true
-    //default-floating-position x=0 y=5 relative-to="top"
-    //border { off; }
     focus-ring {
         on;
         width 2;
@@ -391,11 +389,11 @@ binds {
     }
 
     Mod+Comma hotkey-overlay-title="Pull Window (from last workspace)" {
-        spawn-sh "alacritty --class dropdown -e ${HOME}/.config/niri/util.sh select-and-pull-window-from-last-workspace";
+        spawn-sh "alacritty --class quickswitch -e ${HOME}/.config/niri/util.sh select-and-pull-window-from-last-workspace";
     }
 
     Mod+S hotkey-overlay-title="Focus Window" {
-        spawn-sh "alacritty --class dropdown -e ${HOME}/.config/niri/util.sh select-and-focus-window";
+        spawn-sh "alacritty --class quickswitch -e ${HOME}/.config/niri/util.sh select-and-focus-window";
     }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
