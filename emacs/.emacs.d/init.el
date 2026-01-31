@@ -1726,7 +1726,6 @@ to return a list"
     (setq org-startup-indented t)
     (setq org-indent-indentation-per-level 1)
     (setq org-startup-folded t)
-    (setq org-tags-column -85)
     (setq org-todo-keywords
           '((sequence "NEXT(n)" "DFER(r)" "WAIT(w)" "DPND(x)" "|" "DONE(d!)" "CNCL(c!)")))
     (setq org-todo-keyword-faces
@@ -1779,7 +1778,7 @@ to return a list"
           '(("." "Today's agenda with todo items broken out by tags"
              cp/org-agenda-generate-and-run-forms "")))
     (add-hook 'org-agenda-finalize-hook #'cp/org-agenda-delete-empty-blocks)
-    (setq org-tags-column -85)
+    (setq org-tags-column -80)
     (setq org-log-into-drawer t)
     (setq org-refile-use-cache t)
     (setq org-catch-invisible-edits 'error)
