@@ -165,7 +165,19 @@ subcmd--select-and-pull-window () {
              "${last_first}")
     niri msg action move-window-to-floating --id "${id}"
     niri msg action set-window-height 75% --id "${id}"
+    # CR cperl: This is a hack.
+    #
+    # When this function is done I want the window to be floating and
+    # the right size to take up exactly half the screen when "dropped"
+    # back to tiling.
+    #
+    # But, gaps mean "50%" is different for floating vs tiled
+    # windows. So, we set the size to 50%, which is just slightly too
+    # big, then we manually subtract (1.5 * gap_size), which happens to
+    # be 10. That represents the full width of the gap on the left (or
+    # right) and then half the middle gap).
     niri msg action set-window-width 50% --id "${id}"
+    niri msg action set-window-width -15 --id "${id}"
     niri msg action move-window-to-workspace --window-id "${id}" "${cwsid}"
     niri msg action center-window --id "${id}"
     niri msg action focus-window --id "${id}"
