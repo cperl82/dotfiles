@@ -5,10 +5,11 @@ set -o errexit
 
 select-window () {
     local id
-    local workspaces="${1}"
-    local windows="${2}"
-    local filter="${3}"
-    local title="${4}"
+    local title="${1}"
+    local workspaces="${2}"
+    local windows="${3}"
+    local filter="${4}"
+    local last_first="${5}"
 
     function mangle_names {
         # Fixup various things about window titles
@@ -36,8 +37,8 @@ select-window () {
     }
 
     function extract_name_context {
-	# If a window title starts with [Foo] extract that as a separate field
-	awk -F'\t' \
+        # If a window title starts with [Foo] extract that as a separate field
+        awk -F'\t' \
         '{
            OFS="\t"
 
@@ -64,7 +65,13 @@ select-window () {
 	  .[0] as \$workspaces
 	| .[1] as \$windows
 	| \$workspaces
- 	  | map({"key": (.id | tostring), "value": .idx})
+	  | sort_by(.idx)
+	  | .[-2]
+	  | .idx
+	  | tostring as \$last_workspace
+	| \$workspaces
+	  | map({"key": (.id | tostring),
+	         "value": (.idx | tostring | sub("^" + \$last_workspace + "$"; "L"))})
 	  | from_entries as \$ws
 	| \$windows
 	  | map(select(${filter}))
@@ -73,25 +80,31 @@ select-window () {
 	  | @tsv
 	EOF
 
-    id=$(jq -r -s "${q}"				\
-	    <(echo "${workspaces}")			\
-	    <(echo "${windows}")			\
-             | mangle_names				\
-	     | extract_name_context                     \
-             | sort -k 2,2n -k 3,3V -k 4,4V		\
-             | prepend_header				\
-             | column -t -s$'\t'			\
-             | fzf --border-label="[ ${title} ]"	\
-		   --accept-nth='{1}'			\
-		   --with-nth=2..			\
-		   --border				\
-		   --header-first			\
-		   --header-lines 1			\
-		   --layout reverse)
-    if [[ -z "${id}" ]]; then
-	return 1
+    if (( last_first )); then
+        workspace_keydef="2,2n"
     else
-	echo "${id}"
+        workspace_keydef="2,2"
+    fi
+
+    id=$(jq -r -s "${q}"                                        \
+            <(echo "${workspaces}")                             \
+            <(echo "${windows}")                                \
+             | mangle_names                                     \
+             | extract_name_context                             \
+             | sort -k "${workspace_keydef}" -k 3,3V -k 4,4V    \
+             | prepend_header                                   \
+             | column -t -s$'\t'                                \
+             | fzf --border-label="[ ${title} ]"                \
+                   --accept-nth='{1}'                           \
+                   --with-nth=2..                               \
+                   --border                                     \
+                   --header-first                               \
+                   --header-lines 1                             \
+                   --layout reverse)
+    if [[ -z "${id}" ]]; then
+        return 1
+    else
+        echo "${id}"
     fi
 }
 
@@ -117,37 +130,32 @@ subcmd--move-window-to-last-workspace () {
     if [[ -z "${lwsid}" || -z "${wid}" ]]; then
         return 1
     fi
-    niri msg action move-window-to-workspace	\
-	 --window-id "${wid}"			\
-	 --focus false				\
-	 "${lwsid}"
+    niri msg action move-window-to-workspace    \
+         --window-id "${wid}"                   \
+         --focus false                          \
+         "${lwsid}"
     niri msg action move-window-to-tiling --id "${wid}"
     niri msg action set-window-width "50%" --id "${wid}"
 }
 
-subcmd--select-and-pull-window-from-last-workspace () {
+subcmd--select-and-pull-window () {
     local workspaces
     local windows
     local id
     local lwsid
     local cwsid
-
-    read -d '' -r curr_and_last_workspace_query<<-'EOF' || true
-	sort_by(.idx)
-	| (map(select(.is_active and .is_focused)) | .[0]) as $c
-	| [($c | .idx), (.[-2] | .id)]
-	| @tsv
-	EOF
+    local last_first
 
     workspaces=$(niri msg -j workspaces)
     windows=$(niri msg -j windows)
-    read -r cwsid lwsid < \
-	 <(jq -r "${curr_and_last_workspace_query}" <<< "$workspaces")
-    id=$(select-window					\
-	     "${workspaces}"				\
-	     "${windows}"				\
-	     ".workspace_id == ${lwsid}"		\
-	     "Select Window to Pull")
+    cwsid=$(niri msg -j focused-window | jq -r '.workspace_id')
+    last_first=1
+    id=$(select-window                          \
+             "Select Window to Pull"            \
+             "${workspaces}"                    \
+             "${windows}"                       \
+             "."                                \
+             "${last_first}")
     niri msg action move-window-to-floating --id "${id}"
     niri msg action set-window-height 75% --id "${id}"
     niri msg action set-window-width 50% --id "${id}"
@@ -160,13 +168,17 @@ subcmd--select-and-focus-window () {
     local workspaces
     local windows
     local id
+    local last_first
+
     workspaces=$(niri msg -j workspaces)
     windows=$(niri msg -j windows)
-    id=$(select-window				\
-	     "${workspaces}"			\
-	     "${windows}"			\
-	     ".is_focused | not"		\
-	     "Select Window to Focus")
+    last_first=0
+    id=$(select-window                          \
+             "Select Window to Focus"           \
+             "${workspaces}"                    \
+             "${windows}"                       \
+             ".is_focused | not"                \
+             "${last_first}")
     niri msg action focus-window --id "${id}"
 }
 
