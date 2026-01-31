@@ -71,7 +71,7 @@ select-window () {
 	  | tostring as \$last_workspace
 	| \$workspaces
 	  | map({"key": (.id | tostring),
-	         "value": (.idx | tostring | sub("^" + \$last_workspace + "$"; "L"))})
+	         "value": (.idx | tostring | sub("^" + \$last_workspace + "\$"; "L"))})
 	  | from_entries as \$ws
 	| \$windows
 	  | map(select(${filter}))
