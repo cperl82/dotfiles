@@ -354,7 +354,7 @@ binds {
     }
 
     Mod+Comma hotkey-overlay-title="Pull Window (from last workspace)" {
-        spawn-sh "alacritty --class quickswitch -e ${HOME}/.config/niri/util.sh select-and-pull-window-from-last-workspace";
+        spawn-sh "alacritty --class quickswitch -e ${HOME}/.config/niri/util.sh select-and-pull-window";
     }
 
     Mod+S hotkey-overlay-title="Focus Window" {
