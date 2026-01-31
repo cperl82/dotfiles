@@ -353,7 +353,7 @@ binds {
         spawn-sh "${HOME}/.config/niri/util.sh move-window-to-last-workspace";
     }
 
-    Mod+Comma hotkey-overlay-title="Pull Window (from last workspace)" {
+    Mod+Comma hotkey-overlay-title="Pull Window" {
         spawn-sh "alacritty --class quickswitch -e ${HOME}/.config/niri/util.sh select-and-pull-window";
     }
 
