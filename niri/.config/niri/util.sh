@@ -146,9 +146,16 @@ subcmd--select-and-pull-window () {
     local cwsid
     local last_first
 
+    read -d '' -r curr_workspace_query<<-'EOF' || true
+	sort_by(.idx)
+	| map(select(.is_active and .is_focused))
+	| .[0]
+	| .idx
+	EOF
+
     workspaces=$(niri msg -j workspaces)
     windows=$(niri msg -j windows)
-    cwsid=$(niri msg -j focused-window | jq -r '.workspace_id')
+    cwsid=$(jq -r "${curr_workspace_query}" <<< "${workspaces}")
     last_first=1
     id=$(select-window                          \
              "Select Window to Pull"            \
