@@ -480,7 +480,7 @@ function setup-misc {
     export RIPGREP_CONFIG_PATH
 
     # OS Specific bashrc file inclusion
-    osname=$(uname -s | tr '[A-Z]' '[a-z]')
+    osname=$(uname -s | tr '[:upper:]' '[:lower:]')
     osfile="${BASHFILES}/.bashrc.${osname}"
     if [[ -f "${osfile}" ]]
     then
