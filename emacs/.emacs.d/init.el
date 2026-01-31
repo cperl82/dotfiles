@@ -1756,7 +1756,7 @@ to return a list"
     (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-agenda-sticky t)
     (setq org-agenda-prefix-format
-          '((agenda . "  %-9c %7:s %?-5 t")
+          '((agenda . "  %-9c %?7:s%?7:t ")
             (todo   . "  %-9c")
             (tags   . "  %-9c")
             (search . "  %-9c")))
