@@ -201,6 +201,30 @@ subcmd--select-and-focus-window () {
     niri msg action focus-window --id "${id}"
 }
 
+subcmd--insert-empty-workspace () {
+    local workspaces
+    local cwsid
+    local ewsid
+    local i
+
+    read -d '' -r curr_and_empty_workspace_query<<-EOF || true
+	sort_by(.idx)
+	| (map(select(.is_active and .is_focused)) | .[0]) as \$c
+	| .[-1] as \$e
+	| [(\$c | .idx), (\$e | .idx)]
+	| @tsv
+	EOF
+    workspaces=$(niri msg -j workspaces)
+    read -r cwsid ewsid < \
+	 <(jq -r "${curr_and_empty_workspace_query}" <<< "${workspaces}")
+    niri msg action focus-workspace "${ewsid}"
+    i=$((ewsid - cwsid))
+    while [[ ${i} -gt 0 ]]; do
+	niri msg action move-workspace-up
+	i=$((i-1))
+    done
+}
+
 function main {
     local subcmd_prefix="subcmd"
     local completions
