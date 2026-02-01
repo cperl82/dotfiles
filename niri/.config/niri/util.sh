@@ -165,7 +165,7 @@ subcmd--select-and-pull-window () {
              "${last_first}")
     niri msg action move-window-to-floating --id "${id}"
     niri msg action set-window-height 75% --id "${id}"
-    # CR cperl: This is a hack.
+    # 2026-02-01 cperl: This is a hack.
     #
     # When this function is done I want the window to be floating and
     # the right size to take up exactly half the screen when "dropped"
