@@ -219,6 +219,7 @@ subcmd--insert-empty-workspace () {
 	| [(\$c | .idx), (\$e | .idx)]
 	| @tsv
 	EOF
+
     workspaces=$(niri msg -j workspaces)
     read -r cwsid ewsid < \
 	 <(jq -r "${curr_and_empty_workspace_query}" <<< "${workspaces}")
