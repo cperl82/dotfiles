@@ -63,6 +63,7 @@
         json-mode
         lsp-mode
         lua-mode
+        kdl-mode
         magit
         markdown-mode
         nasm-mode
@@ -843,6 +844,12 @@ dired-x"
     (add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
     (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))))
 
+
+
+;; kdl-mode
+(use-package kdl-mode
+  :defer t
+  )
 
 
 ;; man
