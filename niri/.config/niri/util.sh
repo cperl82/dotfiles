@@ -176,6 +176,11 @@ subcmd--select-and-pull-window () {
     # big, then we manually subtract (1.5 * gap_size), which happens to
     # be 10. That represents the full width of the gap on the left (or
     # right) and then half the middle gap).
+    #
+    # This could be made slightly less hacky by querying the gap
+    # setting out of the config with something like
+    # https://github.com/jihchi/kq, but then I have a dependency on
+    # that utility, and I don't think it matters that much.
     niri msg action set-window-width 50% --id "${id}"
     niri msg action set-window-width -15 --id "${id}"
     niri msg action move-window-to-workspace --window-id "${id}" "${cwsid}"
