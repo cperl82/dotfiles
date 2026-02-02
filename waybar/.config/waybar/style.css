@@ -9,6 +9,14 @@
 	min-height: 10px;
 }
 
+#workspaces button {
+	background: #B5E8E0;
+}
+
+#workspaces button.focused {
+	background: #F28FAD;
+}
+
 window#waybar {
 	background: transparent;
 }
