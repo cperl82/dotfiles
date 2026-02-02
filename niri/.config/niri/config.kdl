@@ -70,8 +70,7 @@ input {
     workspace-auto-back-and-forth
 }
 
-// 2026-01-30 cperl: Each machine should provide and include their own
-// output config that is relevant for that machine.
+// 2026-01-30 cperl: Local output definitions
 include "outputs.local.kdl"
 
 // Settings that influence how windows are positioned and sized.
@@ -239,6 +238,8 @@ layout {
 spawn-at-startup "waybar"
 spawn-at-startup "xsettingsd"
 spawn-at-startup "swayidle" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors"
+
+// 2026-01-30 cperl: Local startup definitions
 include "spawn-at-startup.local.kdl"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
