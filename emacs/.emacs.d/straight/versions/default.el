@@ -1,5 +1,4 @@
 (("Emacs-wgrep" . "49f09ab9b706d2312cab1199e1eeb1bcd3f27f6f")
- ("adaptive-wrap" . "a3b179ea21aeb4e8cfaf5646bb66d9d045263780")
  ("annalist.el" . "134fa3f0fb91a636a1c005c483516d4b64905a6d")
  ("bind-key" . "aa22c8c3c740c2f306509b9c37d9511cfa41b612")
  ("company-mode" . "4c08ef468678bbf3b3c9e750f6e694eea1aa8423")
@@ -13,6 +12,7 @@
  ("eldoc" . "1d11743436e9ce0d11529bfdf1e548e64f31a92e")
  ("elisp-slime-nav" . "8588d80d414aee1fafce5b9da0e913612ee0bcdd")
  ("emacs-async" . "d040f72cb0be5265d50ac541ddb09ebbc68b7908")
+ ("emacs-kdl-mode" . "2d849e298199f490e4894c01764a8a83decd704a")
  ("emacs-which-key" . "4790a14683a2f3e4f72ade197c78e4c0af1cdd4b")
  ("emacsmirror-mirror" . "6c387f044ab033f3a912d08b11bc565679187ba6")
  ("embark" . "a4847042ce53823624d115eebfd77eb3b4477d1b")
