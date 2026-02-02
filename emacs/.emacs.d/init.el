@@ -70,6 +70,7 @@
         nerd-icons
         ob-async
         org
+        org-super-agenda
         org-ql
         origami
         projectile
