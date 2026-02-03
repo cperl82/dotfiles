@@ -104,8 +104,6 @@ main () {
     printf '{"text": "%s", "tooltip": "%s"}\n'  \
            "${text}"                            \
            "${tooltip}"
-
-           
 }
 
 main "${@}"
