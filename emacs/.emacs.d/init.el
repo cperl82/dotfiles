@@ -1946,9 +1946,7 @@ to return a list"
 (use-package embark
   :defer t
   :commands (embark-act)
-  :general
-  (:keymaps '(override)
-   "C-c ." #'embark-act))
+  )
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
