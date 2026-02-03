@@ -53,7 +53,7 @@ pending_updates_apt () {
     echo "0"
 }
 
-pending_updates_rpm () {
+pending_updates_dnf () {
     dnf -q updateinfo list \
         | awk 'BEGIN {
                  count = 0
@@ -67,8 +67,8 @@ pending_updates_rpm () {
 }
 
 pending_updates_package_manager () {
-    if command -v rpm > /dev/null; then
-        pending_updates_rpm
+    if command -v dnf > /dev/null; then
+        pending_updates_dnf
     elif command -v apt > /dev/null; then
         pending_updates_apt
     else
