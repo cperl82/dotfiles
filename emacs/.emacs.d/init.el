@@ -58,7 +58,6 @@
         hydra
         ibuffer-vc
         ibuffer-projectile
-        ios-config-mode
         ivy-rich
         json-mode
         lsp-mode
@@ -1942,17 +1941,6 @@ to return a list"
   :after (projectile)
   )
 
-
-
-; ios-config-mode
-(use-package ios-config-mode
-  :defer t
-  :commands ios-config-mode
-  :config
-  (zenburn-with-color-variables
-    (setq ios-config-command-face  `((t . (:foreground ,zenburn-cyan))))
-    (setq ios-config-ipadd-face    `((t . (:foreground ,zenburn-red))))
-    (setq ios-config-toplevel-face `((t . (:foreground ,zenburn-yellow))))))
 
 
 (use-package embark
