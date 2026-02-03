@@ -7,7 +7,8 @@ set -o nounset
 # Expected to be invoked by waybar with a reasonable `interval'
 pending_updates_opam () {
     if ! command -v opam > /dev/null; then
-        echo "_"
+        echo "0"
+	return
     fi
     echo "0"
 }
@@ -15,6 +16,7 @@ pending_updates_opam () {
 pending_updates_python () {
     if ! command -v pip > /dev/null; then
         echo "0"
+	return
     fi
 
     pip list --user --outdated \
@@ -24,6 +26,7 @@ pending_updates_python () {
 pending_updates_cargo () {
     if ! command -v cargo > /dev/null; then
         echo "0"
+	return
     fi
     cargo install-update --list \
         | awk 'BEGIN {
@@ -42,6 +45,7 @@ pending_updates_cargo () {
 pending_updates_flatpak () {
     if ! command -v flatpak > /dev/null; then
         echo "0"
+	return
     fi
     set +o errexit
     flatpak update < <(printf "n\n") \
@@ -50,7 +54,16 @@ pending_updates_flatpak () {
 }
 
 pending_updates_apt () {
-    echo "0"
+    apt list --upgradable 2>/dev/null \
+	| awk 'BEGIN {
+	         count = 0
+	       };
+	       $1 ~ /\// {
+                 count += 1
+               };
+               END {
+                 print count
+               }'
 }
 
 pending_updates_dnf () {
@@ -72,7 +85,7 @@ pending_updates_package_manager () {
     elif command -v apt > /dev/null; then
         pending_updates_apt
     else
-        echo "N/A"
+        echo "0"
     fi
 
 }
