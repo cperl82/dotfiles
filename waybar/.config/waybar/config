@@ -2,7 +2,19 @@
     "layer": "top",
     "position": "bottom",
     "modules-left": ["niri/workspaces"],
-    "modules-right": ["network", "clock", "pulseaudio", "battery", "tray"],
+    "modules-right": [
+	"custom/pending-updates",
+	"network",
+	"clock",
+	"pulseaudio",
+	"battery",
+	"tray"
+    ],
+    "custom/pending-updates": {
+      "exec": "${HOME}/.config/waybar/pending-updates.sh",
+      "interval": 21600,
+      "return-type": "json",
+    },
     "network": {
 	"format": "{ifname} {ipaddr}",
 	"format-wifi": "{essid} ({signalStrength}%) ",
