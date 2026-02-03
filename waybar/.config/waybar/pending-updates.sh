@@ -1,10 +1,22 @@
 #!/bin/bash
 
+# Expected to be invoked by waybar with a reasonable `interval'
+
 set -o errexit
 set -o pipefail
 set -o nounset
 
-# Expected to be invoked by waybar with a reasonable `interval'
+# CR cperl: This doesn't work well with a laptop as it can wind up
+# getting invoked when the network is not yet up (after resume) and
+# it'll error out in weird ways that cause the number of updates to
+# note display.
+
+# CR cperl: Allow the individual commands to return either a number
+# (representing the number of pending updates) or a string if some
+# kind of an error occurred. Check for he return type via regex in the
+# main function and only update the total if the returned value is
+# numeric, but display whatever is returned in the tooltip.
+
 pending_updates_opam () {
     if ! command -v opam > /dev/null; then
         echo "0"
@@ -67,6 +79,7 @@ pending_updates_apt () {
 }
 
 pending_updates_dnf () {
+    # CR cperl: This is fedora specific right now, which isn't great
     dnf -q updateinfo list \
         | awk 'BEGIN {
                  count = 0
@@ -75,7 +88,11 @@ pending_updates_dnf () {
                  count += 1
                }
                END {
-                 print NR-1
+                 if (NR > 2) {
+                   print NR-1
+                 } else {
+                   print 0
+                 }
                };'
 }
 
