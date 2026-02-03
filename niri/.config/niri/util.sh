@@ -108,27 +108,41 @@ select-window () {
     fi
 }
 
-subcmd--move-window-to-last-workspace () {
+subcmd--move-window-to-last-workspace-dwim () {
+    # Move the window to the last workspace that has windows (i.e. the
+    # workspace before the last empty workspace that always
+    # exists. Unless we're already on that workspace, then move the
+    # window to the empty workspace
     local workspaces
     local windows
+    local cwsid
     local lwsid
     local wid
 
-    workspaces=$(niri msg -j workspaces)
-    windows=$(niri msg -j windows)
-
-    read -d '' -r last_workspace_query<<-EOF || true
-	sort_by(.idx) | .[-2] | .idx
-	EOF
     read -d '' -r curr_window_query<<-EOF || true
 	map(select(.is_focused) | .id) | .[0]
 	EOF
 
-    lwsid=$(jq -r "${last_workspace_query}" <<< "${workspaces}")
+    read -d '' -r curr_and_last_workspace_query<<-EOF || true
+	sort_by(.idx)
+	| (map(select(.is_active and .is_focused)) | .[0]) as \$c
+	| .[-2] as \$l
+	| [(\$c | .idx), (\$l | .idx)]
+	| @tsv
+	EOF
+
+    workspaces=$(niri msg -j workspaces)
+    windows=$(niri msg -j windows)
+    read -r cwsid lwsid < \
+	 <(jq -r "${curr_and_last_workspace_query}" <<< "${workspaces}")
     wid=$(jq -r "${curr_window_query}" <<< "${windows}")
 
-    if [[ -z "${lwsid}" || -z "${wid}" ]]; then
+    if [[ -z "${cwsid}" || -z "${lwsid}" || -z "${wid}" ]]; then
         return 1
+    fi
+
+    if [[ "${cwsid}" -eq "${lwsid}" ]]; then
+	lwsid=$((lwsid + 1))
     fi
     niri msg action move-window-to-workspace    \
          --window-id "${wid}"                   \
