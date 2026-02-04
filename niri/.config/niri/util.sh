@@ -189,7 +189,7 @@ subcmd--select-and-pull-window () {
     # windows. So, we set the size to 50%, which is just slightly too
     # big, then we manually subtract (1.5 * gap_size), which happens to
     # be 10. That represents the full width of the gap on the left (or
-    # right) and then half the middle gap).
+    # right) and then half the middle gap.
     #
     # This could be made slightly less hacky by querying the gap
     # setting out of the config with something like
