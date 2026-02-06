@@ -67,7 +67,6 @@
         markdown-mode
         nasm-mode
         nerd-icons
-        ob-async
         org
         org-super-agenda
         org-ql
@@ -1602,18 +1601,6 @@ to return a list"
         (setq org-habit-following-days 3)))
     (use-package ol-man)
     (use-package org-tempo)
-    (use-package ob-async
-      ;; 2024-02-01 cperl: Disabled for now after some issues running
-      ;; non-async src blocks, something about wrong number of
-      ;; arguments or something like that.
-      :disabled t
-      :config
-      ;; 2022-10-22 cperl: A workaround for :async not working
-      ;; sometimes as described at
-      ;; https://github.com/astahlman/ob-async/issues/75
-      (defun no-hide-overlays (orig-fun &rest args)
-        (setq org-babel-hide-result-overlays nil))
-      (advice-add 'ob-async-org-babel-execute-src-block :before #'no-hide-overlays))
     (setq org-adapt-indentation nil)
     (setq org-startup-indented t)
     (setq org-indent-indentation-per-level 1)
