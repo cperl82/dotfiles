@@ -249,6 +249,14 @@ If there are multiple windows, don't split anything."
 ;; Global keybindings
 (general-define-key
  :keymaps '(override)
+ :states '(normal motion insert emacs)
+ "C-h" #'windmove-left
+ "C-j" #'windmove-down
+ "C-k" #'windmove-up
+ "C-l" #'windmove-right)
+
+(general-define-key
+ :keymaps '(override)
  :states '(normal motion emacs)
  :prefix ","
  "h" #'swiper-isearch-thing-at-point
@@ -264,20 +272,10 @@ If there are multiple windows, don't split anything."
  "w j" #'windmove-down
  "w k" #'windmove-up
  "w l" #'windmove-right
- "w r" #'cp/hydra-windsize/body
- )
-
-(general-define-key
- :keymaps '(override)
- :states '(normal motion insert emacs)
- "C-h" #'windmove-left
- "C-j" #'windmove-down
- "C-k" #'windmove-up
- "C-l" #'windmove-right)
+ "w r" #'cp/hydra-windsize/body)
 
 
 ;; windsize
-
 (use-package windsize
   :defer t
   :general
@@ -295,7 +293,6 @@ If there are multiple windows, don't split anything."
 ;; zenburn
 (load-theme 'zenburn t)
 
-
 
 ;; which-key
 (use-package which-key
@@ -305,7 +302,6 @@ If there are multiple windows, don't split anything."
   (progn
     (setq which-key-idle-delay 1.0)
     (which-key-mode)))
-
 
 
 ;; buffer-move
@@ -323,7 +319,6 @@ If there are multiple windows, don't split anything."
    "w K" #'buf-move-up
    "w L" #'buf-move-right))
 
-
 
 ;; edebug
 (use-package edebug
@@ -333,7 +328,6 @@ If there are multiple windows, don't split anything."
   ;; it, the edebug map doesn't get its proper position as an "intercept" map,
   ;; which makes edebug really annoying to use
   (add-hook 'edebug-mode-hook #'evil-normalize-keymaps))
-
 
 
 ;; company-mode
@@ -347,7 +341,6 @@ If there are multiple windows, don't split anything."
    "C-n" #'company-select-next
    "C-p" #'company-select-previous))
 
-
 
 ;; paren
 (use-package paren
@@ -357,7 +350,6 @@ If there are multiple windows, don't split anything."
   :config
   (progn
     (show-paren-mode)))
-
 
 
 ;; uniquify
@@ -548,7 +540,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
     (setq counsel-grep-use-swiper-p #'cp/counsel-grep-use-swiper-p)
     (counsel-mode 1)))
 
-
 
 ;; dired
 (defun cp/dired-tab-dwim ()
@@ -639,7 +630,6 @@ dired-x"
        (unless (eq ibuffer-sorting-mode 'alphbaetic)
          (ibuffer-do-sort-by-alphabetic))))))
 
-
 
 ;; xcscope
 (use-package xcscope
@@ -686,7 +676,6 @@ dired-x"
           (cscope-file-face        font-lock-doc-face)
           (cscope-function-face    font-lock-function-name-face)))))))
 
-
 
 ;; lisp-mode
 (use-package elisp-mode
@@ -702,7 +691,6 @@ dired-x"
      (hs-hide-all)
      (company-mode))))
 
-
 
 ;; elisp-slime-nav
 (use-package elisp-slime-nav
@@ -716,7 +704,6 @@ dired-x"
    "C-c &"   #'evil-jump-backward
    "C-c ;"   #'elisp-slime-nav-find-elisp-thing-at-point
    "C-c C-t" #'elisp-slime-nav-describe-elisp-thing-at-point))
-
 
 
 ;; tuareg-mode
@@ -790,7 +777,6 @@ dired-x"
           (tuareg-font-lock-extension-node-face tuareg-font-lock-governing-face)
           (tuareg-font-lock-attribute-face      tuareg-font-lock-governing-face)))))))
 
-
 
 ;; hideshow
 (use-package hideshow
@@ -801,7 +787,6 @@ dired-x"
     (setq hs-isearch-open t)
     (evil-define-minor-mode-key 'normal 'hs-minor-mode
       (kbd "TAB") #'hs-toggle-hiding)))
-
 
 
 ;; sh-script
@@ -822,7 +807,6 @@ dired-x"
        (flycheck-mode)
        (flycheck-select-checker 'sh-shellcheck)))))
 
-
 
 ;; grep
 (use-package grep
@@ -835,7 +819,6 @@ dired-x"
     (setq grep-find-use-xargs 'gnu)
     (add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
     (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))))
-
 
 
 ;; kdl-mode
@@ -946,7 +929,6 @@ dired-x"
        evil-operator-state-tag " O"
        evil-emacs-state-tag    " E"))))
 
-
 
 ;; evil-collection
 (use-package evil-collection
@@ -954,7 +936,6 @@ dired-x"
     :diminish evil-collection-unimpaired-mode
     :config
     (evil-collection-init))
-
 
 
 ;; smartparens/evil-smartparens
@@ -976,7 +957,6 @@ dired-x"
        '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
       (sp-local-pair
        '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil)))
-
 
 
 ;; doom-modeline
@@ -1001,7 +981,6 @@ dired-x"
   (progn
     (global-evil-surround-mode 1)))
 
-
 
 ;; highlight-parentheses
 (use-package highlight-parentheses
@@ -1011,7 +990,6 @@ dired-x"
     (zenburn-with-color-variables
       (setq hl-paren-colors
             `(,zenburn-red-4 ,zenburn-green ,zenburn-yellow-2 ,zenburn-blue+1)))))
-
 
 
 ;; winner
@@ -1026,7 +1004,6 @@ dired-x"
    "w U" #'winner-redo)
   :init
   (winner-mode))
-
 
 
 ;; hippie-expand
@@ -1318,7 +1295,6 @@ dired-x"
     (advice-add 'escreen-create-screen :after #'cp/advice/escreen-create-screen)
     (advice-add 'escreen-install       :after #'cp/advice/escreen-install)
     (escreen-install)))
-
 
 
 ;; org
@@ -1777,7 +1753,6 @@ to return a list"
     (add-hook 'org-src-mode-hook    (lambda () (setq electric-indent-mode nil)))
     (remove-hook 'org-mode-hook 'org-eldoc-load)))
 
-
 
 ;; projectile
 (defvar cp/projectile-project-full-feature-name t)
@@ -1877,13 +1852,11 @@ to return a list"
     (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
     (projectile-mode)))
 
-
 
 ;; counsel-projectile
 (use-package counsel-projectile
   :defer t
   :after (projectile))
-
 
 
 (use-package embark
