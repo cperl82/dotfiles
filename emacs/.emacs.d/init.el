@@ -272,7 +272,19 @@ If there are multiple windows, don't split anything."
  "w j" #'windmove-down
  "w k" #'windmove-up
  "w l" #'windmove-right
- "w r" #'cp/hydra-windsize/body)
+ "w H" #'buf-move-left
+ "w J" #'buf-move-down
+ "w K" #'buf-move-up
+ "w L" #'buf-move-right
+ "w r" #'cp/hydra-windsize/body
+ )
+
+
+;; buffer-move
+(use-package buffer-move
+  :defer t
+  :commands (buf-move-down buf-move-up buf-move-left buf-move-right)
+  :load-path "lisp")
 
 
 ;; windsize
@@ -302,22 +314,6 @@ If there are multiple windows, don't split anything."
   (progn
     (setq which-key-idle-delay 1.0)
     (which-key-mode)))
-
-
-;; buffer-move
-(use-package buffer-move
-  :defer t
-  :commands (buf-move-down buf-move-up buf-move-left buf-move-right)
-  :load-path "lisp"
-  :general
-  (:keymaps '(override)
-   :states '(normal motion insert emacs)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "w H" #'buf-move-left
-   "w J" #'buf-move-down
-   "w K" #'buf-move-up
-   "w L" #'buf-move-right))
 
 
 ;; edebug
@@ -876,14 +872,6 @@ dired-x"
 (use-package evil
   :demand t
   :general
-  (:keymaps '(override)
-   :states  '(normal motion emacs)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "w h" #'evil-window-left
-   "w j" #'evil-window-down
-   "w k" #'evil-window-up
-   "w l" #'evil-window-right)
   (:keymaps '(visual)
    "TAB" #'indent-region)
   :init
