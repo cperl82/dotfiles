@@ -259,9 +259,7 @@ If there are multiple windows, don't split anything."
  "j" #'dired-jump
  "k" #'kill-buffer
  "f" #'cp/find-file
- "u" #'cp/find-file-sudo
- "r" #'counsel-recentf
- "R" #'projectile-recentf)
+ "r" #'cp/find-file-sudo)
 
 (general-define-key
  :keymaps '(override)
