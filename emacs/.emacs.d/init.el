@@ -1367,15 +1367,17 @@ The key is the todo keyword and the value is its relative position in the list."
 (defun cp/org-sort-entries ()
   (interactive)
   (org-sort-entries nil ?f #'cp/org-sort-key)
-  ;; there may be a better way to do this, but for now its refolds things the way I want after sorting
+  ;; there may be a better way to do this, but for now its refolds
+  ;; things the way I want after sorting
   (funcall (general-simulate-key "TAB TAB")))
 
 (defun cp/org-agenda-tagged-by-context (search-string)
-  ;; CR-someday cperl: Have to figure out how to make C-u r in the buffer work correctly.
-  ;; Right now it regenerated the buffer with a different tag, but winds up leaving it
-  ;; named incorrectly.  I was thinking one way around it might be to substitute in the
-  ;; proper to call to this function for `org-agenda-redo-command' and the `redo-cmd' text
-  ;; property, but I could quite get it working.
+  ;; CR-someday cperl: Have to figure out how to make C-u r in the
+  ;; buffer work correctly.  Right now it regenerated the buffer with
+  ;; a different tag, but winds up leaving it named incorrectly.  I
+  ;; was thinking one way around it might be to substitute in the
+  ;; proper to call to this function for `org-agenda-redo-command' and
+  ;; the `redo-cmd' text property, but I could quite get it working.
   (let ((selected
          (or search-string
              (completing-read
