@@ -259,33 +259,13 @@ If there are multiple windows, don't split anything."
  "j" #'dired-jump
  "k" #'kill-buffer
  "f" #'cp/find-file
- "r" #'cp/find-file-sudo)
-
-(general-define-key
- :keymaps '(override)
- :states '(normal motion insert emacs)
- :prefix cp/normal-prefix
- :non-normal-prefix cp/non-normal-prefix
- "a"   '(:ignore t :which-key "applications")
- "b"   '(:ignore t :which-key "buffers")
- "w"   '(:ignore t :which-key "windows")
- "f"   '(:ignore t :which-key "files")
- "h"   #'help
- "f f" #'cp/find-file
- "f r" #'find-file-read-only
- "f j" #'dired-jump
- "b b" #'switch-to-buffer
- "b k" #'kill-buffer
- "b K" #'kill-buffer-and-window
- "b r" #'revert-buffer
- "b R" #'cp/revert-buffer-all
- "b f" #'(lambda () (interactive) (message (buffer-file-name)))
- "w s" #'split-window-vertically
- "w v" #'split-window-horizontally
- "w K" #'kill-buffer-and-window
- "w o" #'delete-other-windows
- "w x" #'delete-window
- "w =" #'balance-windows)
+ "r" #'cp/find-file-sudo
+ "w h" #'windmove-left
+ "w j" #'windmove-down
+ "w k" #'windmove-up
+ "w l" #'windmove-right
+ "w r" #'cp/hydra-windsize/body
+ )
 
 (general-define-key
  :keymaps '(override)
@@ -294,6 +274,22 @@ If there are multiple windows, don't split anything."
  "C-j" #'windmove-down
  "C-k" #'windmove-up
  "C-l" #'windmove-right)
+
+
+;; windsize
+
+(use-package windsize
+  :defer t
+  :general
+  :commands (cp/hydra-windsize/body)
+  :config
+  (progn
+    (defhydra cp/hydra-windsize (nil nil)
+      "resize"
+      ("h" windsize-left  "left")
+      ("j" windsize-down  "down")
+      ("k" windsize-up    "up")
+      ("l" windsize-right "right"))))
 
 
 ;; zenburn
@@ -1015,25 +1011,6 @@ dired-x"
     (zenburn-with-color-variables
       (setq hl-paren-colors
             `(,zenburn-red-4 ,zenburn-green ,zenburn-yellow-2 ,zenburn-blue+1)))))
-
-
-
-;; windsize
-(defhydra cp/hydra-windsize (nil nil)
-  "resize"
-  ("h" windsize-left  "left")
-  ("j" windsize-down  "down")
-  ("k" windsize-up    "up")
-  ("l" windsize-right "right"))
-
-(use-package windsize
-  :defer t
-  :general
-  (:keymaps '(override)
-   :states '(normal motion emacs)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "w r" #'cp/hydra-windsize/body))
 
 
 
