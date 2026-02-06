@@ -33,7 +33,6 @@
  ("hydra" . "317e1de33086637579a7aeb60f77ed0405bf359b")
  ("ibuffer-projectile" . "ecbe482804a217b1471593f6c7a8b3d64f3cdc47")
  ("ibuffer-vc" . "5fa6aea09bc67f71ea743302d609f459967b1e81")
- ("ios-config-mode" . "ef1d26a3983006cb4574e4c14fcf36ceeda4a260")
  ("ivy-rich" . "aff9b6bd53e0fdcf350ab83c90e64e651b47dba4")
  ("json-mode" . "eedb4560034f795a7950fa07016bd4347c368873")
  ("json-snatcher" . "b28d1c0670636da6db508d03872d96ffddbc10f2")
