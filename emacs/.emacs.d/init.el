@@ -252,7 +252,6 @@ If there are multiple windows, don't split anything."
  :states '(normal motion emacs)
  :prefix ","
  "h" #'swiper-isearch-thing-at-point
- "m" #'highlight-symbol-at-point
  "s" #'split-window-vertically
  "v" #'split-window-horizontally
  "x" #'delete-window
