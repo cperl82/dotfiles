@@ -802,9 +802,7 @@ dired-x"
    "SPC" nil)
   :config
   (progn
-    (setq grep-find-use-xargs 'gnu)
-    (add-to-list 'grep-files-aliases '("ml"  . "*.ml *.mli"))
-    (add-to-list 'grep-files-aliases '("mlc" . "*.ml *.mli *.c *.h"))))
+    (setq grep-find-use-xargs 'gnu)))
 
 
 ;; kdl-mode
