@@ -692,20 +692,6 @@ dired-x"
      (company-mode))))
 
 
-;; elisp-slime-nav
-(use-package elisp-slime-nav
-  :defer t
-  :diminish elisp-slime-nav-mode
-  :init
-  (add-hook 'emacs-lisp-mode-hook #'turn-on-elisp-slime-nav-mode)
-  :general
-  (:keymaps '(elisp-slime-nav-mode-map)
-   :states  '(normal motion)
-   "C-c &"   #'evil-jump-backward
-   "C-c ;"   #'elisp-slime-nav-find-elisp-thing-at-point
-   "C-c C-t" #'elisp-slime-nav-describe-elisp-thing-at-point))
-
-
 ;; tuareg-mode
 (defun cp/tuareg-mode-hs-forward-sexp-fun (arg)
   (let* ((c (current-column))
