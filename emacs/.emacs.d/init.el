@@ -175,22 +175,6 @@ If there are multiple windows, don't split anything."
       nil)))
 (setq split-window-preferred-function #'cp/split-window-sensibly)
 
-(defun cp/generate-short-id ()
-  "Generate a short mostly unique identifier"
-  (interactive)
-  (let ((str
-        (cl-loop with result = ""
-                 with alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-                 repeat 6
-                 concat
-                 (let ((idx (random (length alphabet))))
-                   (substring alphabet idx (1+ idx)))
-                 into result
-                 finally return result)))
-    (if (called-interactively-p 'interactive)
-        (message str)
-      str)))
-
 ;; 2017-08-17 cperl: misc stuff
 (defun cp/c-mode-hook-setup ()
   (hs-minor-mode))
@@ -1260,6 +1244,22 @@ dired-x"
 
 
 ;; org
+(defun cp/org-generate-short-id ()
+  "Generate a short mostly unique identifier"
+  (interactive)
+  (let ((str
+        (cl-loop with result = ""
+                 with alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+                 repeat 6
+                 concat
+                 (let ((idx (random (length alphabet))))
+                   (substring alphabet idx (1+ idx)))
+                 into result
+                 finally return result)))
+    (if (called-interactively-p 'interactive)
+        (message str)
+      str)))
+
 (defun cp/org-echo-link-at-point ()
   (let ((raw-link (org-element-property :raw-link (org-element-context))))
     (message "%s" raw-link)))
