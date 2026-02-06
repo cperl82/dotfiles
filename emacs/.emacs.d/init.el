@@ -1391,33 +1391,6 @@ dired-x"
   (interactive)
   (cp/org-surround ?*))
 
-(setq cp/org-username-command-alist
-      '((darwin     . "dscacheutil -q user | awk -F: '$1 ~ /name/ {print $2}'")
-        (gnu/linux  . "getent passwd | cut -d: -f1")))
-
-(defun cp/org-username-list-all ()
-  (let* ((cmd (alist-get system-type cp/org-username-command-alist)))
-    (when cmd
-      (split-string (shell-command-to-string cmd)))))
-
-(cp/make-symbol-caching-version-of #'cp/org-username-list-all-caching #'cp/org-username-list-all 86400)
-
-(defun cp/org-ivy-usernames (username)
-  (ivy-read "username: "
-            (cp/org-username-list-all-caching)
-            :require-match t
-            :initial-input username))
-
-(defun cp/org-complete-user-name-at-point ()
-  (interactive)
-  (let* ((partial  (word-at-point))
-         (username (cp/org-ivy-usernames partial)))
-    (when username
-      (progn
-        (when partial
-          (backward-kill-word 1))
-        (insert username)))))
-
 (defun cp/advice/org-next-link (&optional search-backward)
   (cp/org-echo-link-at-point))
 
@@ -1669,8 +1642,7 @@ to return a list"
    :states  '(insert)
    "M-RET"   #'org-meta-return
    "M-."     #'cp/org-surround-tilda
-   "M-,"     #'cp/org-surround-equal
-   "M-u"     #'cp/org-complete-user-name-at-point)
+   "M-,"     #'cp/org-surround-equal)
   (:keymaps '(org-agenda-mode-map)
    :states  '(emacs)
    "j"       #'org-agenda-next-line
