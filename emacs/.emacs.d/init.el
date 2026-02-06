@@ -800,8 +800,7 @@ dired-x"
 
 ;; kdl-mode
 (use-package kdl-mode
-  :defer t
-  )
+  :defer t)
 
 
 ;; man
@@ -1227,21 +1226,14 @@ dired-x"
   :defer t
   :commands (escreen-create-screen)
   :load-path "lisp"
-  :bind-keymap ("C-\\" . escreen-map)
   :general
   (:keymaps '(override)
    :states '(normal motion emacs)
    :prefix ","
    "e" '(:keymap escreen-map :which-key "escreen"))
-  (:keymaps '(override)
-   :states '(normal motion emacs)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "a e" '(:keymap escreen-map :which-key "escreen"))
   (:keymaps '(escreen-map)
    "C-b" nil
-   "n"   nil
-   "t"   #'escreen-goto-last-screen
+   "TAB" #'escreen-goto-last-screen
    "e"   #'cp/escreen-show-active-screens
    "v"   #'cp/escreen-show-active-screens-vertical
    "f"   #'cp/escreen-show-active-screens-horizontal
@@ -1254,6 +1246,8 @@ dired-x"
    "k"   #'escreen-kill-screen
    "H"   #'cp/escreen-move-screen-left
    "L"   #'cp/escreen-move-screen-right
+   "p"   #'escreen-goto-prev-screen
+   "n"   #'escreen-goto-next-screen
    "h"   #'escreen-goto-prev-screen
    "l"   #'escreen-goto-next-screen)
   :config
