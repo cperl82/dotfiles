@@ -1908,15 +1908,13 @@ to return a list"
 ;; counsel-projectile
 (use-package counsel-projectile
   :defer t
-  :after (projectile)
-  )
+  :after (projectile))
 
 
 
 (use-package embark
   :defer t
-  :commands (embark-act)
-  )
+  :commands (embark-act))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
