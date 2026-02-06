@@ -253,7 +253,6 @@ If there are multiple windows, don't split anything."
  :prefix ","
  "h" #'swiper-isearch-thing-at-point
  "m" #'highlight-symbol-at-point
- "u" #'unhighlight-regexp
  "s" #'split-window-vertically
  "v" #'split-window-horizontally
  "x" #'delete-window
