@@ -445,9 +445,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
         t
       (counsel-grep-use-swiper-p-default))))
 
-(use-package smex
-  :defer t)
-
 (use-package ivy
   :defer t
   :diminish ivy-mode
