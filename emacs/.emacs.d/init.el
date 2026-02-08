@@ -1673,8 +1673,9 @@ to return a list"
     (add-to-list 'org-file-apps '("\\.png\\'" . "eog %s"))
     (add-to-list 'org-file-apps '("\\.jpe?g\\'" . "eog %s"))
     (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))
-    (run-with-idle-timer 30 t (lambda ()
-                                (let ((inhibit-message t)) (org-save-all-org-buffers))))
+    (run-with-idle-timer 30 t
+                         (lambda ()
+                           (let ((inhibit-message t)) (org-save-all-org-buffers))))
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
     (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
     (advice-add  'org-archive--compute-location :filter-args #'cp/advice/org-archive--compute-location)
