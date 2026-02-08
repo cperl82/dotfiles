@@ -1631,9 +1631,9 @@ to return a list"
     (setq org-agenda-sticky t)
     (setq org-agenda-prefix-format
           '((agenda . "  %7c %6s %5t ")
-            (todo   . "  %7c")
-            (tags   . "  %7c")
-            (search . "  %7c")))
+            (todo   . "  %7c ")
+            (tags   . "  %7c ")
+            (search . "  %7c ")))
     (setq org-agenda-time-grid
           '((daily today require-timed)
             (800 1000 1200 1400 1600 1800 2000)
