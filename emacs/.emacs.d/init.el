@@ -1644,8 +1644,9 @@ to return a list"
     (setq org-agenda-deadline-leaders '("d" "-%dd d" "%dd d"))
     (setq org-agenda-format-date
           (lambda (date)
-            (concat "\n"
-	            (format-time-string "%a %Y-%m-%d:" (org-time-from-absolute date)))))
+            (concat "\n" (format-time-string
+                          "%a %Y-%m-%d:"
+                          (org-time-from-absolute date)))))
     (setq org-agenda-remove-tags t)
     (setq org-agenda-show-future-repeats nil)
     (setq org-agenda-hide-tags-regexp (format "^%s$" (regexp-opt '("ATTACH"))))
