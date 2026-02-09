@@ -16,24 +16,7 @@
 (setq gc-cons-threshold (* 100 1000 1000))
 
 ;; straight
-(setq straight-cache-autoloads t
-      straight-check-for-modifications nil)
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name
-        "straight/repos/straight.el/bootstrap.el"
-        (or (bound-and-true-p straight-base-dir)
-            user-emacs-directory)))
-      (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage))
-
+(load-file (expand-file-name "init-straight.el" user-emacs-directory))
 (dolist
     (package
       '(annalist
@@ -1644,8 +1627,9 @@ to return a list"
     (setq org-agenda-deadline-leaders '("d" "-%dd d" "%dd d"))
     (setq org-agenda-format-date
           (lambda (date)
-            (concat "\n"
-	            (format-time-string "%a %Y-%m-%d:" (org-time-from-absolute date)))))
+            (concat "\n" (format-time-string
+                          "%a %Y-%m-%d:"
+                          (org-time-from-absolute date)))))
     (setq org-agenda-remove-tags t)
     (setq org-agenda-show-future-repeats nil)
     (setq org-agenda-hide-tags-regexp (format "^%s$" (regexp-opt '("ATTACH"))))
@@ -1672,8 +1656,9 @@ to return a list"
     (add-to-list 'org-file-apps '("\\.png\\'" . "eog %s"))
     (add-to-list 'org-file-apps '("\\.jpe?g\\'" . "eog %s"))
     (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))
-    (run-with-idle-timer 30 t (lambda ()
-                                (let ((inhibit-message t)) (org-save-all-org-buffers))))
+    (run-with-idle-timer 30 t
+                         (lambda ()
+                           (let ((inhibit-message t)) (org-save-all-org-buffers))))
     (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
     (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
     (advice-add  'org-archive--compute-location :filter-args #'cp/advice/org-archive--compute-location)
