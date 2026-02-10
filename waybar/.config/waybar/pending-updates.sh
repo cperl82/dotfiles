@@ -2,7 +2,6 @@
 
 # Expected to be invoked by waybar with a reasonable `interval'
 
-set -o errexit
 set -o pipefail
 set -o nounset
 
@@ -100,7 +99,7 @@ pending_updates_package_manager () {
 
 }
 
-main () {
+run () {
     local package_manager
     local flatpak
     local cargo
@@ -115,6 +114,16 @@ main () {
     cargo=$(pending_updates_cargo)
     python=$(pending_updates_python)
     opam=$(pending_updates_opam)
+
+    if [[ -z "${package_manager}" || \
+	  -z "${flatpak}"         || \
+	  -z "${cargo}"           || \
+	  -z "${python}"          || \
+	  -z "${opam}"
+	]]; then
+	return 1
+    fi
+
     all=0
     for thing in package_manager flatpak cargo python opam; do
 	if [[ "${!thing}" =~ ^[0-9]+$ ]]; then
@@ -132,6 +141,24 @@ main () {
     printf '{"text": "%s", "tooltip": "%s"}\n'  \
            "${text}"                            \
            "${tooltip}"
+    return 0
 }
 
-main "${@}"
+main () {
+    local output
+    local i
+
+    # try 5 time, sleeping 5s between each attempt, to deal with
+    # things like the computer having just been woken up from sleep.
+    i=5
+    while [[ "${i}" -gt 0 ]]; do
+	if output=$(run); then
+	    echo "${output}"
+	    break
+	fi
+	sleep 5
+	i=$((i - 1))
+    done
+}
+
+main
