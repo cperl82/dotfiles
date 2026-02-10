@@ -11,15 +11,9 @@ set -o nounset
 # it'll error out in weird ways that cause the number of updates to
 # note display.
 
-# CR cperl: Allow the individual commands to return either a number
-# (representing the number of pending updates) or a string if some
-# kind of an error occurred. Check for he return type via regex in the
-# main function and only update the total if the returned value is
-# numeric, but display whatever is returned in the tooltip.
-
 pending_updates_opam () {
     if ! command -v opam > /dev/null; then
-        echo "0"
+        echo "_"
 	return
     fi
     echo "0"
@@ -27,7 +21,7 @@ pending_updates_opam () {
 
 pending_updates_python () {
     if ! command -v pip > /dev/null; then
-        echo "0"
+        echo "_"
 	return
     fi
 
@@ -36,8 +30,8 @@ pending_updates_python () {
 }
 
 pending_updates_cargo () {
-    if ! command -v cargo > /dev/null; then
-        echo "0"
+    if ! command -v cargo install-update > /dev/null; then
+        echo "_"
 	return
     fi
     cargo install-update --list \
@@ -56,7 +50,7 @@ pending_updates_cargo () {
 
 pending_updates_flatpak () {
     if ! command -v flatpak > /dev/null; then
-        echo "0"
+        echo "_"
 	return
     fi
     set +o errexit
@@ -79,12 +73,11 @@ pending_updates_apt () {
 }
 
 pending_updates_dnf () {
-    # CR cperl: This is fedora specific right now, which isn't great
     dnf -q updateinfo list \
         | awk 'BEGIN {
                  count = 0
                };
-               $0 ~ /\.fc[0-9][0-9]*\./ {
+               $5 ~ /^[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}$/ {
                  count += 1
                }
                END {
@@ -102,7 +95,7 @@ pending_updates_package_manager () {
     elif command -v apt > /dev/null; then
         pending_updates_apt
     else
-        echo "0"
+        echo "_"
     fi
 
 }
@@ -122,14 +115,19 @@ main () {
     cargo=$(pending_updates_cargo)
     python=$(pending_updates_python)
     opam=$(pending_updates_opam)
-    all=$((package_manager + flatpak + cargo + python + opam))
+    all=0
+    for thing in package_manager flatpak cargo python opam; do
+	if [[ "${!thing}" =~ ^[0-9]+$ ]]; then
+	    all=$((all + ${!thing}))
+	fi
+    done
     printf -v text "%d" "${all}"
     printf -v tooltip "%s\\\\n"                                 \
-           "$(printf "Packages: %3d" "${package_manager}")"     \
-           "$(printf "Flatpak:  %3d" "${flatpak}")"             \
-           "$(printf "Cargo:    %3d" "${cargo}")"               \
-           "$(printf "Python:   %3d" "${python}")"              \
-           "$(printf "Opam:     %3d" "${opam}")"
+           "$(printf "Packages: %3s" "${package_manager}")"     \
+           "$(printf "Flatpak:  %3s" "${flatpak}")"             \
+           "$(printf "Cargo:    %3s" "${cargo}")"               \
+           "$(printf "Python:   %3s" "${python}")"              \
+           "$(printf "Opam:     %3s" "${opam}")"
     tooltip="${tooltip%\\n}"
     printf '{"text": "%s", "tooltip": "%s"}\n'  \
            "${text}"                            \
