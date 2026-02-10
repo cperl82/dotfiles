@@ -23,7 +23,7 @@
 	"tooltip-format": "{ifname} {ipaddr}",
     },
     "clock": {
-        "format": "{:%F %H:%M:%S %Z}",
+        "format": "{:%a %F %H:%M %Z}",
         "timezones": ["America/New_York", "UTC", "Asia/Hong_Kong"],
 	"tooltip": true,
 	"tooltip-format": "{tz_list}",
