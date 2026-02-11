@@ -5,11 +5,6 @@
 set -o pipefail
 set -o nounset
 
-# CR cperl: This doesn't work well with a laptop as it can wind up
-# getting invoked when the network is not yet up (after resume) and
-# it'll error out in weird ways that cause the number of updates to
-# note display.
-
 pending_updates_package_manager () {
     if command -v dnf > /dev/null; then
         pending_updates_dnf
@@ -164,8 +159,11 @@ main () {
     local output
     local i
 
-    # try 5 time, sleeping 5s between each attempt, to deal with
-    # things like the computer having just been woken up from sleep.
+    # Try 5 times, sleeping 5s between each attempt, to deal with
+    # things like the computer having just been woken up from sleep
+    # and the network being disconnected. It's possible you should
+    # cache and display the cached version if you can't get a new
+    # update.
     i=5
     while [[ "${i}" -gt 0 ]]; do
 	if output=$(run); then
