@@ -240,7 +240,7 @@ function setup-os-specific {
     local f 
 
     n=$(uname -s | tr '[:upper:]' '[:lower:]')
-    f="${BASHFILES}/.bashrc.${n}"
+    f="$(dirname "$(realpath -L "${BASH_SOURCE[0]}")")/.bashrc.${n}"
     if [[ -f "${f}" ]]
     then
 	# shellcheck disable=SC1090
