@@ -335,39 +335,6 @@ function with-fzf {
     fi
 }
 
-function centos-vault-url-for-sprm {
-    local output=""
-    local base="http://vault.centos.org"
-    local urls=""
-    local cache_dir=""
-
-    function urls_for_version {
-	# For each version, get
-	# ${root}/${version}/{os,updates}/Source/SPackages
-
-	for version in "${@}"
-	do
-	    printf "%s/%s/os/Source/SPackages\n" "${base}" "${version}"
-	    printf "%s/%s/updates/Source/SPackages\n" "${base}" "${version}"
-	done
-    }
-
-    output=$(curl -vs -q "${base}")
-    versions=(
-	$(echo "${output}"				\
-	      | tidy -quiet -asxml -numeric -utf8	\
-	      | xmlstarlet sel -T -t -v "//_:a"		\
-	      | grep -E '^[[:digit:]\.]+/?$'		\
-	      | sed -e 's#/$##'))
-
-    urls=$(urls_for_version "${versions[@]}")
-    cache_dir="${HOME}/.centos-vault-url-for-srpm"
-    { mkdir -p "${cache_dir}" && \
-      cd "${cache_dir}"       && \
-      xargs -n1 -P 6 curl -qs <<< "${urls}"
-    }
-}
-
 # function wrapper for screen to try to cover some common cases of window title setting
 function scr {
     local parnt=""
