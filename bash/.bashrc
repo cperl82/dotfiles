@@ -335,7 +335,8 @@ function with-fzf {
     fi
 }
 
-# function wrapper for screen to try to cover some common cases of window title setting
+# function wrapper for screen to try to cover some common cases of
+# window title setting
 function scr {
     local parnt=""
     local child=""
@@ -369,49 +370,68 @@ function scr {
 }
 
 function setup-misc {
-    local osname=""
-    local osfile=""
-    local localfile=""
-
-    # PYTHONSTARTUP Environment variable
-    # if the ${HOME}/.python_startup.py file exists, set PYTHONSTARTUP to point to
-    # it such that its contents are executed for interactive python sessions
-    if [[ -f "${HOME}/.python_startup.py" ]];
-    then
-	export PYTHONSTARTUP="${HOME}/.python_startup.py"
-    fi
+    local f
 
     path-prepend "${HOME}/bin"
     path-prepend "${HOME}/.local/bin"
-    path-prepend "${HOME}/.cargo/bin"
-    path-prepend "${HOME}/.fzf/bin"
 
-    # Add ripgrep config file
-    RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
-    export RIPGREP_CONFIG_PATH
-
-    # OS Specific bashrc file inclusion
-    osname=$(uname -s | tr '[:upper:]' '[:lower:]')
-    osfile="${BASHFILES}/.bashrc.${osname}"
-    if [[ -f "${osfile}" ]]
+    # Interactive python session setup
+    f="${HOME}/.python_startup.py" 
+    if [[ -f "${f}" ]];
     then
-	# shellcheck disable=SC1090
-	source "${osfile}"
+	export PYTHONSTARTUP="${f}"
     fi
 
-    # Local bashrc file inclustion
-    # Allows inclusion of initialization stuff that I don't want to keep in my
-    # dotfiles repo
-    localfile="${HOME}/.bashrc.local"
-    if [[ -f "${localfile}" ]]
+    if command -v cargo >/dev/null
     then
-	source "${localfile}"
+	path-prepend "${HOME}/.cargo/bin"
+    fi
+
+    if command -v fzf >/dev/null
+    then
+	path-prepend "${HOME}/.fzf/bin"
+    fi
+
+    if command -v rg >/dev/null
+    then
+	RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
+	export RIPGREP_CONFIG_PATH
+    fi
+
+    if command -v opam > /dev/null
+    then
+	eval "$(opam config env)"
+    fi
+}
+
+function setup-os-specific {
+    local n
+    local f 
+
+    n=$(uname -s | tr '[:upper:]' '[:lower:]')
+    f="${BASHFILES}/.bashrc.${n}"
+    if [[ -f "${f}" ]]
+    then
+	# shellcheck disable=SC1090
+	source "${f}"
+    fi
+}
+
+function setup-local {
+    local f
+    # Local overrides
+    f="${HOME}/.bashrc.local"
+    if [[ -f "${f}" ]]
+    then
+	source "${f}"
     fi
 }
 
 function main
 {
     setup-misc
+    setup-os-specific
+    setup-local
 }
 
 main "${@}"
