@@ -164,60 +164,6 @@ function path-canonical {
     echo "${dst}"
 }
 
-# AES Encryption via command line
-# This is meant to be simplified interface to the aes-256-cbc encryption
-# available in openssl.  Note that output is always "ascii armored" as that just
-# makes life easier.
-function aes-256-cbc { 
-	verb="${1}"
-	shift
-	case "${verb}" in
-	e|enc|encrypt)
-		encrypt_decrypt=""
-		;;
-	d|dec|decrypt)
-		encrypt_decrypt="-d"
-		;;
-	*)
-		echo "${FUNCNAME} encrypt|decrypt string|file str|filename"
-		return
-		;;
-	esac	
-
-	noun="${1}"
-	shift
-	case "${noun}" in 
-	s|str|string)
-		if [[ -z "${1}" ]]
-		then
-			# No data on command line, prompt for it
-			pre_cmd="read -e -p 'input string: ' data"
-		else
-			# Just use the data from the command line
-			pre_cmd="data=${1}"
-		fi
-		openssl_cmd="openssl aes-256-cbc \${encrypt_decrypt} -a -in /dev/stdin -out /dev/stdout <<< \${data}"
-		post_cmd=""
-		;;
-	f|fil|file)
-		file="${1}"
-		infile="${file}"
-		outfile="${file}.aes.$$"
-		pre_cmd=""
-		openssl_cmd="openssl aes-256-cbc ${encrypt_decrypt} -a -in ${infile} -out ${outfile}"
-		post_cmd="mv \${outfile} \${file}"
-		;;
-	*)
-		echo "${FUNCNAME} encrypt|decrypt string|file str|filename"
-		return
-		;;
-	esac
-
-	#echo ${openssl_cmd}
-	eval ${pre_cmd} && eval ${openssl_cmd} && eval ${post_cmd}
-
-}
-
 # function wrapper for screen to try to cover some common cases of
 # window title setting
 function scr {
