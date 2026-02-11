@@ -13,7 +13,7 @@ set -o nounset
 pending_updates_opam () {
     if ! command -v opam > /dev/null; then
         echo "_"
-	return
+	return 0
     fi
     echo "0"
 }
@@ -21,7 +21,7 @@ pending_updates_opam () {
 pending_updates_python () {
     if ! command -v pip > /dev/null; then
         echo "_"
-	return
+	return 0
     fi
 
     pip list --user --outdated \
@@ -63,7 +63,7 @@ pending_updates_rustup () {
 pending_updates_flatpak () {
     if ! command -v flatpak > /dev/null; then
         echo "_"
-	return
+	return 0
     fi
     set +o errexit
     flatpak update < <(printf "n\n") \
@@ -109,7 +109,6 @@ pending_updates_package_manager () {
     else
         echo "_"
     fi
-
 }
 
 run () {
