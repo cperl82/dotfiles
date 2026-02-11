@@ -479,6 +479,7 @@ function setup-misc {
     osfile="${BASHFILES}/.bashrc.${osname}"
     if [[ -f "${osfile}" ]]
     then
+	# shellcheck disable=SC1090
 	source "${osfile}"
     fi
 
