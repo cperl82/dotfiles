@@ -348,67 +348,10 @@ function setup-misc {
     export PS1='[\u@\h \w]\$ '
 }
 
-function setup-op {
-    if command -v op > /dev/null
-    then
-	function op-ssh-key {
-	    local id
-	    local timeout
-	    local preview
-
-	    if [[ -n "${OP_SESSION_my}" ]]
-	    then
-		cmd="op signin --session ${OP_SESSION_my} --account my.1password.com"
-	    else
-		cmd="op signin --account my.1password.com"
-	    fi
-
-	    while true
-	    do
-		if output=$(${cmd})
-		then
-		    eval "${output}"
-		    break
-		fi
-	    done
-
-	    preview="echo {} | cut -f1 | xargs -r -I%% op item get %% --fields notesPlain"
-	    id=$(
-                op item list --tags "ssh-key"				\
-		    | tail -n +2					\
-		    | awk '{printf("%s\t%s\n", $1, $2)}'		\
-                    | fzf -d '\t'					\
-			  --with-nth 2					\
-			  --preview-window down,1,border-horizontal	\
-			  --preview "${preview}"			\
-                    | awk '{print $1}')
-
-	    if [[ -z "${id}" ]]
-	    then
-		return
-	    fi
-
-	    timeout=$(
-                printf "%d\n%d\n%d\n" 3600 $((3600*2)) $((3600*6)) \
-                    | fzf --no-sort)
-
-	    if [[ -z "${timeout}" ]]
-	    then
-		return
-	    fi
-
-            op item get "${id}" --fields "private key"	\
-		| sed -e 's/^"//' -e 's/"$//'		\
-		| ssh-add -t "${timeout}" -
-	}
-    fi
-}
-
 function main
 {
     setup-tty-aliases
     setup-misc
-    setup-op
 }
 
 main "${@}"
