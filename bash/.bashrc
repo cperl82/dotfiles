@@ -460,11 +460,6 @@ function setup-misc {
 	export PYTHONSTARTUP="${HOME}/.python_startup.py"
     fi
 
-    # Important variable setting
-    BASHFILES=$(dirname $(path-canonical ${BASH_ARGV[0]}))
-    DOTFILES=$(dirname ${BASHFILES})
-    export BASHFILES DOTFILES
-
     path-prepend "${HOME}/bin"
     path-prepend "${HOME}/.local/bin"
     path-prepend "${HOME}/.cargo/bin"
