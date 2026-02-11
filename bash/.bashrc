@@ -211,12 +211,14 @@ function setup-misc {
 	export PYTHONSTARTUP="${f}"
     fi
 
-    if command -v cargo >/dev/null 2>&1
+    f="${HOME}/.cargo/bin/cargo"
+    if [[ -x "${f}" ]]
     then
 	path-prepend "${HOME}/.cargo/bin"
     fi
 
-    if command -v fzf >/dev/null 2>&1
+    f="${HOME}/.fzf/bin/fzf"
+    if [[ -x "${f}" ]]
     then
 	path-prepend "${HOME}/.fzf/bin"
     fi
