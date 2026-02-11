@@ -97,11 +97,6 @@ function st {
     printf '\033k%s\033\134' "${name}"
 }
 
-# cl - reset all attributes
-function cl {
-    printf '\033[;0m'
-}
-
 # Bash path canonicalization
 # Copied from comment at
 # http://blog.publicobject.com/2006/06/canonical-path-of-file-in-bash.html
