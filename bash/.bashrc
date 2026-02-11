@@ -30,7 +30,7 @@ function _path-append-prepend-uniq {
 	do
 	    if [[ "${p}" == "${dir}" ]]
 	    then
-		# if the thing we've been asked to appened or prepend
+		# if the thing we've been asked to append or prepend
 		# to path already exists in PATH, remove it
 		continue
 	    fi
