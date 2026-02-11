@@ -2,7 +2,6 @@
 
 export PS1='[\u@\h \w]\$ '
 export PAGER=less
-export MYSQL_PS1='\u@\h [\d]> '
 export HISTIGNORE=' *'
 
 function _path-append-prepend-uniq {
