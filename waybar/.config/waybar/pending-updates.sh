@@ -10,22 +10,55 @@ set -o nounset
 # it'll error out in weird ways that cause the number of updates to
 # note display.
 
-pending_updates_opam () {
-    if ! command -v opam > /dev/null; then
+pending_updates_package_manager () {
+    if command -v dnf > /dev/null; then
+        pending_updates_dnf
+    elif command -v apt > /dev/null; then
+        pending_updates_apt
+    else
         echo "_"
-	return 0
     fi
-    echo "0"
 }
 
-pending_updates_python () {
-    if ! command -v pip > /dev/null; then
+pending_updates_apt () {
+    apt list --upgradable 2>/dev/null \
+	| awk 'BEGIN {
+	         count = 0
+	       };
+	       $1 ~ /\// {
+                 count += 1
+               };
+               END {
+                 print count
+               }'
+}
+
+pending_updates_dnf () {
+    dnf -q updateinfo list \
+        | awk 'BEGIN {
+                 count = 0
+               };
+               $5 ~ /^[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}$/ {
+                 count += 1
+               }
+               END {
+                 if (NR > 2) {
+                   print NR-1
+                 } else {
+                   print 0
+                 }
+               };'
+}
+
+pending_updates_flatpak () {
+    if ! command -v flatpak > /dev/null; then
         echo "_"
 	return 0
     fi
-
-    pip list --user --outdated \
-        | awk 'END {if (NR > 2) {print NR-2} else {print 0}}'
+    set +o errexit
+    flatpak update < <(printf "n\n") \
+        | grep -Ec '^[ ]+[0-9]+\.'
+    set -o errexit
 }
 
 pending_updates_cargo () {
@@ -60,55 +93,22 @@ pending_updates_rustup () {
     rustup check | grep -c Update
 }
 
-pending_updates_flatpak () {
-    if ! command -v flatpak > /dev/null; then
+pending_updates_python () {
+    if ! command -v pip > /dev/null; then
         echo "_"
 	return 0
     fi
-    set +o errexit
-    flatpak update < <(printf "n\n") \
-        | grep -Ec '^[ ]+[0-9]+\.'
-    set -o errexit
+
+    pip list --user --outdated \
+        | awk 'END {if (NR > 2) {print NR-2} else {print 0}}'
 }
 
-pending_updates_apt () {
-    apt list --upgradable 2>/dev/null \
-	| awk 'BEGIN {
-	         count = 0
-	       };
-	       $1 ~ /\// {
-                 count += 1
-               };
-               END {
-                 print count
-               }'
-}
-
-pending_updates_dnf () {
-    dnf -q updateinfo list \
-        | awk 'BEGIN {
-                 count = 0
-               };
-               $5 ~ /^[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}$/ {
-                 count += 1
-               }
-               END {
-                 if (NR > 2) {
-                   print NR-1
-                 } else {
-                   print 0
-                 }
-               };'
-}
-
-pending_updates_package_manager () {
-    if command -v dnf > /dev/null; then
-        pending_updates_dnf
-    elif command -v apt > /dev/null; then
-        pending_updates_apt
-    else
+pending_updates_opam () {
+    if ! command -v opam > /dev/null; then
         echo "_"
+	return 0
     fi
+    echo "0"
 }
 
 run () {
