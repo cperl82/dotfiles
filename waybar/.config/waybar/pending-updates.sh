@@ -31,7 +31,7 @@ pending_updates_python () {
 pending_updates_cargo () {
     if ! command -v cargo install-update > /dev/null; then
         echo "_"
-	return
+	return 0
     fi
     cargo install-update --list \
         | awk 'BEGIN {
@@ -45,6 +45,19 @@ pending_updates_cargo () {
                END {
                  print count;
                };'
+}
+
+pending_updates_rustup () {
+    if ! command -v rustup > /dev/null; then
+	echo "_"
+	return 0
+    fi
+    # CR cperl: This will count updates to rustup itself, updates to
+    # which might be disabled if rustup was installed via the system
+    # package manager. But, I don't know a good way at the moment to
+    # determine if rustup was built with self-update disabled other
+    # than trying to either `rustup self update' or `rustup update'
+    rustup check | grep -c Update
 }
 
 pending_updates_flatpak () {
@@ -103,6 +116,7 @@ run () {
     local package_manager
     local flatpak
     local cargo
+    local rustup
     local python
     local opam
     local all
@@ -112,6 +126,7 @@ run () {
     package_manager=$(pending_updates_package_manager)
     flatpak=$(pending_updates_flatpak)
     cargo=$(pending_updates_cargo)
+    rustup=$(pending_updates_rustup)
     python=$(pending_updates_python)
     opam=$(pending_updates_opam)
 
@@ -119,13 +134,14 @@ run () {
 	  -z "${flatpak}"         || \
 	  -z "${cargo}"           || \
 	  -z "${python}"          || \
-	  -z "${opam}"
+	  -z "${opam}"            || \
+	  -z "${rustup}"
 	]]; then
 	return 1
     fi
 
     all=0
-    for thing in package_manager flatpak cargo python opam; do
+    for thing in package_manager flatpak cargo rustup python opam; do
 	if [[ "${!thing}" =~ ^[0-9]+$ ]]; then
 	    all=$((all + ${!thing}))
 	fi
@@ -135,6 +151,7 @@ run () {
            "$(printf "Packages: %3s" "${package_manager}")"     \
            "$(printf "Flatpak:  %3s" "${flatpak}")"             \
            "$(printf "Cargo:    %3s" "${cargo}")"               \
+           "$(printf "Rustup:   %3s" "${rustup}")"              \
            "$(printf "Python:   %3s" "${python}")"              \
            "$(printf "Opam:     %3s" "${opam}")"
     tooltip="${tooltip%\\n}"
