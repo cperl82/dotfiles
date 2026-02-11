@@ -382,23 +382,23 @@ function setup-misc {
 	export PYTHONSTARTUP="${f}"
     fi
 
-    if command -v cargo >/dev/null
+    if command -v cargo >/dev/null 2>&1
     then
 	path-prepend "${HOME}/.cargo/bin"
     fi
 
-    if command -v fzf >/dev/null
+    if command -v fzf >/dev/null 2>&1
     then
 	path-prepend "${HOME}/.fzf/bin"
     fi
 
-    if command -v rg >/dev/null
+    if command -v rg >/dev/null 2>&1
     then
 	RIPGREP_CONFIG_PATH="${HOME}/.ripgreprc"
 	export RIPGREP_CONFIG_PATH
     fi
 
-    if command -v opam > /dev/null
+    if command -v opam >/dev/null 2>&1
     then
 	eval "$(opam config env)"
     fi
