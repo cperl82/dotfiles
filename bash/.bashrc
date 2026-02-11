@@ -223,51 +223,6 @@ function aes-256-cbc {
 
 }
 
-# NFSv3 Capture Filter
-# Generate tcpdump capture filter for host running nfsv3
-function nfs3-capture-filter-for-host {
-	local host="${1}"
-	if [[ -z "${host}" ]]
-	then
-		echo "nfs3-capture-filter-for-host hostname"
-		return
-	fi
-	OFS="${IFS}"
-	IFS=$'\n'
-	ports=(
-		$(rpcinfo -p "${host}" | \
-		  awk '
-			$4 ~ /[0-9]+/ {
-				a[$4] = 1;
-			}
-			END {
-				for (n in a)
-					printf("%d\n", n)
-			}
-		  ' | \
-		  sed -e 's/^/port /')
-	)
-	IFS="|"
-	printf "host %s and (%s)\n" "${host}" "${ports[*]}" | sed -e 's/|/ or /g'
-	IFS="${OFS}"
-}
-
-function nfs3-capture-filter-for-hosts {
-    hosts="${@}"
-    result=""
-    for host in ${hosts}
-    do
-	s=$(nfs3-capture-filter-for-host "${host}")
-	if [[ -z "${result}" ]]
-	then
-	    result="(${s})"
-	else
-	    result="${result} or (${s})"
-	fi
-    done
-    printf "${result}\n"
-}
-
 function with-fzf {
     local fzf=""
     local input_cmd=()
