@@ -300,7 +300,6 @@ window-rule {
 
 window-rule {
     match app-id=r#"^1password$"#
-    open-floating true
     block-out-from "screen-capture"
 }
 
