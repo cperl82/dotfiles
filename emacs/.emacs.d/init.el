@@ -63,7 +63,6 @@
         s
         smartparens
         doom-modeline
-        smex
         swiper
         systemd-mode
         systemtap-mode
@@ -319,7 +318,7 @@ If there are multiple windows, don't split anything."
           uniquify-after-kill-buffer-p t)))
 
 
-;; swiper / ivy / counsel / smex
+;; swiper / ivy / ivy-rich / counsel
 (defun cp/counsel-rg-type-list ()
   (thread-last (shell-command-to-string "rg --type-list")
     (s-split "\n")))
