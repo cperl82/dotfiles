@@ -6,7 +6,6 @@
   (setq native-comp-async-report-warnings-errors nil))
 
 ;; 2020-10-22 emacs startup tweaks from https://blog.d46.us/advanced-emacs-startup/
-(setq gc-cons-threshold (* 100 1000 1000))
 (defun cp/make-after-emacs-startup-fun ()
   (let ((saved-gc-cons-threshold gc-cons-threshold))
     (lambda ()
@@ -18,6 +17,7 @@
       (setq gc-cons-threshold saved-gc-cons-threshold))))
 (fset 'cp/after-emacs-startup (cp/make-after-emacs-startup-fun))
 (add-hook 'emacs-startup-hook #'cp/after-emacs-startup)
+(setq gc-cons-threshold (* 100 1000 1000))
 
 ;; straight
 (load-file (expand-file-name "init-straight.el" user-emacs-directory))
