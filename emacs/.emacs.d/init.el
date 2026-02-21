@@ -6,14 +6,18 @@
   (setq native-comp-async-report-warnings-errors nil))
 
 ;; 2020-10-22 emacs startup tweaks from https://blog.d46.us/advanced-emacs-startup/
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (message "Emacs ready in %s with %d garbage collections."
-                     (format "%.2f seconds"
-                             (float-time
-                              (time-subtract after-init-time before-init-time)))
-                     gcs-done)))
 (setq gc-cons-threshold (* 100 1000 1000))
+(defun cp/make-after-emacs-startup-fun ()
+  (let ((saved-gc-cons-threshold gc-cons-threshold))
+    (lambda ()
+      (message "Emacs ready in %s with %d garbage collections."
+               (format "%.2f seconds"
+                       (float-time
+                        (time-subtract after-init-time before-init-time)))
+               gcs-done)
+      (setq gc-cons-threshold saved-gc-cons-threshold))))
+(fset 'cp/after-emacs-startup (cp/make-after-emacs-startup-fun))
+(add-hook 'emacs-startup-hook #'cp/after-emacs-startup)
 
 ;; straight
 (load-file (expand-file-name "init-straight.el" user-emacs-directory))
@@ -1838,4 +1842,3 @@ to return a list"
          ((t (:inherit nil :foreground "white" :background ,zenburn-yellow-2))))))))
 
 (enable-theme 'zenburn)
-(setq gc-cons-threshold (* 2 1000 1000))
