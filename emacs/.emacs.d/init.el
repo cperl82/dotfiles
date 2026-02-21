@@ -320,10 +320,6 @@ If there are multiple windows, don't split anything."
 
 
 ;; swiper / ivy / ivy-rich / counsel
-(defun cp/counsel-rg-type-list ()
-  (thread-last (shell-command-to-string "rg --type-list")
-    (s-split "\n")))
-
 (defun cp/counsel-rg (&rest args)
   "A wrapper around `counsel-rg' that increases the level of the
 prefix argument (from 0 to 1 or from 1 to 2).  The point is to always
@@ -337,41 +333,6 @@ to prompt for additional args"
            ((equal current-prefix-arg '(4)) '(16))
            (t current-prefix-arg))))
     (apply #'counsel-rg args)))
-
-(defun cp/counsel-rg-with-type (&optional types prompt)
-  "Prompt for a supported file type from rg and then run
-`counsel-rg' as if a prefix arg was passed, but explicitly
-setting the args to `-t TYPE' instead of prompting."
-  (interactive)
-  (let* ((file-types
-          (or types
-              (thread-last (ivy-read "File type: " (cp/counsel-rg-type-list) :require-match t)
-                (s-split ":")
-                (nth 0)
-                (list))))
-         (extra-rg-args
-          (s-join " " (seq-map (lambda (type) (format "-t%s" type)) file-types))))
-    (cp/counsel-rg nil nil extra-rg-args prompt)))
-
-(defun cp/counsel-rg-with-type-ocaml ()
-  (interactive)
-  (cp/counsel-rg-with-type '("ocaml") "rg (ocaml): "))
-
-(defun cp/counsel-rg-with-type-c ()
-  (interactive)
-  (cp/counsel-rg-with-type '("c") "rg (c): "))
-
-(defun cp/counsel-rg-with-type-ocaml-or-c ()
-  (interactive)
-  (cp/counsel-rg-with-type '("ocaml" "c") "rg (ocaml or c): "))
-
-(defun cp/counsel-rg-with-type-elisp ()
-  (interactive)
-  (cp/counsel-rg-with-type '("elisp") "rg (elisp): "))
-
-(defun cp/counsel-rg-with-type-lisp ()
-  (interactive)
-  (cp/counsel-rg-with-type '("lisp") "rg (lisp): "))
 
 (defun cp/counsel-rg-files (&optional initial-input)
   "Find files with `rg --files'.  This started off as just setting
@@ -482,13 +443,7 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
    :prefix cp/normal-prefix
    :non-normal-prefix cp/non-normal-prefix
    "a g r" #'cp/counsel-rg
-   "a g f" #'cp/counsel-rg-files
-   "a g R" #'cp/counsel-rg-with-type
-   "a g O" #'cp/counsel-rg-with-type-ocaml
-   "a g C" #'cp/counsel-rg-with-type-c
-   "a g J" #'cp/counsel-rg-with-type-ocaml-or-c
-   "a g E" #'cp/counsel-rg-with-type-elisp
-   "a g L" #'cp/counsel-rg-with-type-lisp)
+   "a g f" #'cp/counsel-rg-files)
   :init
   (progn
     ;; Use rg instead of grep because it has the nice smart case feature
