@@ -876,15 +876,13 @@ dired-x"
     (setq evil-move-beyond-eol t)
     (setq evil-symbol-word-search t)
     (setq evil-mode-line-format '(before . mode-line-mule-info))
-    (zenburn-with-color-variables
-      (setq
-       evil-normal-state-tag   " N"
-       evil-insert-state-tag   " I"
-       evil-visual-state-tag   " V"
-       evil-replace-state-tag  " R"
-       evil-motion-state-tag   " M"
-       evil-operator-state-tag " O"
-       evil-emacs-state-tag    " E"))))
+    (setq evil-normal-state-tag   " N"
+          evil-insert-state-tag   " I"
+          evil-visual-state-tag   " V"
+          evil-replace-state-tag  " R"
+          evil-motion-state-tag   " M"
+          evil-operator-state-tag " O"
+          evil-emacs-state-tag    " E")))
 
 
 ;; evil-collection
@@ -922,13 +920,7 @@ dired-x"
     :init
     (progn
       (setq doom-modeline-icon nil)
-      (doom-modeline-mode 1)
-      (zenburn-with-color-variables
-        (set-face-attribute 'doom-modeline-evil-visual-state nil :foreground zenburn-yellow)
-        (set-face-attribute 'doom-modeline-evil-replace-state nil :foreground zenburn-orange)
-        (set-face-attribute 'doom-modeline-evil-motion-state nil :foreground zenburn-cyan)
-        (set-face-attribute 'doom-modeline-evil-operator-state nil :foreground zenburn-blue)
-        (set-face-attribute 'doom-modeline-evil-emacs-state nil :foreground zenburn-magenta))))
+      (doom-modeline-mode 1)))
 
 
 ;; evil-surround
