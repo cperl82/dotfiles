@@ -197,12 +197,6 @@ If there are multiple windows, don't split anything."
     (find-file (concat "/sudo:root@localhost:"
                        (read-file-name "Find file (as root): "))))
 
-(defun cp/run-counsel-grep-or-swiper-with-thing-at-point ()
-  (interactive)
-  (let ((initial-input
-         (evil-find-thing t 'symbol)))
-    (counsel-grep-or-swiper initial-input)))
-
 (defconst cp/normal-prefix "SPC")
 (defconst cp/non-normal-prefix "M-SPC")
 
