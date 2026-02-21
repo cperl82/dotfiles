@@ -62,6 +62,7 @@
         rustic
         s
         smartparens
+        smex
         doom-modeline
         swiper
         systemd-mode
