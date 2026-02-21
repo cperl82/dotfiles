@@ -5,7 +5,7 @@
 (when (> emacs-major-version 28)
   (setq native-comp-async-report-warnings-errors nil))
 
-;; 2020-10-22 emacs startup tweaks from https://blog.d46.us/advanced-emacs-startup/
+;; 2020-10-22: Tweak emacs gc for faster startup
 (defun cp/make-after-emacs-startup-fun ()
   (let ((saved-gc-cons-threshold gc-cons-threshold))
     (lambda ()
