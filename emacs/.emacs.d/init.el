@@ -20,7 +20,6 @@
 (dolist
     (package
       '(annalist
-        color-theme-zenburn
         company-mode
         compat
         counsel-projectile
@@ -73,7 +72,8 @@
         wgrep
         which-key
         windsize
-        xcscope))
+        xcscope
+        zenburn-theme))
   (straight-use-package package))
 
 
@@ -269,7 +269,36 @@ If there are multiple windows, don't split anything."
 
 
 ;; zenburn
-(load-theme 'zenburn t)
+(use-package zenburn-theme
+  :defer nil
+  :config
+  (progn
+    (load-theme 'zenburn t)
+    (zenburn-with-color-variables
+      (custom-theme-set-faces
+       'zenburn
+       `(info-node                   ((t (:foreground ,zenburn-red-3))))
+       `(diff-added                  ((t (:foreground ,zenburn-green :weight bold))))
+       `(diff-removed                ((t (:foreground ,zenburn-red))))
+       `(linum                       ((t (:foreground ,zenburn-green-1 :background ,zenburn-bg))))
+       '(dired-perm-write            ((t nil)))
+       '(hl-line                     ((t (:background "#4F4F4F"))))
+       '(ivy-cursor                  ((t (:foreground "#000000" :background "#d6d6d6"))))
+       `(ivy-current-match           ((t (:foreground nil :background nil :underline nil))))
+       '(ivy-minibuffer-match-face-1 ((t (:foreground nil :background nil :underline nil))))
+       `(ivy-minibuffer-match-face-2 ((t (:foreground ,zenburn-red-2    :background nil))))
+       `(ivy-minibuffer-match-face-3 ((t (:foreground ,zenburn-blue-1  :background nil))))
+       `(ivy-minibuffer-match-face-4 ((t (:foreground ,zenburn-yellow-2 :background nil))))
+       `(ivy-virtual                 ((t (:inherit font-lock-type-face))))
+       '(swiper-line-face            ((t (:background "#4F4F4F"))))
+       '(swiper-match-face-1         ((t (:foreground nil :background nil :underline nil))))
+       `(swiper-match-face-2         ((t (:foreground "white" :weight bold :background ,zenburn-red-2))))
+       `(swiper-match-face-3         ((t (:foreground "white" :weight bold :background ,zenburn-blue-1))))
+       `(swiper-match-face-4         ((t (:foreground "white" :weight bold :background ,zenburn-yellow-2))))
+       `(org-agenda-done             ((t (:foreground ,zenburn-green+4 :background nil))))))
+    (enable-theme 'zenburn)
+    )
+  )
 
 
 ;; which-key
@@ -1804,53 +1833,9 @@ to return a list"
   :defer t
   :commands (embark-act))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(zenburn))
- '(custom-safe-themes
-   '("420459d6eeb45aadf5db5fbcc3d6990b65141c104911f7359454fc29fa9d87a0" "4555c851795f0e0fd572ba82208373b0c32aaffa78289e983d4b25cd1557f472" "a1e99cb36d6235abbe426a0a96fc26c006306f6b9d2a64c2435363350a987b4c" default))
- '(package-selected-packages '(rainbow-mode let-alist)))
-
-; zenburn theme overrides
-(zenburn-with-color-variables
-  (custom-theme-set-faces
-   'zenburn
-   `(info-node                   ((t (:foreground ,zenburn-red-3))))
-   `(diff-added                  ((t (:foreground ,zenburn-green :weight bold))))
-   `(diff-removed                ((t (:foreground ,zenburn-red))))
-   `(linum                       ((t (:foreground ,zenburn-green-1 :background ,zenburn-bg))))
-   '(dired-perm-write            ((t nil)))
-   '(hl-line                     ((t (:background "#4F4F4F"))))
-   '(ivy-cursor                  ((t (:foreground "#000000" :background "#d6d6d6"))))
-   `(ivy-current-match           ((t (:foreground nil :background nil :underline nil))))
-   '(ivy-minibuffer-match-face-1 ((t (:foreground nil :background nil :underline nil))))
-   `(ivy-minibuffer-match-face-2 ((t (:foreground ,zenburn-red-2    :background nil))))
-   `(ivy-minibuffer-match-face-3 ((t (:foreground ,zenburn-blue-1  :background nil))))
-   `(ivy-minibuffer-match-face-4 ((t (:foreground ,zenburn-yellow-2 :background nil))))
-   `(ivy-virtual                 ((t (:inherit font-lock-type-face))))
-   '(swiper-line-face            ((t (:background "#4F4F4F"))))
-   '(swiper-match-face-1         ((t (:foreground nil :background nil :underline nil))))
-   `(swiper-match-face-2         ((t (:foreground "white" :weight bold :background ,zenburn-red-2))))
-   `(swiper-match-face-3         ((t (:foreground "white" :weight bold :background ,zenburn-blue-1))))
-   `(swiper-match-face-4         ((t (:foreground "white" :weight bold :background ,zenburn-yellow-2))))
-   `(org-agenda-done             ((t (:foreground ,zenburn-green+4 :background nil))))))
-
-;; I don't quite understand why this is necessary, somehow related to:
-;; https://emacs.stackexchange.com/questions/48365/custom-theme-set-faces-does-not-work-in-emacs-27
-(enable-theme 'zenburn)
-
 
 ; 2014-04-08: local emacs overrides
 (let ((local "~/.emacs.local"))
   (when (file-exists-p local) (load-file local)))
 
 (setq gc-cons-threshold (* 2 1000 1000))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
