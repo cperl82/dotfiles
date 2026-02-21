@@ -70,7 +70,6 @@
         tuareg-mode
         undo-tree
         unfill
-        use-package
         vagrant-tramp
         visual-fill-column
         wgrep
