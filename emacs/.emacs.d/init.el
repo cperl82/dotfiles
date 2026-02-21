@@ -262,39 +262,6 @@ If there are multiple windows, don't split anything."
       ("l" windsize-right "right"))))
 
 
-;; zenburn
-(use-package zenburn-theme
-  :defer nil
-  :config
-  (progn
-    (load-theme 'zenburn t)
-    (zenburn-with-color-variables
-      (custom-theme-set-faces
-       'zenburn
-       `(info-node                   ((t (:foreground ,zenburn-red-3))))
-       `(diff-added                  ((t (:foreground ,zenburn-green :weight bold))))
-       `(diff-removed                ((t (:foreground ,zenburn-red))))
-       `(linum                       ((t (:foreground ,zenburn-green-1 :background ,zenburn-bg))))
-       '(dired-perm-write            ((t nil)))
-       '(hl-line                     ((t (:background "#4F4F4F"))))
-       '(ivy-cursor                  ((t (:foreground "#000000" :background "#d6d6d6"))))
-       `(ivy-current-match           ((t (:foreground nil :background nil :underline nil))))
-       '(ivy-minibuffer-match-face-1 ((t (:foreground nil :background nil :underline nil))))
-       `(ivy-minibuffer-match-face-2 ((t (:foreground ,zenburn-red-2    :background nil))))
-       `(ivy-minibuffer-match-face-3 ((t (:foreground ,zenburn-blue-1  :background nil))))
-       `(ivy-minibuffer-match-face-4 ((t (:foreground ,zenburn-yellow-2 :background nil))))
-       `(ivy-virtual                 ((t (:inherit font-lock-type-face))))
-       '(swiper-line-face            ((t (:background "#4F4F4F"))))
-       '(swiper-match-face-1         ((t (:foreground nil :background nil :underline nil))))
-       `(swiper-match-face-2         ((t (:foreground "white" :weight bold :background ,zenburn-red-2))))
-       `(swiper-match-face-3         ((t (:foreground "white" :weight bold :background ,zenburn-blue-1))))
-       `(swiper-match-face-4         ((t (:foreground "white" :weight bold :background ,zenburn-yellow-2))))
-       `(org-agenda-done             ((t (:foreground ,zenburn-green+4 :background nil))))))
-    (enable-theme 'zenburn)
-    )
-  )
-
-
 ;; which-key
 (use-package which-key
   :defer 5
@@ -429,6 +396,9 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
     (if (and name (string-match-p "\\.gpg$" name))
         t
       (counsel-grep-use-swiper-p-default))))
+
+(use-package swiper
+  :defer t)
 
 (use-package ivy
   :defer t
@@ -929,16 +899,6 @@ dired-x"
   :config
   (progn
     (global-evil-surround-mode 1)))
-
-
-;; highlight-parentheses
-(use-package highlight-parentheses
-  :defer t
-  :config
-  (progn
-    (zenburn-with-color-variables
-      (setq hl-paren-colors
-            `(,zenburn-red-4 ,zenburn-green ,zenburn-yellow-2 ,zenburn-blue+1)))))
 
 
 ;; winner
@@ -1824,4 +1784,58 @@ to return a list"
 (let ((local "~/.emacs.local"))
   (when (file-exists-p local) (load-file local)))
 
+
+;; Themes
+;; zenburn
+(use-package zenburn-theme
+  :config
+  (progn
+    (load-theme 'zenburn :no-confirm)
+    (zenburn-with-color-variables
+      (custom-theme-set-faces
+       'zenburn
+       `(diff-added
+         ((t (:foreground ,zenburn-green :weight bold))))
+       `(diff-removed
+         ((t (:foreground ,zenburn-red))))
+       `(linum
+         ((t (:foreground ,zenburn-green-1 :background ,zenburn-bg))))
+       '(dired-perm-write
+         ((t nil)))
+       '(hl-line
+         ((t (:background "#4F4F4F"))))
+       `(isearch
+         ((t (:inherit nil :foreground "white" :background ,zenburn-red-2))))
+       `(lazy-highlight
+         ((t (:inherit nil :foreground "white" :background ,zenburn-blue-1))))
+       `(match
+         ((t (:inherit nil :foreground "white" :background ,zenburn-yellow-2))))
+       `(info-node
+         ((t (:foreground ,zenburn-red-3))))
+       '(ivy-cursor
+         ((t (:foreground "#000000" :background "#d6d6d6"))))
+       `(ivy-current-match
+         ((t (:underline nil))))
+       '(ivy-minibuffer-match-face-1
+         ((t (:underline nil))))
+       `(ivy-minibuffer-match-face-2
+         ((t (:foreground ,zenburn-red-2))))
+       `(ivy-minibuffer-match-face-3
+         ((t (:foreground ,zenburn-blue-1))))
+       `(ivy-minibuffer-match-face-4
+         ((t (:foreground ,zenburn-yellow-2))))
+       `(ivy-virtual
+         ((t (:inherit font-lock-type-face))))
+       '(swiper-line-face
+         ((t (:underline nil :background "#4F4F4F"))))
+       '(swiper-match-face-1
+         ((t (:underline nil))))
+       `(swiper-match-face-2
+         ((t (:inherit nil :foreground "white" :background ,zenburn-red-2))))
+       `(swiper-match-face-3
+         ((t (:inherit nil :foreground "white" :background ,zenburn-blue-1))))
+       `(swiper-match-face-4
+         ((t (:inherit nil :foreground "white" :background ,zenburn-yellow-2))))))))
+
+(enable-theme 'zenburn)
 (setq gc-cons-threshold (* 2 1000 1000))
