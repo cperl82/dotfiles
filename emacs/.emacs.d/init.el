@@ -92,17 +92,17 @@
 
 
 ;; Misc
-(setq ad-redefinition-action    'accept
-      c-default-style           "linux"
-      column-number-mode        t
-      confirm-kill-emacs        'yes-or-no-p
-      create-lockfiles          nil
+(setq ad-redefinition-action       'accept
+      c-default-style              "linux"
+      column-number-mode           t
+      confirm-kill-emacs           'yes-or-no-p
+      create-lockfiles             nil
       enable-recursive-minibuffers t
-      indent-tabs-mode          nil
-      inhibit-startup-message   t
-      load-prefer-newer         t
-      make-backup-files         nil
-      window-combination-resize t)
+      indent-tabs-mode             nil
+      inhibit-startup-message      t
+      load-prefer-newer            t
+      make-backup-files            nil
+      window-combination-resize    t)
 
 ;; 2021-10-22 Always use the short form
 (defalias 'yes-or-no-p 'y-or-n-p)
