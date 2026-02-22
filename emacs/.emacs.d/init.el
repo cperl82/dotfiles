@@ -110,8 +110,9 @@
 ;; 2015-09-11 Enable narrowing command which are disabled by default
 (put 'narrow-to-region 'disabled nil)
 
-;; 2018-10-30 Global auto revert mode
+;; Global modes
 (global-auto-revert-mode)
+(repeat-mode)
 
 (if (fboundp 'menu-bar-mode)   (menu-bar-mode   -1))
 (if (fboundp 'tool-bar-mode)   (tool-bar-mode   -1))
