@@ -76,16 +76,26 @@ pending_updates_cargo () {
 }
 
 pending_updates_rustup () {
+    local rustup_init=""
+
     if ! command -v rustup > /dev/null; then
 	echo "_"
 	return 0
     fi
-    # CR cperl: This will count updates to rustup itself, updates to
-    # which might be disabled if rustup was installed via the system
-    # package manager. But, I don't know a good way at the moment to
-    # determine if rustup was built with self-update disabled other
-    # than trying to either `rustup self update' or `rustup update'
-    rustup check | grep -c Update
+
+    # We're trying to determine if updates listed for rustup itself
+    # should be counted. If rustup is installed via the system package
+    # manager then they shouldn't, else they should. We attempt to
+    # determine if rustup is install by the system package manager by
+    # seeing where `rustup-init' is installed. If it's in our home
+    # directory, then it's not installed by the system package manager
+    # and updates to rustup should count.
+    rustup_init=$(which rustup-init)
+    if [[ "${rustup_init}" =~ ^${HOME}/ ]]; then
+	rustup check | grep -c Update
+    else
+	rustup check | grep -v "^rustup " | grep -c Update
+    fi
 }
 
 pending_updates_python () {
