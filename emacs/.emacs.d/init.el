@@ -240,8 +240,7 @@ single prefix argument is like having `aw-dispatch-always' set to t.
   :defer t
   :config
   (progn
-    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
-          aw-char-position 'left)))
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))))
 
 
 ;; buffer-move
