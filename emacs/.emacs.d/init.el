@@ -243,13 +243,6 @@ single prefix argument is like having `aw-dispatch-always' set to t.
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))))
 
 
-;; buffer-move
-(use-package buffer-move
-  :defer t
-  :commands (buf-move-down buf-move-up buf-move-left buf-move-right)
-  :load-path "lisp")
-
-
 ;; windsize
 (use-package windsize
   :defer t
