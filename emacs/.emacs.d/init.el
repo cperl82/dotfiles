@@ -241,7 +241,7 @@ single prefix argument is like having `aw-dispatch-always' set to t.
   :defer t
   :config
   (progn
-    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))))
+    (setq aw-keys '(?j ?k ?l ?\;))))
 
 
 ;; windsize
