@@ -23,60 +23,62 @@
 (load-file (expand-file-name "init-straight.el" user-emacs-directory))
 (dolist
     (package
-      '(annalist
-        company-mode
-        compat
-        counsel-projectile
-        dash
-        diminish
-        elisp-slime-nav
-        embark
-        evil
-        evil-collection
-        evil-smartparens
-        evil-surround
-        f
-        flycheck
-        general
-        go-mode
-        haskell-mode
-        highlight-parentheses
-        hydra
-        ibuffer-vc
-        ibuffer-projectile
-        ivy-rich
-        json-mode
-        lsp-mode
-        lua-mode
-        kdl-mode
-        magit
-        markdown-mode
-        nasm-mode
-        nerd-icons
-        org
-        org-super-agenda
-        org-ql
-        origami
-        projectile
-        rust-mode
-        rustic
-        s
-        smartparens
-        smex
-        doom-modeline
-        swiper
-        systemd-mode
-        systemtap-mode
-        tuareg-mode
-        undo-tree
-        unfill
-        vagrant-tramp
-        visual-fill-column
-        wgrep
-        which-key
-        windsize
-        xcscope
-        zenburn-theme))
+     '(ace-window
+       annalist
+       avy
+       company-mode
+       compat
+       counsel-projectile
+       dash
+       diminish
+       elisp-slime-nav
+       embark
+       evil
+       evil-collection
+       evil-smartparens
+       evil-surround
+       f
+       flycheck
+       general
+       go-mode
+       haskell-mode
+       highlight-parentheses
+       hydra
+       ibuffer-vc
+       ibuffer-projectile
+       ivy-rich
+       json-mode
+       lsp-mode
+       lua-mode
+       kdl-mode
+       magit
+       markdown-mode
+       nasm-mode
+       nerd-icons
+       org
+       org-super-agenda
+       org-ql
+       origami
+       projectile
+       rust-mode
+       rustic
+       s
+       smartparens
+       smex
+       doom-modeline
+       swiper
+       systemd-mode
+       systemtap-mode
+       tuareg-mode
+       undo-tree
+       unfill
+       vagrant-tramp
+       visual-fill-column
+       wgrep
+       which-key
+       windsize
+       xcscope
+       zenburn-theme))
   (straight-use-package package))
 
 
@@ -206,17 +208,16 @@ If there are multiple windows, don't split anything."
 ;; Unbind existing keybindings in evil-motion-state-map
 (general-define-key
  :keymaps '(motion)
-  "SPC" nil
-  ","   nil)
+ "SPC" nil
+ ","   nil
+ )
 
 ;; Global keybindings
 (general-define-key
  :keymaps '(override)
- :states '(normal motion insert emacs)
- "C-h" #'windmove-left
- "C-j" #'windmove-down
- "C-k" #'windmove-up
- "C-l" #'windmove-right)
+ :states '(normal motion emacs)
+ "M-o" #'ace-window
+ )
 
 (general-define-key
  :keymaps '(override)
@@ -231,6 +232,7 @@ If there are multiple windows, don't split anything."
  "k" #'kill-buffer
  "f" #'cp/find-file
  "r" #'cp/find-file-sudo
+ "w o" #'ace-window
  "w h" #'windmove-left
  "w j" #'windmove-down
  "w k" #'windmove-up
@@ -241,6 +243,18 @@ If there are multiple windows, don't split anything."
  "w L" #'buf-move-right
  "w r" #'cp/hydra-windsize/body
  )
+
+
+;; avy / ace-window
+(use-package avy
+  :defer t)
+
+(use-package ace-window
+  :defer t
+  :config
+  (progn
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
+          aw-char-position 'left)))
 
 
 ;; buffer-move
