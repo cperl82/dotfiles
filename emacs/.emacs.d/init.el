@@ -31,6 +31,7 @@
        counsel-projectile
        dash
        diminish
+       eat
        elisp-slime-nav
        embark
        evil
