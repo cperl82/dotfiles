@@ -237,10 +237,10 @@ If there are multiple windows, don't split anything."
  "w j" #'windmove-down
  "w k" #'windmove-up
  "w l" #'windmove-right
- "w H" #'buf-move-left
- "w J" #'buf-move-down
- "w K" #'buf-move-up
- "w L" #'buf-move-right
+ "w H" #'windmove-swap-states-left
+ "w J" #'windmove-swap-states-down
+ "w K" #'windmove-swap-states-up
+ "w L" #'windmove-swap-states-right
  "w r" #'cp/hydra-windsize/body
  )
 
