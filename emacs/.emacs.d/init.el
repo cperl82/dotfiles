@@ -169,33 +169,6 @@ If there are multiple windows, don't split anything."
   (hs-minor-mode))
 (add-hook 'c-mode-hook #'cp/c-mode-hook-setup)
 
-(defun cp/find-file ()
-  "A wrapper for `find-file'"
-  (interactive)
-  ;; Explicitly call `counsel-find-file' if in `counsel-mode'
-  ;; as it has additional actions and such that `find-file'
-  ;; does not, even though they look basically the same from
-  ;; a ui perspective.
-  (let ((f (if counsel-mode #'counsel-find-file #'find-file))
-        (default-directory
-         (if current-prefix-arg
-             (let* ((buffers
-                     (-filter
-                      (lambda (b)
-                        (let ((name (buffer-name b)))
-                          (or (not (string-match "^\\(  *\\)?\\*.*\\*$" name))
-                              (equal "*scratch*" name))))
-                      (buffer-list)))
-                    (directories
-                     (-map
-                      (lambda (b)
-                        (with-current-buffer b (abbreviate-file-name default-directory)))
-                      buffers))
-                    (cands (-sort #'string-equal (-uniq directories))))
-               (ivy-read "Find file in directory: " cands))
-           (if (eq major-mode 'dired-mode) (dired-current-directory) default-directory))))
-    (call-interactively f)))
-
 ;; Adapted from https://emacsredux.com/blog/2013/04/21/edit-files-as-root/
 (defun cp/find-file-sudo ()
     "Edit a file as root. "
@@ -231,7 +204,7 @@ If there are multiple windows, don't split anything."
  "o" #'delete-other-windows
  "j" #'dired-jump
  "k" #'kill-buffer
- "f" #'cp/find-file
+ "f" #'find-file
  "r" #'cp/find-file-sudo
  "w o" #'cp/ace-window
  "w h" #'windmove-left
