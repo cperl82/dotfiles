@@ -217,7 +217,7 @@ If there are multiple windows, don't split anything."
 (general-define-key
  :keymaps '(override)
  :states '(normal motion emacs)
- "M-o" #'ace-window
+ "M-o" #'cp/ace-window
  )
 
 (general-define-key
@@ -233,7 +233,7 @@ If there are multiple windows, don't split anything."
  "k" #'kill-buffer
  "f" #'cp/find-file
  "r" #'cp/find-file-sudo
- "w o" #'ace-window
+ "w o" #'cp/ace-window
  "w h" #'windmove-left
  "w j" #'windmove-down
  "w k" #'windmove-up
@@ -247,6 +247,19 @@ If there are multiple windows, don't split anything."
 
 
 ;; avy / ace-window
+(defun cp/ace-window (arg)
+  "A Wrapper for ace-window.
+This replaces ace-window's default prefix argument behavior such that a
+single prefix argument is like having `aw-dispatch-always' set to t.
+"
+  (interactive "p")
+  (cl-case arg
+    (0 (ace-window 0))
+    (4 (progn
+         (setq aw-dispatch-always t)
+         (ace-window 0)
+         (setq aw-dispatch-always nil)))))
+
 (use-package avy
   :defer t)
 
