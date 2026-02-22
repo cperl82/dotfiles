@@ -254,11 +254,11 @@ single prefix argument is like having `aw-dispatch-always' set to t.
 "
   (interactive "p")
   (cl-case arg
-    (0 (ace-window 0))
     (4 (progn
          (setq aw-dispatch-always t)
          (ace-window 0)
-         (setq aw-dispatch-always nil)))))
+         (setq aw-dispatch-always nil)))
+    (t (ace-window 0))))
 
 (use-package avy
   :defer t)
