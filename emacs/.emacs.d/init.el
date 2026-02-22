@@ -227,10 +227,9 @@ single prefix argument is like having `aw-dispatch-always' set to t.
 "
   (interactive "p")
   (cl-case arg
-    (4 (progn
-         (setq aw-dispatch-always t)
-         (ace-window 0)
-         (setq aw-dispatch-always nil)))
+    ;; Using dlet as loading of ace-window is deferred
+    (4 (dlet ((aw-dispatch-always t))
+         (ace-window 0)))
     (t (ace-window 0))))
 
 (use-package avy
