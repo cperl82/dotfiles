@@ -276,6 +276,11 @@ single prefix argument is like having `aw-dispatch-always' set to t.
     (which-key-mode)))
 
 
+;; eat
+(use-package eat
+  :defer t)
+
+
 ;; edebug
 (use-package edebug
   :defer t
