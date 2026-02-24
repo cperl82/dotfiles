@@ -112,7 +112,6 @@
 
 ;; Global modes
 (global-auto-revert-mode)
-(repeat-mode)
 
 ;; Ui
 (menu-bar-mode -1)
