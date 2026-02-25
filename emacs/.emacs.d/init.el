@@ -1540,7 +1540,6 @@ to return a list"
     (setq org-agenda-restore-windows-after-quit t)
     (setq org-agenda-files (file-expand-wildcards "~/org/*.org" t))
     (setq org-agenda-block-separator ?-)
-    (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-format-date "%a %Y-%m-%d")
     (setq org-agenda-sticky t)
     (setq org-agenda-prefix-format
