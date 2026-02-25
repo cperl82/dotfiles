@@ -212,11 +212,13 @@ If there are multiple windows, don't split anything."
  "w j" #'windmove-down
  "w k" #'windmove-up
  "w l" #'windmove-right
+ "w u" #'winner-undo
+ "w r" #'winner-redo
  "w H" #'windmove-swap-states-left
  "w J" #'windmove-swap-states-down
  "w K" #'windmove-swap-states-up
  "w L" #'windmove-swap-states-right
- "w r" #'cp/hydra-windsize/body
+ "w R" #'cp/hydra-windsize/body
  )
 
 
@@ -860,13 +862,6 @@ dired-x"
 ;; winner
 (use-package winner
   :defer t
-  :general
-  (:keymaps '(override)
-   :states  '(normal motion emacs)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "w u" #'winner-undo
-   "w U" #'winner-redo)
   :init
   (winner-mode))
 
