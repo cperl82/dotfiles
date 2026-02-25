@@ -721,47 +721,8 @@ dired-x"
 
 
 ;; man
-(defun cp/man-forward-sexp-fun (arg)
-    (let ((p (point)))
-      (forward-line 1)
-      (re-search-forward
-       (concat Man-heading-regexp "\\|" "\\'" "\\|" "^[^[:space:]]"))
-      (beginning-of-line)
-      (forward-line -1)
-      (if (equal p (point)) (end-of-line))))
-
 (use-package man
-  :defer t
-  :general
-  (:keymaps '(Man-mode-map)
-   :states  '(normal motion)
-   "TAB" #'hs-toggle-hiding)
-  :config
-  (progn
-    (add-to-list
-     'hs-special-modes-alist
-     `(Man-mode ,Man-heading-regexp nil nil cp/man-forward-sexp-fun))
-    (add-hook
-     'Man-mode-hook
-     (lambda ()
-       (setq-local comment-start "$^")
-       (setq-local comment-end   "$^")
-       (hs-minor-mode 1)
-       (hs-hide-all)
-       (goto-char (point-min))
-       (re-search-forward "NAME" nil t)
-       (hs-show-block)
-       (re-search-forward "SYNOPSIS" nil t)
-       (hs-show-block)
-       (re-search-forward "DESCRIPTION" nil t)
-       (hs-show-block)
-       (font-lock-add-keywords
-        nil          ; Copied from /usr/share/vim/vim74/syntax/man.vim
-        `((,Man-heading-regexp          . font-lock-comment-face)
-          ("^\\s-*[+-][a-zA-Z0-9]\\S-*" . font-lock-function-name-face)
-          ("^\\s-*--[a-zA-Z0-9-]\\S-*"  . font-lock-function-name-face))
-        'set)
-       (font-lock-mode 1)))))
+  :defer t)
 
 
 ;; evil
