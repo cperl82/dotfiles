@@ -1321,43 +1321,6 @@ The key is the todo keyword and the value is its relative position in the list."
   (message "%S %S %S" min-to-app new-time msg)
   t)
 
-(defun cp/org-agenda-generate-and-run-forms (_)
-  (let* ((tags
-          (-sort
-           #'string<
-           (-keep
-            (lambda (tag)
-              (let ((tag (substring-no-properties (car tag))))
-                (unless (string= tag "ATTACH") tag)))
-            (org-global-tags-completion-table))))
-         (tags-todo-forms
-          (-map
-           (lambda (tag)
-             (let ((search (format "%s" tag))
-                   (overriding-header (format "%s" tag)))
-               `(tags-todo ,search
-                           ((org-agenda-overriding-header
-                             ,overriding-header)
-                            (org-agenda-sorting-strategy
-                             '(todo-state-up alpha-up category-up))
-                            (org-agenda-tags-todo-honor-ignore-options t)
-                            (org-agenda-todo-ignore-scheduled 'all)
-                            (org-agenda-todo-ignore-deadlines 'all)))))
-           tags))
-         (agenda-forms
-          '((agenda ""
-	            ((org-agenda-span 1)
-	             (org-deadline-warning-days 7)
-	             (org-agenda-overriding-header
-	              (s-join "\n"
-                               `("Agenda and todo items without SCHEDULED or DEADLINE by tag"
-                                 ,(format-time-string "Generated: %Y-%m-%d %H:%M:%S"))))
-	             (org-agenda-sorting-strategy
-	              '(habit-up scheduled-up deadline-up time-up category-up todo-state-down alpha-up))
-                     (org-agenda-show-future-repeats nil)
-                     (org-agenda-use-time-grid nil)))))
-         (all-forms (append agenda-forms tags-todo-forms)))
-    (org-agenda-run-series "" `(,all-forms ((org-agenda-buffer-name "*Org Agenda*"))))))
 
 ;; 2025-02-22 cperl: Snarfed from:
 ;; https://www.reddit.com/r/emacs/comments/jjrk2o/comment/gaeh3st/
@@ -1563,9 +1526,6 @@ to return a list"
     (setq org-agenda-remove-tags t)
     (setq org-agenda-show-future-repeats nil)
     (setq org-agenda-hide-tags-regexp (format "^%s$" (regexp-opt '("ATTACH"))))
-    (setq org-agenda-custom-commands
-          '(("." "Today's agenda with todo items broken out by tags"
-             cp/org-agenda-generate-and-run-forms "")))
     (add-hook 'org-agenda-finalize-hook #'cp/org-agenda-delete-empty-blocks)
     (setq org-tags-column -80)
     (setq org-log-into-drawer t)
