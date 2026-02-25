@@ -226,8 +226,7 @@ If there are multiple windows, don't split anything."
 (defun cp/ace-window (arg)
   "A Wrapper for `ace-window'.
 This replaces ace-window's default prefix argument behavior such that a
-single prefix argument is like having `aw-dispatch-always' set to t.
-"
+single prefix argument is like having `aw-dispatch-always' set to t."
   (interactive "p")
   (cl-case arg
     ;; Using dlet as loading of ace-window is deferred
