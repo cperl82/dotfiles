@@ -1736,6 +1736,22 @@ to return a list"
   :commands (embark-act))
 
 
+;; rust / rustic
+(use-package rust-mode
+  :defer t)
+
+(use-package rustic-mode
+  :defer t
+  :after (rust-mode)
+  :config
+  (progn
+    (add-hook
+     'rustic-mode-hook
+     (lambda ()
+       (hs-minor-mode)
+       (hs-hide-all)))))
+
+
 ; 2014-04-08: local emacs overrides
 (let ((local "~/.emacs.local"))
   (when (file-exists-p local) (load-file local)))
