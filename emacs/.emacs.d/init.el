@@ -809,6 +809,14 @@ dired-x"
        '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil)))
 
 
+;; evil-surround
+(use-package evil-surround
+  :after (evil)
+  :config
+  (progn
+    (global-evil-surround-mode 1)))
+
+
 ;; doom-modeline
 (use-package doom-modeline
     :after (evil)
@@ -816,14 +824,6 @@ dired-x"
     (progn
       (setq doom-modeline-icon nil)
       (doom-modeline-mode 1)))
-
-
-;; evil-surround
-(use-package evil-surround
-  :after (evil)
-  :config
-  (progn
-    (global-evil-surround-mode 1)))
 
 
 ;; winner
