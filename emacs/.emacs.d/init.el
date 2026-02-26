@@ -166,11 +166,6 @@ If there are multiple windows, don't split anything."
       nil)))
 (setq split-window-preferred-function #'cp/split-window-sensibly)
 
-;; 2017-08-17 cperl: misc stuff
-(defun cp/c-mode-hook-setup ()
-  (hs-minor-mode))
-(add-hook 'c-mode-hook #'cp/c-mode-hook-setup)
-
 ;; Adapted from https://emacsredux.com/blog/2013/04/21/edit-files-as-root/
 (defun cp/find-file-sudo ()
     "Edit a file as root. "
@@ -243,6 +238,22 @@ single prefix argument is like having `aw-dispatch-always' set to t."
   :config
   (progn
     (setq aw-keys '(?j ?k ?l ?\;))))
+
+
+;; cc-mode
+(defun cp/c-mode-hook-setup ()
+  (progn
+    (hs-minor-mode)
+    (hs-hide-all)))
+(use-package cc-mode
+  :defer t
+  :init
+  (setq c-default-style
+        '((java-mode . "java")
+          (awk-mode . "awk")
+          (other . "linux")))
+  :config
+  (add-hook 'c-mode-hook #'cp/c-mode-hook-setup))
 
 
 ;; windsize
