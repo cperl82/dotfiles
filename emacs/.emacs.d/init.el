@@ -101,8 +101,7 @@
       indent-tabs-mode             nil
       inhibit-startup-message      t
       load-prefer-newer            t
-      make-backup-files            nil
-      window-combination-resize    t)
+      make-backup-files            nil)
 
 ;; 2021-10-22 Always use the short form
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -154,6 +153,8 @@ buffers whose visited file has disappeared and refreshes dired buffers."
               (kill-buffer b)))
            ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
 
+;; Window / Buffer display management
+(setq window-combination-resize t)
 (defun cp/split-window-sensibly (&rest r)
   "When there is one window, split it horizontally unless the frame is smaller than 120.
 
