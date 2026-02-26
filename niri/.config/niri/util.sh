@@ -197,6 +197,17 @@ subcmd--select-and-pull-window () {
     # that utility, and I don't think it matters that much.
     niri msg action set-window-width 50% --id "${id}"
     niri msg action set-window-width -15 --id "${id}"
+
+    # 2026-02-26 cperl: I've observed cases where the window is pulled to the
+    # current workspace, but it doesn't wind up being centered (i.e. it's top
+    # edge is on the top edge of the monitor).
+    #
+    # I'm guessing this is because the actions in niri are asynchronous and
+    # there is no guarantee that the `move-window-to-workspace' is done by the
+    # time I call `center-window'. I suppose I could subscribe to the the event
+    # stream to confirm when something is done, but that feels hard from
+    # bash. Perhaps I'll rewrite this in Rust in which case that would be a lot
+    # easier.
     niri msg action move-window-to-workspace --window-id "${id}" "${cwsid}"
     niri msg action center-window --id "${id}"
     niri msg action focus-window --id "${id}"
