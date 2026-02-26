@@ -93,7 +93,6 @@
 
 ;; Misc
 (setq ad-redefinition-action       'accept
-      c-default-style              "linux"
       column-number-mode           t
       confirm-kill-emacs           'yes-or-no-p
       create-lockfiles             nil
