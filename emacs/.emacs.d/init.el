@@ -697,22 +697,18 @@ dired-x"
 
 
 ;; sh-script
-; 2014-12-07 Trying to make sh-mode indentation better
-(defun cp/sh-switch-to-indentation (n)
-  (interactive "p")
-  (progn
-    (setq sh-basic-offset n)))
+(defun cp/sh-mode-hook-setup ()
+  (sh-set-shell "bash")
+  (flycheck-mode)
+  (flycheck-select-checker 'sh-shellcheck)
+  (hs-minor-mode)
+  (hs-hide-all))
 
 (use-package sh-script
   :defer t
   :config
   (progn
-    (add-hook
-     'sh-mode-hook
-     (lambda ()
-       (sh-set-shell "bash")
-       (flycheck-mode)
-       (flycheck-select-checker 'sh-shellcheck)))))
+    (add-hook 'sh-mode-hook #'cp/sh-mode-hook-setup)))
 
 
 ;; grep
