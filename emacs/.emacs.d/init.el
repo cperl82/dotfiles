@@ -103,6 +103,9 @@
       load-prefer-newer            t
       make-backup-files            nil)
 
+;; 2026-02-26 We want auto-fill on in all programming modes
+(add-hook 'prog-mode-hook #'turn-on-auto-fill)
+
 ;; 2021-10-22 Always use the short form
 (defalias 'yes-or-no-p 'y-or-n-p)
 
