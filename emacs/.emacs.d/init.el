@@ -245,6 +245,7 @@ single prefix argument is like having `aw-dispatch-always' set to t."
   (progn
     (hs-minor-mode)
     (hs-hide-all)))
+
 (use-package cc-mode
   :defer t
   :config
