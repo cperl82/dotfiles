@@ -247,12 +247,8 @@ single prefix argument is like having `aw-dispatch-always' set to t."
     (hs-hide-all)))
 (use-package cc-mode
   :defer t
-  :init
-  (setq c-default-style
-        '((java-mode . "java")
-          (awk-mode . "awk")
-          (other . "linux")))
   :config
+  (setq c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "linux")))
   (add-hook 'c-mode-hook #'cp/c-mode-hook-setup))
 
 
