@@ -222,7 +222,7 @@ If there are multiple windows, don't split anything."
 
 ;; avy / ace-window
 (defun cp/ace-window (arg)
-  "A Wrapper for `ace-window'.
+  "A Wrapper for `ace-window' that changes it's prefix handling.
 This replaces ace-window's default prefix argument behavior such that a
 single prefix argument is like having `aw-dispatch-always' set to t."
   (interactive "p")
