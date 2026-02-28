@@ -359,6 +359,14 @@ binds {
         spawn-sh "${HOME}/.config/niri/util.sh move-window-to-last-workspace-dwim";
     }
 
+    Mod+Shift+Page_up hotkey-overlay-title="Move window up onto an empty workspace" {
+        spawn-sh "${HOME}/.config/niri/util.sh move-window-to-empty-workspace-above";
+    }
+
+    Mod+Shift+Page_down hotkey-overlay-title="Move window down onto an empty workspace" {
+        spawn-sh "${HOME}/.config/niri/util.sh move-window-to-empty-workspace-below";
+    }
+
     Mod+Comma hotkey-overlay-title="Pull Window" {
         spawn-sh "alacritty --class quickswitch -e ${HOME}/.config/niri/util.sh select-and-pull-window";
     }
