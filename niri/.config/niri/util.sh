@@ -114,28 +114,49 @@ subcmd--move-window-to-last-workspace-dwim () {
     # exists. Unless we're already on that workspace, then move the
     # window to the empty workspace
     local workspaces
-    local windows
     local cwsid
     local lwsid
     local wid
 
-    read -d '' -r curr_window_query<<-EOF || true
-	map(select(.is_focused) | .id) | .[0]
-	EOF
-
+    # 2026-03-16 cperl: Note that I was originally pulling the
+    # window-id we're targeting below out of:
+    #
+    # niri msg -j windows
+    #
+    # and querying for the window with the:
+    #
+    # is_focused
+    #
+    # attribute, but when in the overview, no windows report as being
+    # focused. The same is true for:
+    #
+    # niri msg -j focused-window
+    #
+    # That means invocation of this function (via a keybinding)
+    # doesn't work in the overview. It's possible that is a bug and it
+    # should be reported upstream. But, for now, I've realized that I
+    # can work around that issue and get some (probably
+    # inconsequential) performance wins by querying the:
+    #
+    # is_active and is_focused
+    #
+    # workspace for it's:
+    #
+    # active_window_id
+    #
+    # which is super easy because we're looking for that workspace
+    # object anyway.
     read -d '' -r curr_and_last_workspace_query<<-EOF || true
 	sort_by(.idx)
 	| (map(select(.is_active and .is_focused)) | .[0]) as \$c
 	| .[-2] as \$l
-	| [(\$c | .idx), (\$l | .idx)]
+	| [(\$c | .active_window_id), (\$c | .idx), (\$l | .idx)]
 	| @tsv
 	EOF
 
     workspaces=$(niri msg -j workspaces)
-    windows=$(niri msg -j windows)
-    read -r cwsid lwsid < \
+    read -r wid cwsid lwsid < \
 	 <(jq -r "${curr_and_last_workspace_query}" <<< "${workspaces}")
-    wid=$(jq -r "${curr_window_query}" <<< "${windows}")
 
     if [[ -z "${cwsid}" || -z "${lwsid}" || -z "${wid}" ]]; then
         return 1
