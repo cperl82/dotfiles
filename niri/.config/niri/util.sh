@@ -255,6 +255,7 @@ subcmd--select-and-focus-window () {
 move-window-to-empty-workspace () {
     local below="${1}"
     local workspaces
+    local wid
     local cwsid
     local ewsid
     local i
@@ -263,20 +264,21 @@ move-window-to-empty-workspace () {
 	sort_by(.idx)
 	| (map(select(.is_active and .is_focused)) | .[0]) as \$c
 	| .[-1] as \$e
-	| [(\$c | .idx), (\$e | .idx)]
+	| [(\$c | .active_window_id), (\$c | .idx), (\$e | .idx)]
 	| @tsv
 	EOF
 
     workspaces=$(niri msg -j workspaces)
-    read -r cwsid ewsid < \
+    read -r wid cwsid ewsid < \
 	 <(jq -r "${curr_and_empty_workspace_query}" <<< "${workspaces}")
-    niri msg action move-window-to-workspace --focus true "${ewsid}"
     if (( below )); then
 	i=$((cwsid + 1))
     else
 	i="${cwsid}"
     fi
+    niri msg action move-window-to-workspace --window-id "${wid}" "${ewsid}"
     niri msg action move-workspace-to-index --reference "${ewsid}" "${i}"
+    niri msg action focus-window --id "${wid}"
 }
 
 subcmd--move-window-to-empty-workspace-above () {
