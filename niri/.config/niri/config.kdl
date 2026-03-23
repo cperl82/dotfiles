@@ -414,8 +414,8 @@ binds {
     Mod+Up    { focus-window-or-workspace-up; }
     Mod+Right { focus-column-right; }
     Mod+H     { focus-column-left; }
-    Mod+J     { focus-window-or-workspace-down; }
-    Mod+K     { focus-window-or-workspace-up; }
+    Mod+J     { spawn-sh "${HOME}/.config/niri/util.sh focus-window-or-workspace-down-dwim"; }
+    Mod+K     { spawn-sh "${HOME}/.config/niri/util.sh focus-window-or-workspace-up-dwim"; }
     Mod+L     { focus-column-right; }
 
     Mod+Shift+Left  { move-column-left; }
