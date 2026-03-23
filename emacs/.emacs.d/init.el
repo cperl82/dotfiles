@@ -161,7 +161,7 @@ buffers whose visited file has disappeared and refreshes dired buffers."
   "When there is one window, split it horizontally unless the frame is smaller than 120.
 
 If there are multiple windows, don't split anything."
-  (let ((width (frame-text-width))
+  (let ((width (window-text-width))
         (nwindows (length (window-list))))
     (if (= nwindows 1)
         (if (< width 120) (split-window-below) (split-window-right))
