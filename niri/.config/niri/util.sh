@@ -83,7 +83,7 @@ select-window () {
     if (( last_first )); then
         workspace_keydef="2,2n"
     else
-        workspace_keydef="2,2"
+        workspace_keydef="2,2V"
     fi
 
     id=$(jq -r -s "${q}"                                        \
