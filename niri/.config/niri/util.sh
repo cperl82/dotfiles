@@ -156,7 +156,7 @@ subcmd--move-window-to-last-workspace-dwim () {
 
     workspaces=$(niri msg -j workspaces)
     read -r wid cwsid lwsid < \
-	 <(jq -r "${curr_and_last_workspace_query}" <<< "${workspaces}")
+         <(jq -r "${curr_and_last_workspace_query}" <<< "${workspaces}")
 
     if [[ -z "${cwsid}" || -z "${lwsid}" || -z "${wid}" ]]; then
         return 1
@@ -270,11 +270,11 @@ move-window-to-empty-workspace () {
 
     workspaces=$(niri msg -j workspaces)
     read -r wid cwsid ewsid < \
-	 <(jq -r "${curr_and_empty_workspace_query}" <<< "${workspaces}")
+         <(jq -r "${curr_and_empty_workspace_query}" <<< "${workspaces}")
     if (( below )); then
-	i=$((cwsid + 1))
+        i=$((cwsid + 1))
     else
-	i="${cwsid}"
+        i="${cwsid}"
     fi
     niri msg action move-window-to-workspace --window-id "${wid}" "${ewsid}"
     niri msg action move-workspace-to-index --reference "${ewsid}" "${i}"
@@ -302,20 +302,20 @@ focus-window-or-workspace-dwim () {
     local dir=""
 
     if (( down )); then
-	dir="down"
+        dir="down"
     else
-	dir="up"
+        dir="up"
     fi
 
     if niri msg overview-state 2>&1 \
-	    | grep -q '^Overview is open\.$'; then
-	niri msg				\
-	     action				\
-	     "focus-workspace-${dir}"
+            | grep -q '^Overview is open\.$'; then
+        niri msg                                \
+             action                             \
+             "focus-workspace-${dir}"
     else
-	niri msg				\
-	     action				\
-	     "focus-window-or-workspace-${dir}"
+        niri msg                                \
+             action                             \
+             "focus-window-or-workspace-${dir}"
     fi
 }
 
