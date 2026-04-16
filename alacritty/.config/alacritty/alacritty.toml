@@ -4,3 +4,8 @@ normal = { family = "JetBrainsMono Nerd Font Mono", style = "regular" }
 
 [scrolling]
 multiplier = 0
+
+[keyboard]
+bindings = [
+   { key = "Return", mods = "Control|Shift", action = "SpawnNewInstance" }
+]
