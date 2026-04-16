@@ -372,7 +372,7 @@ binds {
     }
 
     Mod+S hotkey-overlay-title="Focus Window" {
-        spawn-sh "alacritty --class quickswitch -e ${HOME}/.config/niri/util.sh select-and-focus-window";
+        spawn-sh "alacritty --class quickswitch -e ${HOME}/.config/niri/util.sh select-and-focus-window-all";
     }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.

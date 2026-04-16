@@ -3,6 +3,14 @@
 set -o pipefail
 set -o errexit
 
+jq-query-current-workspace () {
+    cat<<-'EOF'
+	map(select(.is_active and .is_focused))
+	| .[0]
+	| .idx
+	EOF
+}
+
 select-window () {
     local id
     local title="${1}"
@@ -67,15 +75,17 @@ select-window () {
 	| \$workspaces
 	  | sort_by(.idx)
 	  | .[-2]
-	  | .idx
-	  | tostring as \$last_workspace
+	  | .idx as \$lw
 	| \$workspaces
-	  | map({"key": (.id | tostring),
-	         "value": (.idx | tostring | sub("^" + \$last_workspace + "\$"; "L"))})
+	  | map({"key": (.id | tostring), "value": .idx})
 	  | from_entries as \$ws
 	| \$windows
+	  | map(.workspace_idx = \$ws[(.workspace_id | tostring)])
 	  | map(select(${filter}))
-	  | map([.id, \$ws[(.workspace_id | tostring)], .app_id, .title])
+	  | map([.id
+	        , if .workspace_idx == \$lw then "L" else (.workspace_idx | tostring) end
+	        , .app_id
+	        , .title])
 	  | .[]
 	  | @tsv
 	EOF
@@ -116,16 +126,9 @@ subcmd--select-and-pull-window () {
     local cwsid
     local last_first
 
-    read -d '' -r curr_workspace_query<<-'EOF' || true
-	sort_by(.idx)
-	| map(select(.is_active and .is_focused))
-	| .[0]
-	| .idx
-	EOF
-
     workspaces=$(niri msg -j workspaces)
     windows=$(niri msg -j windows)
-    cwsid=$(jq -r "${curr_workspace_query}" <<< "${workspaces}")
+    cwsid=$(jq -r "$(jq-query-current-workspace)" <<< "${workspaces}")
     last_first=1
     id=$(select-window                          \
              "Select Window to Pull"            \
@@ -169,7 +172,7 @@ subcmd--select-and-pull-window () {
     niri msg action focus-window --id "${id}"
 }
 
-subcmd--select-and-focus-window () {
+subcmd--select-and-focus-window-all () {
     local workspaces
     local windows
     local id
@@ -183,6 +186,26 @@ subcmd--select-and-focus-window () {
              "${workspaces}"                    \
              "${windows}"                       \
              ".is_focused | not"                \
+             "${last_first}")
+    niri msg action focus-window --id "${id}"
+}
+
+subcmd--select-and-focus-window-this-workspace () {
+    local workspaces
+    local windows
+    local id
+    local this_idx
+    local last_first
+
+    workspaces=$(niri msg -j workspaces)
+    windows=$(niri msg -j windows)
+    this_idx=$(jq -r "$(jq-query-current-workspace)" <<< "${workspaces}")
+    last_first=0
+    id=$(select-window							\
+             "Select Window to Focus"					\
+             "${workspaces}"						\
+             "${windows}"						\
+             "(.is_focused | not) and (.workspace_idx == ${this_idx})"	\
              "${last_first}")
     niri msg action focus-window --id "${id}"
 }
