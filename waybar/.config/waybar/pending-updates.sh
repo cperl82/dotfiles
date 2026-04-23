@@ -113,7 +113,9 @@ pending_updates_opam () {
         echo "_"
 	return 0
     fi
-    echo "0"
+    opam update >/dev/null 2>&1
+    opam upgrade --dry-run <<< "n" \
+	| sed -n -e 's/^Proceed with.* \([0-9][0-9]*\) upgrades?.*$/\1/p'
 }
 
 pending_updates_npm () {
