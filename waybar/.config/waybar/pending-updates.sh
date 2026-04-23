@@ -116,6 +116,14 @@ pending_updates_opam () {
     echo "0"
 }
 
+pending_updates_npm () {
+    if ! command -v npm > /dev/null; then
+	echo "_"
+	return 0
+    fi
+    npm outdated -g --depth=0 --json | jq -r 'keys | length'
+}
+
 run () {
     local package_manager
     local flatpak
@@ -123,6 +131,7 @@ run () {
     local rustup
     local python
     local opam
+    local npm
     local all
     local text
     local tooltip
@@ -133,19 +142,21 @@ run () {
     rustup=$(pending_updates_rustup)
     python=$(pending_updates_python)
     opam=$(pending_updates_opam)
+    npm=$(pending_updates_npm)
 
     if [[ -z "${package_manager}" || \
 	  -z "${flatpak}"         || \
 	  -z "${cargo}"           || \
+	  -z "${rustup}"          || \
 	  -z "${python}"          || \
 	  -z "${opam}"            || \
-	  -z "${rustup}"
+	  -z "${npm}"
 	]]; then
 	return 1
     fi
 
     all=0
-    for thing in package_manager flatpak cargo rustup python opam; do
+    for thing in package_manager flatpak cargo rustup python opam npm; do
 	if [[ "${!thing}" =~ ^[0-9]+$ ]]; then
 	    all=$((all + ${!thing}))
 	fi
@@ -157,7 +168,8 @@ run () {
            "$(printf "Cargo:    %3s" "${cargo}")"               \
            "$(printf "Rustup:   %3s" "${rustup}")"              \
            "$(printf "Python:   %3s" "${python}")"              \
-           "$(printf "Opam:     %3s" "${opam}")"
+           "$(printf "Opam:     %3s" "${opam}")"                \
+           "$(printf "Npm:      %3s" "${npm}")"
     tooltip="${tooltip%\\n}"
     printf '{"text": "%s", "tooltip": "%s"}\n'  \
            "${text}"                            \
