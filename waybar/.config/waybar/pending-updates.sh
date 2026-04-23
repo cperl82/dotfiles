@@ -117,7 +117,9 @@ pending_updates_opam () {
     opam update >/dev/null 2>&1
     yes "n"									\
 	| opam upgrade --dry-run						\
-	| sed -n -e 's/^Proceed with.* \([0-9][0-9]*\) upgrades?.*$/\1/p'
+	| sed -n \
+	      -e 's/^Proceed with.* \([0-9][0-9]*\) upgrades?.*$/\1/p' \
+	      -e 's/^Everything as up-to-date as possible$/0/p'
 }
 
 pending_updates_npm () {
