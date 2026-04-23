@@ -51,7 +51,8 @@ pending_updates_flatpak () {
 	return 0
     fi
     set +o errexit
-    flatpak update < <(printf "n\n") \
+    yes "n"					\
+	| flatpak update			\
         | grep -Ec '^[ ]+[0-9]+\.'
     set -o errexit
 }
@@ -114,7 +115,8 @@ pending_updates_opam () {
 	return 0
     fi
     opam update >/dev/null 2>&1
-    opam upgrade --dry-run <<< "n" \
+    yes "n"									\
+	| opam upgrade --dry-run						\
 	| sed -n -e 's/^Proceed with.* \([0-9][0-9]*\) upgrades?.*$/\1/p'
 }
 
@@ -123,7 +125,8 @@ pending_updates_npm () {
 	echo "_"
 	return 0
     fi
-    npm outdated -g --depth=0 --json | jq -r 'keys | length'
+    npm outdated -g --depth=0 --json \
+	| jq -r 'keys | length'
 }
 
 run () {
