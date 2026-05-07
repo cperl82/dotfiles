@@ -239,7 +239,8 @@ single prefix argument is like having `aw-dispatch-always' set to t."
   :defer t
   :config
   (progn
-    (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l ?\;))))
+    (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l ?\;)
+          aw-scope 'frame)))
 
 
 ;; cc-mode
