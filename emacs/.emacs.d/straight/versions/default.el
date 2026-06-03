@@ -8,7 +8,7 @@
  ("counsel-projectile" . "40d1e1d4bb70acb00fddd6f4df9778bf2c52734b")
  ("dash.el" . "fb443e7a6e660ba849cafcd01021d9aac3ac6764")
  ("diminish.el" . "6ec6ebc391371418efc6c98d70b013f34af5a2ee")
- ("doom-modeline" . "b6ce0ba5390e8d7395a3e76e8d8272fc88224d3e")
+ ("doom-modeline" . "0b660ed93a185c3edaf8d11c550b15cfeb348a69")
  ("eat" . "c8d54d649872bfe7b2b9f49ae5c2addbf12d3b99")
  ("el-get" . "a59d9886df8af20730203b01b6224de24f24d180")
  ("eldoc" . "1d11743436e9ce0d11529bfdf1e548e64f31a92e")
