@@ -81,5 +81,5 @@
  ("xcscope.el" . "d228d7593d762e457340f678d14b663ef66d7cee")
  ("xref" . "26b277b67df478ad6daf2e2e7a4de79a5fe251e7")
  ("xterm-color" . "2ad407c651e90fff2ea85d17bf074cee2c022912")
- ("zenburn-emacs" . "373a07f99ee595dee83b6cee8b6841b5d1c01e38"))
+ ("zenburn-emacs" . "8697934a57151de119744ea79fde83120e05b88d"))
 :epsilon
