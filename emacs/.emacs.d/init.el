@@ -1698,6 +1698,11 @@ to return a list"
              ((t (:foreground ,zenburn-green-1 :background ,zenburn-bg))))
            '(dired-perm-write
              ((t nil)))
+           ;; CR-someday cperl: This is a workaround for zenburn
+           ;; setting the default face for doom-modeline and causing
+           ;; the inactive mode-line to not "fade" properly
+           '(doom-modeline
+             ((t nil)))
            '(hl-line
              ((t (:background "#4F4F4F"))))
            `(isearch
