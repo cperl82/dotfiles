@@ -21,7 +21,7 @@
  ("evil" . "30c88945002b2a734ebb778054b19b2e58995723")
  ("evil-collection" . "673b38022b8bb36185b6d54aff3f444335a032fb")
  ("evil-smartparens" . "026d4a3cfce415a4dfae1457f871b385386e61d3")
- ("evil-surround" . "da05c60b0621cf33161bb4335153f75ff5c29d91")
+ ("evil-surround" . "c0d2519424933b117b3b2331d07728295866b8e5")
  ("f.el" . "931b6d0667fe03e7bf1c6c282d6d8d7006143c52")
  ("flycheck" . "784f184cdd9f9cb4e3dbb997c09d93e954142842")
  ("general.el" . "9651024e7f40a8ac5c3f31f8675d3ebe2b667344")
