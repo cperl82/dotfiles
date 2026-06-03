@@ -48,7 +48,7 @@
  ("nasm-mode" . "65ca6546fc395711fac5b3b4299e76c2303d43a8")
  ("nerd-icons.el" . "3af4d38c1119567b20ef9020f70de163d0d58c37")
  ("nongnu-elpa" . "6b078c9935f279e7971f53770d354ab6ce15deb6")
- ("org" . "b7bc0ede67f3e2a477f4d6ad0c46a6d80bca5aea")
+ ("org" . "0d02d72627428dddf21ec66b1eb87e46c2849ded")
  ("org-ql" . "4b8330a683c43bb4a2c64ccce8cd5a90c8b174ca")
  ("org-super-agenda" . "fb20ad9c8a9705aa05d40751682beae2d094e0fe")
  ("origami.el" . "e558710a975e8511b9386edc81cd6bdd0a5bda74")
