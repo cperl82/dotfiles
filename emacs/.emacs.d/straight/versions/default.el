@@ -59,7 +59,7 @@
  ("projectile" . "e0fc464d1e41c8d7267636ea2b7330491087c19d")
  ("rust-mode" . "9915b3a585a7a75e9126df9e0e9d1df8057ae3cf")
  ("rustic" . "ad6f3061ff287fe6a9391a67b59c77c4622a2c1b")
- ("s.el" . "dda84d38fffdaf0c9b12837b504b402af910d01d")
+ ("s.el" . "7393fa6fa305403e628058c0ec78c35d610fab05")
  ("seq" . "da86da9bf111f68fb81efd466d76d53af5aebc00")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
  ("smartparens" . "2834c66c4f09778d0c57e99886c329188eed591a")
