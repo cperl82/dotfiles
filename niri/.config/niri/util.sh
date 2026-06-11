@@ -299,7 +299,7 @@ move-window-to-empty-workspace () {
     else
         i="${cwsid}"
     fi
-    niri msg action move-window-to-workspace --window-id "${wid}" "${ewsid}"
+    niri msg action move-window-to-workspace --focus false --window-id "${wid}" "${ewsid}"
     niri msg action move-workspace-to-index --reference "${ewsid}" "${i}"
     niri msg action focus-window --id "${wid}"
 }
