@@ -1714,9 +1714,10 @@ to return a list"
 (use-package zenburn-theme
   :config
   (progn
-    (load-theme 'zenburn :no-confirm)
     (defun cp/zenburn-theme-customize (theme)
       (when (eq theme 'zenburn)
+        (set-face-attribute 'mode-line nil :box nil)
+        (set-face-attribute 'mode-line-inactive nil :box nil)
         (zenburn-with-color-variables
           (custom-theme-set-faces
            'zenburn
@@ -1728,11 +1729,11 @@ to return a list"
              ((t (:foreground ,zenburn-green-1 :background ,zenburn-bg))))
            '(dired-perm-write
              ((t nil)))
-           ;; CR-someday cperl: This is a workaround for zenburn
+           ;; 2026-06-11 cperl: This is a workaround for zenburn
            ;; setting the default face for doom-modeline and causing
            ;; the inactive mode-line to not "fade" properly
            '(doom-modeline
-             ((t nil)))
+             ((t ())))
            '(hl-line
              ((t (:background "#4F4F4F"))))
            `(isearch
@@ -1767,9 +1768,14 @@ to return a list"
              ((t (:inherit nil :foreground "white" :background ,zenburn-blue-1))))
            `(swiper-match-face-4
              ((t (:inherit nil :foreground "white" :background ,zenburn-yellow-2))))))))
-    (add-hook 'enable-theme-functions #'cp/zenburn-theme-customize)))
-
-(enable-theme 'zenburn)
+    (add-hook 'enable-theme-functions #'cp/zenburn-theme-customize))
+  ;; 2026-06-11 cperl: Something is subtly wrong here, as `load-theme'
+  ;; also enables the theme, but if we don't call `enable-theme' to
+  ;; enable it again the evil state indicator won't be the correct
+  ;; color (e.g. "N" will be green, not cyan, etc)
+  (load-theme 'zenburn :no-confirm)
+  (enable-theme 'zenburn)
+  )
 
 
 ;; Custom
