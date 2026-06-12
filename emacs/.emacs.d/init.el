@@ -282,8 +282,38 @@ single prefix argument is like having `aw-dispatch-always' set to t."
 
 
 ;; eat
+(defun cp/eat-mode-hook-setup ()
+  (add-hook 'evil-insert-state-entry-hook
+            ;; 2026-06-11: This is kind of hacky, I feel like there
+            ;; has to be something better to send to ask for the
+            ;; cursor to be moved back to where eat thinks it is when
+            ;; entering insert state.
+            (lambda () (when (not eat--being-loaded) (eat-self-input 1 "M-f")))
+            nil
+            t))
+
 (use-package eat
-  :defer t)
+  :defer t
+  :config
+  (progn
+    (setq eat-term-color-0 "#181818"
+          eat-term-color-1 "#ac4242"
+          eat-term-color-2 "#90a959"
+          eat-term-color-3 "#f4bf75"
+          eat-term-color-4 "#6a9fb5"
+          eat-term-color-5 "#aa759f"
+          eat-term-color-6 "#75b5aa"
+          eat-term-color-7 "#d8d8d8"
+          eat-term-color-bright-0 "#6b6b6b"
+          eat-term-color-bright-1 "#c55555"
+          eat-term-color-bright-2 "#aac474"
+          eat-term-color-bright-3 "#feca88"
+          eat-term-color-bright-4 "#82b8c8"
+          eat-term-color-bright-5 "#c28cb8"
+          eat-term-color-bright-6 "#93d3c3"
+          eat-term-color-bright-7 "#f8f8f8"
+          )
+    (add-hook 'eat-mode-hook #'cp/eat-mode-hook-setup)))
 
 
 ;; edebug
