@@ -48,11 +48,10 @@ pending_updates_dnf () {
 pending_updates_flatpak () {
     if ! command -v flatpak > /dev/null; then
         echo "_"
-	return 0
+        return 0
     fi
     set +o errexit
-    yes "n"					\
-	| flatpak update			\
+    flatpak update <<< "n" \
         | grep -Ec '^[ ]+[0-9]+\.'
     set -o errexit
 }
@@ -112,19 +111,18 @@ pending_updates_python () {
 pending_updates_opam () {
     if ! command -v opam > /dev/null; then
         echo "_"
-	return 0
+        return 0
     fi
     opam update >/dev/null 2>&1
-    yes "n"									\
-	| opam upgrade --dry-run						\
+    opam upgrade --dry-run <<< "n"                                      \
         | awk 'BEGIN {
                  count = 0;
                };
-	       /^Proceed with.*$/ {
-	         if (match($0, /[0-0][0-9]*/)) {
-		   count=substr($0, RSTART, RLENGTH);
-		 }
-	       }
+               /^Proceed with.*$/ {
+                 if (match($0, /[0-0][0-9]*/)) {
+                   count=substr($0, RSTART, RLENGTH);
+                 }
+               }
                END {
                  print count;
                };'
