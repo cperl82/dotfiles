@@ -188,7 +188,7 @@ If there are multiple windows, don't split anything."
 ;; Global keybindings
 (general-define-key
  :keymaps '(override)
- :states '(normal motion emacs)
+ :states '(motion insert emacs)
  "M-o" #'cp/ace-window
  )
 
