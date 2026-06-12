@@ -164,9 +164,7 @@ function path-canonical {
     echo "${dst}"
 }
 
-# function wrapper for screen to try to cover some common cases of
-# window title setting
-function scr {
+function code {
     local parnt=""
     local child=""
     local i=0
@@ -192,9 +190,12 @@ function scr {
     if [[ -n "${parnt}" && -n "${child}" ]]
     then
 	xt "${parnt} ${child}"
-	screen -S "${parnt}-${child}" emacs -nw
+	read -d '' -r elisp <<-EOF
+	(progn (setq server-name "${parnt}-${child}")(server-start)(dired "."))
+	EOF
+	emacs -nw --eval "${elisp}"
     else
-	screen emacs -nw
+	emacs -nw
     fi
 }
 
