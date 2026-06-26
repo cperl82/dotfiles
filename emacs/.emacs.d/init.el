@@ -21,7 +21,6 @@
 
 ;; Base packages
 (require 'general)
-(require 'use-package)
 (require 'dash)
 (require 's)
 (require 'f)

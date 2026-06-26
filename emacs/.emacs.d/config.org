@@ -280,7 +280,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
 
   ;; Base packages
   (require 'general)
-  (require 'use-package)
   (require 'dash)
   (require 's)
   (require 'f)
