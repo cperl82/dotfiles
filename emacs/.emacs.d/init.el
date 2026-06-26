@@ -1,9 +1,8 @@
 ;; -*- lexical-binding: t -*-
 (add-to-list 'load-path (expand-file-name "init-lisp" user-emacs-directory))
-
 (require 'init-emacs)
-
 (require 'init-straight)
+(require 'init-hippie-exp)
 
 ;; 2020-10-22: Tweak emacs gc for faster startup
 (defun cp/make-after-emacs-startup-fun ()
@@ -712,25 +711,6 @@ dired-x"
   :defer t
   :init
   (winner-mode))
-
-
-;; hippie-expand
-(use-package hippie-exp
-  :defer t
-  :init
-  (progn
-    (setq hippie-expand-try-functions-list
-          '(try-expand-dabbrev
-            try-expand-dabbrev-all-buffers
-            try-expand-dabbrev-from-kill
-            try-complete-file-name-partially
-            try-complete-file-name
-            try-expand-all-abbrevs
-            try-expand-list
-            try-expand-line
-            try-complete-lisp-symbol-partially
-            try-complete-lisp-symbol))
-    (global-set-key [remap dabbrev-expand] 'hippie-expand)))
 
 
 ;; escreen
