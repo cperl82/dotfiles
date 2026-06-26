@@ -140,12 +140,15 @@ This uses the ~emacs~ package, which is always available.
   (require 'init-emacs)
 #+end_src
 
+Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long or the short version of prompting (we're getting the short version by virtue of ~use-short-answers~), but it's about being prompted before quitting emacs.
+
 #+begin_src emacs-lisp :tangle init-lisp/init-emacs.el
   (use-package emacs
     :demand t
     :custom
-    (ad-redefinition-action 'accept)
+    (ad-redefinition-action #'accept)
     (column-number-mode t)
+    (confirm-kill-emacs #'yes-or-no-p)
     (create-lockfiles nil)
     (enable-recursive-minibuffers t)
     (indent-tabs-mode nil)
@@ -159,10 +162,10 @@ This uses the ~emacs~ package, which is always available.
     (when (> emacs-major-version 28)
       (setq native-comp-async-report-warnings-errors nil))
     (put 'narrow-to-region 'disabled nil)
-    (global-auto-revert-mode)
     (menu-bar-mode -1)
     (tool-bar-mode -1)
     (scroll-bar-mode -1)
+    (global-auto-revert-mode)
     :hook
     ((prog-mode . turn-on-auto-fill)))
   (provide 'init-emacs)
