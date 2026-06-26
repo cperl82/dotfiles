@@ -126,17 +126,11 @@ Disable the built in emacs package manager, we're going to use another one.
     (setq package-enable-at-startup nil))
 #+end_src
 
-** Early Setup
+** Load Path
 
 #+begin_src emacs-lisp :tangle init.el
   ;; -*- lexical-binding: t -*-
   (add-to-list 'load-path (expand-file-name "init-lisp" user-emacs-directory))
-
-  (when (< emacs-major-version 27)
-    (package-initialize))
-
-  (when (> emacs-major-version 28)
-    (setq native-comp-async-report-warnings-errors nil))
 #+end_src
 
 ** Emacs
@@ -148,6 +142,7 @@ This uses the ~emacs~ package, which is always available.
 
 #+begin_src emacs-lisp :tangle init-lisp/init-emacs.el
   (use-package emacs
+    :demand t
     :custom
     (ad-redefinition-action 'accept)
     (column-number-mode t)
@@ -159,6 +154,10 @@ This uses the ~emacs~ package, which is always available.
     (make-backup-files nil)
     (use-short-answers t)
     :config
+    (when (< emacs-major-version 27)
+      (package-initialize))
+    (when (> emacs-major-version 28)
+      (setq native-comp-async-report-warnings-errors nil))
     (put 'narrow-to-region 'disabled nil)
     (global-auto-revert-mode)
     (menu-bar-mode -1)

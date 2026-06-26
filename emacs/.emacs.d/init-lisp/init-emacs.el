@@ -1,4 +1,5 @@
 (use-package emacs
+  :demand t
   :custom
   (ad-redefinition-action 'accept)
   (column-number-mode t)
@@ -10,6 +11,10 @@
   (make-backup-files nil)
   (use-short-answers t)
   :config
+  (when (< emacs-major-version 27)
+    (package-initialize))
+  (when (> emacs-major-version 28)
+    (setq native-comp-async-report-warnings-errors nil))
   (put 'narrow-to-region 'disabled nil)
   (global-auto-revert-mode)
   (menu-bar-mode -1)
