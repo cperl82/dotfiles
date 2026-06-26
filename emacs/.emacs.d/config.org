@@ -328,9 +328,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
 #+begin_src emacs-lisp :tangle init.el
   ;; Base packages
   (require 'general)
-  (require 'dash)
-  (require 's)
-  (require 'f)
 
   (defconst cp/normal-prefix "SPC")
   (defconst cp/non-normal-prefix "M-SPC")

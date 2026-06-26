@@ -6,9 +6,6 @@
 
 ;; Base packages
 (require 'general)
-(require 'dash)
-(require 's)
-(require 'f)
 
 (defconst cp/normal-prefix "SPC")
 (defconst cp/non-normal-prefix "M-SPC")
