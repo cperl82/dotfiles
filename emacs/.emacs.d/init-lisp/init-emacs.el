@@ -1,11 +1,15 @@
 (use-package emacs
   :demand t
+  :preface
+  (defun cp/reduce-gc-cons-threshold ()
+    (setq gc-cons-threshold (* 20 1000 1000)))
   :custom
   (ad-redefinition-action #'accept)
   (column-number-mode t)
   (confirm-kill-emacs #'yes-or-no-p)
   (create-lockfiles nil)
   (enable-recursive-minibuffers t)
+  (gc-cons-threshold (* 100 1000 1000))
   (indent-tabs-mode nil)
   (inhibit-startup-message t)
   (load-prefer-newer t)
@@ -24,7 +28,8 @@
   (scroll-bar-mode -1)
   (global-auto-revert-mode)
   :hook
-  ((prog-mode . turn-on-auto-fill)))
+  ((prog-mode . turn-on-auto-fill)
+   (emacs-startup . cp/reduce-gc-cons-threshold)))
 
 (defun cp/split-window-function (&rest r)
   "When there is one window, split it horizontally unless the frame is

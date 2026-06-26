@@ -4,20 +4,6 @@
 (require 'init-straight)
 (require 'init-hippie-exp)
 
-;; 2020-10-22: Tweak emacs gc for faster startup
-(defun cp/make-after-emacs-startup-fun ()
-  (let ((saved-gc-cons-threshold gc-cons-threshold))
-    (lambda ()
-      (message "Emacs ready in %s with %d garbage collections."
-               (format "%.2f seconds"
-                       (float-time
-                        (time-subtract after-init-time before-init-time)))
-               gcs-done)
-      (setq gc-cons-threshold saved-gc-cons-threshold))))
-(fset 'cp/after-emacs-startup (cp/make-after-emacs-startup-fun))
-(add-hook 'emacs-startup-hook #'cp/after-emacs-startup)
-(setq gc-cons-threshold (* 100 1000 1000))
-
 ;; Base packages
 (require 'general)
 (require 'dash)
