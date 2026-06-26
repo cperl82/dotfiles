@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t -*-
-
 (add-to-list 'load-path (expand-file-name "init-lisp" user-emacs-directory))
+
 (when (< emacs-major-version 27)
   (package-initialize))
 

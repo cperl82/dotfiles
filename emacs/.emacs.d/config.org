@@ -129,8 +129,8 @@ Disable the built in emacs package manager, we're going to use another one.
 
 #+begin_src emacs-lisp :tangle init.el
   ;; -*- lexical-binding: t -*-
-
   (add-to-list 'load-path (expand-file-name "init-lisp" user-emacs-directory))
+
   (when (< emacs-major-version 27)
     (package-initialize))
 
