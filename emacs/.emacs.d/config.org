@@ -95,6 +95,7 @@ But, having the list of files generated is kind of nice.
 
 #+RESULTS: emacs-config-generate
 - .dotfiles/emacs/.emacs.d/init-lisp/init-straight.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-emacs.el
 - .dotfiles/emacs/.emacs.d/init.el
 - .dotfiles/emacs/.emacs.d/early-init.el
 
@@ -125,7 +126,7 @@ Disable the built in emacs package manager, we're going to use another one.
     (setq package-enable-at-startup nil))
 #+end_src
 
-** Other Early Setup
+** Early Setup
 
 #+begin_src emacs-lisp :tangle init.el
   ;; -*- lexical-binding: t -*-
@@ -136,6 +137,36 @@ Disable the built in emacs package manager, we're going to use another one.
 
   (when (> emacs-major-version 28)
     (setq native-comp-async-report-warnings-errors nil))
+#+end_src
+
+** Emacs
+This uses the ~emacs~ package, which is always available.
+
+#+begin_src emacs-lisp :tangle init.el
+  (require 'init-emacs)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-emacs.el
+  (use-package emacs
+    :custom
+    (ad-redefinition-action 'accept)
+    (column-number-mode t)
+    (create-lockfiles nil)
+    (enable-recursive-minibuffers t)
+    (indent-tabs-mode nil)
+    (inhibit-startup-message t)
+    (load-prefer-newer t)
+    (make-backup-files nil)
+    (use-short-answers t)
+    :config
+    (put 'narrow-to-region 'disabled nil)
+    (global-auto-revert-mode)
+    (menu-bar-mode -1)
+    (tool-bar-mode -1)
+    (scroll-bar-mode -1)
+    :hook
+    ((prog-mode . turn-on-auto-fill)))
+  (provide 'init-emacs)
 #+end_src
 
 ** Straight
@@ -251,35 +282,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
   (require 'dash)
   (require 's)
   (require 'f)
-
-
-  ;; Misc
-  (setq ad-redefinition-action       'accept
-        column-number-mode           t
-        confirm-kill-emacs           'yes-or-no-p
-        create-lockfiles             nil
-        enable-recursive-minibuffers t
-        indent-tabs-mode             nil
-        inhibit-startup-message      t
-        load-prefer-newer            t
-        make-backup-files            nil)
-
-  ;; 2026-02-26 We want auto-fill on in all programming modes
-  (add-hook 'prog-mode-hook #'turn-on-auto-fill)
-
-  ;; 2021-10-22 Always use the short form
-  (defalias 'yes-or-no-p 'y-or-n-p)
-
-  ;; 2015-09-11 Enable narrowing command which are disabled by default
-  (put 'narrow-to-region 'disabled nil)
-
-  ;; Global modes
-  (global-auto-revert-mode)
-
-  ;; Ui
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
 
   (defmacro cp/make-symbol-caching-version-of (name f timeout)
     `(progn

@@ -7,6 +7,8 @@
 (when (> emacs-major-version 28)
   (setq native-comp-async-report-warnings-errors nil))
 
+(require 'init-emacs)
+
 (require 'init-straight)
 
 ;; 2020-10-22: Tweak emacs gc for faster startup
@@ -29,35 +31,6 @@
 (require 'dash)
 (require 's)
 (require 'f)
-
-
-;; Misc
-(setq ad-redefinition-action       'accept
-      column-number-mode           t
-      confirm-kill-emacs           'yes-or-no-p
-      create-lockfiles             nil
-      enable-recursive-minibuffers t
-      indent-tabs-mode             nil
-      inhibit-startup-message      t
-      load-prefer-newer            t
-      make-backup-files            nil)
-
-;; 2026-02-26 We want auto-fill on in all programming modes
-(add-hook 'prog-mode-hook #'turn-on-auto-fill)
-
-;; 2021-10-22 Always use the short form
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-;; 2015-09-11 Enable narrowing command which are disabled by default
-(put 'narrow-to-region 'disabled nil)
-
-;; Global modes
-(global-auto-revert-mode)
-
-;; Ui
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
 
 (defmacro cp/make-symbol-caching-version-of (name f timeout)
   `(progn
