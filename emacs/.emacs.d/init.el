@@ -82,7 +82,7 @@
        zenburn-theme))
   (straight-use-package package))
 
-
+
 ;; Base packages
 (require 'general)
 (require 'use-package)
@@ -90,7 +90,7 @@
 (require 's)
 (require 'f)
 
-
+
 ;; Misc
 (setq ad-redefinition-action       'accept
       column-number-mode           t
@@ -219,7 +219,7 @@ If there are multiple windows, don't split anything."
  "w R" #'cp/hydra-windsize/body
  )
 
-
+
 ;; avy / ace-window
 (defun cp/ace-window (arg)
   "A Wrapper for `ace-window' that changes it's prefix handling.
@@ -242,7 +242,7 @@ single prefix argument is like having `aw-dispatch-always' set to t."
     (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l ?\;)
           aw-scope 'frame)))
 
-
+
 ;; cc-mode
 (defun cp/c-mode-hook-setup ()
   (progn
@@ -255,7 +255,7 @@ single prefix argument is like having `aw-dispatch-always' set to t."
   (setq c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "linux")))
   (add-hook 'c-mode-hook #'cp/c-mode-hook-setup))
 
-
+
 ;; windsize
 (use-package windsize
   :defer t
@@ -270,7 +270,7 @@ single prefix argument is like having `aw-dispatch-always' set to t."
       ("k" windsize-up    "up")
       ("l" windsize-right "right"))))
 
-
+
 ;; which-key
 (use-package which-key
   :defer 5
@@ -280,7 +280,7 @@ single prefix argument is like having `aw-dispatch-always' set to t."
     (setq which-key-idle-delay 1.0)
     (which-key-mode)))
 
-
+
 ;; eat
 (defun cp/eat-mode-hook-setup ()
   (add-hook 'evil-insert-state-entry-hook
@@ -315,7 +315,7 @@ single prefix argument is like having `aw-dispatch-always' set to t."
           )
     (add-hook 'eat-mode-hook #'cp/eat-mode-hook-setup)))
 
-
+
 ;; edebug
 (use-package edebug
   :defer t
@@ -325,7 +325,7 @@ single prefix argument is like having `aw-dispatch-always' set to t."
   ;; which makes edebug really annoying to use
   (add-hook 'edebug-mode-hook #'evil-normalize-keymaps))
 
-
+
 ;; company-mode
 (use-package company-mode
   :defer t
@@ -337,7 +337,7 @@ single prefix argument is like having `aw-dispatch-always' set to t."
    "C-n" #'company-select-next
    "C-p" #'company-select-previous))
 
-
+
 ;; paren
 (use-package paren
   :init
@@ -347,7 +347,7 @@ single prefix argument is like having `aw-dispatch-always' set to t."
   (progn
     (show-paren-mode)))
 
-
+
 ;; uniquify
 (use-package uniquify
   :defer t
@@ -358,7 +358,7 @@ single prefix argument is like having `aw-dispatch-always' set to t."
           uniquify-strip-common-suffix nil
           uniquify-after-kill-buffer-p t)))
 
-
+
 ;; swiper / ivy / ivy-rich / counsel
 (defun cp/counsel-rg (&rest args)
   "A wrapper around `counsel-rg' that increases the level of the
@@ -491,7 +491,7 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
     (setq counsel-grep-use-swiper-p #'cp/counsel-grep-use-swiper-p)
     (counsel-mode 1)))
 
-
+
 ;; dired
 (defun cp/dired-tab-dwim ()
   (interactive)
@@ -560,7 +560,7 @@ dired-x"
 (use-package dired-x
   :after (dired))
 
-
+
 ;; ibuffer-vc
 (use-package ibuffer-vc
   :defer t
@@ -581,7 +581,7 @@ dired-x"
        (unless (eq ibuffer-sorting-mode 'alphbaetic)
          (ibuffer-do-sort-by-alphabetic))))))
 
-
+
 ;; xcscope
 (use-package xcscope
   :defer t
@@ -627,7 +627,7 @@ dired-x"
           (cscope-file-face        font-lock-doc-face)
           (cscope-function-face    font-lock-function-name-face)))))))
 
-
+
 ;; lisp-mode
 (use-package elisp-mode
   :defer t
@@ -642,7 +642,7 @@ dired-x"
      (hs-hide-all)
      (company-mode))))
 
-
+
 ;; tuareg-mode
 (defun cp/tuareg-mode-hs-forward-sexp-fun (arg)
   (let* ((c (current-column))
@@ -714,7 +714,7 @@ dired-x"
           (tuareg-font-lock-extension-node-face tuareg-font-lock-governing-face)
           (tuareg-font-lock-attribute-face      tuareg-font-lock-governing-face)))))))
 
-
+
 ;; hideshow
 (use-package hideshow
   :defer t
@@ -725,7 +725,7 @@ dired-x"
     (evil-define-minor-mode-key 'normal 'hs-minor-mode
       (kbd "TAB") #'hs-toggle-hiding)))
 
-
+
 ;; sh-script
 (defun cp/sh-mode-hook-setup ()
   (sh-set-shell "bash")
@@ -740,7 +740,7 @@ dired-x"
   (progn
     (add-hook 'sh-mode-hook #'cp/sh-mode-hook-setup)))
 
-
+
 ;; grep
 (use-package grep
   :defer t
@@ -751,17 +751,17 @@ dired-x"
   (progn
     (setq grep-find-use-xargs 'gnu)))
 
-
+
 ;; kdl-mode
 (use-package kdl-mode
   :defer t)
 
-
+
 ;; man
 (use-package man
   :defer t)
 
-
+
 ;; evil
 ; http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp
 (defmacro define-and-bind-text-object (key start-regex end-regex)
@@ -810,7 +810,7 @@ dired-x"
           evil-operator-state-tag " O"
           evil-emacs-state-tag    " E")))
 
-
+
 ;; evil-collection
 (use-package evil-collection
     :after (evil)
@@ -818,7 +818,7 @@ dired-x"
     :config
     (evil-collection-init))
 
-
+
 ;; smartparens/evil-smartparens
 ; consider stealing some keybindings from https://github.com/expez/evil-smartparens/issues/19
 (defun cp/enable-evil-smartparens ()
@@ -839,7 +839,7 @@ dired-x"
       (sp-local-pair
        '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil)))
 
-
+
 ;; evil-surround
 (use-package evil-surround
   :after (evil)
@@ -847,7 +847,7 @@ dired-x"
   (progn
     (global-evil-surround-mode 1)))
 
-
+
 ;; doom-modeline
 (use-package doom-modeline
     :after (evil)
@@ -856,14 +856,14 @@ dired-x"
       (setq doom-modeline-icon nil)
       (doom-modeline-mode 1)))
 
-
+
 ;; winner
 (use-package winner
   :defer t
   :init
   (winner-mode))
 
-
+
 ;; hippie-expand
 (use-package hippie-exp
   :defer t
@@ -882,7 +882,7 @@ dired-x"
             try-complete-lisp-symbol))
     (global-set-key [remap dabbrev-expand] 'hippie-expand)))
 
-
+
 ;; escreen
 (defun cp/escreen-swap-screen (a &optional b)
   (when (and (numberp a) (numberp b))
@@ -1149,7 +1149,7 @@ dired-x"
     (advice-add 'escreen-install       :after #'cp/advice/escreen-install)
     (escreen-install)))
 
-
+
 ;; org
 (defun cp/org-generate-short-id ()
   "Generate a short mostly unique identifier"
@@ -1577,7 +1577,7 @@ to return a list"
                             #'org-edit-src-save)))
     (remove-hook 'org-mode-hook 'org-eldoc-load)))
 
-
+
 ;; projectile
 (defvar cp/projectile-project-full-feature-name t)
 
@@ -1676,18 +1676,18 @@ to return a list"
     (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
     (projectile-mode)))
 
-
+
 ;; counsel-projectile
 (use-package counsel-projectile
   :defer t
   :after (projectile))
 
-
+
 (use-package embark
   :defer t
   :commands (embark-act))
 
-
+
 ;; rust / rustic
 (use-package rust-mode
   :defer t)
@@ -1703,12 +1703,12 @@ to return a list"
        (hs-minor-mode)
        (hs-hide-all)))))
 
-
+
 ; 2014-04-08: local emacs overrides
 (let ((local "~/.emacs.local"))
   (when (file-exists-p local) (load-file local)))
 
-
+
 ;; Themes
 ;; zenburn
 (use-package zenburn-theme
@@ -1777,7 +1777,7 @@ to return a list"
   (enable-theme 'zenburn)
   )
 
-
+
 ;; Custom
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
