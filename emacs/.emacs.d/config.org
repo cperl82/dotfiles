@@ -94,7 +94,7 @@ But, having the list of files generated is kind of nice.
 #+end_src
 
 #+RESULTS: emacs-config-generate
-- .dotfiles/emacs/.emacs.d/init-straight.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-straight.el
 - .dotfiles/emacs/.emacs.d/init.el
 - .dotfiles/emacs/.emacs.d/early-init.el
 
@@ -125,33 +125,44 @@ Disable the built in emacs package manager, we're going to use another one.
     (setq package-enable-at-startup nil))
 #+end_src
 
-** Init
-Just a monolithic import of my existing init.el that'll get cleaned up and broken into different logical sections over time.
+** Other Early Setup
 
 #+begin_src emacs-lisp :tangle init.el
   ;; -*- lexical-binding: t -*-
+
+  (add-to-list 'load-path (expand-file-name "init-lisp" user-emacs-directory))
   (when (< emacs-major-version 27)
     (package-initialize))
 
   (when (> emacs-major-version 28)
     (setq native-comp-async-report-warnings-errors nil))
+#+end_src
 
-  ;; 2020-10-22: Tweak emacs gc for faster startup
-  (defun cp/make-after-emacs-startup-fun ()
-    (let ((saved-gc-cons-threshold gc-cons-threshold))
-      (lambda ()
-        (message "Emacs ready in %s with %d garbage collections."
-                 (format "%.2f seconds"
-                         (float-time
-                          (time-subtract after-init-time before-init-time)))
-                 gcs-done)
-        (setq gc-cons-threshold saved-gc-cons-threshold))))
-  (fset 'cp/after-emacs-startup (cp/make-after-emacs-startup-fun))
-  (add-hook 'emacs-startup-hook #'cp/after-emacs-startup)
-  (setq gc-cons-threshold (* 100 1000 1000))
+** Straight
 
-  ;; straight
-  (load-file (expand-file-name "init-straight.el" user-emacs-directory))
+#+begin_src emacs-lisp :tangle init.el
+  (require 'init-straight)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-straight.el
+    (setq straight-cache-autoloads t
+          straight-check-for-modifications nil)
+    (defvar bootstrap-version)
+    (let ((bootstrap-file
+           (expand-file-name
+            "straight/repos/straight.el/bootstrap.el"
+            (or (bound-and-true-p straight-base-dir)
+                user-emacs-directory)))
+          (bootstrap-version 7))
+      (unless (file-exists-p bootstrap-file)
+        (with-current-buffer
+            (url-retrieve-synchronously
+             "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+             'silent 'inhibit-cookies)
+          (goto-char (point-max))
+          (eval-print-last-sexp)))
+        (load bootstrap-file nil 'nomessage))
+
   (dolist
       (package
        '(ace-window
@@ -213,6 +224,26 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
          zenburn-theme))
     (straight-use-package package))
 
+  (provide 'init-straight)
+#+end_src
+
+** Init
+Just a monolithic import of my existing init.el that'll get cleaned up and broken into different logical sections over time.
+
+#+begin_src emacs-lisp :tangle init.el
+  ;; 2020-10-22: Tweak emacs gc for faster startup
+  (defun cp/make-after-emacs-startup-fun ()
+    (let ((saved-gc-cons-threshold gc-cons-threshold))
+      (lambda ()
+        (message "Emacs ready in %s with %d garbage collections."
+                 (format "%.2f seconds"
+                         (float-time
+                          (time-subtract after-init-time before-init-time)))
+                 gcs-done)
+        (setq gc-cons-threshold saved-gc-cons-threshold))))
+  (fset 'cp/after-emacs-startup (cp/make-after-emacs-startup-fun))
+  (add-hook 'emacs-startup-hook #'cp/after-emacs-startup)
+  (setq gc-cons-threshold (* 100 1000 1000))
 
   ;; Base packages
   (require 'general)
@@ -1922,24 +1953,4 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
    )
-#+end_src
-
-#+begin_src emacs-lisp :tangle init-straight.el
-  (setq straight-cache-autoloads t
-        straight-check-for-modifications nil)
-  (defvar bootstrap-version)
-  (let ((bootstrap-file
-         (expand-file-name
-          "straight/repos/straight.el/bootstrap.el"
-          (or (bound-and-true-p straight-base-dir)
-              user-emacs-directory)))
-        (bootstrap-version 7))
-    (unless (file-exists-p bootstrap-file)
-      (with-current-buffer
-          (url-retrieve-synchronously
-           "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-           'silent 'inhibit-cookies)
-        (goto-char (point-max))
-        (eval-print-last-sexp)))
-      (load bootstrap-file nil 'nomessage))
 #+end_src

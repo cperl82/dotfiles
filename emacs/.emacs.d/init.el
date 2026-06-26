@@ -1,9 +1,13 @@
 ;; -*- lexical-binding: t -*-
+
+(add-to-list 'load-path (expand-file-name "init-lisp" user-emacs-directory))
 (when (< emacs-major-version 27)
   (package-initialize))
 
 (when (> emacs-major-version 28)
   (setq native-comp-async-report-warnings-errors nil))
+
+(require 'init-straight)
 
 ;; 2020-10-22: Tweak emacs gc for faster startup
 (defun cp/make-after-emacs-startup-fun ()
@@ -18,70 +22,6 @@
 (fset 'cp/after-emacs-startup (cp/make-after-emacs-startup-fun))
 (add-hook 'emacs-startup-hook #'cp/after-emacs-startup)
 (setq gc-cons-threshold (* 100 1000 1000))
-
-;; straight
-(load-file (expand-file-name "init-straight.el" user-emacs-directory))
-(dolist
-    (package
-     '(ace-window
-       annalist
-       avy
-       company-mode
-       compat
-       counsel-projectile
-       dash
-       diminish
-       eat
-       elisp-slime-nav
-       embark
-       evil
-       evil-collection
-       evil-smartparens
-       evil-surround
-       f
-       flycheck
-       general
-       go-mode
-       haskell-mode
-       highlight-parentheses
-       hydra
-       ibuffer-vc
-       ibuffer-projectile
-       ivy-rich
-       json-mode
-       lsp-mode
-       lua-mode
-       kdl-mode
-       magit
-       markdown-mode
-       nasm-mode
-       nerd-icons
-       org
-       org-super-agenda
-       org-ql
-       origami
-       projectile
-       rust-mode
-       rustic
-       s
-       smartparens
-       smex
-       doom-modeline
-       swiper
-       systemd-mode
-       systemtap-mode
-       tuareg-mode
-       undo-tree
-       unfill
-       vagrant-tramp
-       visual-fill-column
-       wgrep
-       which-key
-       windsize
-       xcscope
-       zenburn-theme))
-  (straight-use-package package))
-
 
 ;; Base packages
 (require 'general)
