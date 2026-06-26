@@ -329,8 +329,7 @@ dired-x"
    "M-p" #'dired-prev-subdir
    "TAB" #'cp/dired-tab-dwim
    "."   #'cp/dired-toggle-hiding-dotfiles
-   "M-&" #'cp/dired-smart-async-shell-command
-   ", f" #'cp/dired-smart-find-file)
+   "M-&" #'cp/dired-smart-async-shell-command)
   :config
   (progn
     (put 'dired-find-alternate-file 'disabled nil)
