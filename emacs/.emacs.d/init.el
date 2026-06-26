@@ -25,62 +25,6 @@
 (require 's)
 (require 'f)
 
-(defmacro cp/make-symbol-caching-version-of (name f timeout)
-  `(progn
-     (fset
-      ,name
-      (let
-          ((expire ,timeout)
-           (cache (make-hash-table :test 'equal)))
-        (lambda (&rest args)
-          (let* ((cache-entry (gethash args cache))
-                 (now         (current-time)))
-            (if (or current-prefix-arg
-                    (not cache-entry)
-                    (> (time-to-seconds (time-subtract now (car cache-entry))) expire))
-                (progn
-                  (message "Regenerating cache for %S with args %S" ,name args)
-                  (let ((result (apply ,f args)))
-                    (puthash args (cons now result) cache)
-                    result))
-              (cdr cache-entry))))))
-     ,name))
-
-(defun cp/revert-buffer-all ()
-  "Revert all buffers.  This reverts buffers that are visiting a file, kills
-buffers whose visited file has disappeared and refreshes dired buffers."
-  (interactive)
-  (if (y-or-n-p "Revert ALL buffers? ")
-      (save-excursion
-        (dolist (b (buffer-list))
-          (set-buffer b)
-          (cond
-           (buffer-file-name
-            (if (file-exists-p buffer-file-name)
-                (revert-buffer t t t)
-              (kill-buffer b)))
-           ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
-
-;; Window / Buffer display management
-(setq window-combination-resize t)
-(defun cp/split-window-sensibly (&rest r)
-  "When there is one window, split it horizontally unless the frame is smaller than 120.
-
-If there are multiple windows, don't split anything."
-  (let ((width (frame-text-width))
-        (nwindows (length (window-list))))
-    (if (= nwindows 1)
-        (if (< width 120) (split-window-below) (split-window-right))
-      nil)))
-(setq split-window-preferred-function #'cp/split-window-sensibly)
-
-;; Adapted from https://emacsredux.com/blog/2013/04/21/edit-files-as-root/
-(defun cp/find-file-sudo ()
-    "Edit a file as root. "
-    (interactive)
-    (find-file (concat "/sudo:root@localhost:"
-                       (read-file-name "Find file (as root): "))))
-
 (defconst cp/normal-prefix "SPC")
 (defconst cp/non-normal-prefix "M-SPC")
 

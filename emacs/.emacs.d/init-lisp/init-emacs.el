@@ -10,7 +10,9 @@
   (inhibit-startup-message t)
   (load-prefer-newer t)
   (make-backup-files nil)
+  (split-window-preferred-function #'cp/split-window-function)
   (use-short-answers t)
+  (window-combination-resize t)
   :config
   (when (< emacs-major-version 27)
     (package-initialize))
@@ -23,4 +25,32 @@
   (global-auto-revert-mode)
   :hook
   ((prog-mode . turn-on-auto-fill)))
+
+(defun cp/split-window-function (&rest r)
+  "When there is one window, split it horizontally unless the frame is
+smaller than 120.
+
+  If there are multiple windows, don't split anything."
+  (let ((width (frame-text-width))
+        (nwindows (length (window-list))))
+    (if (= nwindows 1)
+        (if (< width 120) (split-window-below) (split-window-right))
+      nil)))
+
+(defun cp/revert-buffer-all ()
+  "Revert all buffers.  This reverts buffers that are visiting a file, kills
+  buffers whose visited file has disappeared and refreshes dired
+  buffers."
+  (interactive)
+  (if (y-or-n-p "Revert ALL buffers? ")
+      (save-excursion
+        (dolist (b (buffer-list))
+          (set-buffer b)
+          (cond
+           (buffer-file-name
+            (if (file-exists-p buffer-file-name)
+                (revert-buffer t t t)
+              (kill-buffer b)))
+           ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
+
 (provide 'init-emacs)
