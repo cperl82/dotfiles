@@ -438,6 +438,7 @@ These are just libraries that I find useful when writing elisp.
 
 #+begin_src emacs-lisp :tangle init-lisp/init-paren.el
   (use-package paren
+    :defer t
     :custom
     (show-paren-delay 0)
     :config
