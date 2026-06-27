@@ -347,6 +347,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
      "k" #'kill-buffer
      "f" #'find-file
      "r" #'cp/find-file-sudo
+     "e" '(:package escreen :keymap escreen-map :which-key "escreen")
      "w o" #'other-window
      "w h" #'windmove-left
      "w j" #'windmove-down
@@ -576,10 +577,6 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     :load-path "lisp"
     :commands (escreen-create-screen)
     :general
-    (:keymaps '(override)
-     :states '(normal motion emacs)
-     :prefix ","
-     "e" '(:keymap escreen-map :which-key "escreen"))
     (:keymaps '(escreen-map)
      "C-b" nil
      "TAB" #'escreen-goto-last-screen

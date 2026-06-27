@@ -4,10 +4,6 @@
   :load-path "lisp"
   :commands (escreen-create-screen)
   :general
-  (:keymaps '(override)
-   :states '(normal motion emacs)
-   :prefix ","
-   "e" '(:keymap escreen-map :which-key "escreen"))
   (:keymaps '(escreen-map)
    "C-b" nil
    "TAB" #'escreen-goto-last-screen

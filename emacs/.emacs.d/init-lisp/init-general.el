@@ -32,6 +32,7 @@
    "k" #'kill-buffer
    "f" #'find-file
    "r" #'cp/find-file-sudo
+   "e" '(:package escreen :keymap escreen-map :which-key "escreen")
    "w o" #'other-window
    "w h" #'windmove-left
    "w j" #'windmove-down
