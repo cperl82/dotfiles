@@ -162,9 +162,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     :preface
     (defun cp/reduce-gc-cons-threshold ()
       (setq gc-cons-threshold (* 20 1000 1000)))
-    (defun cp/enable-hideshow-and-hide-all ()
-      (hs-minor-mode)
-      (hs-hide-all))
     :custom
     (ad-redefinition-action #'accept)
     (c-default-style '((java-mode . "java")
@@ -201,6 +198,10 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
      (emacs-startup . cp/startup-time)
      (prog-mode . turn-on-auto-fill)
      (c-mode . cp/enable-hideshow-and-hide-all)))
+
+  (defun cp/enable-hideshow-and-hide-all ()
+    (hs-minor-mode)
+    (hs-hide-all))
 
   (defun cp/startup-time ()
     (message "Emacs ready in %s with %d garbage collections."
@@ -954,6 +955,27 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
 ** Counsel, Ivy, Swiper, Ivy-rich
 ** Config Modes
 ** Programming Modes
+*** Lisp
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-lisp)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-lisp.el
+  (use-package elisp-mode
+    :defer t
+    :straight nil
+    :custom
+    (lisp-loop-forms-indentation 3)
+    (lisp-indent-function #'lisp-indent-function)
+    :preface
+    :hook
+    ((emacs-lisp-mode . company-mode)
+     (emacs-lisp-mode . cp/enable-hideshow-and-hide-all)))
+
+  (provide 'init-lisp)
+#+end_src
+
 ** Init
 Just a monolithic import of my existing init.el that'll get cleaned up and broken into different logical sections over time.
 
@@ -1101,21 +1123,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
       (setq counsel-grep-base-command "rg -i -M 120 --no-heading --line-number --color never %s %s")
       (setq counsel-grep-use-swiper-p #'cp/counsel-grep-use-swiper-p)
       (counsel-mode 1)))
-
-
-  ;; lisp-mode
-  (use-package elisp-mode
-    :defer t
-    :config
-    (add-hook
-     'emacs-lisp-mode-hook
-     (lambda ()
-       (setq lisp-loop-forms-indentation 3)
-       (setq lisp-indent-function #'lisp-indent-function)
-       (setq indent-tabs-mode nil)
-       (hs-minor-mode)
-       (hs-hide-all)
-       (company-mode))))
 
 
   ;; tuareg-mode
