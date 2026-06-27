@@ -1936,14 +1936,15 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
     )
 #+end_src
 ** Local overrides
+Local overrides that I might want to vary from machine to machine. We're using ~condition-case~ here to ignore the file being potentially missing, but still throw errors if the file exists but there are errors processing the elisp within.
 
 #+begin_src emacs-lisp :tangle init.el :padline no
   (require 'init-local-overrides)
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-local-overrides.el
-  (ignore-errors
-    (load-file
-     (expand-file-name "~/.emacs.local")))
+  (condition-case nil
+      (load-file (expand-file-name "~/.emacs.local"))
+    (file-error nil))
   (provide 'init-local-overrides)
 #+end_src
