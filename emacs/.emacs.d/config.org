@@ -566,7 +566,7 @@ These are just libraries that I find useful when writing elisp.
 ** Escreen
 I think I can probably replace all of this with [[https://github.com/nex3/perspective-el][perspective-el]] (perhaps with some light tweaks), but for now, continue using my piles of custom code on top of escreen.
 
-#+begin_src emacs-lisp :tangle init.el
+#+begin_src emacs-lisp :tangle init.el :padline no
   (require 'init-escreen)
 #+end_src
 

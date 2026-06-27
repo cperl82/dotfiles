@@ -10,7 +10,6 @@
 (require 'init-ibuffer-vc)
 (require 'init-which-key)
 (require 'init-dired)
-
 (require 'init-escreen)
 (require 'init-evil)
 (require 'init-embark)
