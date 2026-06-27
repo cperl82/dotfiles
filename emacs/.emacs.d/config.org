@@ -592,7 +592,7 @@ These are just libraries that I find useful when writing elisp.
     :defer t)
   (provide 'init-embark)
 #+end_src
-
+** Counsel, Ivy, Swiper, Ivy-rich
 ** Config Modes
 ** Programming Modes
 ** Init
