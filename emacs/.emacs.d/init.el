@@ -4,6 +4,7 @@
 (require 'init-hippie-exp)
 (require 'init-uniquify)
 (require 'init-paren)
+(require 'init-winner)
 (require 'init-straight)
 (require 'init-utils)
 (require 'init-general)
@@ -621,13 +622,6 @@ dired-x"
     (progn
       (setq doom-modeline-icon nil)
       (doom-modeline-mode 1)))
-
-
-;; winner
-(use-package winner
-  :defer t
-  :init
-  (winner-mode))
 
 
 ;; escreen

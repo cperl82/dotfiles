@@ -97,6 +97,7 @@ But, having the list of files generated is kind of nice.
 - .dotfiles/emacs/.emacs.d/init-lisp/init-general.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-utils.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-straight.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-winner.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-paren.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-uniquify.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-hippie-exp.el
@@ -275,6 +276,20 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     :config
     (show-paren-mode))
   (provide 'init-paren)
+#+end_src
+
+** Winner
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-winner)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-winner.el
+  (use-package winner
+    :demand t
+    :config
+    (winner-mode))
+  (provide 'init-winner)
 #+end_src
 
 ** Straight
@@ -1059,13 +1074,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
       (progn
         (setq doom-modeline-icon nil)
         (doom-modeline-mode 1)))
-
-
-  ;; winner
-  (use-package winner
-    :defer t
-    :init
-    (winner-mode))
 
 
   ;; escreen
