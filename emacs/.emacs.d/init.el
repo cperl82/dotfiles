@@ -11,6 +11,7 @@
 (require 'init-windsize)
 (require 'init-ibuffer-vc)
 (require 'init-which-key)
+(require 'init-dired)
 (require 'init-embark)
 
 ;; cc-mode
@@ -204,69 +205,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
     (setq counsel-grep-base-command "rg -i -M 120 --no-heading --line-number --color never %s %s")
     (setq counsel-grep-use-swiper-p #'cp/counsel-grep-use-swiper-p)
     (counsel-mode 1)))
-
-
-;; dired
-(defun cp/dired-tab-dwim ()
-  (interactive)
-  (if (dired-get-subdir)
-      (dired-hide-subdir 1)
-    (ignore-errors
-      (dired-find-file-other-window))))
-
-(defun cp/dired-toggle-hiding-dotfiles ()
-  (interactive)
-    (let ((regex "^\\..*$")
-          (elements (s-split "\\\\|" dired-omit-files)))
-      (if (-contains? elements regex)
-          (setq dired-omit-files (s-join "\\|" (-remove-item regex elements)))
-        (setq dired-omit-files (s-join "\\|" (-insert-at 0 regex elements))))
-      (revert-buffer)
-      (message "dired-omit-files is now: %S" dired-omit-files)))
-
-(defun cp/dired-smart-async-shell-command (command &optional output-buffer error-buffer)
-  "Like function `async-shell-command', but in the current Virtual
-Dired directory.  Copied from `dired-smart-shell-command' from
-dired-x"
-  (interactive
-   (list
-    (read-shell-command "Async shell command: " nil nil
-			(cond
-			 (buffer-file-name (file-relative-name buffer-file-name))
-			 ((eq major-mode 'dired-mode) (dired-get-filename t t))))
-    current-prefix-arg
-    shell-command-default-error-buffer))
-  (let ((default-directory (or (and (eq major-mode 'dired-mode)
-                                    (dired-current-directory))
-                               default-directory)))
-    (async-shell-command command output-buffer error-buffer)))
-
-(use-package dired
-  :defer t
-  :general
-  (:keymaps '(dired-mode-map)
-   :states  '(normal motion)
-   "h"   #'dired-up-directory
-   "l"   #'dired-find-file
-   "M-K" #'dired-kill-subdir
-   "M-n" #'dired-next-subdir
-   "M-p" #'dired-prev-subdir
-   "TAB" #'cp/dired-tab-dwim
-   "."   #'cp/dired-toggle-hiding-dotfiles
-   "M-&" #'cp/dired-smart-async-shell-command)
-  :config
-  (progn
-    (put 'dired-find-alternate-file 'disabled nil)
-    (let ((prog (if (equal system-type 'darwin) "gls" "ls")))
-      (setq insert-directory-program prog))
-    (setq dired-listing-switches "-aBhl --group-directories-first"
-          dired-dwim-target t)
-    (add-hook 'dired-mode-hook
-              (lambda ()
-                (dired-omit-mode 1)))))
-
-(use-package dired-x
-  :after (dired))
 
 
 ;; xcscope
