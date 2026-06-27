@@ -1445,11 +1445,6 @@ to return a list"
        (hs-hide-all)))))
 
 
-; 2014-04-08: local emacs overrides
-(let ((local "~/.emacs.local"))
-  (when (file-exists-p local) (load-file local)))
-
-
 ;; Themes
 ;; zenburn
 (use-package zenburn-theme
@@ -1532,3 +1527,4 @@ to return a list"
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(require 'init-local-overrides)

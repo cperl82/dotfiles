@@ -90,20 +90,22 @@ But, having the list of files generated is kind of nice.
     (mapcar
      (lambda (path)
        (string-replace
-        (file-name-as-directory (expand-file-name "~")) "" path))))
+        (file-name-as-directory (expand-file-name "~")) "" path)))
+    (reverse))
 #+end_src
 
 #+RESULTS: emacs-config-generate
-- .dotfiles/emacs/.emacs.d/init-lisp/init-general.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-utils.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-straight.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-winner.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-paren.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-uniquify.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-hippie-exp.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-emacs.el
-- .dotfiles/emacs/.emacs.d/init.el
 - .dotfiles/emacs/.emacs.d/early-init.el
+- .dotfiles/emacs/.emacs.d/init.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-emacs.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-hippie-exp.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-uniquify.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-paren.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-winner.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-straight.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-utils.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-general.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-local-overrides.el
 
 * Blocks
 :PROPERTIES:
@@ -1897,11 +1899,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
          (hs-hide-all)))))
 
 
-  ; 2014-04-08: local emacs overrides
-  (let ((local "~/.emacs.local"))
-    (when (file-exists-p local) (load-file local)))
-
-
   ;; Themes
   ;; zenburn
   (use-package zenburn-theme
@@ -1984,4 +1981,16 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
    )
+#+end_src
+** Local overrides
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-local-overrides)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-local-overrides.el
+  (ignore-errors
+    (load-file
+     (expand-file-name "~/.emacs.local")))
+  (provide 'init-local-overrides)
 #+end_src
