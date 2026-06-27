@@ -28,8 +28,16 @@
   (scroll-bar-mode -1)
   (global-auto-revert-mode)
   :hook
-  ((prog-mode . turn-on-auto-fill)
-   (emacs-startup . cp/reduce-gc-cons-threshold)))
+  ((emacs-startup . cp/reduce-gc-cons-threshold)
+   (emacs-startup . cp/startup-time)
+   (prog-mode . turn-on-auto-fill)))
+
+(defun cp/startup-time ()
+  (message "Emacs ready in %s with %d garbage collections."
+           (format "%.2f seconds"
+                   (float-time
+                    (time-subtract after-init-time before-init-time)))
+           gcs-done))
 
 (defun cp/split-window-function (&rest r)
   "When there is one window, split it horizontally unless the frame is
