@@ -651,9 +651,6 @@ to return a list"
      'org-mode-hook
      (lambda ()
        (progn
-         (define-and-bind-text-object "~" "\\~" "\\~")
-         (define-and-bind-text-object "*" "\\*" "\\*")
-         (define-and-bind-text-object "=" "\\=" "\\=")
          (visual-line-mode)
          (visual-fill-column-mode)
          (setq-local visual-fill-column-width 95)

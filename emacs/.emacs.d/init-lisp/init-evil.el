@@ -1,15 +1,3 @@
-;; http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp
-(defmacro define-and-bind-text-object (key start-regex end-regex)
-  (let ((inner-name (make-symbol "inner-name"))
-        (outer-name (make-symbol "outer-name")))
-    `(progn
-       (evil-define-text-object ,inner-name (count &optional beg end type)
-         (evil-select-paren ,start-regex ,end-regex beg end type count nil))
-       (evil-define-text-object ,outer-name (count &optional beg end type)
-         (evil-select-paren ,start-regex ,end-regex beg end type count t))
-       (define-key evil-inner-text-objects-map ,key (quote ,inner-name))
-       (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
-
 (use-package undo-tree
   :straight t
   :demand t
@@ -25,42 +13,42 @@
   ;; Unbind existing keybindings in evil-motion-state-map
   (:states '(motion) "SPC" nil "," nil)
   (:states '(motion insert emacs)
-           :keymaps '(override)
-           "M-o" #'other-window)
+   :keymaps '(override)
+   "M-o" #'other-window)
   (:states '(motion emacs)
-           :keymaps '(override)
-           :prefix ","
-           "h" #'swiper-isearch-thing-at-point
-           "s" #'split-window-vertically
-           "v" #'split-window-horizontally
-           "x" #'delete-window
-           "o" #'delete-other-windows
-           "j" #'dired-jump
-           "k" #'kill-buffer
-           "f" #'find-file
-           "r" #'cp/find-file-sudo
-           "e" '(:package escreen :keymap escreen-map :which-key "escreen")
-           "w o" #'other-window
-           "w h" #'windmove-left
-           "w j" #'windmove-down
-           "w k" #'windmove-up
-           "w l" #'windmove-right
-           "w u" #'winner-undo
-           "w r" #'winner-redo
-           "w H" #'windmove-swap-states-left
-           "w J" #'windmove-swap-states-down
-           "w K" #'windmove-swap-states-up
-           "w L" #'windmove-swap-states-right
-           "w R" #'cp/hydra-windsize/body)
+   :keymaps '(override)
+   :prefix ","
+   "h" #'swiper-isearch-thing-at-point
+   "s" #'split-window-vertically
+   "v" #'split-window-horizontally
+   "x" #'delete-window
+   "o" #'delete-other-windows
+   "j" #'dired-jump
+   "k" #'kill-buffer
+   "f" #'find-file
+   "r" #'cp/find-file-sudo
+   "e" '(:package escreen :keymap escreen-map :which-key "escreen")
+   "w o" #'other-window
+   "w h" #'windmove-left
+   "w j" #'windmove-down
+   "w k" #'windmove-up
+   "w l" #'windmove-right
+   "w u" #'winner-undo
+   "w r" #'winner-redo
+   "w H" #'windmove-swap-states-left
+   "w J" #'windmove-swap-states-down
+   "w K" #'windmove-swap-states-up
+   "w L" #'windmove-swap-states-right
+   "w R" #'cp/hydra-windsize/body)
   (:states '(motion emacs)
-           :keymaps '(override)
-           :prefix "SPC"
-           "a c" '(:package xcscope :keymap cscope-command-map :which-key "xcscope")
-           "a g r" #'cp/counsel-rg
-           "a g f" #'cp/counsel-rg-files)
+   :keymaps '(override)
+   :prefix "SPC"
+   "a c" '(:package xcscope :keymap cscope-command-map :which-key "xcscope")
+   "a g r" #'cp/counsel-rg
+   "a g f" #'cp/counsel-rg-files)
   (:states '(normal)
-           :keymaps '(hs-minor-mode-map)
-           "TAB" #'hs-toggle-hiding)
+   :keymaps '(hs-minor-mode-map)
+   "TAB" #'hs-toggle-hiding)
   (:states '(visual) "TAB" #'indent-region)
   :custom
   (evil-want-C-i-jump nil)
@@ -98,8 +86,16 @@
   :straight t
   :defer t
   :after evil
+  :preface
+  (defun cp/evil-surround-add-org-mode-pairs ()
+    (push '(?* . ("*" . "*")) evil-surround-pairs-alist)
+    (push '(?~ . ("~" . "~")) evil-surround-pairs-alist)
+    (push '(?= . ("=" . "=")) evil-surround-pairs-alist))
   :config
-  (global-evil-surround-mode))
+  (global-evil-surround-mode)
+  :hook
+  ((org-mode . cp/evil-surround-add-org-mode-pairs))
+  )
 
 (use-package evil-smartparens
   :straight t
