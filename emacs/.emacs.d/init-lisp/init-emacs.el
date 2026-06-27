@@ -26,6 +26,7 @@
   (scroll-bar-mode -1)
   (global-auto-revert-mode)
   (show-paren-mode)
+  (winner-mode)
   :hook
   ((emacs-startup . cp/reduce-gc-cons-threshold)
    (emacs-startup . cp/startup-time)

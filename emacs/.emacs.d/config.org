@@ -103,7 +103,6 @@ But, having the list of files generated is kind of nice.
 - .dotfiles/emacs/.emacs.d/init-lisp/init-utils.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-hippie-exp.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-uniquify.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-winner.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-windsize.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-ibuffer-vc.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-which-key.el
@@ -183,6 +182,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     (scroll-bar-mode -1)
     (global-auto-revert-mode)
     (show-paren-mode)
+    (winner-mode)
     :hook
     ((emacs-startup . cp/reduce-gc-cons-threshold)
      (emacs-startup . cp/startup-time)
@@ -433,20 +433,6 @@ These are just libraries that I find useful when writing elisp.
     (uniquify-strip-common-suffix nil)
     (uniquify-after-kill-buffer-p t))
   (provide 'init-uniquify)
-#+end_src
-
-** Winner
-
-#+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-winner)
-#+end_src
-
-#+begin_src emacs-lisp :tangle init-lisp/init-winner.el
-  (use-package winner
-    :demand t
-    :config
-    (winner-mode))
-  (provide 'init-winner)
 #+end_src
 
 ** Windsize

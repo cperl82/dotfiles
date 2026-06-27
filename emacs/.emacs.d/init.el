@@ -6,7 +6,6 @@
 (require 'init-utils)
 (require 'init-hippie-exp)
 (require 'init-uniquify)
-(require 'init-winner)
 (require 'init-windsize)
 (require 'init-ibuffer-vc)
 (require 'init-which-key)
