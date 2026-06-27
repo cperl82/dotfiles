@@ -69,16 +69,6 @@
     (add-hook 'eat-mode-hook #'cp/eat-mode-hook-setup)))
 
 
-;; edebug
-(use-package edebug
-  :defer t
-  :init
-  ;; CR-someday cperl: I'm not entirely sure why this is necessary, but without
-  ;; it, the edebug map doesn't get its proper position as an "intercept" map,
-  ;; which makes edebug really annoying to use
-  (add-hook 'edebug-mode-hook #'evil-normalize-keymaps))
-
-
 ;; company-mode
 (use-package company-mode
   :defer t

@@ -185,7 +185,11 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     :hook
     ((emacs-startup . cp/reduce-gc-cons-threshold)
      (emacs-startup . cp/startup-time)
-     (prog-mode . turn-on-auto-fill)))
+     (prog-mode . turn-on-auto-fill)
+     ;; CR-someday cperl: I'm not entirely sure why this is necessary, but without
+     ;; it, the edebug map doesn't get its proper position as an "intercept" map,
+     ;; which makes edebug really annoying to use
+     (edebug-mode . evil-normalize-keymaps)))
 
   (defun cp/startup-time ()
     (message "Emacs ready in %s with %d garbage collections."
@@ -570,16 +574,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
             eat-term-color-bright-7 "#f8f8f8"
             )
       (add-hook 'eat-mode-hook #'cp/eat-mode-hook-setup)))
-
-
-  ;; edebug
-  (use-package edebug
-    :defer t
-    :init
-    ;; CR-someday cperl: I'm not entirely sure why this is necessary, but without
-    ;; it, the edebug map doesn't get its proper position as an "intercept" map,
-    ;; which makes edebug really annoying to use
-    (add-hook 'edebug-mode-hook #'evil-normalize-keymaps))
 
 
   ;; company-mode

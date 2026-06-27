@@ -30,7 +30,11 @@
   :hook
   ((emacs-startup . cp/reduce-gc-cons-threshold)
    (emacs-startup . cp/startup-time)
-   (prog-mode . turn-on-auto-fill)))
+   (prog-mode . turn-on-auto-fill)
+   ;; CR-someday cperl: I'm not entirely sure why this is necessary, but without
+   ;; it, the edebug map doesn't get its proper position as an "intercept" map,
+   ;; which makes edebug really annoying to use
+   (edebug-mode . evil-normalize-keymaps)))
 
 (defun cp/startup-time ()
   (message "Emacs ready in %s with %d garbage collections."
