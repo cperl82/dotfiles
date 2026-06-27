@@ -136,7 +136,7 @@ If you want to tangle to a different file, you just have to add another subtree 
 ** Early Init
 Disable the built in emacs package manager, we're going to use another one.
 
-#+begin_src emacs-lisp :tangle "early-init.el"
+#+begin_src emacs-lisp :tangle early-init.el
   (when (> emacs-major-version 27)
     (setq package-enable-at-startup nil))
 #+end_src
