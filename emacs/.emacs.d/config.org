@@ -103,7 +103,6 @@ But, having the list of files generated is kind of nice.
 - .dotfiles/emacs/.emacs.d/init-lisp/init-utils.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-hippie-exp.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-uniquify.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-paren.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-winner.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-windsize.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-ibuffer-vc.el
@@ -172,6 +171,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     (inhibit-startup-message t)
     (load-prefer-newer t)
     (make-backup-files nil)
+    (show-paren-delay 0)
     (split-window-preferred-function #'cp/split-window-function)
     (use-short-answers t)
     (window-combination-resize t)
@@ -185,6 +185,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     (tool-bar-mode -1)
     (scroll-bar-mode -1)
     (global-auto-revert-mode)
+    (show-paren-mode)
     :hook
     ((emacs-startup . cp/reduce-gc-cons-threshold)
      (emacs-startup . cp/startup-time)
@@ -435,22 +436,6 @@ These are just libraries that I find useful when writing elisp.
     (uniquify-strip-common-suffix nil)
     (uniquify-after-kill-buffer-p t))
   (provide 'init-uniquify)
-#+end_src
-
-** Paren
-
-#+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-paren)
-#+end_src
-
-#+begin_src emacs-lisp :tangle init-lisp/init-paren.el
-  (use-package paren
-    :defer t
-    :custom
-    (show-paren-delay 0)
-    :config
-    (show-paren-mode))
-  (provide 'init-paren)
 #+end_src
 
 ** Winner

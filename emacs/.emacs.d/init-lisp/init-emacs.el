@@ -14,6 +14,7 @@
   (inhibit-startup-message t)
   (load-prefer-newer t)
   (make-backup-files nil)
+  (show-paren-delay 0)
   (split-window-preferred-function #'cp/split-window-function)
   (use-short-answers t)
   (window-combination-resize t)
@@ -27,6 +28,7 @@
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (global-auto-revert-mode)
+  (show-paren-mode)
   :hook
   ((emacs-startup . cp/reduce-gc-cons-threshold)
    (emacs-startup . cp/startup-time)
