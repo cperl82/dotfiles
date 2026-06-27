@@ -14,6 +14,7 @@
 (require 'init-xcscope)
 (require 'init-evil)
 (require 'init-embark)
+(require 'init-lisp)
 
 ;; company-mode
 (use-package company-mode
@@ -158,21 +159,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
     (setq counsel-grep-base-command "rg -i -M 120 --no-heading --line-number --color never %s %s")
     (setq counsel-grep-use-swiper-p #'cp/counsel-grep-use-swiper-p)
     (counsel-mode 1)))
-
-
-;; lisp-mode
-(use-package elisp-mode
-  :defer t
-  :config
-  (add-hook
-   'emacs-lisp-mode-hook
-   (lambda ()
-     (setq lisp-loop-forms-indentation 3)
-     (setq lisp-indent-function #'lisp-indent-function)
-     (setq indent-tabs-mode nil)
-     (hs-minor-mode)
-     (hs-hide-all)
-     (company-mode))))
 
 
 ;; tuareg-mode
