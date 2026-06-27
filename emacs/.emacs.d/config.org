@@ -106,6 +106,7 @@ But, having the list of files generated is kind of nice.
 - .dotfiles/emacs/.emacs.d/init-lisp/init-paren.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-winner.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-windsize.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-ibuffer-vc.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-local-overrides.el
 
 * Blocks
@@ -480,6 +481,35 @@ These are just libraries that I find useful when writing elisp.
   (provide 'init-windsize)
 #+end_src
 
+** Ibuffer
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-ibuffer-vc)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-ibuffer-vc.el
+  (use-package ibuffer-vc
+    :defer t
+    :after ibuffer
+    :preface
+    (defun cp/ibuffer-hook-setup ()
+      (ibuffer-vc-set-filter-groups-by-vc-root)
+      (unless (eq ibuffer-sorting-mode 'alphbaetic)
+        (ibuffer-do-sort-by-alphabetic)))
+    :hook
+    ((ibuffer . cp/ibuffer-hook-setup))
+    :general
+    (:keymaps '(ibuffer-mode-map)
+     :states  '(emacs)
+     "l" #'ibuffer-visit-buffer
+     "j" #'evil-next-line
+     "k" #'evil-previous-line
+     "r" #'ibuffer-update
+     )
+    )
+  (provide 'init-ibuffer-vc)
+#+end_src
+
 ** Init
 Just a monolithic import of my existing init.el that'll get cleaned up and broken into different logical sections over time.
 
@@ -763,27 +793,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
 
   (use-package dired-x
     :after (dired))
-
-
-  ;; ibuffer-vc
-  (use-package ibuffer-vc
-    :defer t
-    :general
-    (:keymaps '(ibuffer-mode-map)
-     :states  '(emacs)
-     "l" #'ibuffer-visit-buffer
-     "j" #'evil-next-line
-     "k" #'evil-previous-line
-     "r" #'ibuffer-update
-     )
-    :config
-    (progn
-      (add-hook
-       'ibuffer-hook
-       (lambda ()
-         (ibuffer-vc-set-filter-groups-by-vc-root)
-         (unless (eq ibuffer-sorting-mode 'alphbaetic)
-           (ibuffer-do-sort-by-alphabetic))))))
 
 
   ;; xcscope

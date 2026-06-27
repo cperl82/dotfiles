@@ -9,6 +9,7 @@
 (require 'init-paren)
 (require 'init-winner)
 (require 'init-windsize)
+(require 'init-ibuffer-vc)
 
 ;; cc-mode
 (defun cp/c-mode-hook-setup ()
@@ -289,27 +290,6 @@ dired-x"
 
 (use-package dired-x
   :after (dired))
-
-
-;; ibuffer-vc
-(use-package ibuffer-vc
-  :defer t
-  :general
-  (:keymaps '(ibuffer-mode-map)
-   :states  '(emacs)
-   "l" #'ibuffer-visit-buffer
-   "j" #'evil-next-line
-   "k" #'evil-previous-line
-   "r" #'ibuffer-update
-   )
-  :config
-  (progn
-    (add-hook
-     'ibuffer-hook
-     (lambda ()
-       (ibuffer-vc-set-filter-groups-by-vc-root)
-       (unless (eq ibuffer-sorting-mode 'alphbaetic)
-         (ibuffer-do-sort-by-alphabetic))))))
 
 
 ;; xcscope
