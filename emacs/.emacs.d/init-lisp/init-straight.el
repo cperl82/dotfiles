@@ -60,7 +60,6 @@
        visual-fill-column
        wgrep
        windsize
-       xcscope
        zenburn-theme))
   (straight-use-package package))
 
