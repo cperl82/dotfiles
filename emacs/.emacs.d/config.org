@@ -981,18 +981,6 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
 Just a monolithic import of my existing init.el that'll get cleaned up and broken into different logical sections over time.
 
 #+begin_src emacs-lisp :tangle init.el
-  ;; company-mode
-  (use-package company-mode
-    :defer t
-    :diminish company-mode
-    :general
-    (:keymaps '(company-active-map)
-     "M-n" nil
-     "M-p" nil
-     "C-n" #'company-select-next
-     "C-p" #'company-select-previous))
-
-
   ;; swiper / ivy / ivy-rich / counsel
   (defun cp/counsel-rg (&rest args)
     "A wrapper around `counsel-rg' that increases the level of the
