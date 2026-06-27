@@ -25,7 +25,6 @@
        diminish
        elisp-slime-nav
        embark
-       evil-smartparens
        flycheck
        go-mode
        haskell-mode
@@ -47,7 +46,6 @@
        projectile
        rust-mode
        rustic
-       smartparens
        smex
        doom-modeline
        swiper

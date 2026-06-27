@@ -12,6 +12,7 @@
 (require 'init-dired)
 (require 'init-escreen)
 (require 'init-xcscope)
+(require 'init-smartparens)
 (require 'init-evil)
 (require 'init-embark)
 (require 'init-lisp)
@@ -232,27 +233,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
 ;; kdl-mode
 (use-package kdl-mode
   :defer t)
-
-
-;; smartparens/evil-smartparens
-; consider stealing some keybindings from https://github.com/expez/evil-smartparens/issues/19
-(defun cp/enable-evil-smartparens ()
-  (progn
-    (smartparens-mode)
-    (smartparens-strict-mode)
-    (evil-smartparens-mode)))
-
-(use-package evil-smartparens
-    :after (evil)
-    :diminish evil-smartparens-mode
-    :config
-    (progn
-      (add-hook       'lisp-mode-hook #'cp/enable-evil-smartparens)
-      (add-hook 'emacs-lisp-mode-hook #'cp/enable-evil-smartparens)
-      (sp-local-pair
-       '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
-      (sp-local-pair
-       '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil)))
 
 
 ;; doom-modeline

@@ -109,6 +109,7 @@ But, having the list of files generated is kind of nice.
 - .dotfiles/emacs/.emacs.d/init-lisp/init-dired.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-escreen.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-xcscope.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-smartparens.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-evil.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-embark.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-lisp.el
