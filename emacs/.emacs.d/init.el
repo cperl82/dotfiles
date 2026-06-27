@@ -3,6 +3,7 @@
 (require 'init-emacs)
 (require 'init-hippie-exp)
 (require 'init-uniquify)
+(require 'init-paren)
 (require 'init-straight)
 (require 'init-utils)
 (require 'init-general)
@@ -123,16 +124,6 @@ single prefix argument is like having `aw-dispatch-always' set to t."
    "M-p" nil
    "C-n" #'company-select-next
    "C-p" #'company-select-previous))
-
-
-;; paren
-(use-package paren
-  :init
-  (progn
-    (setq show-paren-delay 0))
-  :config
-  (progn
-    (show-paren-mode)))
 
 
 ;; swiper / ivy / ivy-rich / counsel

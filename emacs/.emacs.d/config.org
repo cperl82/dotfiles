@@ -97,6 +97,7 @@ But, having the list of files generated is kind of nice.
 - .dotfiles/emacs/.emacs.d/init-lisp/init-general.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-utils.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-straight.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-paren.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-uniquify.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-hippie-exp.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-emacs.el
@@ -259,6 +260,21 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     (uniquify-strip-common-suffix nil)
     (uniquify-after-kill-buffer-p t))
   (provide 'init-uniquify)
+#+end_src
+
+** Paren
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-paren)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-paren.el
+  (use-package paren
+    :custom
+    (show-paren-delay 0)
+    :config
+    (show-paren-mode))
+  (provide 'init-paren)
 #+end_src
 
 ** Straight
@@ -546,16 +562,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
      "M-p" nil
      "C-n" #'company-select-next
      "C-p" #'company-select-previous))
-
-
-  ;; paren
-  (use-package paren
-    :init
-    (progn
-      (setq show-paren-delay 0))
-    :config
-    (progn
-      (show-paren-mode)))
 
 
   ;; swiper / ivy / ivy-rich / counsel
