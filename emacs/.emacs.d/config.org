@@ -169,6 +169,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     (custom-file (expand-file-name "custom.el" user-emacs-directory))
     (enable-recursive-minibuffers t)
     (gc-cons-threshold (* 100 1000 1000))
+    (grep-find-use-xargs 'gnu-sort)
     (indent-tabs-mode nil)
     (inhibit-startup-message t)
     (load-prefer-newer t)
@@ -1281,17 +1282,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
     :config
     (progn
       (add-hook 'sh-mode-hook #'cp/sh-mode-hook-setup)))
-
-
-  ;; grep
-  (use-package grep
-    :defer t
-    :general
-    (:keymaps '(grep-mode-map)
-     "SPC" nil)
-    :config
-    (progn
-      (setq grep-find-use-xargs 'gnu)))
 
 
   ;; kdl-mode

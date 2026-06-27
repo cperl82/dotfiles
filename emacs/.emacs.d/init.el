@@ -366,17 +366,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
     (add-hook 'sh-mode-hook #'cp/sh-mode-hook-setup)))
 
 
-;; grep
-(use-package grep
-  :defer t
-  :general
-  (:keymaps '(grep-mode-map)
-   "SPC" nil)
-  :config
-  (progn
-    (setq grep-find-use-xargs 'gnu)))
-
-
 ;; kdl-mode
 (use-package kdl-mode
   :defer t)

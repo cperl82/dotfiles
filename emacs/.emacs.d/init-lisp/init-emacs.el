@@ -11,6 +11,7 @@
   (custom-file (expand-file-name "custom.el" user-emacs-directory))
   (enable-recursive-minibuffers t)
   (gc-cons-threshold (* 100 1000 1000))
+  (grep-find-use-xargs 'gnu-sort)
   (indent-tabs-mode nil)
   (inhibit-startup-message t)
   (load-prefer-newer t)
