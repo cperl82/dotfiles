@@ -14,7 +14,6 @@
  ("eldoc" . "1d11743436e9ce0d11529bfdf1e548e64f31a92e")
  ("elisp-slime-nav" . "8588d80d414aee1fafce5b9da0e913612ee0bcdd")
  ("emacs-kdl-mode" . "2d849e298199f490e4894c01764a8a83decd704a")
- ("emacs-which-key" . "4790a14683a2f3e4f72ade197c78e4c0af1cdd4b")
  ("emacsmirror-mirror" . "6c387f044ab033f3a912d08b11bc565679187ba6")
  ("embark" . "a4847042ce53823624d115eebfd77eb3b4477d1b")
  ("epl" . "78ab7a85c08222cd15582a298a364774e3282ce6")

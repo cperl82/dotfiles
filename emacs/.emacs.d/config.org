@@ -107,6 +107,7 @@ But, having the list of files generated is kind of nice.
 - .dotfiles/emacs/.emacs.d/init-lisp/init-winner.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-windsize.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-ibuffer-vc.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-which-key.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-embark.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-local-overrides.el
 
@@ -302,7 +303,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          vagrant-tramp
          visual-fill-column
          wgrep
-         which-key
          windsize
          xcscope
          zenburn-theme))
@@ -515,6 +515,22 @@ These are just libraries that I find useful when writing elisp.
   (provide 'init-ibuffer-vc)
 #+end_src
 
+** Which-key
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-which-key)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-which-key.el
+  (use-package which-key
+    :demand t
+    :custom
+    (which-key-idle-delay 1.0)
+    :config
+    (which-key-mode))
+  (provide 'init-which-key)
+#+end_src
+
 ** Vertico, Consult, Embark, Orderless, Marginalia
 
 #+begin_src emacs-lisp :tangle init.el :padline no
@@ -542,16 +558,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
     :config
     (setq c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "linux")))
     (add-hook 'c-mode-hook #'cp/c-mode-hook-setup))
-
-
-  ;; which-key
-  (use-package which-key
-    :defer 5
-    :diminish which-key-mode
-    :config
-    (progn
-      (setq which-key-idle-delay 1.0)
-      (which-key-mode)))
 
 
   ;; eat

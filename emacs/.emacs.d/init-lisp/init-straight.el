@@ -64,7 +64,6 @@
        vagrant-tramp
        visual-fill-column
        wgrep
-       which-key
        windsize
        xcscope
        zenburn-theme))

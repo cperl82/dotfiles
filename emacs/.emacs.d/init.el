@@ -10,6 +10,7 @@
 (require 'init-winner)
 (require 'init-windsize)
 (require 'init-ibuffer-vc)
+(require 'init-which-key)
 (require 'init-embark)
 
 ;; cc-mode
@@ -23,16 +24,6 @@
   :config
   (setq c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "linux")))
   (add-hook 'c-mode-hook #'cp/c-mode-hook-setup))
-
-
-;; which-key
-(use-package which-key
-  :defer 5
-  :diminish which-key-mode
-  :config
-  (progn
-    (setq which-key-idle-delay 1.0)
-    (which-key-mode)))
 
 
 ;; eat
