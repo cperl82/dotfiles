@@ -1,7 +1,5 @@
 (("Emacs-wgrep" . "49f09ab9b706d2312cab1199e1eeb1bcd3f27f6f")
- ("ace-window" . "77115afc1b0b9f633084cf7479c767988106c196")
  ("annalist.el" . "134fa3f0fb91a636a1c005c483516d4b64905a6d")
- ("avy" . "933d1f36cca0f71e4acb5fac707e9ae26c536264")
  ("company-mode" . "4c08ef468678bbf3b3c9e750f6e694eea1aa8423")
  ("compat" . "6c11d1ce2c6cae75cd281d142ee7edd2781cf112")
  ("cond-let" . "09ebf1caa81c99677ce74091a23b48a28d53bcd9")
