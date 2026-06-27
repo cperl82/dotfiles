@@ -23,7 +23,6 @@
        compat
        counsel-projectile
        diminish
-       eat
        elisp-slime-nav
        embark
        evil-smartparens
