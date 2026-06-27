@@ -1,10 +1,11 @@
 ;; -*- lexical-binding: t -*-
 (add-to-list 'load-path (expand-file-name "init-lisp" user-emacs-directory))
 (require 'init-emacs)
+(require 'init-hippie-exp)
+(require 'init-uniquify)
 (require 'init-straight)
 (require 'init-utils)
 (require 'init-general)
-(require 'init-hippie-exp)
 
 ;; avy / ace-window
 (defun cp/ace-window (arg)
@@ -132,17 +133,6 @@ single prefix argument is like having `aw-dispatch-always' set to t."
   :config
   (progn
     (show-paren-mode)))
-
-
-;; uniquify
-(use-package uniquify
-  :defer t
-  :config
-  (progn
-    (setq uniquify-buffer-name-style 'post-forward
-          uniquify-separator " @"
-          uniquify-strip-common-suffix nil
-          uniquify-after-kill-buffer-p t)))
 
 
 ;; swiper / ivy / ivy-rich / counsel

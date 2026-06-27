@@ -94,10 +94,11 @@ But, having the list of files generated is kind of nice.
 #+end_src
 
 #+RESULTS: emacs-config-generate
-- .dotfiles/emacs/.emacs.d/init-lisp/init-hippie-exp.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-general.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-utils.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-straight.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-uniquify.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-hippie-exp.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-emacs.el
 - .dotfiles/emacs/.emacs.d/init.el
 - .dotfiles/emacs/.emacs.d/early-init.el
@@ -207,6 +208,49 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
              ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
 
   (provide 'init-emacs)
+#+end_src
+
+** Hippie Expand
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-hippie-exp)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-hippie-exp.el
+  (use-package hippie-exp
+    :defer t
+    :custom
+    (hippie-expand-try-functions-list
+     '(try-expand-dabbrev
+       try-expand-dabbrev-all-buffers
+       try-expand-dabbrev-from-kill
+       try-complete-file-name-partially
+       try-complete-file-name
+       try-expand-all-abbrevs
+       try-expand-list
+       try-expand-line
+       try-complete-lisp-symbol-partially
+       try-complete-lisp-symbol))
+    :bind
+    ([remap dabbrev-expand] . #'hippie-expand))
+  (provide 'init-hippie-exp)
+#+end_src
+
+** Uniquify
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-uniquify)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-uniquify.el
+  (use-package uniquify
+    :defer t
+    :custom
+    (uniquify-buffer-name-style 'post-forward)
+    (uniquify-separator " @")
+    (uniquify-strip-common-suffix nil)
+    (uniquify-after-kill-buffer-p t))
+  (provide 'init-uniquify)
 #+end_src
 
 ** Straight
@@ -374,32 +418,6 @@ These are just libraries that I find useful when writing elisp.
   (provide 'init-general)
 #+end_src
 
-** Hippie Expand
-
-#+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-hippie-exp)
-#+end_src
-
-#+begin_src emacs-lisp :tangle init-lisp/init-hippie-exp.el
-  (use-package hippie-exp
-    :defer t
-    :custom
-    (hippie-expand-try-functions-list
-     '(try-expand-dabbrev
-       try-expand-dabbrev-all-buffers
-       try-expand-dabbrev-from-kill
-       try-complete-file-name-partially
-       try-complete-file-name
-       try-expand-all-abbrevs
-       try-expand-list
-       try-expand-line
-       try-complete-lisp-symbol-partially
-       try-complete-lisp-symbol))
-    :bind
-    ([remap dabbrev-expand] . #'hippie-expand))
-  (provide 'init-hippie-exp)
-#+end_src
-
 ** Init
 Just a monolithic import of my existing init.el that'll get cleaned up and broken into different logical sections over time.
 
@@ -530,17 +548,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
     :config
     (progn
       (show-paren-mode)))
-
-
-  ;; uniquify
-  (use-package uniquify
-    :defer t
-    :config
-    (progn
-      (setq uniquify-buffer-name-style 'post-forward
-            uniquify-separator " @"
-            uniquify-strip-common-suffix nil
-            uniquify-after-kill-buffer-p t)))
 
 
   ;; swiper / ivy / ivy-rich / counsel
