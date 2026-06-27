@@ -271,7 +271,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          go-mode
          haskell-mode
          highlight-parentheses
-         ibuffer-vc
          ibuffer-projectile
          ivy-rich
          json-mode
@@ -462,6 +461,7 @@ These are just libraries that I find useful when writing elisp.
 #+begin_src emacs-lisp :tangle init-lisp/init-ibuffer-vc.el
   (use-package ibuffer-vc
     :defer t
+    :straight t
     :after ibuffer
     :preface
     (defun cp/ibuffer-hook-setup ()
