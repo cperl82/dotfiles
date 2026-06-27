@@ -162,8 +162,14 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     :preface
     (defun cp/reduce-gc-cons-threshold ()
       (setq gc-cons-threshold (* 20 1000 1000)))
+    (defun cp/enable-hideshow-and-hide-all ()
+      (hs-minor-mode)
+      (hs-hide-all))
     :custom
     (ad-redefinition-action #'accept)
+    (c-default-style '((java-mode . "java")
+                       (awk-mode . "awk")
+                       (other . "linux")))
     (column-number-mode t)
     (confirm-kill-emacs #'yes-or-no-p)
     (create-lockfiles nil)
@@ -193,7 +199,8 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     :hook
     ((emacs-startup . cp/reduce-gc-cons-threshold)
      (emacs-startup . cp/startup-time)
-     (prog-mode . turn-on-auto-fill)))
+     (prog-mode . turn-on-auto-fill)
+     (c-mode . cp/enable-hideshow-and-hide-all)))
 
   (defun cp/startup-time ()
     (message "Emacs ready in %s with %d garbage collections."
@@ -951,19 +958,6 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
 Just a monolithic import of my existing init.el that'll get cleaned up and broken into different logical sections over time.
 
 #+begin_src emacs-lisp :tangle init.el
-  ;; cc-mode
-  (defun cp/c-mode-hook-setup ()
-    (progn
-      (hs-minor-mode)
-      (hs-hide-all)))
-
-  (use-package cc-mode
-    :defer t
-    :config
-    (setq c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "linux")))
-    (add-hook 'c-mode-hook #'cp/c-mode-hook-setup))
-
-
   ;; company-mode
   (use-package company-mode
     :defer t
