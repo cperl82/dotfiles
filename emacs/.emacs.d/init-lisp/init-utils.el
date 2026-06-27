@@ -7,4 +7,7 @@
 (use-package dash
   :defer t
   :straight t)
+(use-package hydra
+  :defer t
+  :straight t)
 (provide 'init-utils)

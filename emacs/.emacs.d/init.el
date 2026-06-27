@@ -1,13 +1,13 @@
 ;; -*- lexical-binding: t -*-
 (add-to-list 'load-path (expand-file-name "init-lisp" user-emacs-directory))
 (require 'init-emacs)
+(require 'init-straight)
+(require 'init-general)
+(require 'init-utils)
 (require 'init-hippie-exp)
 (require 'init-uniquify)
 (require 'init-paren)
 (require 'init-winner)
-(require 'init-straight)
-(require 'init-utils)
-(require 'init-general)
 
 ;; cc-mode
 (defun cp/c-mode-hook-setup ()

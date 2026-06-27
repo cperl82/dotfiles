@@ -98,13 +98,13 @@ But, having the list of files generated is kind of nice.
 - .dotfiles/emacs/.emacs.d/early-init.el
 - .dotfiles/emacs/.emacs.d/init.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-emacs.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-straight.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-general.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-utils.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-hippie-exp.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-uniquify.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-paren.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-winner.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-straight.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-utils.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-general.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-local-overrides.el
 
 * Blocks
@@ -222,6 +222,170 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
   (provide 'init-emacs)
 #+end_src
 
+** Straight
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-straight)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-straight.el
+    (setq straight-cache-autoloads t
+          straight-check-for-modifications nil)
+    (defvar bootstrap-version)
+    (let ((bootstrap-file
+           (expand-file-name
+            "straight/repos/straight.el/bootstrap.el"
+            (or (bound-and-true-p straight-base-dir)
+                user-emacs-directory)))
+          (bootstrap-version 7))
+      (unless (file-exists-p bootstrap-file)
+        (with-current-buffer
+            (url-retrieve-synchronously
+             "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+             'silent 'inhibit-cookies)
+          (goto-char (point-max))
+          (eval-print-last-sexp)))
+        (load bootstrap-file nil 'nomessage))
+
+  (dolist
+      (package
+       '(annalist
+         company-mode
+         compat
+         counsel-projectile
+         diminish
+         eat
+         elisp-slime-nav
+         embark
+         evil
+         evil-collection
+         evil-smartparens
+         evil-surround
+         flycheck
+         go-mode
+         haskell-mode
+         highlight-parentheses
+         ibuffer-vc
+         ibuffer-projectile
+         ivy-rich
+         json-mode
+         lsp-mode
+         lua-mode
+         kdl-mode
+         magit
+         markdown-mode
+         nasm-mode
+         nerd-icons
+         org
+         org-super-agenda
+         org-ql
+         origami
+         projectile
+         rust-mode
+         rustic
+         smartparens
+         smex
+         doom-modeline
+         swiper
+         systemd-mode
+         systemtap-mode
+         tuareg-mode
+         undo-tree
+         unfill
+         vagrant-tramp
+         visual-fill-column
+         wgrep
+         which-key
+         windsize
+         xcscope
+         zenburn-theme))
+    (straight-use-package package))
+
+  (provide 'init-straight)
+#+end_src
+
+** General
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-general)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-general.el
+  (use-package general
+    :demand t
+    :straight t
+    :config
+    (defconst cp/normal-prefix "SPC")
+    (defconst cp/non-normal-prefix "M-SPC")
+
+    ;; Unbind existing keybindings in evil-motion-state-map
+    (general-define-key
+     :keymaps '(motion)
+     "SPC" nil
+     ","   nil
+     )
+
+    ;; Global keybindings
+    (general-define-key
+     :keymaps '(override)
+     :states '(motion insert emacs)
+     "M-o" #'other-window
+     )
+
+    (general-define-key
+     :keymaps '(override)
+     :states '(motion emacs)
+     :prefix ","
+     "h" #'swiper-isearch-thing-at-point
+     "s" #'split-window-vertically
+     "v" #'split-window-horizontally
+     "x" #'delete-window
+     "o" #'delete-other-windows
+     "j" #'dired-jump
+     "k" #'kill-buffer
+     "f" #'find-file
+     "r" #'cp/find-file-sudo
+     "w o" #'other-window
+     "w h" #'windmove-left
+     "w j" #'windmove-down
+     "w k" #'windmove-up
+     "w l" #'windmove-right
+     "w u" #'winner-undo
+     "w r" #'winner-redo
+     "w H" #'windmove-swap-states-left
+     "w J" #'windmove-swap-states-down
+     "w K" #'windmove-swap-states-up
+     "w L" #'windmove-swap-states-right
+     "w R" #'cp/hydra-windsize/body
+     )
+    )
+
+  (provide 'init-general)
+#+end_src
+
+** Utils
+These are just libraries that I find useful when writing elisp.
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-utils)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-utils.el :padline no
+  (use-package s
+    :defer t
+    :straight t)
+  (use-package f
+    :defer t
+    :straight t)
+  (use-package dash
+    :defer t
+    :straight t)
+  (use-package hydra
+    :defer t
+    :straight t)
+  (provide 'init-utils)
+#+end_src
+
 ** Hippie Expand
 
 #+begin_src emacs-lisp :tangle init.el :padline no
@@ -292,169 +456,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     :config
     (winner-mode))
   (provide 'init-winner)
-#+end_src
-
-** Straight
-
-#+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-straight)
-#+end_src
-
-#+begin_src emacs-lisp :tangle init-lisp/init-straight.el
-    (setq straight-cache-autoloads t
-          straight-check-for-modifications nil)
-    (defvar bootstrap-version)
-    (let ((bootstrap-file
-           (expand-file-name
-            "straight/repos/straight.el/bootstrap.el"
-            (or (bound-and-true-p straight-base-dir)
-                user-emacs-directory)))
-          (bootstrap-version 7))
-      (unless (file-exists-p bootstrap-file)
-        (with-current-buffer
-            (url-retrieve-synchronously
-             "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-             'silent 'inhibit-cookies)
-          (goto-char (point-max))
-          (eval-print-last-sexp)))
-        (load bootstrap-file nil 'nomessage))
-
-  (dolist
-      (package
-       '(annalist
-         company-mode
-         compat
-         counsel-projectile
-         diminish
-         eat
-         elisp-slime-nav
-         embark
-         evil
-         evil-collection
-         evil-smartparens
-         evil-surround
-         flycheck
-         go-mode
-         haskell-mode
-         highlight-parentheses
-         hydra
-         ibuffer-vc
-         ibuffer-projectile
-         ivy-rich
-         json-mode
-         lsp-mode
-         lua-mode
-         kdl-mode
-         magit
-         markdown-mode
-         nasm-mode
-         nerd-icons
-         org
-         org-super-agenda
-         org-ql
-         origami
-         projectile
-         rust-mode
-         rustic
-         smartparens
-         smex
-         doom-modeline
-         swiper
-         systemd-mode
-         systemtap-mode
-         tuareg-mode
-         undo-tree
-         unfill
-         vagrant-tramp
-         visual-fill-column
-         wgrep
-         which-key
-         windsize
-         xcscope
-         zenburn-theme))
-    (straight-use-package package))
-
-  (provide 'init-straight)
-#+end_src
-
-** Utils
-
-These are just libraries that I find useful when writing elisp.
-
-#+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-utils)
-#+end_src
-
-#+begin_src emacs-lisp :tangle init-lisp/init-utils.el :padline no
-  (use-package s
-    :defer t
-    :straight t)
-  (use-package f
-    :defer t
-    :straight t)
-  (use-package dash
-    :defer t
-    :straight t)
-  (provide 'init-utils)
-#+end_src
-
-** General
-
-#+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-general)
-#+end_src
-
-#+begin_src emacs-lisp :tangle init-lisp/init-general.el
-  (use-package general
-    :demand t
-    :straight t
-    :config
-    (defconst cp/normal-prefix "SPC")
-    (defconst cp/non-normal-prefix "M-SPC")
-
-    ;; Unbind existing keybindings in evil-motion-state-map
-    (general-define-key
-     :keymaps '(motion)
-     "SPC" nil
-     ","   nil
-     )
-
-    ;; Global keybindings
-    (general-define-key
-     :keymaps '(override)
-     :states '(motion insert emacs)
-     "M-o" #'other-window
-     )
-
-    (general-define-key
-     :keymaps '(override)
-     :states '(motion emacs)
-     :prefix ","
-     "h" #'swiper-isearch-thing-at-point
-     "s" #'split-window-vertically
-     "v" #'split-window-horizontally
-     "x" #'delete-window
-     "o" #'delete-other-windows
-     "j" #'dired-jump
-     "k" #'kill-buffer
-     "f" #'find-file
-     "r" #'cp/find-file-sudo
-     "w o" #'other-window
-     "w h" #'windmove-left
-     "w j" #'windmove-down
-     "w k" #'windmove-up
-     "w l" #'windmove-right
-     "w u" #'winner-undo
-     "w r" #'winner-redo
-     "w H" #'windmove-swap-states-left
-     "w J" #'windmove-swap-states-down
-     "w K" #'windmove-swap-states-up
-     "w L" #'windmove-swap-states-right
-     "w R" #'cp/hydra-windsize/body
-     )
-    )
-
-  (provide 'init-general)
 #+end_src
 
 ** Init

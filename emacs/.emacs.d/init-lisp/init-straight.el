@@ -34,7 +34,6 @@
        go-mode
        haskell-mode
        highlight-parentheses
-       hydra
        ibuffer-vc
        ibuffer-projectile
        ivy-rich

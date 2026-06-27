@@ -16,7 +16,7 @@
   (general-define-key
    :keymaps '(override)
    :states '(motion insert emacs)
-   "M-o" #'cp/ace-window
+   "M-o" #'other-window
    )
 
   (general-define-key
@@ -32,7 +32,7 @@
    "k" #'kill-buffer
    "f" #'find-file
    "r" #'cp/find-file-sudo
-   "w o" #'cp/ace-window
+   "w o" #'other-window
    "w h" #'windmove-left
    "w j" #'windmove-down
    "w k" #'windmove-up
