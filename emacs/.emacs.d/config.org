@@ -164,11 +164,13 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     (column-number-mode t)
     (confirm-kill-emacs #'yes-or-no-p)
     (create-lockfiles nil)
+    (custom-file (expand-file-name "custom.el" user-emacs-directory))
     (enable-recursive-minibuffers t)
     (gc-cons-threshold (* 100 1000 1000))
     (indent-tabs-mode nil)
     (inhibit-startup-message t)
     (load-prefer-newer t)
+    ;; CR-someday cperl: consider nolittering
     (make-backup-files nil)
     (native-comp-async-report-warnings-errors nil)
     (show-paren-delay 0)
@@ -1931,21 +1933,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
     (load-theme 'zenburn :no-confirm)
     (enable-theme 'zenburn)
     )
-
-
-  ;; Custom
-  (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   )
-  (custom-set-faces
-   ;; custom-set-faces was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   )
 #+end_src
 ** Local overrides
 

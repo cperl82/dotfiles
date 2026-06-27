@@ -8,11 +8,13 @@
   (column-number-mode t)
   (confirm-kill-emacs #'yes-or-no-p)
   (create-lockfiles nil)
+  (custom-file (expand-file-name "custom.el" user-emacs-directory))
   (enable-recursive-minibuffers t)
   (gc-cons-threshold (* 100 1000 1000))
   (indent-tabs-mode nil)
   (inhibit-startup-message t)
   (load-prefer-newer t)
+  ;; CR-someday cperl: consider nolittering
   (make-backup-files nil)
   (native-comp-async-report-warnings-errors nil)
   (show-paren-delay 0)
