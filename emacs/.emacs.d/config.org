@@ -105,6 +105,7 @@ But, having the list of files generated is kind of nice.
 - .dotfiles/emacs/.emacs.d/init-lisp/init-uniquify.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-paren.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-winner.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-windsize.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-local-overrides.el
 
 * Blocks
@@ -458,6 +459,26 @@ These are just libraries that I find useful when writing elisp.
   (provide 'init-winner)
 #+end_src
 
+** Windsize
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-windsize)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-windsize.el
+  (use-package windsize
+    :defer t
+    :commands (cp/hydra-windsize/body)
+    :config
+    (defhydra cp/hydra-windsize (nil nil)
+      "resize"
+      ("h" windsize-left  "left")
+      ("j" windsize-down  "down")
+      ("k" windsize-up    "up")
+      ("l" windsize-right "right")))
+  (provide 'init-windsize)
+#+end_src
+
 ** Init
 Just a monolithic import of my existing init.el that'll get cleaned up and broken into different logical sections over time.
 
@@ -473,21 +494,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
     :config
     (setq c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "linux")))
     (add-hook 'c-mode-hook #'cp/c-mode-hook-setup))
-
-
-  ;; windsize
-  (use-package windsize
-    :defer t
-    :general
-    :commands (cp/hydra-windsize/body)
-    :config
-    (progn
-      (defhydra cp/hydra-windsize (nil nil)
-        "resize"
-        ("h" windsize-left  "left")
-        ("j" windsize-down  "down")
-        ("k" windsize-up    "up")
-        ("l" windsize-right "right"))))
 
 
   ;; which-key

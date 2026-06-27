@@ -8,6 +8,7 @@
 (require 'init-uniquify)
 (require 'init-paren)
 (require 'init-winner)
+(require 'init-windsize)
 
 ;; cc-mode
 (defun cp/c-mode-hook-setup ()
@@ -20,21 +21,6 @@
   :config
   (setq c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "linux")))
   (add-hook 'c-mode-hook #'cp/c-mode-hook-setup))
-
-
-;; windsize
-(use-package windsize
-  :defer t
-  :general
-  :commands (cp/hydra-windsize/body)
-  :config
-  (progn
-    (defhydra cp/hydra-windsize (nil nil)
-      "resize"
-      ("h" windsize-left  "left")
-      ("j" windsize-down  "down")
-      ("k" windsize-up    "up")
-      ("l" windsize-right "right"))))
 
 
 ;; which-key
