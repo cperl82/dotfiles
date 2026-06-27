@@ -10,6 +10,7 @@
 (require 'init-ibuffer-vc)
 (require 'init-which-key)
 (require 'init-dired)
+(require 'init-evil)
 (require 'init-embark)
 
 ;; cc-mode
@@ -380,63 +381,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
   :defer t)
 
 
-;; evil
-; http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp
-(defmacro define-and-bind-text-object (key start-regex end-regex)
-  (let ((inner-name (make-symbol "inner-name"))
-        (outer-name (make-symbol "outer-name")))
-    `(progn
-       (evil-define-text-object ,inner-name (count &optional beg end type)
-         (evil-select-paren ,start-regex ,end-regex beg end type count nil))
-       (evil-define-text-object ,outer-name (count &optional beg end type)
-         (evil-select-paren ,start-regex ,end-regex beg end type count t))
-       (define-key evil-inner-text-objects-map ,key (quote ,inner-name))
-       (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
-
-(use-package undo-tree
-  :demand t
-  :diminish undo-tree-mode
-  :config
-  (progn
-    (setq undo-tree-auto-save-history nil)
-    (global-undo-tree-mode)))
-
-(use-package evil
-  :demand t
-  :general
-  (:keymaps '(visual)
-   "TAB" #'indent-region)
-  :init
-  (progn
-    (setq evil-want-keybinding nil
-          evil-want-integration t
-          evil-want-C-i-jump nil
-          evil-respect-visual-line-mode t))
-  :config
-  (progn
-    (evil-mode 1)
-    (evil-select-search-module 'evil-search-module 'isearch)
-    (setq evil-flash-delay 5)
-    (setq evil-move-beyond-eol t)
-    (setq evil-symbol-word-search t)
-    (setq evil-mode-line-format '(before . mode-line-mule-info))
-    (setq evil-normal-state-tag   " N"
-          evil-insert-state-tag   " I"
-          evil-visual-state-tag   " V"
-          evil-replace-state-tag  " R"
-          evil-motion-state-tag   " M"
-          evil-operator-state-tag " O"
-          evil-emacs-state-tag    " E")))
-
-
-;; evil-collection
-(use-package evil-collection
-    :after (evil)
-    :diminish evil-collection-unimpaired-mode
-    :config
-    (evil-collection-init))
-
-
 ;; smartparens/evil-smartparens
 ; consider stealing some keybindings from https://github.com/expez/evil-smartparens/issues/19
 (defun cp/enable-evil-smartparens ()
@@ -456,14 +400,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
        '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
       (sp-local-pair
        '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil)))
-
-
-;; evil-surround
-(use-package evil-surround
-  :after (evil)
-  :config
-  (progn
-    (global-evil-surround-mode 1)))
 
 
 ;; doom-modeline

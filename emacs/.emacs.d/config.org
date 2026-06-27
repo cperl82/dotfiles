@@ -107,6 +107,7 @@ But, having the list of files generated is kind of nice.
 - .dotfiles/emacs/.emacs.d/init-lisp/init-ibuffer-vc.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-which-key.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-dired.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-evil.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-embark.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-local-overrides.el
 
@@ -568,7 +569,71 @@ These are just libraries that I find useful when writing elisp.
   (provide 'init-dired)
 #+end_src
 
-** Evil
+** Evil, Undo-tree, Evil-collection, Evil-surround
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-evil)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-evil.el
+  ;; http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp
+  (defmacro define-and-bind-text-object (key start-regex end-regex)
+    (let ((inner-name (make-symbol "inner-name"))
+          (outer-name (make-symbol "outer-name")))
+      `(progn
+         (evil-define-text-object ,inner-name (count &optional beg end type)
+           (evil-select-paren ,start-regex ,end-regex beg end type count nil))
+         (evil-define-text-object ,outer-name (count &optional beg end type)
+           (evil-select-paren ,start-regex ,end-regex beg end type count t))
+         (define-key evil-inner-text-objects-map ,key (quote ,inner-name))
+         (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
+
+  (use-package undo-tree
+    :demand t
+    :custom
+    (undo-tree-auto-save-history nil)
+    :config
+    (global-undo-tree-mode))
+
+  (use-package evil
+    :demand t
+    :general
+    (:keymaps '(visual) "TAB" #'indent-region)
+    :custom
+    (evil-want-keybinding nil)
+    (evil-want-integration t)
+    (evil-want-C-i-jump nil)
+    (evil-respect-visual-line-mode t)
+    (evil-flash-delay 5)
+    (evil-move-beyond-eol t)
+    (evil-symbol-word-search t)
+    (evil-mode-line-format '(before . mode-line-mule-info))
+    :config
+    (setq evil-normal-state-tag   " N")
+    (setq evil-insert-state-tag   " I")
+    (setq evil-visual-state-tag   " V")
+    (setq evil-replace-state-tag  " R")
+    (setq evil-motion-state-tag   " M")
+    (setq evil-operator-state-tag " O")
+    (setq evil-emacs-state-tag    " E")
+    (evil-mode)
+    (evil-select-search-module 'evil-search-module 'isearch))
+
+  (use-package evil-collection
+    :demand t
+    :after evil
+    :config
+    (evil-collection-init))
+
+  (use-package evil-surround
+    :demand t
+    :after evil
+    :config
+    (global-evil-surround-mode))
+
+  (provide 'init-evil)
+#+end_src
+
 ** Vertico, Consult, Embark, Orderless, Marginalia
 
 #+begin_src emacs-lisp :tangle init.el :padline no
@@ -955,63 +1020,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
     :defer t)
 
 
-  ;; evil
-  ; http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp
-  (defmacro define-and-bind-text-object (key start-regex end-regex)
-    (let ((inner-name (make-symbol "inner-name"))
-          (outer-name (make-symbol "outer-name")))
-      `(progn
-         (evil-define-text-object ,inner-name (count &optional beg end type)
-           (evil-select-paren ,start-regex ,end-regex beg end type count nil))
-         (evil-define-text-object ,outer-name (count &optional beg end type)
-           (evil-select-paren ,start-regex ,end-regex beg end type count t))
-         (define-key evil-inner-text-objects-map ,key (quote ,inner-name))
-         (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
-
-  (use-package undo-tree
-    :demand t
-    :diminish undo-tree-mode
-    :config
-    (progn
-      (setq undo-tree-auto-save-history nil)
-      (global-undo-tree-mode)))
-
-  (use-package evil
-    :demand t
-    :general
-    (:keymaps '(visual)
-     "TAB" #'indent-region)
-    :init
-    (progn
-      (setq evil-want-keybinding nil
-            evil-want-integration t
-            evil-want-C-i-jump nil
-            evil-respect-visual-line-mode t))
-    :config
-    (progn
-      (evil-mode 1)
-      (evil-select-search-module 'evil-search-module 'isearch)
-      (setq evil-flash-delay 5)
-      (setq evil-move-beyond-eol t)
-      (setq evil-symbol-word-search t)
-      (setq evil-mode-line-format '(before . mode-line-mule-info))
-      (setq evil-normal-state-tag   " N"
-            evil-insert-state-tag   " I"
-            evil-visual-state-tag   " V"
-            evil-replace-state-tag  " R"
-            evil-motion-state-tag   " M"
-            evil-operator-state-tag " O"
-            evil-emacs-state-tag    " E")))
-
-
-  ;; evil-collection
-  (use-package evil-collection
-      :after (evil)
-      :diminish evil-collection-unimpaired-mode
-      :config
-      (evil-collection-init))
-
-
   ;; smartparens/evil-smartparens
   ; consider stealing some keybindings from https://github.com/expez/evil-smartparens/issues/19
   (defun cp/enable-evil-smartparens ()
@@ -1031,14 +1039,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
          '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
         (sp-local-pair
          '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil)))
-
-
-  ;; evil-surround
-  (use-package evil-surround
-    :after (evil)
-    :config
-    (progn
-      (global-evil-surround-mode 1)))
 
 
   ;; doom-modeline
