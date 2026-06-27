@@ -10,6 +10,7 @@
 (require 'init-winner)
 (require 'init-windsize)
 (require 'init-ibuffer-vc)
+(require 'init-embark)
 
 ;; cc-mode
 (defun cp/c-mode-hook-setup ()
@@ -1345,11 +1346,6 @@ to return a list"
 (use-package counsel-projectile
   :defer t
   :after (projectile))
-
-
-(use-package embark
-  :defer t
-  :commands (embark-act))
 
 
 ;; rust / rustic

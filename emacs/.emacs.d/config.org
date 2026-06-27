@@ -107,6 +107,7 @@ But, having the list of files generated is kind of nice.
 - .dotfiles/emacs/.emacs.d/init-lisp/init-winner.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-windsize.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-ibuffer-vc.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-embark.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-local-overrides.el
 
 * Blocks
@@ -512,6 +513,18 @@ These are just libraries that I find useful when writing elisp.
      )
     )
   (provide 'init-ibuffer-vc)
+#+end_src
+
+** Vertico, Consult, Embark, Orderless, Marginalia
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-embark)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-embark.el
+  (use-package embark
+    :defer t)
+  (provide 'init-embark)
 #+end_src
 
 ** Init
@@ -1852,11 +1865,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
   (use-package counsel-projectile
     :defer t
     :after (projectile))
-
-
-  (use-package embark
-    :defer t
-    :commands (embark-act))
 
 
   ;; rust / rustic
