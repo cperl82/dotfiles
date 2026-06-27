@@ -24,7 +24,6 @@
        company-mode
        compat
        counsel-projectile
-       dash
        diminish
        eat
        elisp-slime-nav
@@ -33,9 +32,7 @@
        evil-collection
        evil-smartparens
        evil-surround
-       f
        flycheck
-       general
        go-mode
        haskell-mode
        highlight-parentheses
@@ -58,7 +55,6 @@
        projectile
        rust-mode
        rustic
-       s
        smartparens
        smex
        doom-modeline

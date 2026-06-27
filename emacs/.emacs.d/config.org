@@ -96,6 +96,7 @@ But, having the list of files generated is kind of nice.
 #+RESULTS: emacs-config-generate
 - .dotfiles/emacs/.emacs.d/init-lisp/init-hippie-exp.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-general.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-utils.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-straight.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-emacs.el
 - .dotfiles/emacs/.emacs.d/init.el
@@ -241,7 +242,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          company-mode
          compat
          counsel-projectile
-         dash
          diminish
          eat
          elisp-slime-nav
@@ -250,9 +250,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          evil-collection
          evil-smartparens
          evil-surround
-         f
          flycheck
-         general
          go-mode
          haskell-mode
          highlight-parentheses
@@ -275,7 +273,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          projectile
          rust-mode
          rustic
-         s
          smartparens
          smex
          doom-modeline
@@ -297,6 +294,27 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
   (provide 'init-straight)
 #+end_src
 
+** Utils
+
+These are just libraries that I find useful when writing elisp.
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-utils)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-utils.el :padline no
+  (use-package s
+    :defer t
+    :straight t)
+  (use-package f
+    :defer t
+    :straight t)
+  (use-package dash
+    :defer t
+    :straight t)
+  (provide 'init-utils)
+#+end_src
+
 ** General
 
 #+begin_src emacs-lisp :tangle init.el :padline no
@@ -306,6 +324,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
 #+begin_src emacs-lisp :tangle init-lisp/init-general.el
   (use-package general
     :demand t
+    :straight t
     :config
     (defconst cp/normal-prefix "SPC")
     (defconst cp/non-normal-prefix "M-SPC")

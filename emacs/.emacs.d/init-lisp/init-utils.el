@@ -1,0 +1,10 @@
+(use-package s
+  :defer t
+  :straight t)
+(use-package f
+  :defer t
+  :straight t)
+(use-package dash
+  :defer t
+  :straight t)
+(provide 'init-utils)

@@ -2,6 +2,7 @@
 (add-to-list 'load-path (expand-file-name "init-lisp" user-emacs-directory))
 (require 'init-emacs)
 (require 'init-straight)
+(require 'init-utils)
 (require 'init-general)
 (require 'init-hippie-exp)
 
