@@ -18,9 +18,7 @@
 
 (dolist
     (package
-     '(ace-window
-       annalist
-       avy
+     '(annalist
        company-mode
        compat
        counsel-projectile

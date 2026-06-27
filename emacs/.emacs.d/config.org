@@ -321,9 +321,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
 
   (dolist
       (package
-       '(ace-window
-         annalist
-         avy
+       '(annalist
          company-mode
          compat
          counsel-projectile
@@ -425,7 +423,7 @@ These are just libraries that I find useful when writing elisp.
     (general-define-key
      :keymaps '(override)
      :states '(motion insert emacs)
-     "M-o" #'cp/ace-window
+     "M-o" #'other-window
      )
 
     (general-define-key
@@ -441,7 +439,7 @@ These are just libraries that I find useful when writing elisp.
      "k" #'kill-buffer
      "f" #'find-file
      "r" #'cp/find-file-sudo
-     "w o" #'cp/ace-window
+     "w o" #'other-window
      "w h" #'windmove-left
      "w j" #'windmove-down
      "w k" #'windmove-up
@@ -463,29 +461,6 @@ These are just libraries that I find useful when writing elisp.
 Just a monolithic import of my existing init.el that'll get cleaned up and broken into different logical sections over time.
 
 #+begin_src emacs-lisp :tangle init.el
-  ;; avy / ace-window
-  (defun cp/ace-window (arg)
-    "A Wrapper for `ace-window' that changes it's prefix handling.
-  This replaces ace-window's default prefix argument behavior such that a
-  single prefix argument is like having `aw-dispatch-always' set to t."
-    (interactive "p")
-    (cl-case arg
-      ;; Using dlet as loading of ace-window is deferred
-      (4 (dlet ((aw-dispatch-always t))
-           (ace-window 0)))
-      (t (ace-window 0))))
-
-  (use-package avy
-    :defer t)
-
-  (use-package ace-window
-    :defer t
-    :config
-    (progn
-      (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l ?\;)
-            aw-scope 'frame)))
-
-
   ;; cc-mode
   (defun cp/c-mode-hook-setup ()
     (progn

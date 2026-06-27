@@ -9,29 +9,6 @@
 (require 'init-utils)
 (require 'init-general)
 
-;; avy / ace-window
-(defun cp/ace-window (arg)
-  "A Wrapper for `ace-window' that changes it's prefix handling.
-This replaces ace-window's default prefix argument behavior such that a
-single prefix argument is like having `aw-dispatch-always' set to t."
-  (interactive "p")
-  (cl-case arg
-    ;; Using dlet as loading of ace-window is deferred
-    (4 (dlet ((aw-dispatch-always t))
-         (ace-window 0)))
-    (t (ace-window 0))))
-
-(use-package avy
-  :defer t)
-
-(use-package ace-window
-  :defer t
-  :config
-  (progn
-    (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l ?\;)
-          aw-scope 'frame)))
-
-
 ;; cc-mode
 (defun cp/c-mode-hook-setup ()
   (progn
