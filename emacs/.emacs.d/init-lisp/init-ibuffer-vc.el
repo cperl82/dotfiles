@@ -1,5 +1,6 @@
 (use-package ibuffer-vc
   :defer t
+  :straight t
   :after ibuffer
   :preface
   (defun cp/ibuffer-hook-setup ()

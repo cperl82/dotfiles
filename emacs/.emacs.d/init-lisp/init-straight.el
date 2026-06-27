@@ -30,7 +30,6 @@
        go-mode
        haskell-mode
        highlight-parentheses
-       ibuffer-vc
        ibuffer-projectile
        ivy-rich
        json-mode
