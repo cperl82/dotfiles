@@ -45,6 +45,7 @@
    "w K" #'windmove-swap-states-up
    "w L" #'windmove-swap-states-right
    "w R" #'cp/hydra-windsize/body
+   "a c" '(:package xcscope :keymap cscope-command-map :which-key "xcscope")
    )
   )
 (provide 'init-general)

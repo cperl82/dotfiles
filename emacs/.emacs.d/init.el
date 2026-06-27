@@ -11,6 +11,7 @@
 (require 'init-which-key)
 (require 'init-dired)
 (require 'init-escreen)
+(require 'init-xcscope)
 (require 'init-evil)
 (require 'init-embark)
 
@@ -170,52 +171,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
     (setq counsel-grep-base-command "rg -i -M 120 --no-heading --line-number --color never %s %s")
     (setq counsel-grep-use-swiper-p #'cp/counsel-grep-use-swiper-p)
     (counsel-mode 1)))
-
-
-;; xcscope
-(use-package xcscope
-  :defer t
-  :general
-  (:keymaps '(override)
-   :states '(normal motion emacs)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "a c" '(:keymap cscope-command-map :which-key "cscope"))
-  (:keymaps '(cscope-list-entry-keymap)
-   :states  '(normal motion)
-   "RET" #'cscope-select-entry-inplace
-   "TAB" #'cscope-select-entry-other-window
-   "o"   #'cscope-select-entry-other-window
-   "C-k" #'cscope-history-kill-file
-   "M-q" #'cscope-history-kill-result
-   "q"   #'bury-buffer
-   "Q"   #'cscope-quit
-   "d"   #'cscope-dired-directory
-   "U"   #'cscope-unset-initial-directory
-   "T"   #'cscope-tell-user-about-directory
-   "M-n" #'cscope-history-forward-file
-   "M-p" #'cscope-history-backward-file
-   "M-N" #'cscope-history-forward-result
-   "M-P" #'cscope-history-backward-result)
-  :config
-  (progn
-    (setq cscope-option-use-inverted-index t)
-    (setq cscope-edit-single-match nil)
-    (setq cscope-option-kernel-mode t)
-    (add-hook
-     'cscope-list-entry-hook
-     (lambda ()
-       ;; This should be able to be specified via `evil-set-initial-state', but that
-       ;; doesn't seem to work for the cscope buffer as it seems to be in fundamental-mode
-       ;; when evil loads for the first time.  I'm not entirely sure what is going on, but
-       ;; this works as workaround for now.
-       (evil-motion-state)
-       (setq-local
-        face-remapping-alist
-        '((cscope-separator-face   font-lock-string-face)
-          (cscope-line-number-face font-lock-string-face)
-          (cscope-file-face        font-lock-doc-face)
-          (cscope-function-face    font-lock-function-name-face)))))))
 
 
 ;; lisp-mode
