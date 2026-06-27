@@ -275,7 +275,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          diminish
          elisp-slime-nav
          embark
-         evil-smartparens
          flycheck
          go-mode
          haskell-mode
@@ -297,7 +296,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          projectile
          rust-mode
          rustic
-         smartparens
          smex
          doom-modeline
          swiper
@@ -822,6 +820,19 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
   (provide 'init-xcscope)
 #+end_src
 
+** Smartparens
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (require 'init-smartparens)
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-smartparens.el
+  (use-package smartparens
+    :defer t
+    :straight t)
+  (provide 'init-smartparens)
+#+end_src
+
 ** Evil, Undo-tree, Evil-collection, Evil-surround
 
 #+begin_src emacs-lisp :tangle init.el :padline no
@@ -927,10 +938,28 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
 
   (use-package evil-surround
     :straight t
-    :demand t
+    :defer t
     :after evil
     :config
     (global-evil-surround-mode))
+
+  (use-package evil-smartparens
+    :straight t
+    :demand t
+    :after (evil)
+    :preface
+    (defun cp/smartparens-setup ()
+      (smartparens-mode)
+      (smartparens-strict-mode)
+      (evil-smartparens-mode))
+    :hook
+    ((lisp-mode . cp/smartparens-setup)
+     (emacs-lisp-mode . cp/smartparens-setup))
+    :config
+    (sp-local-pair
+     '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
+    (sp-local-pair
+     '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil))
 
   (provide 'init-evil)
 #+end_src
@@ -1191,27 +1220,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
   ;; kdl-mode
   (use-package kdl-mode
     :defer t)
-
-
-  ;; smartparens/evil-smartparens
-  ; consider stealing some keybindings from https://github.com/expez/evil-smartparens/issues/19
-  (defun cp/enable-evil-smartparens ()
-    (progn
-      (smartparens-mode)
-      (smartparens-strict-mode)
-      (evil-smartparens-mode)))
-
-  (use-package evil-smartparens
-      :after (evil)
-      :diminish evil-smartparens-mode
-      :config
-      (progn
-        (add-hook       'lisp-mode-hook #'cp/enable-evil-smartparens)
-        (add-hook 'emacs-lisp-mode-hook #'cp/enable-evil-smartparens)
-        (sp-local-pair
-         '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
-        (sp-local-pair
-         '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil)))
 
 
   ;; doom-modeline
