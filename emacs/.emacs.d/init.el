@@ -15,19 +15,6 @@
 (require 'init-evil)
 (require 'init-embark)
 
-;; cc-mode
-(defun cp/c-mode-hook-setup ()
-  (progn
-    (hs-minor-mode)
-    (hs-hide-all)))
-
-(use-package cc-mode
-  :defer t
-  :config
-  (setq c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "linux")))
-  (add-hook 'c-mode-hook #'cp/c-mode-hook-setup))
-
-
 ;; company-mode
 (use-package company-mode
   :defer t

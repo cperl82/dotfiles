@@ -3,8 +3,14 @@
   :preface
   (defun cp/reduce-gc-cons-threshold ()
     (setq gc-cons-threshold (* 20 1000 1000)))
+  (defun cp/enable-hideshow-and-hide-all ()
+    (hs-minor-mode)
+    (hs-hide-all))
   :custom
   (ad-redefinition-action #'accept)
+  (c-default-style '((java-mode . "java")
+                     (awk-mode . "awk")
+                     (other . "linux")))
   (column-number-mode t)
   (confirm-kill-emacs #'yes-or-no-p)
   (create-lockfiles nil)
@@ -34,7 +40,8 @@
   :hook
   ((emacs-startup . cp/reduce-gc-cons-threshold)
    (emacs-startup . cp/startup-time)
-   (prog-mode . turn-on-auto-fill)))
+   (prog-mode . turn-on-auto-fill)
+   (c-mode . cp/enable-hideshow-and-hide-all)))
 
 (defun cp/startup-time ()
   (message "Emacs ready in %s with %d garbage collections."
