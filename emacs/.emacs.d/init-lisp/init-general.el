@@ -14,14 +14,14 @@
 
   ;; Global keybindings
   (general-define-key
-   :keymaps '(override)
    :states '(motion insert emacs)
+   :keymaps '(override)
    "M-o" #'other-window
    )
 
   (general-define-key
-   :keymaps '(override)
    :states '(motion emacs)
+   :keymaps '(override)
    :prefix ","
    "h" #'swiper-isearch-thing-at-point
    "s" #'split-window-vertically
@@ -47,5 +47,4 @@
    "w R" #'cp/hydra-windsize/body
    )
   )
-
 (provide 'init-general)

@@ -22,7 +22,8 @@
   :straight t
   :demand t
   :general
-  (:keymaps '(visual) "TAB" #'indent-region)
+  (:states '(visual) "TAB" #'indent-region)
+  (:states '(normal) :keymaps '(hs-minor-mode-map) "TAB" #'hs-toggle-hiding)
   :custom
   (evil-want-C-i-jump nil)
   (evil-want-keybinding nil)

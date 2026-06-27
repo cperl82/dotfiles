@@ -340,17 +340,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
           (tuareg-font-lock-attribute-face      tuareg-font-lock-governing-face)))))))
 
 
-;; hideshow
-(use-package hideshow
-  :defer t
-  :after (evil)
-  :config
-  (progn
-    (setq hs-isearch-open t)
-    (evil-define-minor-mode-key 'normal 'hs-minor-mode
-      (kbd "TAB") #'hs-toggle-hiding)))
-
-
 ;; sh-script
 (defun cp/sh-mode-hook-setup ()
   (sh-set-shell "bash")
