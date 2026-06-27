@@ -16,18 +16,6 @@
 (require 'init-embark)
 (require 'init-lisp)
 
-;; company-mode
-(use-package company-mode
-  :defer t
-  :diminish company-mode
-  :general
-  (:keymaps '(company-active-map)
-   "M-n" nil
-   "M-p" nil
-   "C-n" #'company-select-next
-   "C-p" #'company-select-previous))
-
-
 ;; swiper / ivy / ivy-rich / counsel
 (defun cp/counsel-rg (&rest args)
   "A wrapper around `counsel-rg' that increases the level of the
