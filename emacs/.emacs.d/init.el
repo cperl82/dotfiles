@@ -524,11 +524,6 @@ dired-x"
   :defer t)
 
 
-;; man
-(use-package man
-  :defer t)
-
-
 ;; evil
 ; http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp
 (defmacro define-and-bind-text-object (key start-regex end-regex)
