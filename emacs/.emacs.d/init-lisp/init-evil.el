@@ -22,8 +22,46 @@
   :straight t
   :demand t
   :general
+  ;; Unbind existing keybindings in evil-motion-state-map
+  (:states '(motion) "SPC" nil "," nil)
+  (:states '(motion insert emacs)
+   :keymaps '(override)
+   "M-o" #'other-window)
+  (:states '(motion emacs)
+   :keymaps '(override)
+   :prefix ","
+   "h" #'swiper-isearch-thing-at-point
+   "s" #'split-window-vertically
+   "v" #'split-window-horizontally
+   "x" #'delete-window
+   "o" #'delete-other-windows
+   "j" #'dired-jump
+   "k" #'kill-buffer
+   "f" #'find-file
+   "r" #'cp/find-file-sudo
+   "e" '(:package escreen :keymap escreen-map :which-key "escreen")
+   "w o" #'other-window
+   "w h" #'windmove-left
+   "w j" #'windmove-down
+   "w k" #'windmove-up
+   "w l" #'windmove-right
+   "w u" #'winner-undo
+   "w r" #'winner-redo
+   "w H" #'windmove-swap-states-left
+   "w J" #'windmove-swap-states-down
+   "w K" #'windmove-swap-states-up
+   "w L" #'windmove-swap-states-right
+   "w R" #'cp/hydra-windsize/body)
+  (:states '(motion emacs)
+   :keymaps '(override)
+   :prefix "SPC"
+   "a c" '(:package xcscope :keymap cscope-command-map :which-key "xcscope")
+   "a g r" #'cp/counsel-rg
+   "a g f" #'cp/counsel-rg-files)
+  (:states '(normal)
+   :keymaps '(hs-minor-mode-map)
+   "TAB" #'hs-toggle-hiding)
   (:states '(visual) "TAB" #'indent-region)
-  (:states '(normal) :keymaps '(hs-minor-mode-map) "TAB" #'hs-toggle-hiding)
   :custom
   (evil-want-C-i-jump nil)
   (evil-want-keybinding nil)

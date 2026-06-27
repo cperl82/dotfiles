@@ -134,13 +134,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
 (use-package counsel
   :defer t
   :diminish counsel-mode
-  :general
-  (:keymaps '(override)
-   :states '(normal motion emacs)
-   :prefix cp/normal-prefix
-   :non-normal-prefix cp/non-normal-prefix
-   "a g r" #'cp/counsel-rg
-   "a g f" #'cp/counsel-rg-files)
   :init
   (progn
     ;; Use rg instead of grep because it has the nice smart case feature
