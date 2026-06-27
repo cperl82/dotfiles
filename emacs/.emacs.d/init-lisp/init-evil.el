@@ -14,7 +14,8 @@
   (:states '(motion) "SPC" nil "," nil)
   (:states '(motion insert emacs)
    :keymaps '(override)
-   "M-o" #'other-window)
+   "M-o" #'other-window
+   "C-s" #'swiper-isearch)
   (:states '(motion emacs)
    :keymaps '(override)
    :prefix ","
@@ -60,13 +61,13 @@
   (evil-symbol-word-search t)
   (evil-mode-line-format '(before . mode-line-mule-info))
   :config
-  (setq evil-normal-state-tag   " N")
-  (setq evil-insert-state-tag   " I")
-  (setq evil-visual-state-tag   " V")
-  (setq evil-replace-state-tag  " R")
-  (setq evil-motion-state-tag   " M")
-  (setq evil-operator-state-tag " O")
-  (setq evil-emacs-state-tag    " E")
+  (setq evil-normal-state-tag   " N"
+        evil-insert-state-tag   " I"
+        evil-visual-state-tag   " V"
+        evil-replace-state-tag  " R"
+        evil-motion-state-tag   " M"
+        evil-operator-state-tag " O"
+        evil-emacs-state-tag    " E")
   (evil-mode)
   (evil-select-search-module 'evil-search-module 'isearch)
   :hook
@@ -91,11 +92,13 @@
     (push '(?* . ("*" . "*")) evil-surround-pairs-alist)
     (push '(?~ . ("~" . "~")) evil-surround-pairs-alist)
     (push '(?= . ("=" . "=")) evil-surround-pairs-alist))
+  (defun cp/evil-surround-add-elisp-mode-pairs ()
+    (push '(?` . ("`" . "'")) evil-surround-pairs-alist))
   :config
   (global-evil-surround-mode)
   :hook
-  ((org-mode . cp/evil-surround-add-org-mode-pairs))
-  )
+  ((org-mode . cp/evil-surround-add-org-mode-pairs)
+   (emacs-lisp-mode . cp/evil-surround-add-elisp-mode-pairs)))
 
 (use-package evil-smartparens
   :straight t

@@ -70,8 +70,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
   (:keymaps '(ivy-minibuffer-map)
    "<up>"   #'ivy-previous-history-element
    "<down>" #'ivy-next-history-element)
-  (:keymaps '(override)
-   "C-s"    #'swiper-isearch)
   :init
   (progn
     (setq ivy-height 10)
