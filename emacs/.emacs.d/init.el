@@ -266,11 +266,6 @@ dired-x"
    :states  '(normal motion)
    "h"   #'dired-up-directory
    "l"   #'dired-find-file
-   "n"   #'evil-search-next
-   "N"   #'evil-search-previous
-   "?"   #'evil-search-backward
-   "G"   #'evil-goto-line
-   "gg"  #'evil-goto-first-line
    "M-K" #'dired-kill-subdir
    "M-n" #'dired-next-subdir
    "M-p" #'dired-prev-subdir
