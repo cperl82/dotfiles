@@ -301,7 +301,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          visual-fill-column
          wgrep
          windsize
-         xcscope
          zenburn-theme))
     (straight-use-package package))
 
