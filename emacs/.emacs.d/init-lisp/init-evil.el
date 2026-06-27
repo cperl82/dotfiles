@@ -11,6 +11,7 @@
        (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
 
 (use-package undo-tree
+  :straight t
   :demand t
   :custom
   (undo-tree-auto-save-history nil)
@@ -18,13 +19,14 @@
   (global-undo-tree-mode))
 
 (use-package evil
+  :straight t
   :demand t
   :general
   (:keymaps '(visual) "TAB" #'indent-region)
   :custom
+  (evil-want-C-i-jump nil)
   (evil-want-keybinding nil)
   (evil-want-integration t)
-  (evil-want-C-i-jump nil)
   (evil-respect-visual-line-mode t)
   (evil-flash-delay 5)
   (evil-move-beyond-eol t)
@@ -39,15 +41,22 @@
   (setq evil-operator-state-tag " O")
   (setq evil-emacs-state-tag    " E")
   (evil-mode)
-  (evil-select-search-module 'evil-search-module 'isearch))
+  (evil-select-search-module 'evil-search-module 'isearch)
+  :hook
+  ;; CR-someday cperl: I'm not entirely sure why this is necessary, but without
+  ;; it, the edebug map doesn't get its proper position as an "intercept" map,
+  ;; which makes edebug really annoying to use
+  ((edebug-mode . evil-normalize-keymaps)))
 
 (use-package evil-collection
+  :straight t
   :demand t
   :after evil
   :config
   (evil-collection-init))
 
 (use-package evil-surround
+  :straight t
   :demand t
   :after evil
   :config

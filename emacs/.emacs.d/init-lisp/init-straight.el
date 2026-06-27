@@ -26,10 +26,7 @@
        eat
        elisp-slime-nav
        embark
-       evil
-       evil-collection
        evil-smartparens
-       evil-surround
        flycheck
        go-mode
        haskell-mode
@@ -59,7 +56,6 @@
        systemd-mode
        systemtap-mode
        tuareg-mode
-       undo-tree
        unfill
        vagrant-tramp
        visual-fill-column
