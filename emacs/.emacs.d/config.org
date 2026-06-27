@@ -15,7 +15,7 @@ If called with ~in-a-tmp-dir~ set to ~t~, it'll create a new temporary directory
 This is meant to be called via the ~call~ sites in the two subtrees below (although calling it directly from this block is equivalent to calling the first one).
 
 #+name: emacs-config-generate-and-run
-#+begin_src emacs-lisp :var in-a-tmp-dir='nil :results value verbatim
+#+begin_src emacs-lisp :var in-a-tmp-dir='nil :results value verbatim :eval no
   ;;; -*- lexical-binding: t; -*-
 
   (let* ((d (if in-a-tmp-dir
@@ -60,14 +60,14 @@ This is meant to be called via the ~call~ sites in the two subtrees below (altho
 
 *** In a reusable directory
 
-#+call: emacs-config-generate-and-run(in-a-tmp-dir='nil)
+#+call: emacs-config-generate-and-run[:eval yes](in-a-tmp-dir='nil)
 
 #+RESULTS:
 : nil
 
 *** In a temporary directory
 
-#+call: emacs-config-generate-and-run(in-a-tmp-dir='t)
+#+call: emacs-config-generate-and-run[:eval yes](in-a-tmp-dir='t)
 
 #+RESULTS:
 : nil
