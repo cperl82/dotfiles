@@ -66,6 +66,7 @@ This is meant to be called via the ~call~ sites in the two subtrees below (altho
 : nil
 
 *** In a temporary directory
+Currently this doesn't quite work well because this temporary directory will be missing ~escreen.el~. I should probably just update the code block above to explicitly copy the ~lisp~ directory into the temp dir.
 
 #+call: emacs-config-generate-and-run[:eval yes](in-a-tmp-dir='t)
 
