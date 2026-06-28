@@ -134,6 +134,8 @@ If you want to tangle to a different file, you just have to add another subtree 
 
 : :tangle "init-lisp/init-foo.el"
 
+Also we're using ~load~ instead of ~require~ for all our init files to make sure that straight's forms are reevalulated if our init file is loaded again. See [[https://github.com/radian-software/straight.el#how-does-straightel-know-what-packages-are-installed][How does straight.el know what packages are installed?]] as well as [[https://github.com/radian-software/straight.el/issues/437]["Caches are still outdated; something is seriously wrong" #437]] for why.
+
 ** Early Init
 Disable the built in emacs package manager, we're going to use another one.
 
@@ -245,7 +247,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
 ** Straight
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-straight)
+  (load "init-straight")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-straight.el
@@ -310,14 +312,12 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          windsize
          zenburn-theme))
     (straight-use-package package))
-
-  (provide 'init-straight)
 #+end_src
 
 ** General
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-general)
+  (load "init-general")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-general.el
@@ -327,14 +327,13 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     :config
     (defconst cp/normal-prefix "SPC")
     (defconst cp/non-normal-prefix "M-SPC"))
-  (provide 'init-general)
 #+end_src
 
 ** Utils
 These are just libraries that I find useful when writing elisp.
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-utils)
+  (load "init-utils")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-utils.el :padline no
@@ -350,13 +349,12 @@ These are just libraries that I find useful when writing elisp.
   (use-package hydra
     :defer t
     :straight t)
-  (provide 'init-utils)
 #+end_src
 
 ** Hippie Expand
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-hippie-exp)
+  (load "init-hippie-exp")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-hippie-exp.el
@@ -376,13 +374,12 @@ These are just libraries that I find useful when writing elisp.
        try-complete-lisp-symbol))
     :bind
     ([remap dabbrev-expand] . #'hippie-expand))
-  (provide 'init-hippie-exp)
 #+end_src
 
 ** Uniquify
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-uniquify)
+  (load "init-uniquify")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-uniquify.el
@@ -393,13 +390,12 @@ These are just libraries that I find useful when writing elisp.
     (uniquify-separator " @")
     (uniquify-strip-common-suffix nil)
     (uniquify-after-kill-buffer-p t))
-  (provide 'init-uniquify)
 #+end_src
 
 ** Windsize
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-windsize)
+  (load "init-windsize")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-windsize.el
@@ -413,13 +409,12 @@ These are just libraries that I find useful when writing elisp.
       ("j" windsize-down  "down")
       ("k" windsize-up    "up")
       ("l" windsize-right "right")))
-  (provide 'init-windsize)
 #+end_src
 
 ** Ibuffer
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-ibuffer-vc)
+  (load "init-ibuffer-vc")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-ibuffer-vc.el
@@ -443,13 +438,12 @@ These are just libraries that I find useful when writing elisp.
      "r" #'ibuffer-update
      )
     )
-  (provide 'init-ibuffer-vc)
 #+end_src
 
 ** Which-key
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-which-key)
+  (load "init-which-key")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-which-key.el
@@ -459,13 +453,12 @@ These are just libraries that I find useful when writing elisp.
     (which-key-idle-delay 1.0)
     :config
     (which-key-mode))
-  (provide 'init-which-key)
 #+end_src
 
 ** Dired
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-dired)
+  (load "init-dired")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-dired.el
@@ -524,15 +517,13 @@ These are just libraries that I find useful when writing elisp.
                                       (dired-current-directory))
                                  default-directory)))
       (async-shell-command command output-buffer error-buffer)))
-
-  (provide 'init-dired)
 #+end_src
 
 ** Escreen
 I think I can probably replace all of this with [[https://github.com/nex3/perspective-el][perspective-el]] (perhaps with some light tweaks), but for now, continue using my piles of custom code on top of escreen.
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-escreen)
+  (load "init-escreen")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-escreen.el
@@ -798,15 +789,12 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
 
   (defun cp/advice/escreen-install ()
     (cp/escreen-rename-screen nil nil t))
-
-  (provide 'init-escreen)
-
 #+end_src
 
 ** Xcscope
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-xcscope)
+  (load "init-xcscope")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-xcscope.el
@@ -817,27 +805,24 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     (cscope-option-use-inverted-index t)
     (cscope-edit-single-match nil)
     (cscope-option-kernel-mode t))
-
-  (provide 'init-xcscope)
 #+end_src
 
 ** Smartparens
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-smartparens)
+  (load "init-smartparens")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-smartparens.el
   (use-package smartparens
     :defer t
     :straight t)
-  (provide 'init-smartparens)
 #+end_src
 
 ** Evil, Undo-tree, Evil-collection, Evil-surround
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-evil)
+  (load "init-evil")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-evil.el
@@ -960,14 +945,12 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
      '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
     (sp-local-pair
      '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil))
-
-  (provide 'init-evil)
 #+end_src
 
 ** Vertico, Consult, Embark, Orderless, Marginalia
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-embark)
+  (load "init-embark")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-embark.el
@@ -982,7 +965,7 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
 *** Lisp
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-lisp)
+  (load "init-lisp")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-lisp.el
@@ -996,8 +979,6 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     :hook
     ((emacs-lisp-mode . company-mode)
      (emacs-lisp-mode . cp/enable-hideshow-and-hide-all)))
-
-  (provide 'init-lisp)
 #+end_src
 
 ** Init
@@ -1845,12 +1826,11 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
 Local overrides that I might want to vary from machine to machine. We're using ~condition-case~ here to ignore the file being potentially missing, but still throw errors if the file exists but there are errors processing the elisp within.
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-local-overrides)
+  (load "init-local-overrides")
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-local-overrides.el
   (condition-case nil
       (load-file (expand-file-name "~/.emacs.local"))
     (file-error nil))
-  (provide 'init-local-overrides)
 #+end_src
