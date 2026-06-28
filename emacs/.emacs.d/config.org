@@ -160,7 +160,7 @@ Disable the built in emacs package manager, we're going to use another one.
 This uses the ~emacs~ package, which is always available.
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (require 'init-emacs)
+  (load "init-emacs")
 #+end_src
 
 Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long or the short version of prompting (we're getting the short version by virtue of ~use-short-answers~), but it's about being prompted before quitting emacs.
@@ -245,8 +245,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
                   (revert-buffer t t t)
                 (kill-buffer b)))
              ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
-
-  (provide 'init-emacs)
 #+end_src
 
 ** Straight
