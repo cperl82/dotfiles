@@ -140,6 +140,10 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
     (setq counsel-grep-use-swiper-p #'cp/counsel-grep-use-swiper-p)
     (counsel-mode 1)))
 
+(use-package counsel-projectile
+  :defer t
+  :after (projectile))
+
 
 ;; tuareg-mode
 (defun cp/tuareg-mode-hs-forward-sexp-fun (arg)
@@ -764,12 +768,6 @@ to return a list"
           projectile-switch-project-action #'projectile-dired)
     (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
     (projectile-mode)))
-
-
-;; counsel-projectile
-(use-package counsel-projectile
-  :defer t
-  :after (projectile))
 
 
 ;; rust / rustic
