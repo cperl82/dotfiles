@@ -53,5 +53,3 @@ dired-x"
                                     (dired-current-directory))
                                default-directory)))
     (async-shell-command command output-buffer error-buffer)))
-
-(provide 'init-dired)

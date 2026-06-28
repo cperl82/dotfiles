@@ -260,5 +260,3 @@
 
 (defun cp/advice/escreen-install ()
   (cp/escreen-rename-screen nil nil t))
-
-(provide 'init-escreen)

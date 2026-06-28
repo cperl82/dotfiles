@@ -8,4 +8,3 @@
     ("j" windsize-down  "down")
     ("k" windsize-up    "up")
     ("l" windsize-right "right")))
-(provide 'init-windsize)

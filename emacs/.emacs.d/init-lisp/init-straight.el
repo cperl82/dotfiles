@@ -59,5 +59,3 @@
        windsize
        zenburn-theme))
   (straight-use-package package))
-
-(provide 'init-straight)

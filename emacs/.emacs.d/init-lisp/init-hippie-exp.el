@@ -14,4 +14,3 @@
      try-complete-lisp-symbol))
   :bind
   ([remap dabbrev-expand] . #'hippie-expand))
-(provide 'init-hippie-exp)

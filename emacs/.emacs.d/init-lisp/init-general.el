@@ -4,4 +4,3 @@
   :config
   (defconst cp/normal-prefix "SPC")
   (defconst cp/non-normal-prefix "M-SPC"))
-(provide 'init-general)

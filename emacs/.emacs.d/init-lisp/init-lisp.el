@@ -8,5 +8,3 @@
   :hook
   ((emacs-lisp-mode . company-mode)
    (emacs-lisp-mode . cp/enable-hideshow-and-hide-all)))
-
-(provide 'init-lisp)

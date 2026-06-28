@@ -10,4 +10,3 @@
 (use-package hydra
   :defer t
   :straight t)
-(provide 'init-utils)

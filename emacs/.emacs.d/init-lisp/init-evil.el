@@ -117,5 +117,3 @@
    '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
   (sp-local-pair
    '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "`" nil :actions nil))
-
-(provide 'init-evil)

@@ -18,4 +18,3 @@
    "r" #'ibuffer-update
    )
   )
-(provide 'init-ibuffer-vc)
