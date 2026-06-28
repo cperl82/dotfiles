@@ -77,5 +77,3 @@ smaller than 120.
                 (revert-buffer t t t)
               (kill-buffer b)))
            ((eq major-mode 'dired-mode) (revert-buffer t t t)))))))
-
-(provide 'init-emacs)

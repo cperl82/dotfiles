@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t -*-
 (add-to-list 'load-path (expand-file-name "init-lisp" user-emacs-directory))
-(require 'init-emacs)
+(load "init-emacs")
 (load "init-straight")
 (load "init-general")
 (load "init-utils")
