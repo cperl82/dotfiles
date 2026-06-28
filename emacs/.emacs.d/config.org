@@ -37,10 +37,15 @@ This is meant to be called via the ~call~ sites in the two subtrees below (altho
             (file-name-concat d f-without-default-dir)
             (cdr entry))))
        result))
-    (when (not in-a-tmp-dir)
-      ;; These need to be kept in sync with the files you're tangling
-      ;; the code blocks into
+    (if in-a-tmp-dir
+        ;; Copy in lisp that we've added to our repo manually
+        (copy-directory
+         (file-name-concat (file-name-directory user-init-file) "lisp")
+         (file-name-concat d "lisp")
+         nil t t)
       (ignore-errors
+        ;; These need to be kept in sync with the files you're tangling
+        ;; the code blocks into
         (delete-file (file-name-concat d "early-init.el"))
         (delete-file (file-name-concat d "init.el"))
         (delete-directory (file-name-concat d "init-lisp") t)))
@@ -66,7 +71,6 @@ This is meant to be called via the ~call~ sites in the two subtrees below (altho
 : nil
 
 *** In a temporary directory
-Currently this doesn't quite work well because this temporary directory will be missing ~escreen.el~. I should probably just update the code block above to explicitly copy the ~lisp~ directory into the temp dir.
 
 #+call: emacs-config-generate-and-run[:eval yes](in-a-tmp-dir='t)
 
