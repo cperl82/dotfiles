@@ -37,18 +37,17 @@ This is meant to be called via the ~call~ sites in the two subtrees below (altho
             (file-name-concat d f-without-default-dir)
             (cdr entry))))
        result))
-    (if in-a-tmp-dir
-        ;; Copy in lisp that we've added to our repo manually
-        (copy-directory
-         (file-name-concat (file-name-directory user-init-file) "lisp")
-         (file-name-concat d "lisp")
-         nil t t)
-      (ignore-errors
-        ;; These need to be kept in sync with the files you're tangling
-        ;; the code blocks into
-        (delete-file (file-name-concat d "early-init.el"))
-        (delete-file (file-name-concat d "init.el"))
-        (delete-directory (file-name-concat d "init-lisp") t)))
+    ;; Delete the stuff we're tangling and the lisp we're copying in below
+    (ignore-errors
+      (delete-file (file-name-concat d "early-init.el"))
+      (delete-file (file-name-concat d "init.el"))
+      (delete-directory (file-name-concat d "init-lisp") t)
+      (delete-directory (file-name-concat d "lisp") t))
+    ;; Copy in lisp that we've added to our repo manually
+    (copy-directory
+     (file-name-concat (file-name-directory user-init-file) "lisp")
+     (file-name-concat d "lisp")
+     nil t t)
     (unwind-protect
         (progn
           (advice-add 'org-babel-tangle-collect-blocks
