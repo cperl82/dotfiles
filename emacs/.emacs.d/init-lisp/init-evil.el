@@ -85,7 +85,7 @@
 
 (use-package evil-surround
   :straight t
-  :defer t
+  :demand t
   :after evil
   :preface
   (defun cp/evil-surround-add-org-mode-pairs ()
