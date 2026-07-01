@@ -956,7 +956,13 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     :custom
     (evil-collection-want-unimpaired-p nil)
     :config
-    (evil-collection-init))
+    (defun cp/evil-collection-setup (&rest _)
+      ;; org-agenda-mode evil-collection overrides
+      (evil-collection-define-key 'normal 'org-agenda-mode-map
+        "S" #'cp/org-save-all-org-buffers-and-commit))
+    (evil-collection-init)
+    :hook
+    ((evil-collection-setup . cp/evil-collection-setup)))
 
   (use-package evil-surround
     :straight t
@@ -1036,18 +1042,6 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
 #+begin_src emacs-lisp :tangle init-lisp/init-org.el
   (use-package org
     :defer t
-    :general
-    (:keymaps '(org-agenda-mode-map)
-     :states  '(emacs)
-     "j"       #'org-agenda-next-line
-     "k"       #'org-agenda-previous-line
-     "h"       #'left-char
-     "l"       #'right-char
-     "G"       #'evil-goto-line
-     "gg"      #'evil-goto-first-line
-     "C-c a"   #'org-agenda
-     "C-c c"   #'org-capture
-     "s"       #'cp/org-save-all-org-buffers-and-commit)
     :config
     (progn
       (use-package appt
