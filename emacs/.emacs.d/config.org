@@ -18,6 +18,10 @@ This is meant to be called via the ~call~ sites in the two subtrees below (altho
 #+begin_src emacs-lisp :var in-a-tmp-dir='nil :results value verbatim :eval no
   ;;; -*- lexical-binding: t; -*-
 
+  ;; CR cperl: You might want to come up with an automated way to run
+  ;; the equivalent of `straight-thaw-versions' and `straight-check-all'
+  ;; if you're not running from a temp dir to make sure you have the
+  ;; same versions of the packages that your real configuration will use.
   (let* ((d (if in-a-tmp-dir
                 (make-temp-file "emacs.d-" t)
               (expand-file-name "~/emacs.d-dev")))
@@ -26,6 +30,29 @@ This is meant to be called via the ~call~ sites in the two subtrees below (altho
           `((,(regexp-quote buffer-name)
              . (display-buffer-no-window . ((allow-no-window . t)))))))
     (make-directory d t)
+    (make-directory (file-name-concat d "straight" "versions") t)
+    ;; Delete the stuff we're tangling and the lisp we're copying in below
+    (ignore-errors
+      (delete-file (file-name-concat d "early-init.el"))
+      (delete-file (file-name-concat d "init.el"))
+      (delete-directory (file-name-concat d "init-lisp") t)
+      (delete-directory (file-name-concat d "lisp") t)
+      (delete-directory (file-name-concat d "straight" "versions") t))
+    ;; Copy in lisp that we've added to our repo manually
+    (copy-directory
+     (file-name-concat (file-name-directory user-init-file) "lisp")
+     (file-name-concat d "lisp")
+     nil t t)
+    ;; Straight versions
+    (copy-directory
+     (file-name-concat
+      (file-name-directory user-init-file)
+      "straight"
+      "versions")
+     (file-name-concat
+      d
+      "straight"
+      "versions"))
     (defun cp/org-babel-tangle-collect-blocks-advice (result)
       (mapcar
        (lambda (entry)
@@ -37,17 +64,6 @@ This is meant to be called via the ~call~ sites in the two subtrees below (altho
             (file-name-concat d f-without-default-dir)
             (cdr entry))))
        result))
-    ;; Delete the stuff we're tangling and the lisp we're copying in below
-    (ignore-errors
-      (delete-file (file-name-concat d "early-init.el"))
-      (delete-file (file-name-concat d "init.el"))
-      (delete-directory (file-name-concat d "init-lisp") t)
-      (delete-directory (file-name-concat d "lisp") t))
-    ;; Copy in lisp that we've added to our repo manually
-    (copy-directory
-     (file-name-concat (file-name-directory user-init-file) "lisp")
-     (file-name-concat d "lisp")
-     nil t t)
     (unwind-protect
         (progn
           (advice-add 'org-babel-tangle-collect-blocks
