@@ -12,12 +12,14 @@
   :general
   ;; Unbind existing keybindings in evil-motion-state-map
   (:states '(motion) "SPC" nil "," nil)
-  (:states '(motion insert emacs)
-   :keymaps '(override)
+  ;; Global overrides
+  (:keymaps '(override)
+   :states '(motion insert emacs)
    "M-o" #'other-window
    "C-s" #'swiper-isearch)
-  (:states '(motion emacs)
-   :keymaps '(override)
+  ;; , leader
+  (:keymaps '(override)
+   :states '(motion emacs)
    :prefix ","
    "h" #'swiper-isearch-thing-at-point
    "s" #'split-window-vertically
@@ -41,15 +43,56 @@
    "w K" #'windmove-swap-states-up
    "w L" #'windmove-swap-states-right
    "w R" #'cp/hydra-windsize/body)
-  (:states '(motion emacs)
-   :keymaps '(override)
+  ;; SPC leader
+  (:keymaps '(override)
+   :states '(motion emacs)
    :prefix "SPC"
    "a c" '(:package xcscope :keymap cscope-command-map :which-key "xcscope")
    "a g r" #'cp/counsel-rg
    "a g f" #'cp/counsel-rg-files)
+  ;; hideshow
   (:states '(normal)
    :keymaps '(hs-minor-mode-map)
    "TAB" #'hs-toggle-hiding)
+  ;; org
+  (:keymaps '(org-mode-map)
+   :states  '(motion)
+   "TAB"     #'org-cycle
+   "M-h"     #'org-metaleft
+   "M-j"     #'org-metadown
+   "M-k"     #'org-metaup
+   "M-l"     #'org-metaright
+   "M-H"     #'org-shiftmetaleft
+   "M-J"     #'org-shiftmetadown
+   "M-K"     #'org-shiftmetaup
+   "M-L"     #'org-shiftmetaright
+   "C-c a"   #'org-agenda
+   "C-c c"   #'org-capture)
+  (:keymaps '(org-mode-map)
+   :states  '(motion)
+   :prefix cp/normal-prefix
+   "o"       '(:ignore t :which-key "org")
+   "o p"     #'org-previous-link
+   "o n"     #'org-next-link
+   "o a"     #'org-agenda
+   "o t"     #'org-todo
+   "o T"     #'org-set-tags
+   "o P"     #'org-set-property
+   "o s"     #'cp/org-sort-entries
+   "o h"     #'org-metaleft
+   "o j"     #'org-metadown
+   "o k"     #'org-metaup
+   "o l"     #'org-metaright
+   "o H"     #'org-shiftmetaleft
+   "o J"     #'org-shiftmetadown
+   "o K"     #'org-shiftmetaup
+   "o L"     #'org-shiftmetaright
+   "o c"     #'cp/org-save-all-org-buffers-and-commit)
+  (:keymaps '(org-mode-map)
+   :states  '(insert)
+   "M-RET"   #'org-meta-return
+   "M-."     #'cp/org-surround-tilda
+   "M-,"     #'cp/org-surround-equal)
   (:states '(visual) "TAB" #'indent-region)
   :custom
   (evil-want-C-i-jump nil)
@@ -69,7 +112,6 @@
         evil-operator-state-tag " O"
         evil-emacs-state-tag    " E")
   (evil-mode)
-  (evil-select-search-module 'evil-search-module 'isearch)
   :hook
   ;; CR-someday cperl: I'm not entirely sure why this is necessary, but without
   ;; it, the edebug map doesn't get its proper position as an "intercept" map,
@@ -80,6 +122,8 @@
   :straight t
   :demand t
   :after evil
+  :custom
+  (evil-collection-want-unimpaired-p nil)
   :config
   (evil-collection-init))
 
