@@ -125,7 +125,13 @@
   :custom
   (evil-collection-want-unimpaired-p nil)
   :config
-  (evil-collection-init))
+  (defun cp/evil-collection-setup (&rest _)
+    ;; org-agenda-mode evil-collection overrides
+    (evil-collection-define-key 'normal 'org-agenda-mode-map
+      "S" #'cp/org-save-all-org-buffers-and-commit))
+  (evil-collection-init)
+  :hook
+  ((evil-collection-setup . cp/evil-collection-setup)))
 
 (use-package evil-surround
   :straight t

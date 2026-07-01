@@ -1,17 +1,5 @@
 (use-package org
   :defer t
-  :general
-  (:keymaps '(org-agenda-mode-map)
-   :states  '(emacs)
-   "j"       #'org-agenda-next-line
-   "k"       #'org-agenda-previous-line
-   "h"       #'left-char
-   "l"       #'right-char
-   "G"       #'evil-goto-line
-   "gg"      #'evil-goto-first-line
-   "C-c a"   #'org-agenda
-   "C-c c"   #'org-capture
-   "s"       #'cp/org-save-all-org-buffers-and-commit)
   :config
   (progn
     (use-package appt
