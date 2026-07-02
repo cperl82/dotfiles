@@ -18,10 +18,6 @@ This is meant to be called via the ~call~ sites in the two subtrees below (altho
 #+begin_src emacs-lisp :var in-a-tmp-dir='nil :results value verbatim :eval no
   ;;; -*- lexical-binding: t; -*-
 
-  ;; CR cperl: You might want to come up with an automated way to run
-  ;; the equivalent of `straight-thaw-versions' and `straight-check-all'
-  ;; if you're not running from a temp dir to make sure you have the
-  ;; same versions of the packages that your real configuration will use.
   (let* ((d (if in-a-tmp-dir
                 (make-temp-file "emacs.d-" t)
               (expand-file-name "~/emacs.d-dev")))
