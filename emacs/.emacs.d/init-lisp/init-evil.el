@@ -50,6 +50,8 @@
    "a c" '(:package xcscope :keymap cscope-command-map :which-key "xcscope")
    "a g r" #'cp/counsel-rg
    "a g f" #'cp/counsel-rg-files)
+  ;; visual tab indent
+  (:states '(visual) "TAB" #'indent-region)
   ;; hideshow
   (:states '(normal)
    :keymaps '(hs-minor-mode-map)
@@ -93,7 +95,10 @@
    "M-RET"   #'org-meta-return
    "M-."     #'cp/org-surround-tilda
    "M-,"     #'cp/org-surround-equal)
-  (:states '(visual) "TAB" #'indent-region)
+  (:keymaps '(org-agenda-mode-map)
+   :states  '(motion)
+   "C-c a"   #'org-agenda
+   "C-c c"   #'org-capture)
   :custom
   (evil-want-C-i-jump nil)
   (evil-want-keybinding nil)
