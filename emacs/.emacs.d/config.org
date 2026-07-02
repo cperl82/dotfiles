@@ -1119,7 +1119,6 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     (setq org-ctrl-k-protect-subtree t)
     (setq org-cycle-include-plain-lists 'integrate)
     (setq org-hide-leading-stars t)
-    (setq org-link-make-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
     ;; CR cperl: Perhaps update this so it only does this if it
     ;; detects that `~/org' points at Dropbox
     (setq auto-revert-notify-exclude-dir-regexp
@@ -1226,22 +1225,6 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
   (defun cp/org-echo-link-at-point ()
     (let ((raw-link (org-element-property :raw-link (org-element-context))))
       (message "%s" raw-link)))
-
-  (defun cp/org-echo-link-matching (regex)
-      (let ((raw-link (org-element-property :raw-link (org-element-context))))
-        (when (s-matches? regex raw-link)
-          (cp/org-echo-link-at-point))))
-
-  (defun cp/org-link-auto-desc-from-abbrev-tags (link desc)
-    (let ((abbrevs
-           (append (mapcar 'car org-link-abbrev-alist-local)
-                   (mapcar 'car org-link-abbrev-alist))))
-      (catch 'found
-        (dolist (abbrev abbrevs)
-          (let ((s (format "^%s:\\(.+\\)" abbrev)))
-            (when (string-match s link)
-              (throw 'found (match-string 1 link)))))
-        desc)))
 
   (defun cp/org-surround (c)
     (let ((spc (looking-back " " nil)))
