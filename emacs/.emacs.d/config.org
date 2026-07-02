@@ -1115,7 +1115,7 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
                           (org-time-from-absolute date)))))
     (setq org-agenda-remove-tags t)
     (setq org-agenda-show-future-repeats nil)
-    (setq org-agenda-hide-tags-regexp (format "^%s$" (regexp-opt '("ATTACH"))))
+    (setq org-agenda-hide-tags-regexp (rx line-start (or "ATTACH") line-end))
     (add-hook 'org-agenda-finalize-hook #'cp/org-agenda-delete-empty-blocks)
     (setq org-tags-column -80)
     (setq org-log-into-drawer t)
