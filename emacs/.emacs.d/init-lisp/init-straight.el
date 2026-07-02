@@ -39,8 +39,6 @@
        markdown-mode
        nasm-mode
        nerd-icons
-       org
-       org-super-agenda
        org-ql
        origami
        projectile
@@ -54,7 +52,6 @@
        tuareg-mode
        unfill
        vagrant-tramp
-       visual-fill-column
        wgrep
        windsize
        zenburn-theme))

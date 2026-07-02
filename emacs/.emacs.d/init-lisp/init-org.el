@@ -1,4 +1,5 @@
 (use-package org
+  :straight t
   :defer t
   :config
   (setq org-adapt-indentation nil)
@@ -133,6 +134,12 @@
 
 (use-package ol-man
   :after org)
+
+(use-package visual-fill-column
+  :straight t)
+
+(use-package org-super-agenda
+  :straight t)
 
 (use-package appt
   :after org

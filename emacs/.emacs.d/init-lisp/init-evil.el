@@ -159,7 +159,7 @@
 (use-package evil-smartparens
   :straight t
   :demand t
-  :after (evil)
+  :after evil
   :preface
   (defun cp/smartparens-setup ()
     (smartparens-mode)

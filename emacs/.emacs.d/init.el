@@ -91,7 +91,7 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
   )
 
 (use-package ivy-rich
-  :after (ivy)
+  :after ivy
   :config
   (progn
     (let ((switch-buffer-prefs
@@ -144,7 +144,7 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
 
 (use-package counsel-projectile
   :defer t
-  :after (projectile))
+  :after projectile)
 
 
 ;; tuareg-mode
@@ -241,7 +241,7 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
 
 ;; doom-modeline
 (use-package doom-modeline
-    :after (evil)
+    :after evil
     :init
     (progn
       (setq doom-modeline-icon nil)
@@ -254,7 +254,7 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
 
 (use-package rustic-mode
   :defer t
-  :after (rust-mode)
+  :after rust-mode
   :config
   (progn
     (add-hook
