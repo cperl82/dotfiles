@@ -336,14 +336,13 @@ The key is the todo keyword and the value is its relative position in the list."
 (defun cp/org-save-all-org-buffers-and-commit ()
   (interactive)
   (org-save-all-org-buffers)
-  (let* ((lines
-          (->>
-           (process-lines "git" "status" "--porcelain")
-           (-map #'s-trim))))
-    (if (> (length lines) 0)
-        (progn
-          (process-lines "git" "commit" "-a" "-m" "Automatic commit")
-          t))))
+  (let ((lines
+         (->>
+          (process-lines "git" "status" "--porcelain")
+          (-map #'s-trim))))
+    (when (> (length lines) 0)
+      (process-lines "git" "commit" "-a" "-m" "Automatic commit")
+      t)))
 
 (defun cp/advice/org-archive--compute-location (location)
   "A function for use as :filter-args advice on `org-archive--compute-location'.
