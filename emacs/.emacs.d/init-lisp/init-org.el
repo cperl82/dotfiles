@@ -57,7 +57,6 @@
   (setq org-ctrl-k-protect-subtree t)
   (setq org-cycle-include-plain-lists 'integrate)
   (setq org-hide-leading-stars t)
-  (setq org-link-make-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
   ;; CR cperl: Perhaps update this so it only does this if it
   ;; detects that `~/org' points at Dropbox
   (setq auto-revert-notify-exclude-dir-regexp
@@ -164,22 +163,6 @@
 (defun cp/org-echo-link-at-point ()
   (let ((raw-link (org-element-property :raw-link (org-element-context))))
     (message "%s" raw-link)))
-
-(defun cp/org-echo-link-matching (regex)
-    (let ((raw-link (org-element-property :raw-link (org-element-context))))
-      (when (s-matches? regex raw-link)
-        (cp/org-echo-link-at-point))))
-
-(defun cp/org-link-auto-desc-from-abbrev-tags (link desc)
-  (let ((abbrevs
-         (append (mapcar 'car org-link-abbrev-alist-local)
-                 (mapcar 'car org-link-abbrev-alist))))
-    (catch 'found
-      (dolist (abbrev abbrevs)
-        (let ((s (format "^%s:\\(.+\\)" abbrev)))
-          (when (string-match s link)
-            (throw 'found (match-string 1 link)))))
-      desc)))
 
 (defun cp/org-surround (c)
   (let ((spc (looking-back " " nil)))
@@ -297,13 +280,16 @@ The key is the todo keyword and the value is its relative position in the list."
   (org-agenda-to-appt))
 
 (defun cp/org-appt-disp-window (min-to-app new-time msg)
-  ;; Add code here to encode the logic of displaying the appt notification.
-  ;; You have to test whether `min-to-app' is a list or an atom, which can be done with `atom'
-  ;; You'll need to think about how you want to override behavior for your various use cases
+  ;; Add code here to encode the logic of displaying the appt
+  ;; notification.  You have to test whether `min-to-app' is a list or
+  ;; an atom, which can be done with `atom' You'll need to think about
+  ;; how you want to override behavior for your various use cases
   ;;
-  ;; If min-to-app is a list, then it means there are multiple notifications and you should handle them all.
+  ;; If min-to-app is a list, then it means there are multiple
+  ;; notifications and you should handle them all.
   ;;
   ;; Example:
+  ;;
   ;; ("5" "5") "Thu Jan 17 " (#("06:55 Foo" 6 9 (org-heading t org-category "foo" face org-level-1 fontified t)) #("06:55 Bar" 6 9 (org-heading t org-category "foo" face org-level-1 fontified t)))
   (message "%S %S %S" min-to-app new-time msg)
   t)
