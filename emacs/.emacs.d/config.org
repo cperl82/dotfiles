@@ -334,6 +334,12 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
 
 ** General
 
+We're ammending the recipe for general below to use ~:nonrecursive~ because otherwise straight will clone it's ~makem~ git submodule. That submodule isn't needed to use the package (it's needed to develop the package) and we can wind up with the submodule checked out to the wrong revision, leading straight to tell us the worktree is dirty when it's actually fine.
+
+It's possible that ~straight-thaw-versions~ should also call something like ~git submodule update~ when checking out a different revision, but I haven't dug into it much.
+
+It's a similar issue to [[https://github.com/karthink/gptel/issues/716][test submodule marks repo as dirty in straight.el #716]] in gptel.
+
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-general")
 #+end_src
