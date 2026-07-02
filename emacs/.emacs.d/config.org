@@ -1130,7 +1130,7 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
           (concat
            auto-revert-notify-exclude-dir-regexp
            "\\|"
-           (rx (: bol (0+ "/" (1+ anything)) "/" "org" "/"))))
+           (rx line-start (0+ "/" (1+ anything)) "/" "org" "/")))
     ;; Ensure certain files are opened in certain apps
     (add-to-list 'org-file-apps '("\\.png\\'" . "eog %s"))
     (add-to-list 'org-file-apps '("\\.jpe?g\\'" . "eog %s"))
