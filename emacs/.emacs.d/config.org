@@ -1058,6 +1058,26 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     ((emacs-lisp-mode . company-mode)
      (emacs-lisp-mode . cp/enable-hideshow-and-hide-all)))
 #+end_src
+
+*** Shell
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-shell")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-shell.el
+  (use-package sh-script
+    :defer t
+    :preface
+    (defun cp/sh-mode-setup ()
+      (sh-set-shell "bash")
+      (flycheck-mode)
+      (flycheck-select-checker 'sh-shellcheck)
+      (sh-electric-here-document-mode -1))
+    :hook
+    ((sh-mode . cp/sh-mode-setup)
+     (sh-mode . cp/enable-hideshow-and-hide-all)))
+#+end_src
+
 ** Org mode
 
 #+begin_src emacs-lisp :tangle init.el :padline no
@@ -1733,21 +1753,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
           '((tuareg-font-double-colon-face        tuareg-font-lock-governing-face)
             (tuareg-font-lock-extension-node-face tuareg-font-lock-governing-face)
             (tuareg-font-lock-attribute-face      tuareg-font-lock-governing-face)))))))
-
-
-  ;; sh-script
-  (defun cp/sh-mode-hook-setup ()
-    (sh-set-shell "bash")
-    (flycheck-mode)
-    (flycheck-select-checker 'sh-shellcheck)
-    (hs-minor-mode)
-    (hs-hide-all))
-
-  (use-package sh-script
-    :defer t
-    :config
-    (progn
-      (add-hook 'sh-mode-hook #'cp/sh-mode-hook-setup)))
 
 
   ;; kdl-mode
