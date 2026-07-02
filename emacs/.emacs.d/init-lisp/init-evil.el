@@ -48,6 +48,7 @@
    :states '(motion emacs)
    :prefix "SPC"
    "a c" '(:package xcscope :keymap cscope-command-map :which-key "xcscope")
+   "a p" '(:package projectile :keymap projectile-command-map :which-key "projectile")
    "a g r" #'cp/counsel-rg
    "a g f" #'cp/counsel-rg-files)
   ;; visual tab indent
