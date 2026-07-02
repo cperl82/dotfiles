@@ -1009,7 +1009,7 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
   (use-package evil-smartparens
     :straight t
     :demand t
-    :after (evil)
+    :after evil
     :preface
     (defun cp/smartparens-setup ()
       (smartparens-mode)
@@ -1607,7 +1607,7 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
     )
 
   (use-package ivy-rich
-    :after (ivy)
+    :after ivy
     :config
     (progn
       (let ((switch-buffer-prefs
@@ -1660,7 +1660,7 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
 
   (use-package counsel-projectile
     :defer t
-    :after (projectile))
+    :after projectile)
 
 
   ;; tuareg-mode
@@ -1757,7 +1757,7 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
 
   ;; doom-modeline
   (use-package doom-modeline
-      :after (evil)
+      :after evil
       :init
       (progn
         (setq doom-modeline-icon nil)
@@ -1770,7 +1770,7 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
 
   (use-package rustic-mode
     :defer t
-    :after (rust-mode)
+    :after rust-mode
     :config
     (progn
       (add-hook
