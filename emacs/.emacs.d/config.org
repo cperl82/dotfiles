@@ -73,9 +73,12 @@ This is meant to be called via the ~call~ sites in the two subtrees below (altho
       (advice-remove 'org-babel-tangle-collect-blocks
                      #'cp/org-babel-tangle-collect-blocks-advice)
       (fmakunbound #'cp/org-babel-tangle-collect-blocks-advice))
-    (async-shell-command
-     (format "alacritty -e emacs -nw --init-directory '%s'" d)
-     buffer-name))
+    (let* ((base (format "alacritty -e emacs -nw --init-directory '%s'" d))
+           (cmd
+            (if in-a-tmp-dir
+                base
+              (format "%s --eval '(straight-thaw-versions)'" base))))
+      (async-shell-command cmd buffer-name)))
 #+end_src
 
 *** In a reusable directory
