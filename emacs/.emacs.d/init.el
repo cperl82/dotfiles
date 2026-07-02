@@ -16,6 +16,7 @@
 (load "init-evil")
 (load "init-embark")
 (load "init-lisp")
+(load "init-shell")
 (load "init-org")
 (load "init-projectile")
 
@@ -217,21 +218,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
         '((tuareg-font-double-colon-face        tuareg-font-lock-governing-face)
           (tuareg-font-lock-extension-node-face tuareg-font-lock-governing-face)
           (tuareg-font-lock-attribute-face      tuareg-font-lock-governing-face)))))))
-
-
-;; sh-script
-(defun cp/sh-mode-hook-setup ()
-  (sh-set-shell "bash")
-  (flycheck-mode)
-  (flycheck-select-checker 'sh-shellcheck)
-  (hs-minor-mode)
-  (hs-hide-all))
-
-(use-package sh-script
-  :defer t
-  :config
-  (progn
-    (add-hook 'sh-mode-hook #'cp/sh-mode-hook-setup)))
 
 
 ;; kdl-mode
