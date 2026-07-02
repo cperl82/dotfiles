@@ -342,7 +342,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
 #+begin_src emacs-lisp :tangle init-lisp/init-general.el
   (use-package general
     :demand t
-    :straight t
+    :straight (:nonrecursive t)
     :config
     (defconst cp/normal-prefix "SPC")
     (defconst cp/non-normal-prefix "M-SPC"))
