@@ -7,6 +7,8 @@
   (setq org-startup-folded t)
   (setq org-todo-keywords
         '((sequence "NEXT(n)" "DFER(r)" "WAIT(w)" "DPND(x)" "|" "DONE(d!)" "CNCL(c!)")))
+  ;; CR-someday cperl: These should really be a part of whatever theme you're
+  ;; loading, not just set unconditionally
   (setq org-todo-keyword-faces
         '(("DFER" . "#B06060")
           ("WAIT" . "#8C5353")
@@ -24,6 +26,9 @@
   (setq org-hide-block-startup t)
   (setq org-refile-targets '((org-agenda-files . (:maxlevel . 5))))
   (setq org-agenda-restore-windows-after-quit t)
+  ;; CR-someday cperl: Consider setting this via .dir-locals.el as
+  ;; sometimes you'll fire up an instance of emacs futzing with an org
+  ;; file and it has nothing to do with your personal org files.
   (setq org-agenda-files (file-expand-wildcards "~/org/*.org" t))
   (setq org-agenda-block-separator ?-)
   (setq org-agenda-format-date "%a %Y-%m-%d")
@@ -48,7 +53,7 @@
                         (org-time-from-absolute date)))))
   (setq org-agenda-remove-tags t)
   (setq org-agenda-show-future-repeats nil)
-  (setq org-agenda-hide-tags-regexp (format "^%s$" (regexp-opt '("ATTACH"))))
+  (setq org-agenda-hide-tags-regexp (rx line-start (or "ATTACH") line-end))
   (add-hook 'org-agenda-finalize-hook #'cp/org-agenda-delete-empty-blocks)
   (setq org-tags-column -80)
   (setq org-log-into-drawer t)
@@ -63,7 +68,7 @@
         (concat
          auto-revert-notify-exclude-dir-regexp
          "\\|"
-         (rx (: bol (0+ "/" (1+ anything)) "/" "org" "/"))))
+         (rx line-start (0+ "/" (1+ anything)) "/" "org" "/")))
   ;; Ensure certain files are opened in certain apps
   (add-to-list 'org-file-apps '("\\.png\\'" . "eog %s"))
   (add-to-list 'org-file-apps '("\\.jpe?g\\'" . "eog %s"))
