@@ -108,46 +108,40 @@
                           #'org-edit-src-save)))
   (remove-hook 'org-mode-hook 'org-eldoc-load))
 
-(use-package appt
-  :after org
-  :config
-  (appt-activate t)
-  (setq appt-message-warning-time 15)
-  ; (setq appt-display-mode-line nil)
-  ; (setq appt-display-interval appt-message-warning-time)
-  ;; Add code here to automatically run `cp/org-agenda-to-appt'
-  ;; at certain times, you need to run this to move any
-  ;; scheduled or deadline tasks from org to appt for
-  ;; notifications.
-  (setq appt-disp-window-function #'cp/org-appt-disp-window)
-  (setq appt-delete-window-function (lambda () t)))
-
 (use-package org-attach
   :after org
-  :config
-  (setq org-attach-use-inheritance t)
-  (setq org-attach-id-dir "~/org/data"))
+  :custom
+  (org-attach-use-inheritance t)
+  (org-attach-id-dir "~/org/data"))
 
 (use-package org-id
   :after org
-  :config
-  (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
+  :custom
+  (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 
 (use-package org-habit
   :after org
-  :config
-  (progn
-    (setq org-habit-today-glyph ?t)
-    (setq org-habit-completed-glyph ?d)
-    (setq org-habit-graph-column 69)
-    (setq org-habit-preceding-days 21)
-    (setq org-habit-following-days 3)))
+  :custom
+  (org-habit-today-glyph ?t)
+  (org-habit-completed-glyph ?d)
+  (org-habit-graph-column 69)
+  (org-habit-preceding-days 21)
+  (org-habit-following-days 3))
 
 (use-package org-tempo
   :after org)
 
 (use-package ol-man
   :after org)
+
+(use-package appt
+  :after org
+  :custom
+  (appt-message-warning-time 15)
+  (appt-disp-window-function #'cp/org-appt-disp-window)
+  (appt-delete-window-function (lambda () t))
+  :config
+  (appt-activate t))
 
 (defun cp/org-generate-short-id ()
   "Generate a short mostly unique identifier"
