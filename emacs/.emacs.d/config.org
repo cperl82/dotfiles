@@ -1067,8 +1067,7 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
   (use-package org
     :defer t
     :config
-    (progn
-      (use-package appt
+    (use-package appt
         :config
         (progn
           (appt-activate t)
@@ -1081,127 +1080,127 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
           ;; notifications.
           (setq appt-disp-window-function #'cp/org-appt-disp-window)
           (setq appt-delete-window-function (lambda () t))))
-      (use-package org-attach
-        :config
-        (progn
-          (setq org-attach-use-inheritance t)
-          (setq org-attach-id-dir "~/org/data")))
-      (use-package org-id
-        :config
-        (progn
-          (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)))
-      (use-package org-habit
-        :config
-        (progn
-          (setq org-habit-today-glyph ?t)
-          (setq org-habit-completed-glyph ?d)
-          (setq org-habit-graph-column 69)
-          (setq org-habit-preceding-days 21)
-          (setq org-habit-following-days 3)))
-      (use-package ol-man)
-      (use-package org-tempo)
-      (setq org-adapt-indentation nil)
-      (setq org-startup-indented t)
-      (setq org-indent-indentation-per-level 1)
-      (setq org-startup-folded t)
-      (setq org-todo-keywords
-            '((sequence "NEXT(n)" "DFER(r)" "WAIT(w)" "DPND(x)" "|" "DONE(d!)" "CNCL(c!)")))
-      (setq org-todo-keyword-faces
-            '(("DFER" . "#B06060")
-              ("WAIT" . "#8C5353")
-              ("DPND" . "#767676")
-              ("CNCL" . "#FFFFFF")
-              ("DONE" . "#FFFFFF")))
-      (setq org-capture-templates
-            `(("n" "Next Action" entry (file "~/org/capture.org")
-               ,(string-join '("* NEXT %?" ":PROPERTIES:" ":CAPTURED: %U" ":END:") "\n")
-               :empty-lines 1)))
-      (setq org-link-abbrev-alist
-            '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
-      (setq org-refile-use-outline-path 'file)
-      (setq org-outline-path-complete-in-steps nil)
-      (setq org-hide-block-startup t)
-      (setq org-refile-targets '((org-agenda-files . (:maxlevel . 5))))
-      (setq org-agenda-restore-windows-after-quit t)
-      (setq org-agenda-files (file-expand-wildcards "~/org/*.org" t))
-      (setq org-agenda-block-separator ?-)
-      (setq org-agenda-format-date "%a %Y-%m-%d")
-      (setq org-agenda-sticky t)
-      (setq org-agenda-prefix-format
-            '((agenda . "  %7c %6s %5t ")
-              (todo   . "  %7c ")
-              (tags   . "  %7c ")
-              (search . "  %7c ")))
-      (setq org-agenda-time-grid
-            '((daily today require-timed)
-              (800 1000 1200 1400 1600 1800 2000)
-              ""
-              "----------------"))
-      (setq org-agenda-breadcrumbs-separator ">")
-      (setq org-agenda-scheduled-leaders '("s" "%dd s"))
-      (setq org-agenda-deadline-leaders '("d" "-%dd d" "%dd d"))
-      (setq org-agenda-format-date
-            (lambda (date)
-              (concat "\n" (format-time-string
-                            "%a %Y-%m-%d:"
-                            (org-time-from-absolute date)))))
-      (setq org-agenda-remove-tags t)
-      (setq org-agenda-show-future-repeats nil)
-      (setq org-agenda-hide-tags-regexp (format "^%s$" (regexp-opt '("ATTACH"))))
-      (add-hook 'org-agenda-finalize-hook #'cp/org-agenda-delete-empty-blocks)
-      (setq org-tags-column -80)
-      (setq org-log-into-drawer t)
-      (setq org-refile-use-cache t)
-      (setq org-catch-invisible-edits 'error)
-      (setq org-ctrl-k-protect-subtree t)
-      (setq org-cycle-include-plain-lists 'integrate)
-      (setq org-hide-leading-stars t)
-      (setq org-link-make-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
-      ;; CR cperl: Perhaps update this so it only does this if it
-      ;; detects that `~/org' points at Dropbox
-      (setq auto-revert-notify-exclude-dir-regexp
-            (concat
-             auto-revert-notify-exclude-dir-regexp
-             "\\|"
-             (rx (: bol (0+ "/" (1+ anything)) "/" "org" "/"))))
-      ;; Ensure certain files are opened in certain apps
-      (add-to-list 'org-file-apps '("\\.png\\'" . "eog %s"))
-      (add-to-list 'org-file-apps '("\\.jpe?g\\'" . "eog %s"))
-      (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))
-      (run-with-idle-timer 30 t
-                           (lambda ()
-                             (let ((inhibit-message t)) (org-save-all-org-buffers))))
-      (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
-      (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
-      (advice-add  'org-archive--compute-location :filter-args #'cp/advice/org-archive--compute-location)
-      (org-babel-do-load-languages
-       'org-babel-load-languages
-       '((shell  . true)
-         (python . true)
-         (awk    . true)
-         (sed    . true)
-         (R      . true)
-         (calc   . true)))
-      (add-hook
-       'org-mode-hook
-       (lambda ()
-         (progn
-           (visual-line-mode)
-           (visual-fill-column-mode)
-           (setq-local visual-fill-column-width 95)
-           (setq-local indent-tabs-mode nil)
-           (add-hook 'write-contents-functions
-                     (lambda () (save-excursion (delete-trailing-whitespace)))))))
-      (add-hook 'org-src-mode-hook
-                (lambda ()
-                  (setq-local electric-indent-mode nil)
-                  (define-key org-src-mode-map
-                              (kbd "C-c @")
-                              #'org-src-do-key-sequence-at-code-block)
-                  (define-key org-src-mode-map
-                              [remap evil-write]
-                              #'org-edit-src-save)))
-      (remove-hook 'org-mode-hook 'org-eldoc-load)))
+    (use-package org-attach
+      :config
+      (progn
+        (setq org-attach-use-inheritance t)
+        (setq org-attach-id-dir "~/org/data")))
+    (use-package org-id
+      :config
+      (progn
+        (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)))
+    (use-package org-habit
+      :config
+      (progn
+        (setq org-habit-today-glyph ?t)
+        (setq org-habit-completed-glyph ?d)
+        (setq org-habit-graph-column 69)
+        (setq org-habit-preceding-days 21)
+        (setq org-habit-following-days 3)))
+    (use-package ol-man)
+    (use-package org-tempo)
+    (setq org-adapt-indentation nil)
+    (setq org-startup-indented t)
+    (setq org-indent-indentation-per-level 1)
+    (setq org-startup-folded t)
+    (setq org-todo-keywords
+          '((sequence "NEXT(n)" "DFER(r)" "WAIT(w)" "DPND(x)" "|" "DONE(d!)" "CNCL(c!)")))
+    (setq org-todo-keyword-faces
+          '(("DFER" . "#B06060")
+            ("WAIT" . "#8C5353")
+            ("DPND" . "#767676")
+            ("CNCL" . "#FFFFFF")
+            ("DONE" . "#FFFFFF")))
+    (setq org-capture-templates
+          `(("n" "Next Action" entry (file "~/org/capture.org")
+             ,(string-join '("* NEXT %?" ":PROPERTIES:" ":CAPTURED: %U" ":END:") "\n")
+             :empty-lines 1)))
+    (setq org-link-abbrev-alist
+          '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
+    (setq org-refile-use-outline-path 'file)
+    (setq org-outline-path-complete-in-steps nil)
+    (setq org-hide-block-startup t)
+    (setq org-refile-targets '((org-agenda-files . (:maxlevel . 5))))
+    (setq org-agenda-restore-windows-after-quit t)
+    (setq org-agenda-files (file-expand-wildcards "~/org/*.org" t))
+    (setq org-agenda-block-separator ?-)
+    (setq org-agenda-format-date "%a %Y-%m-%d")
+    (setq org-agenda-sticky t)
+    (setq org-agenda-prefix-format
+          '((agenda . "  %7c %6s %5t ")
+            (todo   . "  %7c ")
+            (tags   . "  %7c ")
+            (search . "  %7c ")))
+    (setq org-agenda-time-grid
+          '((daily today require-timed)
+            (800 1000 1200 1400 1600 1800 2000)
+            ""
+            "----------------"))
+    (setq org-agenda-breadcrumbs-separator ">")
+    (setq org-agenda-scheduled-leaders '("s" "%dd s"))
+    (setq org-agenda-deadline-leaders '("d" "-%dd d" "%dd d"))
+    (setq org-agenda-format-date
+          (lambda (date)
+            (concat "\n" (format-time-string
+                          "%a %Y-%m-%d:"
+                          (org-time-from-absolute date)))))
+    (setq org-agenda-remove-tags t)
+    (setq org-agenda-show-future-repeats nil)
+    (setq org-agenda-hide-tags-regexp (format "^%s$" (regexp-opt '("ATTACH"))))
+    (add-hook 'org-agenda-finalize-hook #'cp/org-agenda-delete-empty-blocks)
+    (setq org-tags-column -80)
+    (setq org-log-into-drawer t)
+    (setq org-refile-use-cache t)
+    (setq org-catch-invisible-edits 'error)
+    (setq org-ctrl-k-protect-subtree t)
+    (setq org-cycle-include-plain-lists 'integrate)
+    (setq org-hide-leading-stars t)
+    (setq org-link-make-description-function  #'cp/org-link-auto-desc-from-abbrev-tags)
+    ;; CR cperl: Perhaps update this so it only does this if it
+    ;; detects that `~/org' points at Dropbox
+    (setq auto-revert-notify-exclude-dir-regexp
+          (concat
+           auto-revert-notify-exclude-dir-regexp
+           "\\|"
+           (rx (: bol (0+ "/" (1+ anything)) "/" "org" "/"))))
+    ;; Ensure certain files are opened in certain apps
+    (add-to-list 'org-file-apps '("\\.png\\'" . "eog %s"))
+    (add-to-list 'org-file-apps '("\\.jpe?g\\'" . "eog %s"))
+    (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))
+    (run-with-idle-timer 30 t
+                         (lambda ()
+                           (let ((inhibit-message t)) (org-save-all-org-buffers))))
+    (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
+    (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
+    (advice-add  'org-archive--compute-location :filter-args #'cp/advice/org-archive--compute-location)
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((shell  . true)
+       (python . true)
+       (awk    . true)
+       (sed    . true)
+       (R      . true)
+       (calc   . true)))
+    (add-hook
+     'org-mode-hook
+     (lambda ()
+       (progn
+         (visual-line-mode)
+         (visual-fill-column-mode)
+         (setq-local visual-fill-column-width 95)
+         (setq-local indent-tabs-mode nil)
+         (add-hook 'write-contents-functions
+                   (lambda () (save-excursion (delete-trailing-whitespace)))))))
+    (add-hook 'org-src-mode-hook
+              (lambda ()
+                (setq-local electric-indent-mode nil)
+                (define-key org-src-mode-map
+                            (kbd "C-c @")
+                            #'org-src-do-key-sequence-at-code-block)
+                (define-key org-src-mode-map
+                            [remap evil-write]
+                            #'org-edit-src-save)))
+    (remove-hook 'org-mode-hook 'org-eldoc-load))
 
   (defun cp/org-generate-short-id ()
     "Generate a short mostly unique identifier"
