@@ -42,8 +42,6 @@
        org-ql
        origami
        projectile
-       rust-mode
-       rustic
        smex
        doom-modeline
        swiper

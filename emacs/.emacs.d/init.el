@@ -17,6 +17,7 @@
 (load "init-embark")
 (load "init-lisp")
 (load "init-shell")
+(load "init-rust")
 (load "init-org")
 (load "init-projectile")
 
@@ -232,22 +233,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
     (progn
       (setq doom-modeline-icon nil)
       (doom-modeline-mode 1)))
-
-
-;; rust / rustic
-(use-package rust-mode
-  :defer t)
-
-(use-package rustic-mode
-  :defer t
-  :after rust-mode
-  :config
-  (progn
-    (add-hook
-     'rustic-mode-hook
-     (lambda ()
-       (hs-minor-mode)
-       (hs-hide-all)))))
 
 
 ;; Themes
