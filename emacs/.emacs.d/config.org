@@ -311,8 +311,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          markdown-mode
          nasm-mode
          nerd-icons
-         org
-         org-super-agenda
          org-ql
          origami
          projectile
@@ -326,7 +324,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          tuareg-mode
          unfill
          vagrant-tramp
-         visual-fill-column
          wgrep
          windsize
          zenburn-theme))
@@ -1069,6 +1066,7 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
 
 #+begin_src emacs-lisp :tangle init-lisp/init-org.el
   (use-package org
+    :straight t
     :defer t
     :config
     (setq org-adapt-indentation nil)
@@ -1203,6 +1201,12 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
 
   (use-package ol-man
     :after org)
+
+  (use-package visual-fill-column
+    :straight t)
+
+  (use-package org-super-agenda
+    :straight t)
 
   (use-package appt
     :after org
