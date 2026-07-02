@@ -1069,6 +1069,8 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     (setq org-startup-folded t)
     (setq org-todo-keywords
           '((sequence "NEXT(n)" "DFER(r)" "WAIT(w)" "DPND(x)" "|" "DONE(d!)" "CNCL(c!)")))
+    ;; CR-someday cperl: These should really be a part of whatever theme you're
+    ;; loading, not just set unconditionally
     (setq org-todo-keyword-faces
           '(("DFER" . "#B06060")
             ("WAIT" . "#8C5353")
@@ -1086,6 +1088,9 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     (setq org-hide-block-startup t)
     (setq org-refile-targets '((org-agenda-files . (:maxlevel . 5))))
     (setq org-agenda-restore-windows-after-quit t)
+    ;; CR-someday cperl: Consider setting this via .dir-locals.el as
+    ;; sometimes you'll fire up an instance of emacs futzing with an org
+    ;; file and it has nothing to do with your personal org files.
     (setq org-agenda-files (file-expand-wildcards "~/org/*.org" t))
     (setq org-agenda-block-separator ?-)
     (setq org-agenda-format-date "%a %Y-%m-%d")
