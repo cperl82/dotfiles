@@ -443,16 +443,16 @@ These are just libraries that I find useful when writing elisp.
 
 #+begin_src emacs-lisp :tangle init-lisp/init-ibuffer-vc.el
   (use-package ibuffer-vc
-    :defer t
     :straight t
+    :defer t
     :after ibuffer
     :preface
-    (defun cp/ibuffer-hook-setup ()
+    (defun cp/ibuffer-setup ()
       (ibuffer-vc-set-filter-groups-by-vc-root)
       (unless (eq ibuffer-sorting-mode 'alphbaetic)
         (ibuffer-do-sort-by-alphabetic)))
     :hook
-    ((ibuffer . cp/ibuffer-hook-setup))
+    ((ibuffer . cp/ibuffer-setup))
     :general
     (:keymaps '(ibuffer-mode-map)
      :states  '(emacs)
@@ -1872,6 +1872,7 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
     (enable-theme 'zenburn)
     )
 #+end_src
+
 ** Local overrides
 Local overrides that I might want to vary from machine to machine. We're using ~condition-case~ here to ignore the file being potentially missing, but still throw errors if the file exists but there are errors processing the elisp within.
 
