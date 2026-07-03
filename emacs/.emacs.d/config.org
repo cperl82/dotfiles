@@ -319,7 +319,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          origami
          projectile
          smex
-         doom-modeline
          systemd-mode
          systemtap-mode
          tuareg-mode
@@ -1787,17 +1786,20 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
      (funcall orig-fun force)))
 #+end_src
 
-** Init
-Just a monolithic import of my existing init.el that'll get cleaned up and broken into different logical sections over time.
+** Doom Modeline
 
-#+begin_src emacs-lisp :tangle init.el
-  ;; doom-modeline
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-doom-modeline")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-doom-modeline.el
   (use-package doom-modeline
-      :after evil
-      :init
-      (progn
-        (setq doom-modeline-icon nil)
-        (doom-modeline-mode 1)))
+    :straight t
+    :demand t
+    :custom
+    (doom-modeline-icon nil)
+    :config
+    (doom-modeline-mode))
 #+end_src
 
 ** Themes
@@ -1871,6 +1873,10 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
 *** Selected
 
 #+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-theme")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-theme.el
   (enable-theme 'zenburn)
 #+end_src
 
