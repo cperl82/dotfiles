@@ -1035,11 +1035,22 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
 #+begin_src emacs-lisp :tangle init-lisp/init-embark.el
   (use-package embark
     :defer t)
-  (provide 'init-embark)
 #+end_src
 
 ** Counsel, Ivy, Swiper, Ivy-rich
 ** Config Modes
+*** Kdl
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-kdl")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-kdl.el
+  (use-package kdl-mode
+    :straight t
+    :defer t)
+#+end_src
+
 ** Programming Modes
 *** Lisp
 
