@@ -1,14 +1,14 @@
 (use-package ibuffer-vc
-  :defer t
   :straight t
+  :defer t
   :after ibuffer
   :preface
-  (defun cp/ibuffer-hook-setup ()
+  (defun cp/ibuffer-setup ()
     (ibuffer-vc-set-filter-groups-by-vc-root)
     (unless (eq ibuffer-sorting-mode 'alphbaetic)
       (ibuffer-do-sort-by-alphabetic)))
   :hook
-  ((ibuffer . cp/ibuffer-hook-setup))
+  ((ibuffer . cp/ibuffer-setup))
   :general
   (:keymaps '(ibuffer-mode-map)
    :states  '(emacs)

@@ -21,7 +21,6 @@
      '(annalist
        company-mode
        compat
-       counsel-projectile
        diminish
        elisp-slime-nav
        embark
@@ -30,7 +29,6 @@
        haskell-mode
        highlight-parentheses
        ibuffer-projectile
-       ivy-rich
        json-mode
        lsp-mode
        lua-mode
@@ -44,7 +42,6 @@
        projectile
        smex
        doom-modeline
-       swiper
        systemd-mode
        systemtap-mode
        tuareg-mode
