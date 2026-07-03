@@ -18,6 +18,7 @@
 (load "init-lisp")
 (load "init-shell")
 (load "init-rust")
+(load "init-ocaml")
 (load "init-org")
 (load "init-projectile")
 
@@ -147,78 +148,6 @@ attempting to use grep (or ag, rg, etc) is always going to fail."
 (use-package counsel-projectile
   :defer t
   :after projectile)
-
-
-;; tuareg-mode
-(defun cp/tuareg-mode-hs-forward-sexp-fun (arg)
-  (let* ((c (current-column))
-         (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
-    (forward-line 1)
-    (re-search-forward re)
-    (beginning-of-line)
-    (back-to-indentation)
-    (if (not
-         (or
-          (looking-at "in")
-          (looking-at "end")
-          (looking-at ";;")
-          (looking-at "with")))
-        (progn
-          (forward-line -1)
-          (move-end-of-line nil)))))
-
-;; 2016-03-21: Alternative implementation that deals with functions without ;; better
-(defun cp/tuareg-mode-hs-forward-sexp-fun-alt (arg)
-  (let* ((c (current-column))
-         (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
-    (forward-line 1)
-    (re-search-forward re)
-    (beginning-of-line)
-    (back-to-indentation)
-    (if (not
-         (or
-          (looking-at "in")
-          (looking-at "end")
-          (looking-at ";;")
-          (looking-at "with")
-       (eq (point) (buffer-size))))
-        (progn
-          (re-search-backward "^[:space:]*[^:space:].")
-          (move-end-of-line nil)))))
-
-(setq cp/tuareg-mode-hs-start-regexp
-      (mapconcat
-       'identity
-       '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+"
-         "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
-         "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
-         "\\<end\\>\\s-+=\\s-+\\<struct\\>"
-         "\\<let\\>\\s-+"
-         "\\<and\\>\\s-+"
-         "\\<let%\\S-+\\>\\s-+"
-         "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
-         "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
-         "\\<TEST_UNIT\\>\\s-+="
-         )
-       "\\|"))
-
-(use-package tuareg
-  :defer t
-  :config
-  (progn
-    (add-to-list
-     'hs-special-modes-alist
-     `(tuareg-mode
-       ,cp/tuareg-mode-hs-start-regexp nil nil  cp/tuareg-mode-hs-forward-sexp-fun))
-    (add-hook
-     'tuareg-mode-hook
-     (lambda ()
-       (hs-minor-mode)
-       (setq-local
-        face-remapping-alist
-        '((tuareg-font-double-colon-face        tuareg-font-lock-governing-face)
-          (tuareg-font-lock-extension-node-face tuareg-font-lock-governing-face)
-          (tuareg-font-lock-attribute-face      tuareg-font-lock-governing-face)))))))
 
 
 ;; kdl-mode
