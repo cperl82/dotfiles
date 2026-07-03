@@ -451,16 +451,7 @@ These are just libraries that I find useful when writing elisp.
       (unless (eq ibuffer-sorting-mode 'alphbaetic)
         (ibuffer-do-sort-by-alphabetic)))
     :hook
-    ((ibuffer . cp/ibuffer-setup))
-    :general
-    (:keymaps '(ibuffer-mode-map)
-     :states  '(emacs)
-     "l" #'ibuffer-visit-buffer
-     "j" #'evil-next-line
-     "k" #'evil-previous-line
-     "r" #'ibuffer-update
-     )
-    )
+    ((ibuffer . cp/ibuffer-setup)))
 #+end_src
 
 ** Which-key
@@ -487,14 +478,6 @@ These are just libraries that I find useful when writing elisp.
 #+begin_src emacs-lisp :tangle init-lisp/init-dired.el
   (use-package dired
     :defer t
-    :general
-    (:keymaps '(dired-mode-map)
-     :states  '(normal motion)
-     "h" #'dired-up-directory
-     "l" #'dired-find-file
-     "."   #'cp/dired-toggle-hiding-dotfiles
-     "TAB" #'cp/dired-tab-dwim
-     "M-&" #'cp/dired-smart-async-shell-command)
     :hook
     ((dired-mode . dired-omit-mode))
     :custom
@@ -951,6 +934,14 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
      :states  '(motion)
      "C-c a"   #'org-agenda
      "C-c c"   #'org-capture)
+    ;; dired
+    (:keymaps '(dired-mode-map)
+     :states  '(motion)
+     "h" #'dired-up-directory
+     "l" #'dired-find-file
+     "."   #'cp/dired-toggle-hiding-dotfiles
+     "TAB" #'cp/dired-tab-dwim
+     "M-&" #'cp/dired-smart-async-shell-command)
     :custom
     (evil-want-C-i-jump nil)
     (evil-want-keybinding nil)
