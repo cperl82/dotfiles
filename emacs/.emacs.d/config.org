@@ -1097,6 +1097,81 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     ((rustic-mode . cp/enable-hideshow-and-hide-all)))
 #+end_src
 
+*** OCaml
+
+I haven't written any OCaml in a while, so it's possible I should just do away with these forward sexp funs and there is a better method based on tree-sitter or what have you.
+
+Either way, I sort of yolo converted the regexes to Rx notation, so I probably broke something.
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-ocaml")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-ocaml.el
+  (use-package tuareg
+    :defer t
+    :config
+    (add-to-list
+       'hs-special-modes-alist
+       `(tuareg-mode
+         ,cp/tuareg-mode-hs-start-regexp nil nil  cp/tuareg-mode-hs-forward-sexp-fun))
+    :hook
+    ((tuareg-mode . cp/enable-hideshow-and-hide-all)))
+
+  (setq cp/tuareg-mode-hs-start-regexp
+        (rx (or
+             (: bow "module" eow
+                (1+ whitespace)
+                (or
+                 (: (1+ (not whitespace))
+                    (1+ whitespace)
+                    (or
+                     (: "=" (1+ whitespace) bow "struct" eow)
+                     (: ":" (1+ whitespace) bow "sig" eow)))
+                 (: bow "type" eow
+                    (1+ whitespace)
+                    (1+ (not whitespace))
+                    (1+ whitespace)
+                    "="
+                    (1+ whitespace)
+                    bow "sig" eow)))
+             (: bow "end" eow
+                (1+ whitespace)
+                "="
+                (1+ whitespace)
+                bow "struct" eow)
+             (: bow "let" eow
+                (1+ whitespace))
+             (: bow "and" eow
+                (1+ whitespace))
+             (: bow "let%" (1+ (not whitespace)) eow
+                (1+ whitespace))
+             (: bow "type" eow
+                (+? (1+ whitespace) (1+ (not whitespace)))
+                (1+ whitespace)
+                "="))))
+
+  (defun cp/tuareg-mode-hs-forward-sexp-fun (arg)
+    (forward-line 1)
+    (re-search-forward
+     (rx-to-string
+      `(or (: bol (** 0 ,(current-column) whitespace) (not whitespace))
+           (: eos))
+      t))
+    (beginning-of-line)
+    (back-to-indentation)
+    (if (not
+         (or
+          (looking-at "in")
+          (looking-at "end")
+          (looking-at ";;")
+          (looking-at "with")
+          (eq (point) (buffer-size))))
+        (progn
+          (re-search-backward (rx bol (0+ whitespace) (not whitespace) any))
+          (move-end-of-line nil))))
+#+end_src
+
 ** Org mode
 
 #+begin_src emacs-lisp :tangle init.el :padline no
@@ -1700,78 +1775,6 @@ Just a monolithic import of my existing init.el that'll get cleaned up and broke
   (use-package counsel-projectile
     :defer t
     :after projectile)
-
-
-  ;; tuareg-mode
-  (defun cp/tuareg-mode-hs-forward-sexp-fun (arg)
-    (let* ((c (current-column))
-           (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
-      (forward-line 1)
-      (re-search-forward re)
-      (beginning-of-line)
-      (back-to-indentation)
-      (if (not
-           (or
-            (looking-at "in")
-            (looking-at "end")
-            (looking-at ";;")
-            (looking-at "with")))
-          (progn
-            (forward-line -1)
-            (move-end-of-line nil)))))
-
-  ;; 2016-03-21: Alternative implementation that deals with functions without ;; better
-  (defun cp/tuareg-mode-hs-forward-sexp-fun-alt (arg)
-    (let* ((c (current-column))
-           (re (format "^[[:space:]]\\{,%d\\}[^[:space:]]\\|\\'" c)))
-      (forward-line 1)
-      (re-search-forward re)
-      (beginning-of-line)
-      (back-to-indentation)
-      (if (not
-           (or
-            (looking-at "in")
-            (looking-at "end")
-            (looking-at ";;")
-            (looking-at "with")
-         (eq (point) (buffer-size))))
-          (progn
-            (re-search-backward "^[:space:]*[^:space:].")
-            (move-end-of-line nil)))))
-
-  (setq cp/tuareg-mode-hs-start-regexp
-        (mapconcat
-         'identity
-         '("\\<module\\>\\s-+\\S-+\\s-+=\\s-+"
-           "\\<module\\>\\s-+\\S-+\\s-+:\\s-+\\<sig\\>"
-           "\\<module\\>\\s-+\\<type\\>\\s-+\\S-+\\s-+=\\s-+\\<sig\\>"
-           "\\<end\\>\\s-+=\\s-+\\<struct\\>"
-           "\\<let\\>\\s-+"
-           "\\<and\\>\\s-+"
-           "\\<let%\\S-+\\>\\s-+"
-           "\\<type\\>\\(\\s-+\\S-+\\)+?\\s-+="
-           "\\<TEST_MODULE\\>\\s-+\\S-+\\s-+=\\s-+\\<struct\\>"
-           "\\<TEST_UNIT\\>\\s-+="
-           )
-         "\\|"))
-
-  (use-package tuareg
-    :defer t
-    :config
-    (progn
-      (add-to-list
-       'hs-special-modes-alist
-       `(tuareg-mode
-         ,cp/tuareg-mode-hs-start-regexp nil nil  cp/tuareg-mode-hs-forward-sexp-fun))
-      (add-hook
-       'tuareg-mode-hook
-       (lambda ()
-         (hs-minor-mode)
-         (setq-local
-          face-remapping-alist
-          '((tuareg-font-double-colon-face        tuareg-font-lock-governing-face)
-            (tuareg-font-lock-extension-node-face tuareg-font-lock-governing-face)
-            (tuareg-font-lock-attribute-face      tuareg-font-lock-governing-face)))))))
 
 
   ;; kdl-mode
