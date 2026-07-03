@@ -103,7 +103,6 @@ But, having the list of files generated is kind of nice.
 #+name: emacs-config-generate
 #+begin_src emacs-lisp :results value list
   ;;; -*- lexical-binding: t; -*-
-
   (thread-last
     (org-babel-tangle)
     (mapcar
@@ -139,7 +138,9 @@ But, having the list of files generated is kind of nice.
 - .dotfiles/emacs/.emacs.d/init-lisp/init-ocaml.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-org.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-projectile.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-doom-modeline.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-theme-zenburn.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-theme.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-local-overrides.el
 
 * Blocks

@@ -41,7 +41,6 @@
        origami
        projectile
        smex
-       doom-modeline
        systemd-mode
        systemtap-mode
        tuareg-mode

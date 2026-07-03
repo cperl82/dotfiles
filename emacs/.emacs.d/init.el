@@ -23,15 +23,8 @@
 (load "init-ocaml")
 (load "init-org")
 (load "init-projectile")
-
-;; doom-modeline
-(use-package doom-modeline
-    :after evil
-    :init
-    (progn
-      (setq doom-modeline-icon nil)
-      (doom-modeline-mode 1)))
+(load "init-doom-modeline")
 (load "init-theme-zenburn")
-(enable-theme 'zenburn)
+(load "init-theme")
 
 (load "init-local-overrides")
