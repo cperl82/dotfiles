@@ -8,13 +8,4 @@
     (unless (eq ibuffer-sorting-mode 'alphbaetic)
       (ibuffer-do-sort-by-alphabetic)))
   :hook
-  ((ibuffer . cp/ibuffer-setup))
-  :general
-  (:keymaps '(ibuffer-mode-map)
-   :states  '(emacs)
-   "l" #'ibuffer-visit-buffer
-   "j" #'evil-next-line
-   "k" #'evil-previous-line
-   "r" #'ibuffer-update
-   )
-  )
+  ((ibuffer . cp/ibuffer-setup)))

@@ -1,13 +1,5 @@
 (use-package dired
   :defer t
-  :general
-  (:keymaps '(dired-mode-map)
-   :states  '(normal motion)
-   "h" #'dired-up-directory
-   "l" #'dired-find-file
-   "."   #'cp/dired-toggle-hiding-dotfiles
-   "TAB" #'cp/dired-tab-dwim
-   "M-&" #'cp/dired-smart-async-shell-command)
   :hook
   ((dired-mode . dired-omit-mode))
   :custom

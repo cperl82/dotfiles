@@ -100,6 +100,14 @@
    :states  '(motion)
    "C-c a"   #'org-agenda
    "C-c c"   #'org-capture)
+  ;; dired
+  (:keymaps '(dired-mode-map)
+   :states  '(motion)
+   "h" #'dired-up-directory
+   "l" #'dired-find-file
+   "."   #'cp/dired-toggle-hiding-dotfiles
+   "TAB" #'cp/dired-tab-dwim
+   "M-&" #'cp/dired-smart-async-shell-command)
   :custom
   (evil-want-C-i-jump nil)
   (evil-want-keybinding nil)
