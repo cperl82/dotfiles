@@ -15,6 +15,7 @@
 (load "init-smartparens")
 (load "init-evil")
 (load "init-embark")
+(load "init-kdl")
 (load "init-lisp")
 (load "init-shell")
 (load "init-rust")
