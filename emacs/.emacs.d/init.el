@@ -11,6 +11,7 @@
 (load "init-which-key")
 (load "init-dired")
 (load "init-escreen")
+(load "init-helpful")
 (load "init-xcscope")
 (load "init-smartparens")
 (load "init-evil")
