@@ -25,6 +25,7 @@
 (load "init-projectile")
 (load "init-doom-modeline")
 (load "init-theme-zenburn")
+(load "init-theme-modus")
+(load "init-theme-standard")
 (load "init-theme")
-
 (load "init-local-overrides")

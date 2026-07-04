@@ -140,9 +140,12 @@
   (evil-collection-want-unimpaired-p nil)
   :config
   (defun cp/evil-collection-setup (&rest _)
-    ;; org-agenda-mode evil-collection overrides
+    ;; org-agenda-mode
     (evil-collection-define-key 'normal 'org-agenda-mode-map
-      "S" #'cp/org-save-all-org-buffers-and-commit))
+      "S" #'cp/org-save-all-org-buffers-and-commit)
+    ;; dired-mode
+    (evil-collection-define-key 'normal 'dired-mode-map
+      " " nil))
   (evil-collection-init)
   :hook
   ((evil-collection-setup . cp/evil-collection-setup)))
