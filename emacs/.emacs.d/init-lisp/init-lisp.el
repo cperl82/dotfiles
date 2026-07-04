@@ -7,7 +7,8 @@
   :preface
   (defun cp/emacs-lisp-mode-setup ()
     (company-mode)
-    (flycheck-mode)
+    ;; flycheck-mode is nagging me about too many things currently
+    ;(flycheck-mode)
     (cp/enable-hideshow-and-hide-all))
   (defalias 'cp/lisp-mode-setup 'cp/emacs-lisp-mode-setup)
   :hook
