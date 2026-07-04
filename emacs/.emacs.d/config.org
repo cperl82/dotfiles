@@ -799,6 +799,18 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     (cp/escreen-rename-screen nil nil t))
 #+end_src
 
+** Helpful
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-helpful")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-helpful.el
+  (use-package helpful
+    :straight t
+    :defer t)
+#+end_src
+
 ** Xcscope
 
 #+begin_src emacs-lisp :tangle init.el :padline no
