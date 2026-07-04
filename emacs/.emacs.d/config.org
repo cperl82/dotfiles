@@ -1089,6 +1089,11 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     (meow-selection-command-fallback
      '((meow-kill . meow-delete)))
     :config
+    ;; Unbind one of the several bindings to `text-scale-adjust' as this one
+    ;; get's in the way of using meow's fallback behavior for SPC x 0 to
+    ;; invoke `delete-window'
+    (global-unset-key (kbd "C-x C-0"))
+
     ;; We're doing this here rather than in the hideshow use-package
     ;; block because this function has meow specific functionality,
     ;; e.g. checking if we're in normal mode
@@ -1102,6 +1107,7 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
   	(call-interactively f))))
     (with-eval-after-load 'hideshow
       (define-key hs-minor-mode-map (kbd "TAB") #'cp/meow-hide-show-toggle))
+
     (defun cp/meow-setup ()
       (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
       (meow-motion-define-key
@@ -1203,6 +1209,7 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
        )
       )
     (cp/meow-setup)
+
     (meow-global-mode 1))
 
 
