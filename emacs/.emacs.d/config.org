@@ -1050,14 +1050,6 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
 #+end_src
 
 #+begin_src emacs-lisp :tangle init-lisp/init-meow.el
-  (use-package vundo
-    :straight t
-    :defer t
-    :custom
-    (vundo-glyph-alist vundo-unicode-symbols)
-    )
-
-  ;; meow
   (use-package meow
     :straight t
     :demand t
@@ -1131,6 +1123,7 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
        '("?" . meow-cheatsheet)
        '("j" . flash-jump)
        '("e" . meow-M-x)
+       '("s" . save-buffer)
        '("w u" . winner-undo)
        '("w r" . winner-redo)
        '("w o" . other-window)
@@ -1140,8 +1133,7 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
        '("f s" . save-buffer)
        '("b b" . switch-to-buffer)
        '("b k" . kill-buffer)
-       '("t h" . "C-c @ C-e")
-       )
+       '("t h" . "C-c @ C-e"))
       (meow-normal-define-key
        '("0" . meow-expand-0)
        '("9" . meow-expand-9)
@@ -1212,7 +1204,15 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
 
     (meow-global-mode 1))
 
+  (use-package vundo
+    :straight t
+    :defer t
+    :custom
+    (vundo-glyph-alist vundo-unicode-symbols))
 
+  (use-package flash
+    :straight (:host github :repo "Prgebish/flash" :ref "42fbc58")
+    :defer t)
 #+end_src
 
 ** Vertico, Consult, Embark, Orderless, Marginalia
