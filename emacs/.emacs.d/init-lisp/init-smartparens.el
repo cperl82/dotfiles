@@ -1,3 +1,9 @@
 (use-package smartparens
-  :defer t
-  :straight t)
+  :straight t
+  :demand t
+  :preface
+  (defun cp/smartparens-mode-setup ()
+    (smartparens-mode)
+    (smartparens-strict-mode))
+  :hook
+  ((lisp-data-mode . cp/smartparens-mode-setup)))

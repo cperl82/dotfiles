@@ -5,6 +5,11 @@
   (lisp-loop-forms-indentation 3)
   (lisp-indent-function #'lisp-indent-function)
   :preface
+  (defun cp/emacs-lisp-mode-setup ()
+    (company-mode)
+    (flycheck-mode)
+    (cp/enable-hideshow-and-hide-all))
+  (defalias 'cp/lisp-mode-setup 'cp/emacs-lisp-mode-setup)
   :hook
-  ((emacs-lisp-mode . company-mode)
-   (emacs-lisp-mode . cp/enable-hideshow-and-hide-all)))
+  ((emacs-lisp-mode . cp/emacs-lisp-mode-setup)
+   (lisp-mode . cp/lisp-mode-setup)))

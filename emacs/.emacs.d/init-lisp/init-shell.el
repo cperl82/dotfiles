@@ -5,7 +5,7 @@
     (sh-set-shell "bash")
     (flycheck-mode)
     (flycheck-select-checker 'sh-shellcheck)
-    (sh-electric-here-document-mode -1))
+    (sh-electric-here-document-mode -1)
+    (cp/enable-hideshow-and-hide-all))
   :hook
-  ((sh-mode . cp/sh-mode-setup)
-   (sh-mode . cp/enable-hideshow-and-hide-all)))
+  ((sh-mode . cp/sh-mode-setup)))

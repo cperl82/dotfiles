@@ -171,15 +171,12 @@
   :straight t
   :demand t
   :after evil
-  :preface
-  (defun cp/smartparens-setup ()
-    (smartparens-mode)
-    (smartparens-strict-mode)
-    (evil-smartparens-mode))
-  :hook
-  ((lisp-mode . cp/smartparens-setup)
-   (emacs-lisp-mode . cp/smartparens-setup))
   :config
+  ;; We're using `add-hook' here instead of `:hook' so we can control
+  ;; the depth and ensure that this function will come after the
+  ;; function elsewhere in the config that will turn on smartparens
+  ;; and enable strict mode
+  (add-hook 'lisp-data-mode-hook #'evil-smartparens-mode 99)
   (sp-local-pair
    '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
   (sp-local-pair
