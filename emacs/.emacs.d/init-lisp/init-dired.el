@@ -5,6 +5,10 @@
   :custom
   (dired-listing-switches "-aBhl --group-directories-first")
   (dired-dwim-target t)
+  :bind
+  (:map dired-mode-map
+   ("h" . #'dired-up-directory)
+   ("l" . #'dired-find-file))
   :config
   (put 'dired-find-alternate-file 'disabled nil))
 
