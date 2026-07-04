@@ -449,12 +449,12 @@ These are just libraries that I find useful when writing elisp.
     :defer t
     :after ibuffer
     :preface
-    (defun cp/ibuffer-setup ()
+    (defun cp/ibuffer-mode-setup ()
       (ibuffer-vc-set-filter-groups-by-vc-root)
       (unless (eq ibuffer-sorting-mode 'alphbaetic)
         (ibuffer-do-sort-by-alphabetic)))
     :hook
-    ((ibuffer . cp/ibuffer-setup)))
+    ((ibuffer . cp/ibuffer-mode-setup)))
 #+end_src
 
 ** Which-key
@@ -836,8 +836,14 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
 
 #+begin_src emacs-lisp :tangle init-lisp/init-smartparens.el
   (use-package smartparens
-    :defer t
-    :straight t)
+    :straight t
+    :demand t
+    :preface
+    (defun cp/smartparens-mode-setup ()
+      (smartparens-mode)
+      (smartparens-strict-mode))
+    :hook
+    ((lisp-data-mode . cp/smartparens-mode-setup)))
 #+end_src
 
 ** Evil, Undo-tree, Evil-collection, Evil-surround
@@ -1020,15 +1026,12 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     :straight t
     :demand t
     :after evil
-    :preface
-    (defun cp/smartparens-setup ()
-      (smartparens-mode)
-      (smartparens-strict-mode)
-      (evil-smartparens-mode))
-    :hook
-    ((lisp-mode . cp/smartparens-setup)
-     (emacs-lisp-mode . cp/smartparens-setup))
     :config
+    ;; We're using `add-hook' here instead of `:hook' so we can control
+    ;; the depth and ensure that this function will come after the
+    ;; function elsewhere in the config that will turn on smartparens
+    ;; and enable strict mode
+    (add-hook 'lisp-data-mode-hook #'evil-smartparens-mode 99)
     (sp-local-pair
      '(lisp-interaction-mode lisp-mode emacs-lisp-mode) "'" nil :actions nil)
     (sp-local-pair
@@ -1206,9 +1209,14 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     (lisp-loop-forms-indentation 3)
     (lisp-indent-function #'lisp-indent-function)
     :preface
+    (defun cp/emacs-lisp-mode-setup ()
+      (company-mode)
+      (flycheck-mode)
+      (cp/enable-hideshow-and-hide-all))
+    (defalias 'cp/lisp-mode-setup 'cp/emacs-lisp-mode-setup)
     :hook
-    ((emacs-lisp-mode . company-mode)
-     (emacs-lisp-mode . cp/enable-hideshow-and-hide-all)))
+    ((emacs-lisp-mode . cp/emacs-lisp-mode-setup)
+     (lisp-mode . cp/lisp-mode-setup)))
 #+end_src
 
 *** Shell
@@ -1224,10 +1232,10 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
       (sh-set-shell "bash")
       (flycheck-mode)
       (flycheck-select-checker 'sh-shellcheck)
-      (sh-electric-here-document-mode -1))
+      (sh-electric-here-document-mode -1)
+      (cp/enable-hideshow-and-hide-all))
     :hook
-    ((sh-mode . cp/sh-mode-setup)
-     (sh-mode . cp/enable-hideshow-and-hide-all)))
+    ((sh-mode . cp/sh-mode-setup)))
 #+end_src
 
 *** Rust
