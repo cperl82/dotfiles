@@ -1862,6 +1862,32 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
     (load-theme 'zenburn :no-confirm :no-enable))
 #+end_src
 
+*** Modus Themes
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-theme-modus")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-theme-modus.el
+  (use-package modus-themes
+    :straight t
+    :defer t)
+#+end_src
+
+*** Standard Themes
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-theme-standard")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-theme-standard.el
+  (use-package standard-themes
+    :straight t
+    :defer t
+    :commands (standard-themes-select)
+    )
+#+end_src
+
 *** Selected
 
 #+begin_src emacs-lisp :tangle init.el :padline no
@@ -1875,7 +1901,7 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
 ** Local overrides
 Local overrides that I might want to vary from machine to machine. We're using ~condition-case~ here to ignore the file being potentially missing, but still throw errors if the file exists but there are errors processing the elisp within.
 
-#+begin_src emacs-lisp :tangle init.el
+#+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-local-overrides")
 #+end_src
 
