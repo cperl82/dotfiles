@@ -1881,6 +1881,8 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
 
 *** Standard Themes
 
+Something isn't quite right with this as not all the expected commands are autoloaded, e.g. ~standard-themes-select~. I think it might have something to do with these depending on modus-themes, but I'm not entirely sure.
+
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-theme-standard")
 #+end_src
@@ -1889,7 +1891,7 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
   (use-package standard-themes
     :straight t
     :defer t
-    :commands (standard-themes-select)
+    :after modus-themes
     )
 #+end_src
 
