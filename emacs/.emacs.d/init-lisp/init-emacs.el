@@ -4,14 +4,9 @@
   (defun cp/reduce-gc-cons-threshold ()
     (setq gc-cons-threshold (* 20 1000 1000)))
   :bind
-  ;; Bindings for scrolling the window a line at a time. Useful when
-  ;; you're on a given line of a function and want to scroll up to see
-  ;; more of the function but don't want to move point.
-  ("M-n" . "C-u 1 C-v")
-  ("M-p" . "C-u 1 M-v")
-
-  ;; A more convenient key for `other-window'
-  ("M-o" . other-window)
+  (
+   ;; A more convenient key for `other-window'
+   ("M-o" . other-window))
   :custom
   (ad-redefinition-action #'accept)
   (c-default-style '((java-mode . "java")
@@ -38,6 +33,15 @@
   (use-short-answers t)
   (window-combination-resize t)
   :config
+  ;; Bindings for scrolling the window a line at a time. Useful when
+  ;; you're on a given line of a function and want to scroll up to see
+  ;; more of the function but don't want to move point.
+  ;;
+  ;; As far as I'm aware, I can't bind these with `bind' in
+  ;; `use-package' as that uses `bind-key' and that doesn't support
+  ;; macros as the target.
+  (global-set-key (kbd "M-n") (kbd "C-u 1 C-v"))
+  (global-set-key (kbd "M-p") (kbd "C-u 1 M-v"))
   (put 'narrow-to-region 'disabled nil)
   (menu-bar-mode -1)
   (tool-bar-mode -1)
