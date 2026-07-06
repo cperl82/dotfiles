@@ -1213,6 +1213,10 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
   (use-package flash
     :straight (:host github :repo "Prgebish/flash" :ref "42fbc58")
     :defer t)
+
+  (use-package embrace
+    :straight t
+    :defer t)
 #+end_src
 
 ** Vertico, Consult, Embark, Orderless, Marginalia
