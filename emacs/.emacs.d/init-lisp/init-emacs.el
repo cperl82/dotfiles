@@ -23,6 +23,7 @@
   ;; CR-someday cperl: consider nolittering
   (make-backup-files nil)
   (native-comp-async-report-warnings-errors nil)
+  (scroll-preserve-screen-position t)
   (show-paren-delay 0)
   (split-window-preferred-function #'cp/split-window-function)
   (use-short-answers t)
