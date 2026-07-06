@@ -55,6 +55,9 @@
      '("k" . meow-prev)
      '("<escape>" . ignore))
     (meow-leader-define-key
+     ;; Make shadowed j/k keys available in motion state
+     '("j" . "H-j")
+     '("k" . "H-k")
      ;; Use SPC (0-9) for digit arguments.
      '("1" . meow-digit-argument)
      '("2" . meow-digit-argument)
@@ -68,19 +71,10 @@
      '("0" . meow-digit-argument)
      '("/" . meow-keypad-describe-key)
      '("?" . meow-cheatsheet)
-     '("j" . flash-jump)
      '("e" . meow-M-x)
-     '("s" . save-buffer)
-     '("w u" . winner-undo)
-     '("w r" . winner-redo)
-     '("w o" . other-window)
-     '("f f" . find-file)
-     '("f g" . consult-ripgrep)
-     '("f l" . consult-fd)
-     '("f s" . save-buffer)
-     '("b b" . switch-to-buffer)
-     '("b k" . kill-buffer)
-     '("t h" . "C-c @ C-e"))
+     '("w" . flash-jump)
+     '("g" . cp/counsel-rg)
+     '("f" . cp/counsel-rg-files))
     (meow-normal-define-key
      '("0" . meow-expand-0)
      '("9" . meow-expand-9)
