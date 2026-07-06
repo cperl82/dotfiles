@@ -4,9 +4,6 @@
   :bind
   (:map org-mode-map
    ("C-c a" . org-agenda)
-   ("C-c c" . org-capture)
-   :map org-agenda-mode-map
-   ("C-c a" . org-agenda)
    ("C-c c" . org-capture))
   :config
   (setq org-adapt-indentation nil)
@@ -115,6 +112,13 @@
                           [remap evil-write]
                           #'org-edit-src-save)))
   (remove-hook 'org-mode-hook 'org-eldoc-load))
+
+(use-package org-agenda
+  :after org
+  :bind
+  (:map org-agenda-mode-map
+   ("C-c a" . org-agenda)
+   ("C-c c" . org-capture)))
 
 (use-package org-attach
   :after org
