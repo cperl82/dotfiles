@@ -102,15 +102,6 @@
        (setq-local indent-tabs-mode nil)
        (add-hook 'write-contents-functions
                  (lambda () (save-excursion (delete-trailing-whitespace)))))))
-  (add-hook 'org-src-mode-hook
-            (lambda ()
-              (setq-local electric-indent-mode nil)
-              (define-key org-src-mode-map
-                          (kbd "C-c @")
-                          #'org-src-do-key-sequence-at-code-block)
-              (define-key org-src-mode-map
-                          [remap evil-write]
-                          #'org-edit-src-save)))
   (remove-hook 'org-mode-hook 'org-eldoc-load))
 
 (use-package org-agenda
