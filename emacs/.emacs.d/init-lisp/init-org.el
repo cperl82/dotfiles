@@ -117,6 +117,7 @@
   :after org
   :bind
   (:map org-agenda-mode-map
+   ("s" . cp/org-save-all-org-buffers-and-commit)
    ("C-c a" . org-agenda)
    ("C-c c" . org-capture)))
 
