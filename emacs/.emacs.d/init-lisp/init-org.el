@@ -1,6 +1,13 @@
 (use-package org
   :straight t
   :defer t
+  :bind
+  (:map org-mode-map
+   ("C-c a" . org-agenda)
+   ("C-c c" . org-capture)
+   :map org-agenda-mode-map
+   ("C-c a" . org-agenda)
+   ("C-c c" . org-capture))
   :config
   (setq org-adapt-indentation nil)
   (setq org-startup-indented t)
