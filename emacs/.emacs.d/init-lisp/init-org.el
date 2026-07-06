@@ -146,7 +146,9 @@
   :straight t)
 
 (use-package org-super-agenda
-  :straight t)
+  :straight t
+  :defer t
+  :after org)
 
 (use-package appt
   :after org
