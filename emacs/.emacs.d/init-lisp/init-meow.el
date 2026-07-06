@@ -70,8 +70,8 @@
      '("?" . meow-cheatsheet)
      '("e" . meow-M-x)
      '("w" . flash-jump)
-     '("g" . cp/counsel-rg)
-     '("f" . cp/counsel-rg-files))
+     '("f g" . cp/counsel-rg)
+     '("f f" . cp/counsel-rg-files))
     (meow-normal-define-key
      '("0" . meow-expand-0)
      '("9" . meow-expand-9)
