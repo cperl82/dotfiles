@@ -53,7 +53,6 @@
     (meow-motion-define-key
      '("j" . meow-next)
      '("k" . meow-prev)
-     '("M-o" . other-window)
      '("<escape>" . ignore))
     (meow-leader-define-key
      ;; Use SPC (0-9) for digit arguments.
@@ -143,7 +142,6 @@
      '("Y" . meow-sync-grab)
      '("z" . meow-pop-selection)
      '("'" . repeat)
-     '("M-o" . other-window)
      '("<escape>" . ignore)
      '("RET" . ignore)
      )

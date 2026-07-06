@@ -9,6 +9,9 @@
   ;; more of the function but don't want to move point.
   ("M-n" . "C-u 1 C-v")
   ("M-p" . "C-u 1 M-v")
+
+  ;; A more convenient key for `other-window'
+  ("M-o" . other-window)
   :custom
   (ad-redefinition-action #'accept)
   (c-default-style '((java-mode . "java")
