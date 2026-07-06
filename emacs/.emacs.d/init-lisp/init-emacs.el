@@ -3,6 +3,12 @@
   :preface
   (defun cp/reduce-gc-cons-threshold ()
     (setq gc-cons-threshold (* 20 1000 1000)))
+  :bind
+  ;; Bindings for scrolling the window a line at a time. Useful when
+  ;; you're on a given line of a function and want to scroll up to see
+  ;; more of the function but don't want to move point.
+  ("M-n" . "C-u 1 C-v")
+  ("M-p" . "C-u 1 M-v")
   :custom
   (ad-redefinition-action #'accept)
   (c-default-style '((java-mode . "java")
