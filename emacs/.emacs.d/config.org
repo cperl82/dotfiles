@@ -1526,9 +1526,6 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
     :bind
     (:map org-mode-map
      ("C-c a" . org-agenda)
-     ("C-c c" . org-capture)
-     :map org-agenda-mode-map
-     ("C-c a" . org-agenda)
      ("C-c c" . org-capture))
     :config
     (setq org-adapt-indentation nil)
@@ -1638,6 +1635,14 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
                             #'org-edit-src-save)))
     (remove-hook 'org-mode-hook 'org-eldoc-load))
 
+  (use-package org-agenda
+    :after org
+    :bind
+    (:map org-agenda-mode-map
+     ("s" . cp/org-save-all-org-buffers-and-commit)
+     ("C-c a" . org-agenda)
+     ("C-c c" . org-capture)))
+
   (use-package org-attach
     :after org
     :custom
@@ -1668,7 +1673,9 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
     :straight t)
 
   (use-package org-super-agenda
-    :straight t)
+    :straight t
+    :defer t
+    :after org)
 
   (use-package appt
     :after org
