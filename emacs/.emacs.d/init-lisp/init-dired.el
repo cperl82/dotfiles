@@ -25,7 +25,7 @@
 
 (defun cp/dired-toggle-hiding-dotfiles ()
   (interactive)
-    (let ((regex "^\\..*$")
+    (let ((regex (rx bos ?. (1+ any) eos))
           (elements (s-split "\\\\|" dired-omit-files)))
       (if (-contains? elements regex)
           (setq dired-omit-files (s-join "\\|" (-remove-item regex elements)))

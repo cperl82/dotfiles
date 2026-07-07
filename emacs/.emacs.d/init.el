@@ -15,7 +15,7 @@
 (load "init-xcscope")
 (load "init-smartparens")
 (load "init-meow")
-(load "init-embark")
+(load "init-consult")
 (load "init-swiper-ivy-counsel")
 (load "init-kdl")
 (load "init-lisp")
