@@ -1,7 +1,7 @@
 (("Emacs-wgrep" . "49f09ab9b706d2312cab1199e1eeb1bcd3f27f6f")
  ("annalist.el" . "134fa3f0fb91a636a1c005c483516d4b64905a6d")
  ("company-mode" . "4c08ef468678bbf3b3c9e750f6e694eea1aa8423")
- ("compat" . "6c11d1ce2c6cae75cd281d142ee7edd2781cf112")
+ ("compat" . "ab5ab0e4e886325780c21b2c88a93eded4c0e271")
  ("cond-let" . "09ebf1caa81c99677ce74091a23b48a28d53bcd9")
  ("counsel-projectile" . "40d1e1d4bb70acb00fddd6f4df9778bf2c52734b")
  ("dash.el" . "fb443e7a6e660ba849cafcd01021d9aac3ac6764")
