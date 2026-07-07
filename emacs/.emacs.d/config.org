@@ -381,15 +381,22 @@ These are just libraries that I find useful when writing elisp.
   (use-package s
     :defer t
     :straight t)
+
   (use-package f
     :defer t
     :straight t)
+
   (use-package dash
     :defer t
     :straight t)
+
   (use-package hydra
     :defer t
     :straight t)
+
+  (use-package compat
+    :straight t
+    :defer t)
 #+end_src
 
 ** Hippie Expand
@@ -1223,7 +1230,7 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     :defer t)
 #+end_src
 
-** Vertico, Consult, Embark, Orderless, Marginalia
+** Consult, Vertico, Embark, Orderless, Marginalia, Compat
 
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-consult")
