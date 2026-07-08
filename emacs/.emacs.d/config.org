@@ -462,10 +462,16 @@ These are just libraries that I find useful when writing elisp.
 ** Ibuffer
 
 #+begin_src emacs-lisp :tangle init.el :padline no
-  (load "init-ibuffer-vc")
+  (load "init-ibuffer")
 #+end_src
 
-#+begin_src emacs-lisp :tangle init-lisp/init-ibuffer-vc.el
+#+begin_src emacs-lisp :tangle init-lisp/init-ibuffer.el
+  (use-package ibuffer
+    :straight nil
+    :defer t
+    :bind
+    ([remap list-buffers] . ibuffer))
+
   (use-package ibuffer-vc
     :straight t
     :defer t
