@@ -320,7 +320,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          compat
          diminish
          elisp-slime-nav
-         embark
          flycheck
          go-mode
          haskell-mode
@@ -336,16 +335,13 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          nerd-icons
          org-ql
          origami
-         projectile
          smex
          systemd-mode
          systemtap-mode
          tuareg-mode
          unfill
          vagrant-tramp
-         wgrep
-         windsize
-         zenburn-theme))
+         wgrep))
     (straight-use-package package))
 #+end_src
 
@@ -448,6 +444,7 @@ These are just libraries that I find useful when writing elisp.
 
 #+begin_src emacs-lisp :tangle init-lisp/init-windsize.el
   (use-package windsize
+    :straight t
     :defer t
     :commands (cp/hydra-windsize/body)
     :config
@@ -1941,6 +1938,7 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
 
 #+begin_src emacs-lisp :tangle init-lisp/init-projectile.el
   (use-package projectile
+    :straight t
     :defer t
     :custom
     (projectile-enable-caching t)
@@ -2053,6 +2051,7 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
 
 #+begin_src emacs-lisp :tangle init-lisp/init-theme-zenburn.el
   (use-package zenburn-theme
+    :straight t
     :config
     (defun cp/zenburn-theme-customize (theme)
       (when (eq theme 'zenburn)
