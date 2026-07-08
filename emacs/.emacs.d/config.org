@@ -109,42 +109,43 @@ But, having the list of files generated is kind of nice.
      (lambda (path)
        (string-replace
         (file-name-as-directory (expand-file-name "~")) "" path)))
-    (reverse))
+    (reverse)
+    (sort))
 #+end_src
 
 #+RESULTS: emacs-config-generate
 - .dotfiles/emacs/.emacs.d/early-init.el
-- .dotfiles/emacs/.emacs.d/init.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-emacs.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-straight.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-general.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-utils.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-hippie-exp.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-uniquify.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-windsize.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-ibuffer.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-which-key.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-dired.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-escreen.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-helpful.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-xcscope.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-smartparens.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-meow.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-consult.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-swiper-ivy-counsel.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-dired.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-doom-modeline.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-emacs.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-escreen.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-general.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-helpful.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-hippie-exp.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-ibuffer.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-kdl.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-lisp.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-shell.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-rust.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-local-overrides.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-meow.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-ocaml.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-org.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-projectile.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-doom-modeline.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-theme-zenburn.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-rust.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-shell.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-smartparens.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-straight.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-swiper-ivy-counsel.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-theme-modus.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-theme-standard.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-theme-zenburn.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-theme.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-local-overrides.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-uniquify.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-utils.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-which-key.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-windsize.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-xcscope.el
+- .dotfiles/emacs/.emacs.d/init.el
 
 * Blocks
 :PROPERTIES:
