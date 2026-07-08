@@ -1,4 +1,5 @@
 (use-package zenburn-theme
+  :straight t
   :config
   (defun cp/zenburn-theme-customize (theme)
     (when (eq theme 'zenburn)

@@ -1,4 +1,5 @@
 (use-package windsize
+  :straight t
   :defer t
   :commands (cp/hydra-windsize/body)
   :config

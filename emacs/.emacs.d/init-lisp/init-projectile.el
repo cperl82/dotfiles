@@ -1,4 +1,5 @@
 (use-package projectile
+  :straight t
   :defer t
   :custom
   (projectile-enable-caching t)

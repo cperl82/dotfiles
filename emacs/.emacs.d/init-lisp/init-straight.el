@@ -23,7 +23,6 @@
        compat
        diminish
        elisp-slime-nav
-       embark
        flycheck
        go-mode
        haskell-mode
@@ -39,14 +38,11 @@
        nerd-icons
        org-ql
        origami
-       projectile
        smex
        systemd-mode
        systemtap-mode
        tuareg-mode
        unfill
        vagrant-tramp
-       wgrep
-       windsize
-       zenburn-theme))
+       wgrep))
   (straight-use-package package))
