@@ -7,7 +7,7 @@
 (load "init-hippie-exp")
 (load "init-uniquify")
 (load "init-windsize")
-(load "init-ibuffer-vc")
+(load "init-ibuffer")
 (load "init-which-key")
 (load "init-dired")
 (load "init-escreen")

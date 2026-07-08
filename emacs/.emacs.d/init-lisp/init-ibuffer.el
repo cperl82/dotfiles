@@ -1,3 +1,9 @@
+(use-package ibuffer
+  :straight nil
+  :defer t
+  :bind
+  ([remap list-buffers] . ibuffer))
+
 (use-package ibuffer-vc
   :straight t
   :defer t
