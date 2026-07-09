@@ -15,6 +15,7 @@
 (load "init-helpful")
 (load "init-xcscope")
 (load "init-smartparens")
+(load "init-expand-region")
 (load "init-meow")
 (load "init-consult")
 (load "init-swiper-ivy-counsel")

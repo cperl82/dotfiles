@@ -27,7 +27,8 @@
   :custom
   (meow-expand-hint-remove-delay 0)
   (meow-selection-command-fallback
-   '((meow-kill . meow-delete)))
+   '((meow-kill . meow-delete)
+     (meow-change . meow-change-char)))
   :config
   ;; Unbind one of the several bindings to `text-scale-adjust' as this one
   ;; get's in the way of using meow's fallback behavior for SPC x 0 to
@@ -68,7 +69,6 @@
      '("0" . meow-digit-argument)
      '("/" . meow-keypad-describe-key)
      '("?" . meow-cheatsheet)
-     '("e" . meow-M-x)
      '("w" . flash-jump)
      '("f g" . cp/counsel-rg)
      '("f f" . cp/counsel-rg-files))
