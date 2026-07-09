@@ -218,7 +218,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     (hs-isearch-open t)
     (indent-tabs-mode nil)
     (inhibit-startup-message t)
-    (isearch-lazy-count t)
     (load-prefer-newer t)
     ;; CR-someday cperl: consider nolittering
     (make-backup-files nil)
@@ -395,6 +394,26 @@ These are just libraries that I find useful when writing elisp.
   (use-package compat
     :straight t
     :defer t)
+#+end_src
+
+** Isearch
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-isearch")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-isearch.el
+  (use-package isearch
+    :straight nil
+    :demand t
+    :custom
+    (isearch-lazy-count t)
+    (isearch-lax-whitespace t)
+    (search-whitespace-regexp (rx (minimal-match (0+ any))))
+    :bind
+    (:map isearch-mode-map
+     ("C-o" . isearch-occur)
+     ("C-d" . isearch-forward-thing-at-point)))
 #+end_src
 
 ** Hippie Expand
@@ -1244,7 +1263,10 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
 #+begin_src emacs-lisp :tangle init-lisp/init-consult.el
   (use-package consult
     :straight t
-    :defer t)
+    :defer t
+    :bind
+    (:map isearch-mode-map
+     ("C-l" . consult-line)))
 
   (use-package vertico
     :straight t
