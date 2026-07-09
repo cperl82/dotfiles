@@ -22,7 +22,6 @@
   (hs-isearch-open t)
   (indent-tabs-mode nil)
   (inhibit-startup-message t)
-  (isearch-lazy-count t)
   (load-prefer-newer t)
   ;; CR-someday cperl: consider nolittering
   (make-backup-files nil)

@@ -4,6 +4,7 @@
 (load "init-straight")
 (load "init-general")
 (load "init-utils")
+(load "init-isearch")
 (load "init-hippie-exp")
 (load "init-uniquify")
 (load "init-windsize")

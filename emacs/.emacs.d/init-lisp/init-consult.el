@@ -1,6 +1,9 @@
 (use-package consult
   :straight t
-  :defer t)
+  :defer t
+  :bind
+  (:map isearch-mode-map
+   ("C-l" . consult-line)))
 
 (use-package vertico
   :straight t
