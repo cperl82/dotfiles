@@ -74,7 +74,8 @@ This is meant to be called via the ~call~ sites in the two subtrees below (altho
             (if in-a-tmp-dir
                 base
               (format "%s --eval '(straight-thaw-versions)'" base))))
-      (async-shell-command cmd buffer-name)))
+      (let ((default-directory d))
+        (async-shell-command cmd buffer-name))))
 #+end_src
 
 *** In a reusable directory
