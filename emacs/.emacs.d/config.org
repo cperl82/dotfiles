@@ -902,6 +902,20 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     ((lisp-data-mode . cp/smartparens-mode-setup)))
 #+end_src
 
+** Expand-region
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-expand-region")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-expand-region.el
+  (use-package expand-region
+    :straight t
+    :defer t
+    :bind
+    (("C-c e" . er/expand-region)))
+#+end_src
+
 ** COMMENT Evil, Undo-tree, Evil-collection, Evil-surround
 
 #+begin_src emacs-lisp :tangle init.el :padline no
@@ -1126,7 +1140,8 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
     :custom
     (meow-expand-hint-remove-delay 0)
     (meow-selection-command-fallback
-     '((meow-kill . meow-delete)))
+     '((meow-kill . meow-delete)
+       (meow-change . meow-change-char)))
     :config
     ;; Unbind one of the several bindings to `text-scale-adjust' as this one
     ;; get's in the way of using meow's fallback behavior for SPC x 0 to
@@ -1167,7 +1182,6 @@ I think I can probably replace all of this with [[https://github.com/nex3/perspe
        '("0" . meow-digit-argument)
        '("/" . meow-keypad-describe-key)
        '("?" . meow-cheatsheet)
-       '("e" . meow-M-x)
        '("w" . flash-jump)
        '("f g" . cp/counsel-rg)
        '("f f" . cp/counsel-rg-files))
