@@ -581,7 +581,7 @@ These are just libraries that I find useful when writing elisp.
 #+end_src
 
 ** Escreen
-I think I can probably replace all of this with [[https://github.com/nex3/perspective-el][perspective-el]] (perhaps with some light tweaks), but for now, continue using my piles of custom code on top of escreen.
+I'm pretty confident I can replace all of this with some light tweaks to ~tab-bar-mode~ (e.g. turn off the tab bar, make an easy way to show the current tabs in the echo area, etc).
 
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-escreen")
