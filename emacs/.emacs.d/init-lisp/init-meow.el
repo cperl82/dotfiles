@@ -69,7 +69,6 @@
      '("0" . meow-digit-argument)
      '("/" . meow-keypad-describe-key)
      '("?" . meow-cheatsheet)
-     '("w" . flash-jump)
      '("f g" . cp/counsel-rg)
      '("f f" . cp/counsel-rg-files))
     (meow-normal-define-key
@@ -149,7 +148,9 @@
 
 (use-package flash
   :straight (:host github :repo "Prgebish/flash" :ref "42fbc58")
-  :defer t)
+  :defer t
+  :bind
+  ("C-c w" . flash-jump))
 
 (use-package embrace
   :straight t
