@@ -153,5 +153,12 @@
   ("C-c w" . flash-jump))
 
 (use-package embrace
+  :disabled t
   :straight t
   :defer t)
+
+(use-package surround
+  :straight t
+  :defer t
+  :bind-keymap
+  ("C-c s" . surround-keymap))
