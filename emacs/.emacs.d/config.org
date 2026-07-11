@@ -599,7 +599,10 @@ These are just libraries that I find useful when writing elisp.
 #+end_src
 
 ** Escreen
-I'm pretty confident I can replace all of this with some light tweaks to ~tab-bar-mode~ (e.g. turn off the tab bar, make an easy way to show the current tabs in the echo area, etc).
+
+I'm pretty confident I can replace all of this with some light tweaks to ~tab-bar-mode~ (e.g. turn off the tab bar, make an easy way to show the current tabs in the echo area, etc). And, perhaps even the echo area bit has already been tackled by someone else, see [[https://github.com/fritzgrabo/tab-bar-echo-area][tab-bar-echo-area]].
+
+I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97c7][Tab Bar Mode]].
 
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-escreen")
@@ -868,6 +871,28 @@ I'm pretty confident I can replace all of this with some light tweaks to ~tab-ba
 
   (defun cp/advice/escreen-install ()
     (cp/escreen-rename-screen nil nil t))
+#+end_src
+
+** COMMENT Tab Bar Mode
+:PROPERTIES:
+:ID:       ff173306-b2d8-4a86-987c-6269216b97c7
+:END:
+
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-tab-bar")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-tab-bar.el
+  (use-package tab-bar
+    :straight nil
+    :defer t
+    :custom
+    (tab-bar-show nil))
+
+  (use-package tab-bar-echo-area
+    :straight t
+    :defer t
+    :after tab-bar)
 #+end_src
 
 ** Helpful
