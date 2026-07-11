@@ -4,9 +4,7 @@
   (defun cp/reduce-gc-cons-threshold ()
     (setq gc-cons-threshold (* 20 1000 1000)))
   :bind
-  (
-   ;; A more convenient key for `other-window'
-   ("M-o" . other-window))
+  (("M-o" . other-window))
   :custom
   (ad-redefinition-action #'accept)
   (c-default-style '((java-mode . "java")
@@ -15,6 +13,7 @@
   (column-number-mode t)
   (confirm-kill-emacs #'yes-or-no-p)
   (create-lockfiles nil)
+  (copy-region-blink-predicate 'ignore)
   (custom-file (expand-file-name "custom.el" user-emacs-directory))
   (enable-recursive-minibuffers t)
   (gc-cons-threshold (* 100 1000 1000))
