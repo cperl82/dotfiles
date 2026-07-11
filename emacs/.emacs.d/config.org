@@ -414,7 +414,6 @@ These are just libraries that I find useful when writing elisp.
     (search-whitespace-regexp (rx (minimal-match (0+ any))))
     :bind
     (:map isearch-mode-map
-          ("C-o" . loccur-isearch)
           ("C-l" . consult-line)))
 
   (use-package isearch-mb
@@ -432,6 +431,7 @@ These are just libraries that I find useful when writing elisp.
     (isearch-mb-mode))
 
   (use-package loccur
+    :disabled t
     :straight t
     :defer t)
 #+end_src
