@@ -195,6 +195,12 @@ This uses the ~emacs~ package, which is always available.
 
 Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long or the short version of prompting (we're getting the short version by virtue of ~use-short-answers~), but it's about being prompted before quitting emacs.
 
+- ~copy-region-blink-predicate~
+
+  This function (or symbol declaring what you want) is used to decide if the region should "blink" after invoking something like ~kill-ring-save~. It defaults to ~region-indistinguishable-p~, which tries to decide if the region can be visually distinguished from the background, and if it determines it cannot, then it says that yes, we should blink.
+
+  I find this quite annoying as with my default theme zenburn, the region is easily distinguishable, but ~region-indistinguishable-p~ thinks it's not, and so when invoking ~kill-ring-save~ or ~meow-save~, there is an unecessary delay while it shows my what I just saved.
+
 #+begin_src emacs-lisp :tangle init-lisp/init-emacs.el
   (use-package emacs
     :demand t
@@ -211,6 +217,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     (column-number-mode t)
     (confirm-kill-emacs #'yes-or-no-p)
     (create-lockfiles nil)
+    (copy-region-blink-predicate 'ignore)
     (custom-file (expand-file-name "custom.el" user-emacs-directory))
     (enable-recursive-minibuffers t)
     (gc-cons-threshold (* 100 1000 1000))
