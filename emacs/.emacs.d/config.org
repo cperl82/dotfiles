@@ -202,9 +202,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     (defun cp/reduce-gc-cons-threshold ()
       (setq gc-cons-threshold (* 20 1000 1000)))
     :bind
-    (
-     ;; A more convenient key for `other-window'
-     ("M-o" . other-window))
+    (("M-o" . other-window))
     :custom
     (ad-redefinition-action #'accept)
     (c-default-style '((java-mode . "java")
