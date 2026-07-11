@@ -1288,7 +1288,7 @@ I'm pretty confident I can replace all of this with some light tweaks to ~tab-ba
     :defer t)
 #+end_src
 
-** Consult, Vertico, Embark, Orderless, Marginalia, Compat
+** Consult, Vertico, Embark, Orderless, Marginalia
 
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-consult")
