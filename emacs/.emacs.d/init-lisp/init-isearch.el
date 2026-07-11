@@ -7,7 +7,6 @@
   (search-whitespace-regexp (rx (minimal-match (0+ any))))
   :bind
   (:map isearch-mode-map
-        ("C-o" . loccur-isearch)
         ("C-l" . consult-line)))
 
 (use-package isearch-mb
@@ -25,5 +24,6 @@
   (isearch-mb-mode))
 
 (use-package loccur
+  :disabled t
   :straight t
   :defer t)
