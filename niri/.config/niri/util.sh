@@ -315,12 +315,7 @@ subcmd--move-window-to-empty-workspace-below () {
 focus-window-or-workspace-dwim () {
     # If the overview is open, then invoke focus-workspace-up or
     # focus-workspace-down. If the overview is closed, then invoke
-    # focus-window-or-workspace-up or focus-window-or-workspace-down.
-    #
-    # The idea is that normally, I like focus-window-or-workspace-up
-    # and focus-window-or-workspace-down, but when I'm in the
-    # overview, I don't want to switch between windows, I want to
-    # switch between workspaces.
+    # focus-window-up or focus-window-down.
     local down="${1}"
     local dir=""
 
@@ -338,15 +333,15 @@ focus-window-or-workspace-dwim () {
     else
         niri msg                                \
              action                             \
-             "focus-window-or-workspace-${dir}"
+             "focus-window-${dir}"
     fi
 }
 
-subcmd--focus-window-or-workspace-up-dwim () {
+subcmd--focus-window-up-or-workspace-up-dwim () {
     focus-window-or-workspace-dwim 0
 }
 
-subcmd--focus-window-or-workspace-down-dwim () {
+subcmd--focus-window-down-or-workspace-down-dwim () {
     focus-window-or-workspace-dwim 1
 }
 

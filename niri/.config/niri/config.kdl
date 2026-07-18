@@ -370,14 +370,6 @@ binds {
         spawn-sh "${HOME}/.config/niri/util.sh move-window-to-last-workspace-dwim";
     }
 
-    Mod+Shift+Page_up hotkey-overlay-title="Move window up onto an empty workspace" {
-        spawn-sh "${HOME}/.config/niri/util.sh move-window-to-empty-workspace-above";
-    }
-
-    Mod+Shift+Page_down hotkey-overlay-title="Move window down onto an empty workspace" {
-        spawn-sh "${HOME}/.config/niri/util.sh move-window-to-empty-workspace-below";
-    }
-
     Mod+Comma hotkey-overlay-title="Pull Window" {
         spawn-sh "alacritty --class quickswitch -e ${HOME}/.config/niri/util.sh select-and-pull-window";
     }
@@ -425,8 +417,8 @@ binds {
     Mod+Up    { focus-window-or-workspace-up; }
     Mod+Right { focus-column-right; }
     Mod+H     { focus-column-left; }
-    Mod+J     { spawn-sh "${HOME}/.config/niri/util.sh focus-window-or-workspace-down-dwim"; }
-    Mod+K     { spawn-sh "${HOME}/.config/niri/util.sh focus-window-or-workspace-up-dwim"; }
+    Mod+J     { spawn-sh "${HOME}/.config/niri/util.sh focus-window-down-or-workspace-down-dwim"; }
+    Mod+K     { spawn-sh "${HOME}/.config/niri/util.sh focus-window-up-or-workspace-up-dwim"; }
     Mod+L     { focus-column-right; }
 
     Mod+Shift+Left  { move-column-left; }
@@ -437,6 +429,7 @@ binds {
     Mod+Shift+J     { move-window-down-or-to-workspace-down; }
     Mod+Shift+K     { move-window-up-or-to-workspace-up; }
     Mod+Shift+L     { move-column-right; }
+
     Mod+Ctrl+J      { move-workspace-down; }
     Mod+Ctrl+K      { move-workspace-up; }
 
@@ -480,6 +473,14 @@ binds {
 
     Mod+Page_Down       { focus-workspace-down; }
     Mod+Page_Up         { focus-workspace-up; }
+
+    Mod+Shift+Page_up {
+        spawn-sh "${HOME}/.config/niri/util.sh move-window-to-empty-workspace-above";
+    }
+
+    Mod+Shift+Page_down {
+        spawn-sh "${HOME}/.config/niri/util.sh move-window-to-empty-workspace-below";
+    }
 
     // You can bind mouse wheel scroll ticks using the following syntax.
     // These binds will change direction based on the natural-scroll setting.
