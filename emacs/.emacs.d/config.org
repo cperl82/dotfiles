@@ -1502,7 +1502,12 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 #+begin_src emacs-lisp :tangle init-lisp/init-kdl.el
   (use-package kdl-mode
     :straight t
-    :defer t)
+    :defer t
+    :preface
+    (defun cp/kdl-mode-setup ()
+      (setq tab-width 4))
+    :hook
+    (kdl-mode . cp/kdl-mode-setup))
 #+end_src
 
 ** Programming Modes
