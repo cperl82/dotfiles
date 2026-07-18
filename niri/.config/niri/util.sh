@@ -167,9 +167,11 @@ subcmd--select-and-pull-window () {
     # stream to confirm when something is done, but that feels hard from
     # bash. Perhaps I'll rewrite this in Rust in which case that would be a lot
     # easier.
-    niri msg action move-window-to-workspace --window-id "${id}" "${cwsid}"
+    #
+    # 2026-07-17 cperl: I'm trying changing up the ordering here and
+    # maybe that'll just kind of implicitly deal with what I described above
     niri msg action center-window --id "${id}"
-    niri msg action focus-window --id "${id}"
+    niri msg action move-window-to-workspace --window-id "${id}" "${cwsid}"
 }
 
 subcmd--select-and-focus-window-all () {
