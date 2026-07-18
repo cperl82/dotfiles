@@ -228,6 +228,16 @@ layout {
         // top 64
         // bottom 64
     }
+
+    tab-indicator {
+        hide-when-single-tab true
+        place-within-column true
+        position "bottom"
+        width 8
+        active-color "ff6961"
+        inactive-color "grey"
+        gaps-between-tabs 3
+    }
 }
 
 // Add lines like this to spawn processes at startup.
