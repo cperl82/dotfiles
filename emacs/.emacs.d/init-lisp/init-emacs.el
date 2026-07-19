@@ -4,7 +4,8 @@
   (defun cp/reduce-gc-cons-threshold ()
     (setq gc-cons-threshold (* 20 1000 1000)))
   :bind
-  (("M-o" . other-window))
+  (("M-o" . other-window)
+   ("M-i" . imenu))
   :custom
   (ad-redefinition-action #'accept)
   (c-default-style '((java-mode . "java")
