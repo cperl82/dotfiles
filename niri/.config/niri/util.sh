@@ -212,11 +212,11 @@ subcmd--select-and-focus-window-this-workspace () {
     niri msg action focus-window --id "${id}"
 }
 
-subcmd--move-window-to-last-workspace-dwim () {
-    # Move the window to the last workspace that has windows (i.e. the
+subcmd--move-column-to-last-workspace-dwim () {
+    # Move the column to the last workspace that has windows (i.e. the
     # workspace before the last empty workspace that always
     # exists. Unless we're already on that workspace, then move the
-    # window to the empty workspace
+    # column to the empty workspace
     local workspaces
     local cwsid
     local lwsid
@@ -269,12 +269,16 @@ subcmd--move-window-to-last-workspace-dwim () {
     if [[ "${cwsid}" -eq "${lwsid}" ]]; then
 	lwsid=$((lwsid + 1))
     fi
-    niri msg action move-window-to-workspace    \
-         --window-id "${wid}"                   \
+    niri msg action move-column-to-workspace    \
          --focus false                          \
          "${lwsid}"
-    niri msg action move-window-to-tiling --id "${wid}"
+
+    # Setting the width of a window affects the entire column
     niri msg action set-window-width "50%" --id "${wid}"
+
+    # This is a nop for a window/column that was already tiled, but
+    # if we're dealing with a floating window, it'll wind up tiled
+    niri msg action move-window-to-tiling --id "${wid}"
 }
 
 move-column-to-empty-workspace-up-or-down () {

@@ -368,21 +368,19 @@ binds {
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "000000"; }
 
     Mod+Period hotkey-overlay-title="Move window to last workspace" {
-        spawn-sh "${HOME}/.config/niri/util.sh move-window-to-last-workspace-dwim";
+        spawn-sh \
+        "${HOME}/.config/niri/util.sh move-column-to-last-workspace-dwim";
     }
 
     Mod+Comma hotkey-overlay-title="Pull Window" {
-        spawn-sh "alacritty --class quickswitch -e ${HOME}/.config/niri/util.sh select-and-pull-window";
+        spawn-sh \
+        "alacritty --class quickswitch -e ${HOME}/.config/niri/util.sh select-and-pull-window";
     }
 
     Mod+S hotkey-overlay-title="Focus Window" {
-        spawn-sh "alacritty --class quickswitch -e ${HOME}/.config/niri/util.sh select-and-focus-window-all";
+        spawn-sh \
+        "alacritty --class quickswitch -e ${HOME}/.config/niri/util.sh select-and-focus-window-all";
     }
-
-    // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
-    // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
-    // For example, this is a standard bind to toggle the screen reader (orca).
-    Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
 
     // Example volume keys mappings for PipeWire & WirePlumber.
     // The allow-when-locked=true property makes them work even when the session is locked.
