@@ -277,8 +277,8 @@ subcmd--move-window-to-last-workspace-dwim () {
     niri msg action set-window-width "50%" --id "${wid}"
 }
 
-move-window-to-empty-workspace () {
-    local below="${1}"
+move-column-to-empty-workspace-up-or-down () {
+    local direction="${1}"
     local workspaces
     local wid
     local cwsid
@@ -289,62 +289,69 @@ move-window-to-empty-workspace () {
 	sort_by(.idx)
 	| (map(select(.is_active and .is_focused)) | .[0]) as \$c
 	| .[-1] as \$e
-	| [(\$c | .active_window_id), (\$c | .idx), (\$e | .idx)]
+	| [(\$c | .idx), (\$e | .idx)]
 	| @tsv
 	EOF
 
     workspaces=$(niri msg -j workspaces)
-    read -r wid cwsid ewsid < \
+    read -r cwsid ewsid < \
          <(jq -r "${curr_and_empty_workspace_query}" <<< "${workspaces}")
-    if (( below )); then
+    if [[ "${direction}" == "down" ]]; then
         i=$((cwsid + 1))
     else
         i="${cwsid}"
     fi
-    niri msg action move-window-to-workspace --focus false --window-id "${wid}" "${ewsid}"
+    niri msg action move-column-to-workspace "${ewsid}"
     niri msg action move-workspace-to-index --reference "${ewsid}" "${i}"
-    niri msg action focus-window --id "${wid}"
 }
 
-subcmd--move-window-to-empty-workspace-above () {
-    move-window-to-empty-workspace 0
+subcmd--move-column-to-empty-workspace-down () {
+    move-column-to-empty-workspace-up-or-down "down"
 }
 
-subcmd--move-window-to-empty-workspace-below () {
-    move-window-to-empty-workspace 1
+subcmd--move-column-to-empty-workspace-up () {
+    move-column-to-empty-workspace-up-or-down "up"
 }
 
-focus-window-or-workspace-dwim () {
-    # If the overview is open, then invoke focus-workspace-up or
-    # focus-workspace-down. If the overview is closed, then invoke
-    # focus-window-up or focus-window-down.
-    local down="${1}"
-    local dir=""
+when-in-overview-do-else () {
+    # If the overview is open call `niri msg action' with the first
+    # set of arguments. If it's not, call it with the second
+    local a="${1}"
+    local b="${2}"
+    local cmd=""
 
-    if (( down )); then
-        dir="down"
+    if [[ "$(niri msg overview-state)" =~ ^Overview\ is\ open\.$ ]];
+    then
+        cmd="${a}"
     else
-        dir="up"
+        cmd="${b}"
     fi
-
-    if niri msg overview-state 2>&1 \
-            | grep -q '^Overview is open\.$'; then
-        niri msg                                \
-             action                             \
-             "focus-workspace-${dir}"
-    else
-        niri msg                                \
-             action                             \
-             "focus-window-${dir}"
-    fi
+    # shellcheck disable=SC2086
+    niri msg action ${cmd}
 }
 
-subcmd--focus-window-up-or-workspace-up-dwim () {
-    focus-window-or-workspace-dwim 0
+subcmd--in-overview-focus-workspace-down-else-focus-window-down () {
+    when-in-overview-do-else                    \
+        "focus-workspace-down"                  \
+        "focus-window-down"
 }
 
-subcmd--focus-window-down-or-workspace-down-dwim () {
-    focus-window-or-workspace-dwim 1
+subcmd--in-overview-focus-workspace-up-else-focus-window-up () {
+    when-in-overview-do-else                    \
+        "focus-workspace-up"                    \
+        "focus-window-up"
+}
+
+subcmd--in-overview-move-column-to-workspace-down-else-move-window-down () {
+    when-in-overview-do-else                    \
+        "move-column-to-workspace-down"         \
+        "move-window-down"
+}
+
+subcmd--in-overview-move-column-to-workspace-up-else-move-window-up () {
+    when-in-overview-do-else                    \
+        "move-column-to-workspace-up"           \
+        "move-window-up"
 }
 
 function main {
