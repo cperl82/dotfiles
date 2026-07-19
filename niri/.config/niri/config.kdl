@@ -232,7 +232,7 @@ layout {
     tab-indicator {
         hide-when-single-tab true
         place-within-column true
-        position "left"
+        position "bottom"
         length total-proportion=0.33
         width 8
         active-color "ff6961"
