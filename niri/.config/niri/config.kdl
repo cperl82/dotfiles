@@ -233,7 +233,7 @@ layout {
         hide-when-single-tab true
         place-within-column true
         position "bottom"
-        length total-proportion=0.33
+        length total-proportion=0.15
         width 8
         active-color "ff6961"
         inactive-color "grey"
