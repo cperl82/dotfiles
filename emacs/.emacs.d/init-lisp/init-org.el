@@ -15,7 +15,8 @@
    ("C-c c" . org-capture))
   :config
   (setq org-todo-keywords
-        '((sequence "NEXT(n)" "DFER(r)" "WAIT(w)" "DPND(x)" "|" "DONE(d!)" "CNCL(c!)")))
+        '((sequence "NEXT(n)" "DFER(r)" "WAIT(w)" "DPND(x)" "|"
+                    "DONE(d!)" "CNCL(c!)")))
   ;; CR-someday cperl: These should really be a part of whatever theme you're
   ;; loading, not just set unconditionally
   (setq org-todo-keyword-faces
@@ -31,11 +32,11 @@
   (setq org-link-abbrev-alist
         '(("gmail" . "https://mail.google.com/mail/u/0/#all/%s")))
   (setq org-refile-targets '((org-agenda-files . (:maxlevel . 5))))
-  (setq org-agenda-restore-windows-after-quit t)
   ;; CR-someday cperl: Consider setting this via .dir-locals.el as
   ;; sometimes you'll fire up an instance of emacs futzing with an org
   ;; file and it has nothing to do with your personal org files.
   (setq org-agenda-files (file-expand-wildcards "~/org/*.org" t))
+  (setq org-agenda-restore-windows-after-quit t)
   (setq org-agenda-block-separator ?-)
   (setq org-agenda-format-date "%a %Y-%m-%d")
   (setq org-agenda-sticky t)
@@ -59,7 +60,87 @@
                         (org-time-from-absolute date)))))
   (setq org-agenda-remove-tags t)
   (setq org-agenda-show-future-repeats nil)
-  (setq org-agenda-hide-tags-regexp (rx line-start (or "ATTACH") line-end))
+  (setq org-agenda-hide-tags-regexp (rx line-start (or "ATTACH")
+                                        line-end))
+  (setq org-agenda-custom-commands
+          '(("d" "Daily Agenda"
+             agenda nil
+             ((org-agenda-span 'day)
+              (org-agenda-include-deadlines t)
+              (org-agenda-skip-deadline-if-done t)
+              (org-agenda-skip-scheduled-if-done t)
+              (org-agenda-skip-timestamp-if-done t)
+              (org-agenda-skip-scheduled-if-deadline-is-shown t)
+              (org-agenda-skip-timestamp-if-deadline-is-shown t)
+              (org-agenda-skip-additional-timestamps-same-entry t)
+              (org-agenda-tags-column 'auto)
+              (org-agenda-remove-tags t)
+              (org-agenda-timerange-leaders '("" "%d/%d "))
+              (org-agenda-sorting-strategy
+               '(habit-up
+                 time-up
+                 scheduled-up
+                 deadline-up
+                 category-up
+                 todo-state-down
+                 tag-up))
+              (org-habit-completed-glyph ?_)
+              (org-habit-today-glyph ?↓)
+              (org-habit-preceding-days 14)
+              (org-habit-following-days 2)
+              (org-super-agenda-groups
+               '((:name "Books" :and (:habit t :category "books")  :order 10)
+                 (:name "Habits" :habit t :order 20)
+                 (:name "Timegrid and Active Timestamps"
+                        :time-grid t
+                        :pred (lambda (item)
+                                (member
+                                 (get-text-property 0 'type item)
+                                 '("timestamp" "block")))
+                        :order 30)
+                 ;; The use of a predicate is so that we can only pull in deadline
+                 ;; "warning" agenda entries. Testing with `:deadline' or `:scheduled'
+                 ;; tells you about properties of the underlying org node that caused a
+                 ;; given agenda entry (or entries) to get generated, but doesn't tell
+                 ;; you about those agenda entries. This allows me to ask "is the agenda
+                 ;; entry under consideration a deadline warning entry?"
+                 (:name "Deadlines"
+                        :pred
+                        (lambda (item)
+                          (member (get-text-property 0 'type item)
+                                  '("deadline" "upcoming-deadline")))
+                        :order 40)
+                 (:name "Repeating"
+                        :and (:todo "NEXT" :category "repeat")
+                        :order 70)
+                 (:name "Projects"
+                        :and (:todo "NEXT" :category "project")
+                        :order 50)
+                 (:name "Tasks"
+                        :todo "NEXT"
+                        :order 60)
+                 (:name "Revisit"
+                        :todo "DFER"
+                        :order 80)
+                 (:name "Follow up"
+                        :todo "WAIT"
+                        :order 90)))))
+            ("x" "Not Scheduled, no Deadline, no Timestamp"
+             alltodo nil
+             ((org-agenda-overriding-header "Not scheduled, no deadline, no ts")
+              (org-agenda-todo-ignore-scheduled 'all)
+              (org-agenda-todo-ignore-deadlines 'all)
+              (org-agenda-todo-ignore-timestamp 'all)
+              (org-agenda-remove-tags t)
+              (org-agenda-category-filter-preset '("-books" "-kb"))
+              (org-agenda-sorting-strategy
+               '(time-up
+                 scheduled-up
+                 deadline-up
+                 category-up
+                 todo-state-down))
+              (org-super-agenda-groups
+               '((:auto-outline-path t)))))))
   (add-hook 'org-agenda-finalize-hook #'cp/org-agenda-delete-empty-blocks)
   (setq org-tags-column -80)
   (setq org-log-into-drawer t)
@@ -81,10 +162,19 @@
   (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))
   (run-with-idle-timer 30 t
                        (lambda ()
-                         (let ((inhibit-message t)) (org-save-all-org-buffers))))
-  (advice-add  'org-next-link     :after #'cp/advice/org-next-link)
-  (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
-  (advice-add  'org-archive--compute-location :filter-args #'cp/advice/org-archive--compute-location)
+                         (let ((inhibit-message t))
+                           (org-save-all-org-buffers))))
+  (advice-add  'org-next-link
+               :after
+               #'cp/advice/org-next-link)
+  (advice-add  'org-previous-link
+               :after #'cp/advice/org-previous-link)
+  (advice-add  'org-archive--compute-location
+               :filter-args
+               #'cp/advice/org-archive--compute-location)
+  (advice-add #'org-habit-insert-consistency-graphs
+              :before
+              #'cp/advice/org-habit-insert-consistency-graphs)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((shell  . true)
@@ -144,8 +234,16 @@
 
 (use-package org-super-agenda
   :straight t
-  :defer t
-  :after org)
+  :after org
+  :custom
+  (org-super-agenda-hide-empty-groups t)
+  :config
+  ;; Remove the 'local-map text property, as it causes the key
+  ;; lookup to not look in org-agenda-map at all
+  (advice-add 'org-super-agenda--make-agenda-header
+              :filter-return
+              #'cp/advice/org-super-agenda-remove-local-map)
+  (org-super-agenda-mode))
 
 (use-package appt
   :after org
@@ -373,3 +471,13 @@ Note that because we're being called via advice as :filter-args, we
 receive a list of `org-archive--compute-locations's arguments and have
 to return a list"
   (list (format-time-string (replace-regexp-in-string "%s" "%%s" (car location)))))
+
+;; 2026-07-29 cperl: dynamically adjust habit graphs to fit the window width
+(defun cp/advice/org-habit-insert-consistency-graphs ()
+  (setq org-habit-graph-column
+        (- (window-max-chars-per-line)
+           (+ org-habit-preceding-days 1 org-habit-following-days))))
+
+(defun cp/advice/org-super-agenda-remove-local-map (header)
+  (remove-text-properties 0 (length header) '(local-map nil) header)
+  header)
