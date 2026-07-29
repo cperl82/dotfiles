@@ -232,12 +232,14 @@ layout {
     tab-indicator {
         hide-when-single-tab true
         place-within-column true
-        position "bottom"
-        length total-proportion=0.15
-        width 8
-        active-color "ff6961"
-        inactive-color "grey"
+        position "left"
+        width 6
+        gap 8
+        length total-proportion=0.20
         gaps-between-tabs 5
+        corner-radius 4
+        active-color "FACE68"
+        inactive-color "grey"
     }
 }
 
