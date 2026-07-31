@@ -109,23 +109,24 @@ pending_updates_python () {
 }
 
 pending_updates_opam () {
+    local awk
+
     if ! command -v opam > /dev/null; then
         echo "_"
         return 0
     fi
+
+    read -d '' -r awk <<-'EOF' || true
+	BEGIN { count=0 }
+	/^Proceed with .* upgrades/ {
+	  if(match($0, /([0-9][0-9]*) upgrades/, m)) {
+	    count=m[1]
+	  }
+	}
+	END { print count }
+	EOF
     opam update >/dev/null 2>&1
-    opam upgrade --dry-run <<< "n"                                      \
-        | awk 'BEGIN {
-                 count = 0;
-               };
-               /^Proceed with.*$/ {
-                 if (match($0, /[0-0][0-9]*/)) {
-                   count=substr($0, RSTART, RLENGTH);
-                 }
-               }
-               END {
-                 print count;
-               };'
+    opam upgrade --dry-run <<< "n" | awk "${awk}"
 }
 
 pending_updates_npm () {
