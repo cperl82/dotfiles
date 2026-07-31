@@ -41,7 +41,7 @@ window#waybar.hidden {
 #clock,
 #pulseaudio,
 #tray {
-    border-radius: 4px;
+    border-radius: 6px;
     margin-top: 0px;
     margin-right: 4px;
     margin-bottom: 4px;
