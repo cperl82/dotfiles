@@ -2,6 +2,7 @@
     "layer": "top",
     "position": "bottom",
     "modules-left": ["niri/workspaces"],
+    "modules-center": ["niri/window"],
     "modules-right": [
 	"custom/pending-updates",
 	"network",
