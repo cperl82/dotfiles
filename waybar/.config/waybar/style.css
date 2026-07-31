@@ -1,12 +1,14 @@
 * {
     font-family: "JetBrainsMono Nerd Font Propo" ;
     font-size: 16px;
+    padding: 0;
+    margin: 0;
 }
 
 window#waybar {
     background: transparent;
     border: none;
-    min-height: 10px;
+    min-height: 0px;
 }
 
 window#waybar.hidden {
@@ -24,6 +26,8 @@ window#waybar.hidden {
 
 #workspaces button {
     margin-right: 2px;
+    padding-left: 15px;
+    padding-right: 15px;
     background: #B5E8E0;
 }
 
@@ -39,10 +43,13 @@ window#waybar.hidden {
 #tray {
     border-radius: 4px;
     margin-top: 0px;
-    margin-bottom: 4px;
     margin-right: 4px;
-    padding-left: 10px;
+    margin-bottom: 4px;
+    margin-left: 0px;
+    padding-top: 1px;
     padding-right: 10px;
+    padding-bottom: 1px;
+    padding-left: 10px;
 }
 
 #tags {
