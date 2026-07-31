@@ -38,7 +38,7 @@ window#waybar.hidden {
 #pulseaudio,
 #tray {
     border-radius: 4px;
-    margin-top: 4px;
+    margin-top: 0px;
     margin-bottom: 4px;
     margin-right: 4px;
     padding-left: 10px;
