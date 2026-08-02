@@ -35,12 +35,13 @@ window#waybar.hidden {
     background: #F28FAD;
 }
 
-#workspaces,
+#battery,
+#clock,
 #custom-pending-updates,
 #network,
-#clock,
 #pulseaudio,
-#tray {
+#tray,
+#workspaces {
     border-radius: 6px;
     margin-top: 0px;
     margin-right: 4px;
