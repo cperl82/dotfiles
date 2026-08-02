@@ -238,11 +238,10 @@
   :custom
   (org-super-agenda-hide-empty-groups t)
   :config
-  ;; Remove the 'local-map text property, as it causes the key
-  ;; lookup to not look in org-agenda-map at all
+  ;; Remove the 'local-map and 'keymap text properties
   (advice-add 'org-super-agenda--make-agenda-header
               :filter-return
-              #'cp/advice/org-super-agenda-remove-local-map)
+              #'cp/advice/org-super-agenda-remove-text-property-keymap-overrides)
   (org-super-agenda-mode))
 
 (use-package appt
@@ -478,6 +477,7 @@ to return a list"
         (- (window-max-chars-per-line)
            (+ org-habit-preceding-days 1 org-habit-following-days))))
 
-(defun cp/advice/org-super-agenda-remove-local-map (header)
+(defun cp/advice/org-super-agenda-remove-text-property-keymap-overrides (header)
   (remove-text-properties 0 (length header) '(local-map nil) header)
+  (remove-text-properties 0 (length header) '(keymap nil) header)
   header)
