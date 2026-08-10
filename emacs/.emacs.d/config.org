@@ -1177,14 +1177,14 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
       (dolist (sym symbols)
         (define-key meow-normal-state-keymap (vector 'remap sym) #'undefined)))
     (defun cp/meow-normal-remap-c-mode ()
-        (cp/meow-normal-remap-symbols-undefined
-         '(c-electric-pound
-           c-electric-brace
-           c-electric-slash
-           c-electric-star
-           c-electric-semi&comma
-           c-electric-colon
-           c-electric-paren)))
+      (cp/meow-normal-remap-symbols-undefined
+       '(c-electric-pound
+         c-electric-brace
+         c-electric-slash
+         c-electric-star
+         c-electric-semi&comma
+         c-electric-colon
+         c-electric-paren)))
     :hook
     ((c-mode . cp/meow-normal-remap-c-mode))
     :custom
