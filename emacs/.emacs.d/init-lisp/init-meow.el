@@ -14,14 +14,14 @@
     (dolist (sym symbols)
       (define-key meow-normal-state-keymap (vector 'remap sym) #'undefined)))
   (defun cp/meow-normal-remap-c-mode ()
-      (cp/meow-normal-remap-symbols-undefined
-       '(c-electric-pound
-         c-electric-brace
-         c-electric-slash
-         c-electric-star
-         c-electric-semi&comma
-         c-electric-colon
-         c-electric-paren)))
+    (cp/meow-normal-remap-symbols-undefined
+     '(c-electric-pound
+       c-electric-brace
+       c-electric-slash
+       c-electric-star
+       c-electric-semi&comma
+       c-electric-colon
+       c-electric-paren)))
   :hook
   ((c-mode . cp/meow-normal-remap-c-mode))
   :custom
@@ -30,14 +30,17 @@
    '((meow-kill . meow-delete)
      (meow-change . meow-change-char)))
   (meow-char-thing-table
-   '((?(  . round)
-     (?[  . square)
-     (?{  . curly)
-     (?<  . angle)
+   '((?\( . round)
+     (?\[ . square)
+     (?\{ . curly)
+     (?\< . angle)
      (?\" . string)
-     (?p  . paragraph)
      (?l  . line)
-     (?b  . buffer)))
+     (?v  . visual-line)
+     (?d  . defun)
+     (?b  . buffer)
+     (?p  . paragraph)
+     (?s  . sentence)))
   :config
   ;; Unbind one of the several bindings to `text-scale-adjust' as this one
   ;; get's in the way of using meow's fallback behavior for SPC x 0 to
