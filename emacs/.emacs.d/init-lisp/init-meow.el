@@ -29,6 +29,15 @@
   (meow-selection-command-fallback
    '((meow-kill . meow-delete)
      (meow-change . meow-change-char)))
+  (meow-char-thing-table
+   '((?(  . round)
+     (?[  . square)
+     (?{  . curly)
+     (?<  . angle)
+     (?\" . string)
+     (?p  . paragraph)
+     (?l  . line)
+     (?b  . buffer)))
   :config
   ;; Unbind one of the several bindings to `text-scale-adjust' as this one
   ;; get's in the way of using meow's fallback behavior for SPC x 0 to
