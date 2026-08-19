@@ -25,6 +25,7 @@
   :hook
   ((c-mode . cp/meow-normal-remap-c-mode))
   :custom
+  (meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
   (meow-expand-hint-remove-delay 0)
   (meow-selection-command-fallback
    '((meow-kill . meow-delete)
@@ -62,7 +63,9 @@
     (define-key hs-minor-mode-map (kbd "TAB") #'cp/meow-hide-show-toggle))
 
   (defun cp/meow-setup ()
-    (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+    (meow-thing-register 'angle
+                         '(pair ("<") (">"))
+                         '(pair ("<") (">")))
     (meow-motion-define-key
      '("j" . meow-next)
      '("k" . meow-prev)
@@ -145,9 +148,7 @@
      '("z" . meow-pop-selection)
      '("'" . repeat)
      '("<escape>" . ignore)
-     '("RET" . ignore)
-     )
-    )
+     '("RET" . ignore)))
   (cp/meow-setup)
 
   (meow-global-mode 1))
