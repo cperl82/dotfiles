@@ -1188,6 +1188,7 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
     :hook
     ((c-mode . cp/meow-normal-remap-c-mode))
     :custom
+    (meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
     (meow-expand-hint-remove-delay 0)
     (meow-selection-command-fallback
      '((meow-kill . meow-delete)
@@ -1225,7 +1226,9 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
       (define-key hs-minor-mode-map (kbd "TAB") #'cp/meow-hide-show-toggle))
 
     (defun cp/meow-setup ()
-      (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+      (meow-thing-register 'angle
+                           '(pair ("<") (">"))
+                           '(pair ("<") (">")))
       (meow-motion-define-key
        '("j" . meow-next)
        '("k" . meow-prev)
@@ -1308,9 +1311,7 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
        '("z" . meow-pop-selection)
        '("'" . repeat)
        '("<escape>" . ignore)
-       '("RET" . ignore)
-       )
-      )
+       '("RET" . ignore)))
     (cp/meow-setup)
 
     (meow-global-mode 1))
