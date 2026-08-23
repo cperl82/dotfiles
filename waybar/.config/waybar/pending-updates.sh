@@ -109,14 +109,18 @@ pending_updates_python () {
 }
 
 pending_updates_opam () {
+    local t=""
+
     if ! command -v opam > /dev/null; then
         echo "_"
         return 0
     fi
 
     opam update >/dev/null 2>&1
-    opam upgrade --dry-run <<< "n" \
-        | grep -c 'upgrade '
+    t=$(mktemp -t "pending-updates-opam.XXXXXX")
+    opam upgrade --dry-run --no --quiet --json="${t}" > /dev/null 2>&1
+    jq -r '.request | .upgrade | length' "${t}"
+    rm -f "${t}"
 }
 
 pending_updates_npm () {
