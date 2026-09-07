@@ -116,6 +116,8 @@ pending_updates_opam () {
         return 0
     fi
 
+    # CR-soon cperl: This doesn't handle multiple switches being
+    # installed at the same time.
     opam update >/dev/null 2>&1
     t=$(mktemp -t "pending-updates-opam.XXXXXX")
     opam upgrade --dry-run --no --quiet --json="${t}" > /dev/null 2>&1
