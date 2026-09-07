@@ -128,7 +128,7 @@ pending_updates_npm () {
 	echo "_"
 	return 0
     fi
-    npm outdated -g --depth=0 --json \
+    npm outdated -g --min-release-age=7 --depth=0 --json \
 	| jq -r 'keys | length'
 }
 
