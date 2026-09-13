@@ -29,6 +29,9 @@ select-window () {
            # org.mozilla.firefox into firefox
            gsub(/^([^.]+\.)+/, "", $3);
 
+           # Fixup OnePassword -> 1Password
+           gsub(/^OnePassword$/, "1Password", $3);
+
            # Remove trailing dollar separate components, e.g. turn
            # Cryptomator$MainApp to Cryptomator
            gsub(/([$][^$]+)+$/, "", $3);
