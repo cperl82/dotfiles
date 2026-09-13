@@ -313,7 +313,7 @@ window-rule {
 }
 
 window-rule {
-    match app-id=r#"^1password$"#
+    match app-id=r#"^com.onepassword.OnePassword$"#
     block-out-from "screen-capture"
 }
 
