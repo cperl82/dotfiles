@@ -525,6 +525,10 @@ Various libraries, utilities and niceties that don't need their own section.
         (ibuffer-do-sort-by-alphabetic)))
     :hook
     ((ibuffer . cp/ibuffer-mode-setup)))
+
+  (use-package ibuffer-projectile
+    :straight t
+    :defer t)
 #+end_src
 
 ** Which-key
@@ -2170,10 +2174,6 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
     :config
     (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
     (projectile-mode))
-
-  (use-package ibuffer-projectile
-    :straight t
-    :defer t)
 
   (defvar cp/projectile-project-full-feature-name t)
 
