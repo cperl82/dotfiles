@@ -173,7 +173,6 @@ Disable the built in emacs package manager, we're going to use another one.
 #+end_src
 
 ** Load Path
-
 #+begin_src emacs-lisp :tangle init.el
   ;; -*- lexical-binding: t -*-
   (add-to-list 'load-path (expand-file-name "init-lisp" user-emacs-directory))
@@ -292,7 +291,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
 #+end_src
 
 ** Straight
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-straight")
 #+end_src
@@ -342,7 +340,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
 #+end_src
 
 ** COMMENT General
-
 We're ammending the recipe for general below to use ~:nonrecursive~ because otherwise straight will clone it's ~makem~ git submodule. That submodule isn't needed to use the package (it's needed to develop the package) and we can wind up with the submodule checked out to the wrong revision, leading straight to tell us the worktree is dirty when it's actually fine.
 
 It's possible that ~straight-thaw-versions~ should also call something like ~git submodule update~ when checking out a different revision, but I haven't dug into it much.
@@ -404,7 +401,6 @@ Various libraries, utilities and niceties that don't need their own section.
 #+end_src
 
 ** Isearch
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-isearch")
 #+end_src
@@ -442,7 +438,6 @@ Various libraries, utilities and niceties that don't need their own section.
 #+end_src
 
 ** Hippie Expand
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-hippie-exp")
 #+end_src
@@ -467,7 +462,6 @@ Various libraries, utilities and niceties that don't need their own section.
 #+end_src
 
 ** Uniquify
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-uniquify")
 #+end_src
@@ -483,7 +477,6 @@ Various libraries, utilities and niceties that don't need their own section.
 #+end_src
 
 ** Windsize
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-windsize")
 #+end_src
@@ -503,7 +496,6 @@ Various libraries, utilities and niceties that don't need their own section.
 #+end_src
 
 ** Ibuffer
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-ibuffer")
 #+end_src
@@ -533,7 +525,6 @@ Various libraries, utilities and niceties that don't need their own section.
 #+end_src
 
 ** Which-key
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-which-key")
 #+end_src
@@ -548,7 +539,6 @@ Various libraries, utilities and niceties that don't need their own section.
 #+end_src
 
 ** Dired
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-dired")
 #+end_src
@@ -608,7 +598,6 @@ Various libraries, utilities and niceties that don't need their own section.
 #+end_src
 
 ** Escreen
-
 I'm pretty confident I can replace all of this with some light tweaks to ~tab-bar-mode~ (e.g. turn off the tab bar, make an easy way to show the current tabs in the echo area, etc). And, perhaps even the echo area bit has already been tackled by someone else, see [[https://github.com/fritzgrabo/tab-bar-echo-area][tab-bar-echo-area]].
 
 I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97c7][Tab Bar Mode]].
@@ -886,7 +875,6 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 :PROPERTIES:
 :ID:       ff173306-b2d8-4a86-987c-6269216b97c7
 :END:
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-tab-bar")
 #+end_src
@@ -905,7 +893,6 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 #+end_src
 
 ** Helpful
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-helpful")
 #+end_src
@@ -917,7 +904,6 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 #+end_src
 
 ** Xcscope
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-xcscope")
 #+end_src
@@ -933,7 +919,6 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 #+end_src
 
 ** Smartparens
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-smartparens")
 #+end_src
@@ -956,7 +941,6 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 #+end_src
 
 ** Expand-region
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-expand-region")
 #+end_src
@@ -970,7 +954,6 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 #+end_src
 
 ** COMMENT Evil, Undo-tree, Evil-collection, Evil-surround
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-evil")
 #+end_src
@@ -1158,7 +1141,6 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 #+end_src
 
 ** Meow
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-meow")
 #+end_src
@@ -1334,7 +1316,6 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 #+end_src
 
 ** Consult, Vertico, Embark, Orderless, Marginalia
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-consult")
 #+end_src
@@ -1368,7 +1349,6 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 #+end_src
 
 ** Ivy, Counsel, Swiper, Ivy-rich
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-swiper-ivy-counsel")
 #+end_src
@@ -1505,7 +1485,6 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 
 ** Config Modes
 *** Kdl
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-kdl")
 #+end_src
@@ -1523,7 +1502,6 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 
 ** Programming Modes
 *** Lisp
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-lisp")
 #+end_src
@@ -1567,7 +1545,6 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 #+end_src
 
 *** Rust
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-rust")
 #+end_src
@@ -1586,7 +1563,6 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 #+end_src
 
 *** OCaml
-
 I haven't written any OCaml in a while, so it's possible I should just do away with these forward sexp funs and there is a better method based on tree-sitter or what have you.
 
 Either way, I sort of yolo converted the regexes to Rx notation, so I probably broke something.
@@ -1661,7 +1637,6 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
 #+end_src
 
 ** Org mode
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-org")
 #+end_src
@@ -2154,7 +2129,6 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
 #+end_src
 
 ** Projectile
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-projectile")
 #+end_src
@@ -2250,7 +2224,6 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
 #+end_src
 
 ** Doom Modeline
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-doom-modeline")
 #+end_src
@@ -2267,7 +2240,6 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
 
 ** Themes
 *** Zenburn
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-theme-zenburn")
 #+end_src
@@ -2335,7 +2307,6 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
 #+end_src
 
 *** Modus Themes
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-theme-modus")
 #+end_src
@@ -2347,7 +2318,6 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
 #+end_src
 
 *** Standard Themes
-
 Something isn't quite right with this as not all the expected commands are autoloaded, e.g. ~standard-themes-select~. I think it might have something to do with these depending on modus-themes, but I'm not entirely sure.
 
 #+begin_src emacs-lisp :tangle init.el :padline no
@@ -2363,7 +2333,6 @@ Something isn't quite right with this as not all the expected commands are autol
 #+end_src
 
 *** Selected
-
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-theme")
 #+end_src
