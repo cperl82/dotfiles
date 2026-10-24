@@ -350,7 +350,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     (straight-use-package package))
 #+end_src
 
-** General
+** COMMENT General
 
 We're ammending the recipe for general below to use ~:nonrecursive~ because otherwise straight will clone it's ~makem~ git submodule. That submodule isn't needed to use the package (it's needed to develop the package) and we can wind up with the submodule checked out to the wrong revision, leading straight to tell us the worktree is dirty when it's actually fine.
 
@@ -624,26 +624,26 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
     :straight nil
     :load-path "lisp"
     :commands (escreen-create-screen)
-    :general
-    (:keymaps '(escreen-map)
-     "C-b" nil
-     "TAB" #'escreen-goto-last-screen
-     "e"   #'cp/escreen-show-active-screens
-     "v"   #'cp/escreen-show-active-screens-vertical
-     "f"   #'cp/escreen-show-active-screens-horizontal
-     "V"   #'cp/escreen-set-show-active-screens-fun-vertical
-     "F"   #'cp/escreen-set-show-active-screens-fun-horizontal
-     "A"   #'cp/escreen-set-show-active-screens-fun-auto
-     "r"   #'cp/escreen-rename-screen
-     "s"   #'cp/escreen-switch-to-screen-with-ivy-completion
-     "C"   #'cp/escreen-compress
-     "k"   #'escreen-kill-screen
-     "H"   #'cp/escreen-move-screen-left
-     "L"   #'cp/escreen-move-screen-right
-     "p"   #'escreen-goto-prev-screen
-     "n"   #'escreen-goto-next-screen
-     "h"   #'escreen-goto-prev-screen
-     "l"   #'escreen-goto-next-screen)
+    :bind
+    (:map escreen-map
+          ("C-b" . nil)
+          ("TAB" . #'escreen-goto-last-screen)
+          ("e"   . #'cp/escreen-show-active-screens)
+          ("v"   . #'cp/escreen-show-active-screens-vertical)
+          ("f"   . #'cp/escreen-show-active-screens-horizontal)
+          ("V"   . #'cp/escreen-set-show-active-screens-fun-vertical)
+          ("F"   . #'cp/escreen-set-show-active-screens-fun-horizontal)
+          ("A"   . #'cp/escreen-set-show-active-screens-fun-auto)
+          ("r"   . #'cp/escreen-rename-screen)
+          ("s"   . #'cp/escreen-switch-to-screen-with-ivy-completion)
+          ("C"   . #'cp/escreen-compress)
+          ("k"   . #'escreen-kill-screen)
+          ("H"   . #'cp/escreen-move-screen-left)
+          ("L"   . #'cp/escreen-move-screen-right)
+          ("p"   . #'escreen-goto-prev-screen)
+          ("n"   . #'escreen-goto-next-screen)
+          ("h"   . #'escreen-goto-prev-screen)
+          ("l"   . #'escreen-goto-next-screen))
     :config
     (setq escreen-max-screens 30)
     (advice-add 'escreen-goto-screen   :after #'cp/advice/escreen-goto-screen)
