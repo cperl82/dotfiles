@@ -18,8 +18,7 @@
 
 (dolist
     (package
-     '(annalist
-       company-mode
+     '(company-mode
        diminish
        elisp-slime-nav
        go-mode

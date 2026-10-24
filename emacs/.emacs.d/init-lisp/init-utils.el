@@ -18,6 +18,10 @@
   :straight t
   :defer t)
 
+(use-package flycheck
+  :straight t
+  :defer t)
+
 (use-package unfill
   :straight t
   :defer t)
