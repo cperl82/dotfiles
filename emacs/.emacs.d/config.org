@@ -326,10 +326,8 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
       (package
        '(annalist
          company-mode
-         compat
          diminish
          elisp-slime-nav
-         flycheck
          go-mode
          haskell-mode
          highlight-parentheses
@@ -348,8 +346,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          systemd-mode
          systemtap-mode
          tuareg-mode
-         vagrant-tramp
-         wgrep))
+         vagrant-tramp))
     (straight-use-package package))
 #+end_src
 
@@ -375,7 +372,7 @@ It's a similar issue to [[https://github.com/karthink/gptel/issues/716][test sub
 #+end_src
 
 ** Utils
-These are just libraries that I find useful when writing elisp.
+Various libraries, utilities and niceties that don't need their own section.
 
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-utils")
@@ -403,6 +400,10 @@ These are just libraries that I find useful when writing elisp.
     :defer t)
 
   (use-package unfill
+    :straight t
+    :defer t)
+
+  (use-package wgrep
     :straight t
     :defer t)
 #+end_src
