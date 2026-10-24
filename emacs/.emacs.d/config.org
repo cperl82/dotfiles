@@ -348,7 +348,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          systemd-mode
          systemtap-mode
          tuareg-mode
-         unfill
          vagrant-tramp
          wgrep))
     (straight-use-package package))
@@ -400,6 +399,10 @@ These are just libraries that I find useful when writing elisp.
     :straight t)
 
   (use-package compat
+    :straight t
+    :defer t)
+
+  (use-package unfill
     :straight t
     :defer t)
 #+end_src
