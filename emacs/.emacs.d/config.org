@@ -1,8 +1,8 @@
-* Generate
+* Config Generation
 :PROPERTIES:
 :ID:       1f28903d-6f9c-40c4-93ee-99764d547c22
 :END:
-** Test Configs
+** Test
 :PROPERTIES:
 :ID:       7190b4e5-ba33-41bf-b7de-ff7bca98b542
 :END:
@@ -15,7 +15,7 @@ If called with ~in-a-tmp-dir~ set to ~t~, it'll create a new temporary directory
 This is meant to be called via the ~call~ sites in the two subtrees below.
 
 #+name: emacs-config-generate-and-run
-#+begin_src emacs-lisp :var in-a-tmp-dir='nil :results value verbatim :eval no
+#+begin_src emacs-lisp :var in-a-tmp-dir='nil :results silent :eval no
   ;;; -*- lexical-binding: t; -*-
 
   (let* ((d (if in-a-tmp-dir
@@ -82,17 +82,11 @@ This is meant to be called via the ~call~ sites in the two subtrees below.
 
 #+call: emacs-config-generate-and-run[:eval yes](in-a-tmp-dir='nil)
 
-#+RESULTS:
-: nil
-
 *** In a temporary directory
 
 #+call: emacs-config-generate-and-run[:eval yes](in-a-tmp-dir='t)
 
-#+RESULTS:
-: nil
-
-** Real Configs
+** Real
 This code block generates my actual config. After running this, I'd typically diff the results to make sure they look like I want and then commit the result.
 
 You can also just run:
