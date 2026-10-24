@@ -362,7 +362,7 @@ The key is the todo keyword and the value is its relative position in the list."
   (org-sort-entries nil ?f #'cp/org-sort-key)
   ;; there may be a better way to do this, but for now its refolds
   ;; things the way I want after sorting
-  (funcall (general-simulate-key "TAB TAB")))
+  (execute-kbd-macro (kbd "TAB TAB")))
 
 (defun cp/org-agenda-tagged-by-context (search-string)
   ;; CR-someday cperl: Have to figure out how to make C-u r in the

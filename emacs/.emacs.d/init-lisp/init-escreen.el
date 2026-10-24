@@ -3,26 +3,26 @@
   :straight nil
   :load-path "lisp"
   :commands (escreen-create-screen)
-  :general
-  (:keymaps '(escreen-map)
-   "C-b" nil
-   "TAB" #'escreen-goto-last-screen
-   "e"   #'cp/escreen-show-active-screens
-   "v"   #'cp/escreen-show-active-screens-vertical
-   "f"   #'cp/escreen-show-active-screens-horizontal
-   "V"   #'cp/escreen-set-show-active-screens-fun-vertical
-   "F"   #'cp/escreen-set-show-active-screens-fun-horizontal
-   "A"   #'cp/escreen-set-show-active-screens-fun-auto
-   "r"   #'cp/escreen-rename-screen
-   "s"   #'cp/escreen-switch-to-screen-with-ivy-completion
-   "C"   #'cp/escreen-compress
-   "k"   #'escreen-kill-screen
-   "H"   #'cp/escreen-move-screen-left
-   "L"   #'cp/escreen-move-screen-right
-   "p"   #'escreen-goto-prev-screen
-   "n"   #'escreen-goto-next-screen
-   "h"   #'escreen-goto-prev-screen
-   "l"   #'escreen-goto-next-screen)
+  :bind
+  (:map escreen-map
+        ("C-b" . nil)
+        ("TAB" . #'escreen-goto-last-screen)
+        ("e"   . #'cp/escreen-show-active-screens)
+        ("v"   . #'cp/escreen-show-active-screens-vertical)
+        ("f"   . #'cp/escreen-show-active-screens-horizontal)
+        ("V"   . #'cp/escreen-set-show-active-screens-fun-vertical)
+        ("F"   . #'cp/escreen-set-show-active-screens-fun-horizontal)
+        ("A"   . #'cp/escreen-set-show-active-screens-fun-auto)
+        ("r"   . #'cp/escreen-rename-screen)
+        ("s"   . #'cp/escreen-switch-to-screen-with-ivy-completion)
+        ("C"   . #'cp/escreen-compress)
+        ("k"   . #'escreen-kill-screen)
+        ("H"   . #'cp/escreen-move-screen-left)
+        ("L"   . #'cp/escreen-move-screen-right)
+        ("p"   . #'escreen-goto-prev-screen)
+        ("n"   . #'escreen-goto-next-screen)
+        ("h"   . #'escreen-goto-prev-screen)
+        ("l"   . #'escreen-goto-next-screen))
   :config
   (setq escreen-max-screens 30)
   (advice-add 'escreen-goto-screen   :after #'cp/advice/escreen-goto-screen)
