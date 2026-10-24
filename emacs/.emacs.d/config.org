@@ -122,7 +122,6 @@ But, having the list of files generated is kind of nice.
 - .dotfiles/emacs/.emacs.d/init-lisp/init-emacs.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-escreen.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-expand-region.el
-- .dotfiles/emacs/.emacs.d/init-lisp/init-general.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-helpful.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-hippie-exp.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-ibuffer.el
