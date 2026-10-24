@@ -9,6 +9,7 @@
   (org-refile-use-outline-path 'file)
   (org-outline-path-complete-in-steps nil)
   (org-hide-block-startup t)
+  (org-fold-catch-invisible-edits 'smart)
   :bind
   (:map org-mode-map
    ("C-c a" . org-agenda)
