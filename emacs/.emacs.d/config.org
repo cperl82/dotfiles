@@ -323,8 +323,7 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
 
   (dolist
       (package
-       '(annalist
-         company-mode
+       '(company-mode
          diminish
          elisp-slime-nav
          go-mode
@@ -395,6 +394,10 @@ Various libraries, utilities and niceties that don't need their own section.
     :straight t)
 
   (use-package compat
+    :straight t
+    :defer t)
+
+  (use-package flycheck
     :straight t
     :defer t)
 
