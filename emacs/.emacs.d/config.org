@@ -12,7 +12,7 @@ It controls the output location of the tangled code blocks by adding advice to f
 
 If called with ~in-a-tmp-dir~ set to ~t~, it'll create a new temporary directory and tangle the code blocks there and then launch emacs. If called with ~in-a-tmp-dir~ set to ~nil~, it'll reuse a more permanent dev area of ~${HOME}/emacs.d-dev~, such that we don't have to install fresh copies of all packages every time.
 
-This is meant to be called via the ~call~ sites in the two subtrees below (although calling it directly from this block is equivalent to calling the first one).
+This is meant to be called via the ~call~ sites in the two subtrees below.
 
 #+name: emacs-config-generate-and-run
 #+begin_src emacs-lisp :var in-a-tmp-dir='nil :results value verbatim :eval no
