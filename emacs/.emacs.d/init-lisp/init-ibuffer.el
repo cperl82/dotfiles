@@ -15,3 +15,7 @@
       (ibuffer-do-sort-by-alphabetic)))
   :hook
   ((ibuffer . cp/ibuffer-mode-setup)))
+
+(use-package ibuffer-projectile
+  :straight t
+  :defer t)
