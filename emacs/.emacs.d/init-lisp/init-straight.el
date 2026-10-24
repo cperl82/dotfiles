@@ -20,10 +20,8 @@
     (package
      '(annalist
        company-mode
-       compat
        diminish
        elisp-slime-nav
-       flycheck
        go-mode
        haskell-mode
        highlight-parentheses
@@ -42,7 +40,5 @@
        systemd-mode
        systemtap-mode
        tuareg-mode
-       unfill
-       vagrant-tramp
-       wgrep))
+       vagrant-tramp))
   (straight-use-package package))

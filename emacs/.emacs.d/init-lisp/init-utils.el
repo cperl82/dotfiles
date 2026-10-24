@@ -17,3 +17,11 @@
 (use-package compat
   :straight t
   :defer t)
+
+(use-package unfill
+  :straight t
+  :defer t)
+
+(use-package wgrep
+  :straight t
+  :defer t)
