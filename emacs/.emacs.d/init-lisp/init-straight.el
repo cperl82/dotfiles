@@ -24,7 +24,6 @@
        go-mode
        haskell-mode
        highlight-parentheses
-       ibuffer-projectile
        json-mode
        lsp-mode
        lua-mode
@@ -35,7 +34,6 @@
        nerd-icons
        org-ql
        origami
-       smex
        systemd-mode
        systemtap-mode
        tuareg-mode

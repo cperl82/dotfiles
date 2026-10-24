@@ -14,6 +14,10 @@
   (add-to-list 'projectile-project-root-files-bottom-up "cscope.files")
   (projectile-mode))
 
+(use-package ibuffer-projectile
+  :straight t
+  :defer t)
+
 (defvar cp/projectile-project-full-feature-name t)
 
 (defun cp/projectile-project-name (project-root)

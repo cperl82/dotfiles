@@ -25,10 +25,15 @@
   :demand t
   :custom
   ;; Use rg instead of grep because it has the nice smart case feature
-  (counsel-grep-base-command "rg -i -M 120 --no-heading --line-number --color never %s %s")
+  (counsel-grep-base-command
+   "rg -i -M 120 --no-heading --line-number --color never %s %s")
   (counsel-grep-use-swiper-p #'cp/counsel-grep-use-swiper-p)
   :config
   (counsel-mode))
+
+(use-package smex
+  :straight t
+  :demand t)
 
 (use-package ivy-rich
   :straight t
