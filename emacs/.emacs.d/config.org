@@ -334,7 +334,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
          nerd-icons
          org-ql
          origami
-         smex
          systemd-mode
          systemtap-mode
          tuareg-mode
@@ -1398,10 +1397,15 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
     :demand t
     :custom
     ;; Use rg instead of grep because it has the nice smart case feature
-    (counsel-grep-base-command "rg -i -M 120 --no-heading --line-number --color never %s %s")
+    (counsel-grep-base-command
+     "rg -i -M 120 --no-heading --line-number --color never %s %s")
     (counsel-grep-use-swiper-p #'cp/counsel-grep-use-swiper-p)
     :config
     (counsel-mode))
+
+  (use-package smex
+    :straight t
+    :demand t)
 
   (use-package ivy-rich
     :straight t
