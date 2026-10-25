@@ -2332,6 +2332,19 @@ Something isn't quite right with this as not all the expected commands are autol
     )
 #+end_src
 
+*** EF Themes
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-theme-ef")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-theme-ef.el
+  (use-package ef-themes
+    :straight t
+    :defer t
+    :after modus-themes
+    )
+#+end_src
+
 *** Selected
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-theme")
