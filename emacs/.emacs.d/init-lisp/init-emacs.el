@@ -46,6 +46,7 @@
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
+  (recentf-mode)
   (savehist-mode)
   (show-paren-mode)
   (winner-mode)
