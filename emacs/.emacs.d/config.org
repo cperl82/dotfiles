@@ -2319,7 +2319,7 @@ Either way, I sort of yolo converted the regexes to Rx notation, so I probably b
 #+end_src
 
 *** Standard Themes
-Something isn't quite right with this as not all the expected commands are autoloaded, e.g. ~standard-themes-select~. I think it might have something to do with these depending on modus-themes, but I'm not entirely sure.
+For some reason, if I defer the loading of the ~standard-themes~ package, the autoloads don't seem to get processed correctly and therefore I can't use the themes without using ~require~.
 
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-theme-standard")
@@ -2328,12 +2328,12 @@ Something isn't quite right with this as not all the expected commands are autol
 #+begin_src emacs-lisp :tangle init-lisp/init-theme-standard.el
   (use-package standard-themes
     :straight t
-    :defer t
-    :after modus-themes
-    )
+    :demand t)
 #+end_src
 
 *** EF Themes
+For some reason, if I defer the loading of the ~ef-themes~ package, the autoloads don't seem to get processed correctly and therefore I can't use the themes without using ~require~.
+
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-theme-ef")
 #+end_src
@@ -2341,9 +2341,7 @@ Something isn't quite right with this as not all the expected commands are autol
 #+begin_src emacs-lisp :tangle init-lisp/init-theme-ef.el
   (use-package ef-themes
     :straight t
-    :defer t
-    :after modus-themes
-    )
+    :demand t)
 #+end_src
 
 *** Selected
