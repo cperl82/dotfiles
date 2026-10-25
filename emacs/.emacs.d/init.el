@@ -29,5 +29,6 @@
 (load "init-theme-zenburn")
 (load "init-theme-modus")
 (load "init-theme-standard")
+(load "init-theme-ef")
 (load "init-theme")
 (load "init-local-overrides")

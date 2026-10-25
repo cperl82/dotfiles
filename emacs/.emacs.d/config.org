@@ -132,6 +132,7 @@ But, having the list of files generated is kind of nice.
 - .dotfiles/emacs/.emacs.d/init-lisp/init-smartparens.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-straight.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-swiper-ivy-counsel.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-theme-ef.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-theme-modus.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-theme-standard.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-theme-zenburn.el
