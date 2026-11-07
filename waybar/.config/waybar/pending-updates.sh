@@ -141,7 +141,7 @@ pending_updates_opam () {
     opam update >/dev/null 2>&1
     t=$(mktemp -t "pending-updates-opam.XXXXXX")
     opam upgrade --dry-run --no --quiet --json="${t}" > /dev/null 2>&1
-    jq -r '.request | .upgrade | length' "${t}"
+    jq -r '.solution | .upgrade? | length' "${t}"
     rm -f "${t}"
 }
 
