@@ -11,10 +11,10 @@ pending_updates_apt () {
         return 0
     fi
     apt list --upgradable 2>/dev/null \
-	| awk 'BEGIN {
-	         count = 0
-	       };
-	       $1 ~ /\// {
+        | awk 'BEGIN {
+                 count = 0
+               };
+               $1 ~ /\// {
                  count += 1
                };
                END {
@@ -57,7 +57,7 @@ pending_updates_flatpak () {
 pending_updates_cargo () {
     if ! command -v cargo install-update > /dev/null; then
         echo "n/a"
-	return 0
+        return 0
     fi
     cargo install-update --list \
         | awk 'BEGIN {
@@ -77,8 +77,8 @@ pending_updates_rustup () {
     local rustup_init=""
 
     if ! command -v rustup > /dev/null; then
-	echo "n/a"
-	return 0
+        echo "n/a"
+        return 0
     fi
 
     # We're trying to determine if updates listed for rustup itself
@@ -90,20 +90,32 @@ pending_updates_rustup () {
     # and updates to rustup should count.
     rustup_init=$(which rustup-init)
     if [[ "${rustup_init}" =~ ^${HOME}/ ]]; then
-	rustup check | grep -c Update
+        rustup check | grep -c Update
     else
-	rustup check | grep -v "^rustup " | grep -c Update
+        rustup check | grep -v "^rustup " | grep -c Update
     fi
 }
 
 pending_updates_pip () {
     if ! command -v pip > /dev/null; then
         echo "n/a"
-	return 0
+        return 0
     fi
 
     pip list --user --outdated \
-        | awk 'END {if (NR > 2) {print NR-2} else {print 0}}'
+        | grep -Ec '^[0-9.]+$'
+}
+
+pending_updates_pipx () {
+    if ! command -v pipx > /dev/null; then
+        echo "n/a"
+        return 0
+    fi
+
+    pipx list --json                                    \
+        | jq -r '.venvs | keys | @tsv'                  \
+        | xargs -r -I{} pipx runpip {} list --outdated  \
+        | grep -Ec '^[0-9.]+$'
 }
 
 pending_updates_opam () {
@@ -125,11 +137,11 @@ pending_updates_opam () {
 
 pending_updates_npm () {
     if ! command -v npm > /dev/null; then
-	echo "n/a"
-	return 0
+        echo "n/a"
+        return 0
     fi
     npm outdated -g --min-release-age=7 --depth=0 --json \
-	| jq -r 'keys | length'
+        | jq -r 'keys | length'
 }
 
 run () {
@@ -173,12 +185,12 @@ main () {
     # update.
     i=5
     while [[ "${i}" -gt 0 ]]; do
-	if output=$(run); then
-	    echo "${output}"
-	    break
-	fi
-	sleep 5
-	i=$((i - 1))
+        if output=$(run); then
+            echo "${output}"
+            break
+        fi
+        sleep 5
+        i=$((i - 1))
     done
 }
 
