@@ -129,20 +129,18 @@ pending_updates_uv () {
 }
 
 pending_updates_opam () {
-    local t=""
-
     if ! command -v opam > /dev/null; then
         echo "n/a"
         return 0
     fi
 
-    # CR-soon cperl: This doesn't handle multiple switches being
-    # installed at the same time.
-    opam update >/dev/null 2>&1
-    t=$(mktemp -t "pending-updates-opam.XXXXXX")
-    opam upgrade --dry-run --no --quiet --json="${t}" > /dev/null 2>&1
-    jq -r '.solution | .upgrade? | length' "${t}"
-    rm -f "${t}"
+    if opam upgrade --check >/dev/null 2>&1; then
+        # CR-soon cperl: Meh, 1 isn't really true, it's just standing
+        # in for "there are upgrades", maybe fix that.
+        echo "1"
+    else
+        echo "0"
+    fi
 }
 
 pending_updates_npm () {
