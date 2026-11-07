@@ -118,6 +118,16 @@ pending_updates_pipx () {
         | grep -Ec '^[0-9.]+$'
 }
 
+pending_updates_uv () {
+    if ! command -v uv > /dev/null; then
+        echo "n/a"
+        return 0
+    fi
+
+    uv tool list --outdated 2>/dev/null \
+        | wc -l
+}
+
 pending_updates_opam () {
     local t=""
 
