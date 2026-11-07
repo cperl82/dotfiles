@@ -5,17 +5,11 @@
 set -o pipefail
 set -o nounset
 
-pending_updates_package_manager () {
-    if command -v dnf > /dev/null; then
-        pending_updates_dnf
-    elif command -v apt > /dev/null; then
-        pending_updates_apt
-    else
-        echo "_"
-    fi
-}
-
 pending_updates_apt () {
+    if ! command -v apt > /dev/null; then
+        echo "n/a"
+        return 0
+    fi
     apt list --upgradable 2>/dev/null \
 	| awk 'BEGIN {
 	         count = 0
@@ -29,6 +23,10 @@ pending_updates_apt () {
 }
 
 pending_updates_dnf () {
+    if ! command -v dnf > /dev/null; then
+        echo "n/a"
+        return 0
+    fi
     dnf -q updateinfo list \
         | awk 'BEGIN {
                  count = 0
@@ -47,7 +45,7 @@ pending_updates_dnf () {
 
 pending_updates_flatpak () {
     if ! command -v flatpak > /dev/null; then
-        echo "_"
+        echo "n/a"
         return 0
     fi
     set +o errexit
@@ -58,7 +56,7 @@ pending_updates_flatpak () {
 
 pending_updates_cargo () {
     if ! command -v cargo install-update > /dev/null; then
-        echo "_"
+        echo "n/a"
 	return 0
     fi
     cargo install-update --list \
@@ -79,7 +77,7 @@ pending_updates_rustup () {
     local rustup_init=""
 
     if ! command -v rustup > /dev/null; then
-	echo "_"
+	echo "n/a"
 	return 0
     fi
 
@@ -98,9 +96,9 @@ pending_updates_rustup () {
     fi
 }
 
-pending_updates_python () {
+pending_updates_pip () {
     if ! command -v pip > /dev/null; then
-        echo "_"
+        echo "n/a"
 	return 0
     fi
 
@@ -112,7 +110,7 @@ pending_updates_opam () {
     local t=""
 
     if ! command -v opam > /dev/null; then
-        echo "_"
+        echo "n/a"
         return 0
     fi
 
@@ -127,7 +125,7 @@ pending_updates_opam () {
 
 pending_updates_npm () {
     if ! command -v npm > /dev/null; then
-	echo "_"
+	echo "n/a"
 	return 0
     fi
     npm outdated -g --min-release-age=7 --depth=0 --json \
@@ -135,51 +133,28 @@ pending_updates_npm () {
 }
 
 run () {
-    local package_manager
-    local flatpak
-    local cargo
-    local rustup
-    local python
-    local opam
-    local npm
-    local all
+    local fns
+    local name
     local text
     local tooltip
+    local pending_updates=0
+    local tooltip_components=()
 
-    package_manager=$(pending_updates_package_manager)
-    flatpak=$(pending_updates_flatpak)
-    cargo=$(pending_updates_cargo)
-    rustup=$(pending_updates_rustup)
-    python=$(pending_updates_python)
-    opam=$(pending_updates_opam)
-    npm=$(pending_updates_npm)
-
-    if [[ -z "${package_manager}" || \
-	  -z "${flatpak}"         || \
-	  -z "${cargo}"           || \
-	  -z "${rustup}"          || \
-	  -z "${python}"          || \
-	  -z "${opam}"            || \
-	  -z "${npm}"
-	]]; then
-	return 1
-    fi
-
-    all=0
-    for thing in package_manager flatpak cargo rustup python opam npm; do
-	if [[ "${!thing}" =~ ^[0-9]+$ ]]; then
-	    all=$((all + ${!thing}))
-	fi
+    mapfile -t fns < <(declare -F | grep -Eo "pending_updates_.*$")
+    for fn in "${fns[@]}"; do
+        name="${fn#pending_updates_}"
+        output=$(${fn})
+        if [[ "${output}" =~ ^n/a$ ]]; then
+            continue
+        elif [[ "${output}" =~ ^[0-9]+$ ]]; then
+            pending_updates=$((pending_updates + output))
+        else
+            output="!"
+        fi
+        tooltip_components+=("$(printf "%-10s %3s" "${name^}:" "${output}")")
     done
-    printf -v text "%d" "${all}"
-    printf -v tooltip "%s\\\\n"                                 \
-           "$(printf "Packages: %3s" "${package_manager}")"     \
-           "$(printf "Flatpak:  %3s" "${flatpak}")"             \
-           "$(printf "Cargo:    %3s" "${cargo}")"               \
-           "$(printf "Rustup:   %3s" "${rustup}")"              \
-           "$(printf "Python:   %3s" "${python}")"              \
-           "$(printf "Opam:     %3s" "${opam}")"                \
-           "$(printf "Npm:      %3s" "${npm}")"
+    text="${pending_updates}"
+    printf -v tooltip "%s\\\\n" "${tooltip_components[@]}"
     tooltip="${tooltip%\\n}"
     printf '{"text": "%s", "tooltip": "%s"}\n'  \
            "${text}"                            \
