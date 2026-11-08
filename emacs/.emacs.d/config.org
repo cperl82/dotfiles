@@ -1305,6 +1305,9 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
   (use-package beancount
     :straight t
     :defer t
+    :config
+    (with-eval-after-load 'flycheck
+      (require 'flycheck-beancount))
     :hook ((beancount-mode . outline-minor-mode)
            (beancount-mode . flycheck-mode)))
 
@@ -1313,9 +1316,6 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
                :type git
                :host github
                :repo "John-Goff/flycheck-beancount")
-    :init
-    (with-eval-after-load 'flycheck
-      (require 'flycheck-beancount))
     :defer t
     :after (beancount flycheck))
 #+end_src
