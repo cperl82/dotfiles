@@ -1,6 +1,9 @@
 (use-package beancount
   :straight t
   :defer t
+  :config
+  (with-eval-after-load 'flycheck
+    (require 'flycheck-beancount))
   :hook ((beancount-mode . outline-minor-mode)
          (beancount-mode . flycheck-mode)))
 
@@ -9,8 +12,5 @@
              :type git
              :host github
              :repo "John-Goff/flycheck-beancount")
-  :init
-  (with-eval-after-load 'flycheck
-    (require 'flycheck-beancount))
   :defer t
   :after (beancount flycheck))
