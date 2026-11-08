@@ -1304,7 +1304,20 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
 #+begin_src emacs-lisp :tangle init-lisp/init-beancount.el
   (use-package beancount
     :straight t
-    :defer t)
+    :defer t
+    :hook ((beancount-mode . outline-minor-mode)
+           (beancount-mode . flycheck-mode)))
+
+  (use-package flycheck-beancount
+    :straight (flycheck-beancount
+               :type git
+               :host github
+               :repo "John-Goff/flycheck-beancount")
+    :init
+    (with-eval-after-load 'flycheck
+      (require 'flycheck-beancount))
+    :defer t
+    :after (beancount flycheck))
 #+end_src
 
 ** Programming Modes
