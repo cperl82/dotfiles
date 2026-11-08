@@ -1502,6 +1502,17 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
     (kdl-mode . cp/kdl-mode-setup))
 #+end_src
 
+*** Beancount
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-beancount")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-beancount.el
+  (use-package beancount
+    :straight t
+    :defer t)
+#+end_src
+
 ** Programming Modes
 *** Lisp
 #+begin_src emacs-lisp :tangle init.el :padline no
