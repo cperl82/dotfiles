@@ -110,6 +110,7 @@ But, having the list of files generated is kind of nice.
 
 #+RESULTS: emacs-config-generate
 - .dotfiles/emacs/.emacs.d/early-init.el
+- .dotfiles/emacs/.emacs.d/init-lisp/init-beancount.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-consult.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-dired.el
 - .dotfiles/emacs/.emacs.d/init-lisp/init-doom-modeline.el

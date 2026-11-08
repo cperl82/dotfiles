@@ -19,6 +19,7 @@
 (load "init-consult")
 (load "init-swiper-ivy-counsel")
 (load "init-kdl")
+(load "init-beancount")
 (load "init-lisp")
 (load "init-shell")
 (load "init-rust")
