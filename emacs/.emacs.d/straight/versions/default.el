@@ -21,6 +21,7 @@
  ("f.el" . "931b6d0667fe03e7bf1c6c282d6d8d7006143c52")
  ("flash" . "42fbc5883fd802df97cae842c403deba4c433d45")
  ("flycheck" . "784f184cdd9f9cb4e3dbb997c09d93e954142842")
+ ("flycheck-beancount" . "b1fda0488ac951c78b9d6683464c1a0a2205c40f")
  ("gnu-elpa-mirror" . "f6c1c7ecee4da027908bb2eb08d939c170ccb54d")
  ("go-mode.el" . "6f4ff9ef874d151ed8d297a80f1bf27db5d9dbf0")
  ("haskell-mode" . "8402caa341d90b4236f5c0a802751f9023ccfbe7")
