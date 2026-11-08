@@ -1,4 +1,5 @@
 (("Emacs-wgrep" . "49f09ab9b706d2312cab1199e1eeb1bcd3f27f6f")
+ ("beancount" . "37648f983ff42426b1f364831ce7d2d0d735686b")
  ("company-mode" . "4c08ef468678bbf3b3c9e750f6e694eea1aa8423")
  ("compat" . "ab5ab0e4e886325780c21b2c88a93eded4c0e271")
  ("cond-let" . "09ebf1caa81c99677ce74091a23b48a28d53bcd9")
@@ -7,6 +8,7 @@
  ("dash.el" . "fb443e7a6e660ba849cafcd01021d9aac3ac6764")
  ("diminish.el" . "6ec6ebc391371418efc6c98d70b013f34af5a2ee")
  ("doom-modeline" . "0b660ed93a185c3edaf8d11c550b15cfeb348a69")
+ ("ef-themes" . "b68826fa8fc200e769ed29b142577d1af51a4be8")
  ("el-get" . "5c1e9c10860f35a1ee6e56b8d19505913b1c2ff2")
  ("eldoc" . "1d11743436e9ce0d11529bfdf1e548e64f31a92e")
  ("elisp-refs" . "541a064c3ce27867872cf708354a65d83baf2a6d")
