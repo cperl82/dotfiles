@@ -4,8 +4,12 @@
   :config
   (with-eval-after-load 'flycheck
     (require 'flycheck-beancount))
-  :hook ((beancount-mode . outline-minor-mode)
-         (beancount-mode . flycheck-mode)))
+  (defun cp/beancount-mode-setup ()
+    (outline-minor-mode)
+    (flycheck-mode)
+    (add-hook 'before-save-hook #'delete-trailing-whitespace nil t))
+  :hook
+  ((beancount-mode . cp/beancount-mode-setup)))
 
 (use-package flycheck-beancount
   :straight (flycheck-beancount
