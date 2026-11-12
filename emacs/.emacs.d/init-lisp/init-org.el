@@ -15,6 +15,12 @@
    ("C-c a" . org-agenda)
    ("C-c c" . org-capture))
   :config
+  (defun cp/org-mode-setup ()
+    (visual-line-mode)
+    (visual-fill-column-mode)
+    (setq-local visual-fill-column-width 100)
+    (setq-local indent-tabs-mode nil)
+    (add-hook 'before-save-hook #'delete-trailing-whitespace nil t))
   (setq org-todo-keywords
         '((sequence "NEXT(n)" "DFER(r)" "WAIT(w)" "DPND(x)" "|"
                     "DONE(d!)" "CNCL(c!)")))
@@ -165,11 +171,8 @@
                        (lambda ()
                          (let ((inhibit-message t))
                            (org-save-all-org-buffers))))
-  (advice-add  'org-next-link
-               :after
-               #'cp/advice/org-next-link)
-  (advice-add  'org-previous-link
-               :after #'cp/advice/org-previous-link)
+  (advice-add  'org-next-link :after #'cp/advice/org-next-link)
+  (advice-add  'org-previous-link :after #'cp/advice/org-previous-link)
   (advice-add  'org-archive--compute-location
                :filter-args
                #'cp/advice/org-archive--compute-location)
@@ -184,17 +187,9 @@
      (sed    . true)
      (R      . true)
      (calc   . true)))
-  (add-hook
-   'org-mode-hook
-   (lambda ()
-     (progn
-       (visual-line-mode)
-       (visual-fill-column-mode)
-       (setq-local visual-fill-column-width 95)
-       (setq-local indent-tabs-mode nil)
-       (add-hook 'write-contents-functions
-                 (lambda () (save-excursion (delete-trailing-whitespace)))))))
-  (remove-hook 'org-mode-hook 'org-eldoc-load))
+  (remove-hook 'org-mode-hook 'org-eldoc-load)
+  :hook
+  ((org-mode . cp/org-mode-setup)))
 
 (use-package org-agenda
   :after org
