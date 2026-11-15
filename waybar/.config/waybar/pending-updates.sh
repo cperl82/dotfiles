@@ -92,6 +92,7 @@ pending_updates_cargo () {
 	$2 ~ /^v/ && $3 ~ /^v/ && $4 ~ /^[Yy][Ee][Ss]$/ { count += 1 };
 	END { print count };
 	EOF
+    # CR cperl: I don't think this covers git installed packages
     updates=$(cargo install-update --list | awk "${awk}")
     echo "${sort} ${updates}"
 }
@@ -115,12 +116,22 @@ pending_updates_pipx () {
     fi
 
     local sort=3
+    local cooldown=7
     local updates
+    local awk
+    read -d '' -r awk <<-'EOF'
+	BEGIN { count = 0 };
+	$2 ~ /^[0-9.]+$/ && $3 ~ /^[0-9.]+$/ { count++ };
+	END   { print count };
+	EOF
     updates=$(
         pipx list --json                                    \
             | jq -r '.venvs | keys | @tsv'                  \
-            | xargs -r -I{} pipx runpip {} list --outdated  \
-            | grep -Ec '^[0-9.]+$')
+            | xargs -r -I{} \
+                    pipx runpip {} list \
+                    --outdated  \
+                    --uploaded-prior-to "P${cooldown}D" \
+            | awk "${awk}")
     echo "${sort} ${updates}"
 }
 
@@ -130,9 +141,10 @@ pending_updates_uv () {
     fi
 
     local sort=3
+    local cooldown=7
     local updates
     local tool_updates
-    local cooldown=7
+    local awk
 
     # This one is a little confusing, so leaving an explainer here.
     #
@@ -152,7 +164,7 @@ pending_updates_uv () {
     #
     # We then look for output that has version numbers in the second
     # and third columns and then add it all up.
-    read -d '' -r q <<-'EOF'
+    read -d '' -r awk <<-'EOF'
 	BEGIN { count = 0 };
 	$2 ~ /^[0-9.]+$/ && $3 ~ /^[0-9.]+$/ { count++ };
 	END   { print count };
@@ -166,7 +178,7 @@ pending_updates_uv () {
                     list                                                \
                     --outdated                                          \
                     --uploaded-prior-to "P${cooldown}D"                 \
-                    | awk "${q}")
+                    | awk "${awk}")
             updates=$((updates + tool_updates))
         done < <(uv tool list | grep -Eo '^[^-][^ ]+'))
     echo "${sort} ${updates}"
