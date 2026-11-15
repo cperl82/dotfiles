@@ -105,7 +105,7 @@ pending_updates_pip () {
     local updates
     updates=$(
         pip list --user --outdated \
-            | grep -Ec '^[0-9.]+$')
+            | grep -Ec '[0-9.]+$')
     echo "${sort} ${updates}"
 }
 
@@ -131,7 +131,40 @@ pending_updates_uv () {
 
     local sort=3
     local updates
-    updates=$(uv tool list --outdated 2>/dev/null | wc -l)
+    local tool_updates
+    local cooldown=7
+
+    # This one is a little confusing, so leaving an explainer here.
+    #
+    # For each tool installed with uv we want to run a pip command in
+    # that environment to list the outdated packages. Something like:
+    #
+    # pip list --oudated --uploaded-prior-to COOLDOWN ...
+    #
+    # The easiest way to do that is to use uv to run pip. But, we also
+    # don't want a brand new pip, so we run it like:
+    #
+    # uvx ---exclude-newer COOLDOWN pip ...
+    #
+    # We then look for output that has version numbers in the second
+    # and third columns and then add it all up.
+    read -d '' -r q <<-'EOF'
+	BEGIN { count = 0 };
+	$2 ~ /^[0-9.]+$/ && $3 ~ /^[0-9.]+$/ { count++ };
+	END   { print count };
+	EOF
+    updates=$(
+        while read -r tool; do
+            tool_updates=$(
+                uvx --exclude-newer "${cooldown} days"                  \
+                    pip                                                 \
+                    --python "$(uv tool dir)/${tool}/bin/python"        \
+                    list                                                \
+                    --outdated                                          \
+                    --uploaded-prior-to "P${cooldown}D"                 \
+                    | awk "${q}")
+            updates=$((updates + tool_updates))
+        done < <(uv tool list | grep -Eo '^[^-][^ ]+'))
     echo "${sort} ${updates}"
 }
 
