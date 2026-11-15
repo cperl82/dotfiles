@@ -146,6 +146,10 @@ pending_updates_uv () {
     #
     # uvx ---exclude-newer COOLDOWN pip ...
     #
+    # We could just use the system installed pip, but on at least one
+    # of my systems that pip doesn't understand the
+    # --uploaded-prior-to flag.
+    #
     # We then look for output that has version numbers in the second
     # and third columns and then add it all up.
     read -d '' -r q <<-'EOF'
