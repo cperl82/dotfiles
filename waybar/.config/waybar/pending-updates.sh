@@ -172,7 +172,7 @@ pending_updates_uv () {
     updates=$(
         while read -r tool; do
             tool_updates=$(
-                uvx --exclude-newer "${cooldown} days"                  \
+                uvx --color never --exclude-newer "${cooldown} days"    \
                     pip                                                 \
                     --python "$(uv tool dir)/${tool}/bin/python"        \
                     list                                                \
