@@ -222,12 +222,12 @@ layout {
     // Left and right struts will cause the next window to the side to always be visible.
     // Top and bottom struts will simply add outer gaps in addition to the area occupied by
     // layer-shell panels and regular gaps.
-    struts {
-        left 48
-        right 48
-        // top 64
-        // bottom 64
-    }
+    // struts {
+    //     left 48
+    //     right 48
+    //     // top 64
+    //     // bottom 64
+    // }
 
     tab-indicator {
         hide-when-single-tab true
