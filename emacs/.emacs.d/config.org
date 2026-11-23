@@ -199,8 +199,6 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
   (use-package emacs
     :demand t
     :preface
-    (defun cp/reduce-gc-cons-threshold ()
-      (setq gc-cons-threshold (* 20 1000 1000)))
     :bind
     (("M-o" . other-window)
      ("M-i" . imenu))
@@ -251,12 +249,11 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
     :hook
     ((emacs-startup . cp/reduce-gc-cons-threshold)
      (emacs-startup . cp/startup-time)
-     (prog-mode . turn-on-auto-fill)
+     (prog-mode . cp/turn-on-auto-fill-prog-mode)
      (c-mode . cp/enable-hideshow-and-hide-all)))
 
-  (defun cp/enable-hideshow-and-hide-all ()
-    (hs-minor-mode)
-    (hs-hide-all))
+  (defun cp/reduce-gc-cons-threshold ()
+    (setq gc-cons-threshold (* 20 1000 1000)))
 
   (defun cp/startup-time ()
     (message "Emacs ready in %s with %d garbage collections."
@@ -264,6 +261,14 @@ Note that ~confirm-kill-emacs~ being set to ~yes-or-no-p~ is not about the long 
                      (float-time
                       (time-subtract after-init-time before-init-time)))
              gcs-done))
+
+  (defun cp/turn-on-auto-fill-prog-mode ()
+    (setq-local comment-auto-fill-only-comments t)
+    (turn-on-auto-fill))
+
+  (defun cp/enable-hideshow-and-hide-all ()
+    (hs-minor-mode)
+    (hs-hide-all))
 
   (defun cp/split-window-function (&rest r)
     "When there is one window, split it horizontally unless the frame is
