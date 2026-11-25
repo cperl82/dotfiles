@@ -78,11 +78,11 @@ This is meant to be called via the ~call~ sites in the two subtrees below.
         (async-shell-command cmd buffer-name))))
 #+end_src
 
-*** In a reusable directory
+In a reusable directory:
 
 #+call: emacs-config-generate-and-run[:eval yes](in-a-tmp-dir='nil)
 
-*** In a temporary directory
+In a temporary directory:
 
 #+call: emacs-config-generate-and-run[:eval yes](in-a-tmp-dir='t)
 
