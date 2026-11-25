@@ -985,6 +985,32 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
     (("C-c e" . er/expand-region)))
 #+end_src
 
+** Vundo
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-vundo")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-vundo.el
+  (use-package vundo
+    :straight t
+    :defer t
+    :custom
+    (vundo-glyph-alist vundo-unicode-symbols))
+#+end_src
+
+** Flash
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-flash")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-flash.el
+  (use-package flash
+    :straight (:host github :repo "Prgebish/flash" :ref "42fbc58")
+    :defer t
+    :bind
+    ("C-c w" . flash-jump))
+#+end_src
+
 ** Meow
 #+begin_src emacs-lisp :tangle init.el :padline no
   (load "init-meow")
@@ -1145,19 +1171,59 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
     (cp/meow-setup)
 
     (meow-global-mode 1))
+#+end_src
 
-  (use-package vundo
+** COMMENT Meep
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-meep")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-meep.el
+  (use-package meep
     :straight t
-    :defer t
-    :custom
-    (vundo-glyph-alist vundo-unicode-symbols))
+    :demand t
+    :after bray
+    )
 
-  (use-package flash
-    :straight (:host github :repo "Prgebish/flash" :ref "42fbc58")
-    :defer t
-    :bind
-    ("C-c w" . flash-jump))
+  (use-package bray
+    :straight t
+    :demand t)
 
+  (use-package repeat-fu
+    :commands (repeat-fu-mode)
+    :straight t
+    :config (setq repeat-fu-preset 'meep)
+    :hook ((bray-mode . (lambda () (repeat-fu-mode (or bray-mode 0))))))
+
+  (use-package with-command-redo
+    :commands (with-command-redo-fn)
+    :straight t)
+
+  (use-package command-log-mode
+    :straight t
+    :config
+    ;; Too small by default.
+    (setq command-log-mode-window-size 60)
+    ;; Always show the log.
+    (add-hook
+     'command-log-mode-hook
+     (lambda ()
+       (when command-log-mode
+         (clm/open-command-log-buffer)))))
+
+  (use-package show-inactive-region
+    :straight t)
+#+end_src
+
+** COMMENT God-mode
+#+begin_src emacs-lisp :tangle init.el :padline no
+  (load "init-god-mode")
+#+end_src
+
+#+begin_src emacs-lisp :tangle init-lisp/init-gode-mode.el
+  (use-package god-mode
+    :straight t
+    :demand t)
 #+end_src
 
 ** Consult, Vertico, Embark, Orderless, Marginalia
