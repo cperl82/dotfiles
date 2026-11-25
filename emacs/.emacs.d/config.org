@@ -386,6 +386,13 @@ Various libraries, utilities and niceties that don't need their own section.
   (use-package wgrep
     :straight t
     :defer t)
+
+  (use-package kkp
+    :straight t
+    :defer t
+    :custom
+    (kkp-restore-legacy-keys-around-subprocesses t)
+    :hook (tty-setup . global-kkp-mode))
 #+end_src
 
 ** Isearch
