@@ -1227,10 +1227,19 @@ I'm starting to play around with this in [[id:ff173306-b2d8-4a86-987c-6269216b97
   (load "init-god-mode")
 #+end_src
 
-#+begin_src emacs-lisp :tangle init-lisp/init-gode-mode.el
+#+begin_src emacs-lisp :tangle init-lisp/init-god-mode.el
   (use-package god-mode
     :straight t
-    :demand t)
+    :demand t
+    :custom
+    (god-mode-enable-function-key-translation nil)
+    :bind
+    (("<escape>" . (lambda () (interactive) (god-local-mode 1)))
+     :map god-local-mode-map
+     ("." . repeat)
+     ("i" . god-local-mode))
+    :config
+    (god-mode))
 #+end_src
 
 ** Consult, Vertico, Embark, Orderless, Marginalia
